@@ -84,7 +84,9 @@ function CodeForm({
                 {children}
                 <Field
                     label={
-                        recovery ? 'Code or recovery code' : 'Verification code'
+                        recovery
+                            ? 'Kode atau kode pemulihan'
+                            : 'Kode verifikasi'
                     }
                     error={form.errors.code}
                 >
@@ -94,14 +96,14 @@ function CodeForm({
                         onValueChange={(value) => form.setData('code', value)}
                         aria-invalid={!!form.errors.code}
                         placeholder={
-                            recovery ? 'code or xxxxx-xxxxx' : '••••••'
+                            recovery ? 'kode atau xxxxx-xxxxx' : '••••••'
                         }
                     />
                 </Field>
             </div>
             <DialogFooter>
                 <Button variant="outline" onClick={onDone}>
-                    Cancel
+                    Batal
                 </Button>
                 <Button
                     type="submit"
@@ -131,11 +133,11 @@ function SendCode({ resendIn, sent }: { resendIn: number; sent: boolean }) {
                     )
                 }
             >
-                <Mail /> {sent ? 'Send a new code' : 'Send code'}
+                <Mail /> {sent ? 'Kirim kode baru' : 'Kirim kode'}
             </Button>
             {resendIn > 0 && (
                 <span className="text-xs text-muted">
-                    Available again in {resendIn}s
+                    Bisa lagi dalam {resendIn} dtk
                 </span>
             )}
         </div>
@@ -153,8 +155,8 @@ function RecoveryCodes({
         <Modal
             open={codes !== null}
             onOpenChange={(open) => !open && onClose()}
-            title="Save your recovery codes"
-            description="Each code works once if you lose your phone. They are shown only now."
+            title="Simpan kode pemulihan Anda"
+            description="Tiap kode hanya berlaku sekali bila ponsel Anda hilang. Kode ini hanya ditampilkan sekarang."
         >
             <div className="p-4">
                 <ul className="grid grid-cols-2 gap-1.5 rounded-md border border-line bg-canvas p-3 font-mono text-sm">
@@ -170,12 +172,12 @@ function RecoveryCodes({
                         void navigator.clipboard.writeText(
                             (codes ?? []).join('\n'),
                         );
-                        toast.success('Recovery codes copied.');
+                        toast.success('Kode pemulihan disalin.');
                     }}
                 >
-                    <Copy /> Copy
+                    <Copy /> Salin
                 </Button>
-                <Button onClick={onClose}>I saved them</Button>
+                <Button onClick={onClose}>Sudah saya simpan</Button>
             </DialogFooter>
         </Modal>
     );
@@ -191,7 +193,7 @@ function PasswordCard() {
     return (
         <Card>
             <h2 className="border-b border-line px-3 py-2 text-sm font-semibold">
-                Password
+                Kata sandi
             </h2>
             <form
                 noValidate
@@ -205,7 +207,7 @@ function PasswordCard() {
                 }}
             >
                 <Field
-                    label="Current password"
+                    label="Kata sandi saat ini"
                     required
                     error={form.errors.current_password}
                 >
@@ -220,10 +222,10 @@ function PasswordCard() {
                 </Field>
                 <div className="grid gap-3 sm:grid-cols-2">
                     <Field
-                        label="New password"
+                        label="Kata sandi baru"
                         required
                         error={form.errors.password}
-                        hint="At least 8 characters"
+                        hint="Minimal 8 karakter"
                     >
                         <PasswordInput
                             autoComplete="new-password"
@@ -235,7 +237,7 @@ function PasswordCard() {
                         />
                     </Field>
                     <Field
-                        label="Confirm new password"
+                        label="Konfirmasi kata sandi baru"
                         required
                         error={form.errors.password_confirmation}
                     >
@@ -254,8 +256,8 @@ function PasswordCard() {
                 </div>
                 <div className="flex items-center justify-between gap-2">
                     <p className="text-xs text-muted">
-                        Your password is kept in Codex and applies to every
-                        system that uses it.
+                        Kata sandi Anda disimpan di Codex dan berlaku untuk
+                        semua sistem yang memakainya.
                     </p>
                     <Button
                         type="submit"
@@ -264,7 +266,7 @@ function PasswordCard() {
                             !form.data.current_password || !form.data.password
                         }
                     >
-                        <Save /> Change password
+                        <Save /> Ubah kata sandi
                     </Button>
                 </div>
             </form>
@@ -294,28 +296,30 @@ export default function ProfileShow({ account, twoFactor }: Props) {
 
     return (
         <>
-            <Head title="Profile" />
+            <Head title="Profil" />
             <PageHeader
-                title="Profile"
-                description="Your account and how you sign in"
+                title="Profil"
+                description="Akun Anda dan cara Anda masuk"
             />
 
             <div className="grid gap-3 lg:grid-cols-2">
                 <div className="flex flex-col gap-3">
                     <Card>
                         <h2 className="border-b border-line px-3 py-2 text-sm font-semibold">
-                            Account
+                            Akun
                         </h2>
                         <dl className="grid gap-3 p-3 sm:grid-cols-2">
-                            <Detail label="Name">{account.name}</Detail>
-                            <Detail label="Username">{account.username}</Detail>
+                            <Detail label="Nama">{account.name}</Detail>
+                            <Detail label="Nama pengguna">
+                                {account.username}
+                            </Detail>
                             <Detail label="Email">{account.email}</Detail>
-                            <Detail label="Office">{account.office}</Detail>
-                            <Detail label="Role">{account.role}</Detail>
+                            <Detail label="Kantor">{account.office}</Detail>
+                            <Detail label="Peran">{account.role}</Detail>
                         </dl>
                         <p className="border-t border-line px-3 py-2 text-xs text-muted">
-                            These details come from Codex and are updated each
-                            time you sign in.
+                            Data ini berasal dari Codex dan diperbarui setiap
+                            kali Anda masuk.
                         </p>
                     </Card>
                     <PasswordCard />
@@ -324,19 +328,18 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                 <Card className="self-start">
                     <div className="flex items-center justify-between border-b border-line px-3 py-2">
                         <h2 className="text-sm font-semibold">
-                            Two-factor authentication
+                            Verifikasi dua langkah
                         </h2>
                         {enabled && (
                             <Badge tone={method ? 'success' : 'warning'}>
-                                {method ? 'On' : 'Off'}
+                                {method ? 'Aktif' : 'Mati'}
                             </Badge>
                         )}
                     </div>
 
                     {!enabled ? (
                         <p className="p-3 text-sm text-muted">
-                            Two-factor authentication is switched off by the
-                            administrator.
+                            Verifikasi dua langkah dimatikan oleh administrator.
                         </p>
                     ) : (
                         <div className="flex flex-col divide-y divide-line">
@@ -345,23 +348,23 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                                     <Smartphone className="mt-0.5 size-4 shrink-0 text-muted" />
                                     <div>
                                         <p className="text-sm font-medium">
-                                            Authenticator app
+                                            Aplikasi authenticator
                                         </p>
                                         <p className="text-xs text-muted">
-                                            Codes from an app such as Google
-                                            Authenticator or Microsoft
-                                            Authenticator. Recommended.
+                                            Kode dari aplikasi seperti Google
+                                            Authenticator atau Microsoft
+                                            Authenticator. Disarankan.
                                         </p>
                                         {method === 'totp' && (
                                             <p className="mt-1 text-xs text-muted">
                                                 {twoFactor.recoveryRemaining}{' '}
-                                                recovery codes left
+                                                kode pemulihan tersisa
                                             </p>
                                         )}
                                     </div>
                                 </div>
                                 {method === 'totp' ? (
-                                    <Badge tone="success">In use</Badge>
+                                    <Badge tone="success">Dipakai</Badge>
                                 ) : (
                                     <Button
                                         size="sm"
@@ -369,7 +372,7 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                                         onClick={startTotp}
                                     >
                                         <ShieldCheck />{' '}
-                                        {method ? 'Switch' : 'Set up'}
+                                        {method ? 'Ganti' : 'Atur'}
                                     </Button>
                                 )}
                             </div>
@@ -378,17 +381,17 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                                     <Mail className="mt-0.5 size-4 shrink-0 text-muted" />
                                     <div>
                                         <p className="text-sm font-medium">
-                                            Email code
+                                            Kode email
                                         </p>
                                         <p className="text-xs text-muted">
                                             {twoFactor.emailAvailable
-                                                ? `A code is sent to ${account.email} each time you sign in.`
-                                                : 'Your account has no email address that can receive codes.'}
+                                                ? `Kode dikirim ke ${account.email} setiap kali Anda masuk.`
+                                                : 'Akun Anda tidak punya alamat email yang bisa menerima kode.'}
                                         </p>
                                     </div>
                                 </div>
                                 {method === 'email' ? (
-                                    <Badge tone="success">In use</Badge>
+                                    <Badge tone="success">Dipakai</Badge>
                                 ) : (
                                     <Button
                                         size="sm"
@@ -396,8 +399,7 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                                         disabled={!twoFactor.emailAvailable}
                                         onClick={() => setEmailOpen(true)}
                                     >
-                                        <KeyRound />{' '}
-                                        {method ? 'Switch' : 'Set up'}
+                                        <KeyRound /> {method ? 'Ganti' : 'Atur'}
                                     </Button>
                                 )}
                             </div>
@@ -408,7 +410,7 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                                         variant="outline"
                                         onClick={() => setDisableOpen(true)}
                                     >
-                                        <ShieldOff /> Turn off
+                                        <ShieldOff /> Matikan
                                     </Button>
                                 </div>
                             )}
@@ -420,13 +422,13 @@ export default function ProfileShow({ account, twoFactor }: Props) {
             <Modal
                 open={twoFactor.setup !== null}
                 onOpenChange={(open) => !open && cancelTotp()}
-                title="Set up an authenticator app"
-                description="Scan the QR code, then enter the 6-digit code the app shows."
+                title="Atur aplikasi authenticator"
+                description="Pindai kode QR, lalu masukkan kode 6 digit yang tampil di aplikasi."
             >
                 {twoFactor.setup && (
                     <CodeForm
                         url="/profile/two-factor/totp"
-                        submitLabel="Turn on"
+                        submitLabel="Aktifkan"
                         onDone={cancelTotp}
                     >
                         <div className="flex flex-col items-center gap-2">
@@ -450,12 +452,12 @@ export default function ProfileShow({ account, twoFactor }: Props) {
             <Modal
                 open={emailOpen}
                 onOpenChange={setEmailOpen}
-                title="Set up email codes"
-                description={`We will send a code to ${account.email} to confirm it works.`}
+                title="Atur kode email"
+                description={`Kami akan mengirim kode ke ${account.email} untuk memastikan berfungsi.`}
             >
                 <CodeForm
                     url="/profile/two-factor/email"
-                    submitLabel="Turn on"
+                    submitLabel="Aktifkan"
                     onDone={() => setEmailOpen(false)}
                 >
                     <SendCode
@@ -468,13 +470,13 @@ export default function ProfileShow({ account, twoFactor }: Props) {
             <Modal
                 open={disableOpen}
                 onOpenChange={setDisableOpen}
-                title="Turn off two-factor authentication"
-                description="Enter a code to confirm it is you."
+                title="Matikan verifikasi dua langkah"
+                description="Masukkan kode untuk memastikan ini Anda."
             >
                 <CodeForm
                     url="/profile/two-factor"
                     method="delete"
-                    submitLabel="Turn off"
+                    submitLabel="Matikan"
                     recovery={method === 'totp'}
                     onDone={() => setDisableOpen(false)}
                 >

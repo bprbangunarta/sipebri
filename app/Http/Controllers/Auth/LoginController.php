@@ -34,7 +34,7 @@ class LoginController extends Controller
             } catch (Throwable $exception) {
                 report($exception);
 
-                throw ValidationException::withMessages(['username' => 'We could not send the verification code. Please try again shortly.']);
+                throw ValidationException::withMessages(['username' => 'Kode verifikasi gagal dikirim. Coba lagi sebentar lagi.']);
             }
 
             Audit::record('auth.password_verified', 'auth', 'password_verified', $user, context: ['next' => 'two-factor challenge'], actor: $user);

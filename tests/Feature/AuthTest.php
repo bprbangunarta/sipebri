@@ -142,7 +142,7 @@ it('shows a clear message when Codex is unreachable', function () {
     Http::fake(['codex.test/*' => Http::response('down', 500)]);
 
     $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
-        ->assertSessionHasErrors(['username' => 'The sign-in service cannot be reached right now. Please try again shortly.']);
+        ->assertSessionHasErrors(['username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
     $this->assertGuest();
 });
 

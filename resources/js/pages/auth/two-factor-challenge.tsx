@@ -40,21 +40,21 @@ export default function TwoFactorChallenge({
     return (
         <div className="flex min-h-screen items-center justify-center p-4">
             <NetworkStatus />
-            <Head title="Verification" />
+            <Head title="Verifikasi" />
             <div className="w-full max-w-xs">
                 <div className="mb-4 flex flex-col items-center gap-1">
                     <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-white">
                         <ShieldCheck className="size-5" />
                     </span>
                     <h1 className="text-base font-semibold">
-                        Two-factor verification
+                        Verifikasi dua langkah
                     </h1>
                     <p className="text-center text-xs text-muted">
                         {method === 'email'
-                            ? `Hi ${name}, enter the code we sent to ${email}.`
+                            ? `Halo ${name}, masukkan kode yang kami kirim ke ${email}.`
                             : recovery
-                              ? `Hi ${name}, enter one of your recovery codes.`
-                              : `Hi ${name}, enter the code from your authenticator app.`}
+                              ? `Halo ${name}, masukkan salah satu kode pemulihan Anda.`
+                              : `Halo ${name}, masukkan kode dari aplikasi authenticator Anda.`}
                     </p>
                 </div>
                 <Card className="p-4">
@@ -70,7 +70,7 @@ export default function TwoFactorChallenge({
                     >
                         <Field
                             label={
-                                recovery ? 'Recovery code' : 'Verification code'
+                                recovery ? 'Kode pemulihan' : 'Kode verifikasi'
                             }
                             error={form.errors.code}
                         >
@@ -94,7 +94,7 @@ export default function TwoFactorChallenge({
                                 form.data.code.length < (recovery ? 11 : 6)
                             }
                         >
-                            Verify
+                            Verifikasi
                         </Button>
                         <div className="flex flex-col items-center gap-1.5 text-xs">
                             {method === 'email' && (
@@ -111,8 +111,8 @@ export default function TwoFactorChallenge({
                                     className="cursor-pointer text-primary hover:underline disabled:cursor-not-allowed disabled:text-muted disabled:no-underline"
                                 >
                                     {wait > 0
-                                        ? `Send a new code in ${wait}s`
-                                        : 'Send a new code'}
+                                        ? `Kirim kode baru dalam ${wait} dtk`
+                                        : 'Kirim kode baru'}
                                 </button>
                             )}
                             {method === 'totp' && (
@@ -126,8 +126,8 @@ export default function TwoFactorChallenge({
                                     className="cursor-pointer text-primary hover:underline"
                                 >
                                     {recovery
-                                        ? 'Use the authenticator app instead'
-                                        : 'Use a recovery code'}
+                                        ? 'Pakai aplikasi authenticator'
+                                        : 'Pakai kode pemulihan'}
                                 </button>
                             )}
                             <button
@@ -137,7 +137,8 @@ export default function TwoFactorChallenge({
                                 }
                                 className="flex cursor-pointer items-center gap-1 text-muted hover:text-ink"
                             >
-                                <ArrowLeft className="size-3" /> Back to sign in
+                                <ArrowLeft className="size-3" /> Kembali ke
+                                halaman masuk
                             </button>
                         </div>
                     </form>

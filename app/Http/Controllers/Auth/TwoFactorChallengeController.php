@@ -57,14 +57,14 @@ class TwoFactorChallengeController extends Controller
         if (RateLimiter::tooManyAttempts($key, (int) config('security.max_attempts'))) {
             $request->session()->forget('two_factor.login');
 
-            return to_route('login')->withErrors(['username' => 'Too many wrong codes. Please sign in again.']);
+            return to_route('login')->withErrors(['username' => 'Terlalu banyak kode salah. Silakan masuk lagi.']);
         }
 
         if (! $this->twoFactor->verify($user, $data['code'])) {
             RateLimiter::hit($key, 15 * 60);
             Audit::record('auth.mfa_failed', 'auth', 'mfa_failed', $user, context: ['method' => $this->twoFactor->methodFor($user)], outcome: 'failure', actor: $user);
 
-            throw ValidationException::withMessages(['code' => 'The code is not valid. Check it and try again.']);
+            throw ValidationException::withMessages(['code' => 'Kode tidak valid. Periksa lalu coba lagi.']);
         }
 
         RateLimiter::clear($key);
@@ -91,12 +91,12 @@ class TwoFactorChallengeController extends Controller
         } catch (Throwable $exception) {
             report($exception);
 
-            return back()->with('error', 'We could not send the code. Please try again shortly.');
+            return back()->with('error', 'Kode gagal dikirim. Coba lagi sebentar lagi.');
         }
 
         return $sent
-            ? back()->with('success', 'A new code has been sent.')
-            : back()->with('error', "Please wait {$this->email->secondsUntilResend($user)} seconds before asking for another code.");
+            ? back()->with('success', 'Kode baru sudah dikirim.')
+            : back()->with('error', "Tunggu {$this->email->secondsUntilResend($user)} detik sebelum meminta kode lagi.");
     }
 
     public function cancel(Request $request): RedirectResponse
@@ -126,7 +126,7 @@ class TwoFactorChallengeController extends Controller
     {
         $request->session()->forget('two_factor.login');
 
-        return to_route('login')->withErrors(['username' => 'Your sign-in expired. Please sign in again.']);
+        return to_route('login')->withErrors(['username' => 'Sesi masuk Anda berakhir. Silakan masuk lagi.']);
     }
 
     private function mask(string $email): string

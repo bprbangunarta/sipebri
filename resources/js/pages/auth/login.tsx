@@ -11,16 +11,14 @@ export default function Login() {
     return (
         <div className="flex min-h-screen items-center justify-center p-4">
             <NetworkStatus />
-            <Head title="Log in" />
+            <Head title="Masuk" />
             <div className="w-full max-w-xs">
                 <div className="mb-4 flex flex-col items-center gap-1">
                     <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-base font-bold text-white">
                         S
                     </span>
                     <h1 className="text-base font-semibold">SIPEBRI</h1>
-                    <p className="text-xs text-muted">
-                        Sign in to your account
-                    </p>
+                    <p className="text-xs text-muted">Masuk ke akun Anda</p>
                 </div>
                 <Card className="p-4">
                     <Form
@@ -30,7 +28,10 @@ export default function Login() {
                     >
                         {({ errors, processing }) => (
                             <>
-                                <Field label="Username" error={errors.username}>
+                                <Field
+                                    label="Nama pengguna"
+                                    error={errors.username}
+                                >
                                     <Input
                                         name="username"
                                         type="text"
@@ -38,10 +39,13 @@ export default function Login() {
                                         autoFocus
                                         required
                                         aria-invalid={!!errors.username}
-                                        placeholder="Your Codex username"
+                                        placeholder="Username Codex Anda"
                                     />
                                 </Field>
-                                <Field label="Password" error={errors.password}>
+                                <Field
+                                    label="Kata sandi"
+                                    error={errors.password}
+                                >
                                     <PasswordInput
                                         name="password"
                                         autoComplete="current-password"
@@ -55,14 +59,14 @@ export default function Login() {
                                         name="remember"
                                         className="accent-primary"
                                     />
-                                    Remember me
+                                    Ingat saya
                                 </label>
                                 <Button
                                     type="submit"
                                     loading={processing}
                                     className="w-full"
                                 >
-                                    Log in
+                                    Masuk
                                 </Button>
                             </>
                         )}

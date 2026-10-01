@@ -73,7 +73,7 @@ class ProfileController extends Controller
         ]);
 
         if (RateLimiter::tooManyAttempts($key, 5)) {
-            throw ValidationException::withMessages(['current_password' => 'Too many attempts. Try again in '.ceil(RateLimiter::availableIn($key) / 60).' minutes.']);
+            throw ValidationException::withMessages(['current_password' => 'Terlalu banyak percobaan. Coba lagi dalam '.ceil(RateLimiter::availableIn($key) / 60).' menit.']);
         }
 
         try {
@@ -81,43 +81,43 @@ class ProfileController extends Controller
         } catch (CodexUnavailable $exception) {
             report($exception);
 
-            throw ValidationException::withMessages(['current_password' => 'The password service cannot be reached right now. Please try again shortly.']);
+            throw ValidationException::withMessages(['current_password' => 'Layanan kata sandi tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
         }
 
         if (! $result['ok']) {
             RateLimiter::hit($key, 600);
             Audit::record('profile.password_change_failed', 'profile', 'password_change_failed', $user, outcome: 'failure');
 
-            throw ValidationException::withMessages($result['errors'] !== [] ? $result['errors'] : ['current_password' => $result['message'] !== '' ? $result['message'] : 'The password could not be changed.']);
+            throw ValidationException::withMessages($result['errors'] !== [] ? $result['errors'] : ['current_password' => $result['message'] !== '' ? $result['message'] : 'Kata sandi gagal diubah.']);
         }
 
         RateLimiter::clear($key);
         Audit::record('profile.password_changed', 'profile', 'password_changed', $user);
 
-        return back()->with('success', $result['message'] !== '' ? $result['message'] : 'Your password was changed.');
+        return back()->with('success', $result['message'] !== '' ? $result['message'] : 'Kata sandi Anda berhasil diubah.');
     }
 
     /** Send a code to the person's own email: to confirm the email method, or to authorise turning two-factor off. */
     public function sendEmailCode(Request $request): RedirectResponse
     {
         $user = $this->guard($request);
-        abort_unless($this->email->canReceive($user), 422, 'Your account has no email address that can receive codes.');
+        abort_unless($this->email->canReceive($user), 422, 'Akun Anda tidak punya alamat email yang bisa menerima kode.');
 
         try {
             $sent = $this->email->issue($user);
         } catch (Throwable $exception) {
             report($exception);
 
-            return back()->with('error', 'We could not send the code. Please try again shortly.');
+            return back()->with('error', 'Kode gagal dikirim. Coba lagi sebentar lagi.');
         }
 
         if (! $sent) {
-            return back()->with('error', "Please wait {$this->email->secondsUntilResend($user)} seconds before asking for another code.");
+            return back()->with('error', "Tunggu {$this->email->secondsUntilResend($user)} detik sebelum meminta kode lagi.");
         }
 
         $request->session()->put('two_factor.email_sent', true);
 
-        return back()->with('success', 'A code has been sent to your email.');
+        return back()->with('success', 'Kode sudah dikirim ke email Anda.');
     }
 
     public function enableEmail(Request $request): RedirectResponse
@@ -128,7 +128,7 @@ class ProfileController extends Controller
         if (! $this->email->verify($user, $this->code($request))) {
             RateLimiter::hit($this->throttleKey($user), 600);
 
-            throw ValidationException::withMessages(['code' => 'The code is not valid. Check it or request a new one.']);
+            throw ValidationException::withMessages(['code' => 'Kode tidak valid. Periksa atau minta kode baru.']);
         }
 
         RateLimiter::clear($this->throttleKey($user));
@@ -136,7 +136,7 @@ class ProfileController extends Controller
         Audit::record('profile.mfa_enabled', 'profile', 'mfa_enabled', $user, context: ['method' => TwoFactor::EMAIL]);
         $request->session()->forget(['two_factor.email_sent', 'two_factor.setup_secret']);
 
-        return back()->with('success', 'Two-factor authentication by email is on.');
+        return back()->with('success', 'Verifikasi dua langkah lewat email sudah aktif.');
     }
 
     /** Begin authenticator-app setup: create the pending secret that the QR code shows. */
@@ -159,13 +159,13 @@ class ProfileController extends Controller
     {
         $user = $this->guard($request);
         $secret = $request->session()->get('two_factor.setup_secret');
-        abort_if($secret === null, 422, 'Start the setup again.');
+        abort_if($secret === null, 422, 'Mulai ulang pengaturannya.');
         $this->throttle($user);
 
         if (! $this->twoFactor->verifyTotp($user, $this->code($request), $secret)) {
             RateLimiter::hit($this->throttleKey($user), 600);
 
-            throw ValidationException::withMessages(['code' => 'The code is not valid. Check that your phone clock is correct and try again.']);
+            throw ValidationException::withMessages(['code' => 'Kode tidak valid. Pastikan jam ponsel Anda benar lalu coba lagi.']);
         }
 
         RateLimiter::clear($this->throttleKey($user));
@@ -174,7 +174,7 @@ class ProfileController extends Controller
         $request->session()->forget(['two_factor.setup_secret', 'two_factor.email_sent']);
         $request->session()->flash('two_factor.recovery_codes', $this->recovery->regenerate($user));
 
-        return back()->with('success', 'Two-factor authentication with an authenticator app is on. Save your recovery codes.');
+        return back()->with('success', 'Verifikasi dua langkah dengan aplikasi authenticator sudah aktif. Simpan kode pemulihan Anda.');
     }
 
     /** Turn two-factor off. Needs a valid code of the current method, so a hijacked session cannot do it silently. */
@@ -186,7 +186,7 @@ class ProfileController extends Controller
         if (! $this->twoFactor->verify($user, $this->code($request))) {
             RateLimiter::hit($this->throttleKey($user), 600);
 
-            throw ValidationException::withMessages(['code' => 'The code is not valid.']);
+            throw ValidationException::withMessages(['code' => 'Kode tidak valid.']);
         }
 
         RateLimiter::clear($this->throttleKey($user));
@@ -194,7 +194,7 @@ class ProfileController extends Controller
         $user->forceFill(['mfa_method' => null, 'mfa_secret' => null, 'mfa_recovery_codes' => null, 'mfa_confirmed_at' => null])->save();
         $request->session()->forget(['two_factor.email_sent', 'two_factor.setup_secret']);
 
-        return back()->with('success', 'Two-factor authentication is off.');
+        return back()->with('success', 'Verifikasi dua langkah sudah dimatikan.');
     }
 
     private function guard(Request $request): User
@@ -217,7 +217,7 @@ class ProfileController extends Controller
     private function throttle(User $user): void
     {
         if (RateLimiter::tooManyAttempts($this->throttleKey($user), (int) config('security.max_attempts'))) {
-            throw ValidationException::withMessages(['code' => 'Too many wrong codes. Try again in '.ceil(RateLimiter::availableIn($this->throttleKey($user)) / 60).' minutes.']);
+            throw ValidationException::withMessages(['code' => 'Terlalu banyak kode salah. Coba lagi dalam '.ceil(RateLimiter::availableIn($this->throttleKey($user)) / 60).' menit.']);
         }
     }
 

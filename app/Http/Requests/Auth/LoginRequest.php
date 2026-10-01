@@ -49,7 +49,7 @@ class LoginRequest extends FormRequest
             $this->audit('auth.login_failed', 'sign-in service unavailable');
 
             throw ValidationException::withMessages([
-                'username' => 'The sign-in service cannot be reached right now. Please try again shortly.',
+                'username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.',
             ]);
         }
 
@@ -65,7 +65,7 @@ class LoginRequest extends FormRequest
         if ($user->trashed()) {
             $this->audit('auth.login_failed', 'inactive account', $user);
 
-            throw ValidationException::withMessages(['username' => 'Your account is inactive. Please contact your supervisor or HR.']);
+            throw ValidationException::withMessages(['username' => 'Akun Anda tidak aktif. Hubungi atasan atau bagian SDM.']);
         }
 
         RateLimiter::clear($this->throttleKey());
