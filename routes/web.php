@@ -2,6 +2,7 @@
 
 use App\Enums\RoleName;
 use App\Http\Controllers\AnalysisController;
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
@@ -104,6 +105,7 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::get('analysis', [AnalysisController::class, 'index'])->middleware('permission:analysis.view')->name('analysis.index');
+    Route::get('approvals', [ApprovalController::class, 'index'])->middleware('permission:approvals.view')->name('approvals.index');
 
     // Reference data and access management belong to Super Admin only (a role check, not per-module permissions).
     Route::middleware('role:'.RoleName::SuperAdmin->value)->group(function () {

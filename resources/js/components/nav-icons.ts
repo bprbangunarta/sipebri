@@ -1,4 +1,5 @@
 import {
+    BadgeCheck,
     Banknote,
     Building2,
     Gavel,
@@ -38,6 +39,7 @@ const icons: Record<string, LucideIcon> = {
     'file-text': FileText,
     calendar: CalendarDays,
     'clipboard-check': ClipboardCheck,
+    'badge-check': BadgeCheck,
     banknote: Banknote,
     building: Building2,
     gavel: Gavel,

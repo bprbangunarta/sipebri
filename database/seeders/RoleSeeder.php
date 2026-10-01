@@ -96,14 +96,14 @@ class RoleSeeder extends Seeder
      * @var array<string, list<string>>
      */
     private const REQUIRED = [
-        'Staff Analis & Appraisal' => ['analysis.view'],
+        'Staff Analis & Appraisal' => ['analysis.view', 'approvals.view'],
         'Kepala Kantor Kas' => ['analysis.view'],
         'Customer Service' => ['analysis.view'],
         'Teller' => ['analysis.view'],
-        'Kepala Seksi Analis' => ['surveys.view', 'surveys.manage'],
-        'Kepala Bagian Analis' => ['surveys.view', 'surveys.manage'],
-        'Direktur Bisnis' => ['surveys.view', 'surveys.manage'],
-        'Direktur Utama' => ['surveys.view', 'surveys.manage'],
+        'Kepala Seksi Analis' => ['surveys.view', 'surveys.manage', 'approvals.view'],
+        'Kepala Bagian Analis' => ['surveys.view', 'surveys.manage', 'approvals.view'],
+        'Direktur Bisnis' => ['surveys.view', 'surveys.manage', 'approvals.view'],
+        'Direktur Utama' => ['surveys.view', 'surveys.manage', 'approvals.view'],
     ];
 
     /**

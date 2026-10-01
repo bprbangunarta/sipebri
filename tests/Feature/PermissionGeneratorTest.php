@@ -11,10 +11,10 @@ it('lists every permission with its type and the number of roles holding it', fu
 
     $this->actingAs($admin)->get(route('permissions.index'))
         ->assertInertia(fn (Assert $page) => $page->component('permissions/index')
-            ->has('permissions.data', 10)
+            ->has('permissions.data', 11)
             ->where('permissions.data.0.custom', false)
             ->where('permissions.data.0.name', 'analysis.view')
-            ->has('entities', 6));
+            ->has('entities', 7));
 
     $this->get(route('permissions.index', ['search' => 'surveys']))
         ->assertInertia(fn (Assert $page) => $page->has('permissions.data', 2));
