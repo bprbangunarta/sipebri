@@ -53,7 +53,7 @@ class EmailCode
         Cache::put($this->key($user), ['hash' => $this->hash($user, $code), 'sent_at' => now()->getTimestamp(), 'attempts' => 0], now()->addMinutes($ttl));
 
         try {
-            Mail::to($user->email)->send(new LoginCode($code, $ttl));
+            Mail::to($user->email)->send(new LoginCode($code, $ttl, $user->name));
         } catch (Throwable $exception) {
             Cache::forget($this->key($user));
             Audit::record('auth.mfa_code_send_failed', 'auth', 'mfa_code_send_failed', $user, context: ['method' => 'email', 'error' => class_basename($exception)], outcome: 'failure', actor: $user);
