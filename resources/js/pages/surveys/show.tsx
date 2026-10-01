@@ -809,7 +809,6 @@ function PositionPicker({
 
             <form
                 noValidate
-                className="flex flex-col gap-2 sm:flex-row sm:items-end"
                 onSubmit={(e) => {
                     e.preventDefault();
                     send(
@@ -830,23 +829,26 @@ function PositionPicker({
                         error={form.errors.text}
                         hint="Contoh -6.4643, 107.8083, atau tautan lokasi yang dibagikan lewat WhatsApp."
                     >
-                        <Input
-                            value={form.data.text}
-                            onChange={(e) => {
-                                form.setData('text', e.target.value);
-                                form.clearErrors();
-                            }}
-                            aria-invalid={!!form.errors.text}
-                        />
+                        <div className="flex gap-2">
+                            <Input
+                                className="min-w-0 flex-1"
+                                value={form.data.text}
+                                onChange={(e) => {
+                                    form.setData('text', e.target.value);
+                                    form.clearErrors();
+                                }}
+                                aria-invalid={!!form.errors.text}
+                            />
+                            <Button
+                                type="submit"
+                                loading={busy}
+                                disabled={form.data.text.trim() === ''}
+                            >
+                                Simpan posisi
+                            </Button>
+                        </div>
                     </Field>
                 </div>
-                <Button
-                    type="submit"
-                    loading={busy}
-                    disabled={form.data.text.trim() === ''}
-                >
-                    Simpan posisi
-                </Button>
             </form>
 
             {withGps.length > 0 && (
