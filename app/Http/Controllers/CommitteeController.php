@@ -26,18 +26,32 @@ use Spatie\Permission\Models\Role;
  */
 class CommitteeController extends Controller
 {
-    public function index(Request $request): Response
+    /** The hub: the default ladder of authority, and how it works. */
+    public function index(): Response
     {
+        $default = CommitteeLevels::defaultPath();
+
         return Inertia::render('committees/index', [
+            'defaultId' => $default?->id,
+            'levels' => $default !== null ? $default->tiers->map(fn (CommitteeTier $t): array => [
+                ...$t->only(['id', 'sort', 'label', 'role', 'is_individual', 'min_amount', 'max_amount', 'can_escalate', 'can_approve', 'can_cancel', 'can_reject']),
+                'people' => User::role($t->role)->count(),
+            ])->values() : [],
+            'followers' => CommitteeLevels::followers(),
+            'special' => CommitteePath::query()->where('is_default', false)->where(fn ($q) => $q->where('follows_default', false)->orWhere('mechanism', '!=', 'plafon'))->count(),
+            ...$this->authorityProps(),
+            'canManage' => true,
+        ]);
+    }
+
+    /** Paths that deviate from the default levels (hierarchy, or levels of their own); the rest can be shown on request. */
+    public function paths(): Response
+    {
+        return Inertia::render('committees/paths', [
             'paths' => CommitteePath::with('product')->withCount('tiers')->where('is_default', false)->orderBy('product_id')->orderBy('condition')->get()
                 ->map(fn (CommitteePath $p): array => $this->pathRow($p)),
             'productOptions' => Product::orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} — {$p->name}"]),
             'pathOptions' => CommitteePath::with('product')->has('tiers')->where('is_default', false)->get()->map(fn (CommitteePath $p): array => ['value' => $p->id, 'label' => $p->title()]),
-            // Valid conditions per product for the authority check: the product's own plus cross-product ones (e.g. RELOAN).
-            'conditionMap' => CommitteePath::where('is_active', true)->get()
-                ->groupBy(fn (CommitteePath $p) => $p->product_id ?? 'global')
-                ->map(fn ($paths) => $paths->map(fn (CommitteePath $p): string => (string) $p->condition)->unique()->sort()->values()),
-            'committeeMembers' => CommitteeMembers::options(),
             'defaultLevels' => ($default = CommitteeLevels::defaultPath()) ? ['id' => $default->id, 'followers' => CommitteeLevels::followers()] : null,
             'mechanisms' => collect(CommitteePath::MECHANISMS)->map(fn (string $label, string $value): array => ['value' => $value, 'label' => $label])->values(),
             'canManage' => true,
@@ -59,43 +73,30 @@ class CommitteeController extends Controller
         ]);
     }
 
-    /** The mechanisms that decide who may approve a loan, as a list; each one opens its configuration. */
-    public function mechanism(): Response
+    /** How an applicant who is a committee member is handled. */
+    public function exceptions(): Response
     {
-        $paths = CommitteePath::query()->where('is_default', false)->get();
-        $own = fn (string $mechanism): int => $paths->where('mechanism', $mechanism)->where('follows_default', false)->count();
-
-        return Inertia::render('committees/mechanism', [
-            'items' => [
-                ['key' => 'plafon', 'name' => 'Authority by amount', 'summary' => 'The loan amount picks the level that decides.', 'paths' => $paths->where('mechanism', 'plafon')->count(), 'own' => $own('plafon')],
-                ['key' => 'hierarki', 'name' => 'Committee hierarchy', 'summary' => 'The file climbs every committee; only the last one decides.', 'paths' => $paths->where('mechanism', 'hierarki')->count(), 'own' => $own('hierarki')],
-                ['key' => 'conflict', 'name' => 'Applicant is a committee member', 'summary' => 'Nobody decides their own file; the level above takes over.', 'paths' => null, 'own' => null],
-            ],
+        return Inertia::render('committees/exceptions', [
+            'members' => ['total' => CommitteeMembers::committee()->count(), 'withoutNik' => CommitteeMembers::committee()->whereNull('nik_hash')->count()],
+            ...$this->authorityProps(),
         ]);
     }
 
-    /** The configuration behind one mechanism, from the live rules. */
-    public function mechanismShow(string $key): Response
+    /**
+     * Options for the authority check dialog.
+     *
+     * @return array<string, mixed>
+     */
+    private function authorityProps(): array
     {
-        abort_unless(in_array($key, ['plafon', 'hierarki', 'conflict'], true), 404);
-
-        $default = CommitteeLevels::defaultPath();
-        $levels = ($default !== null ? $default->tiers : collect())
-            ->reject(fn (CommitteeTier $t): bool => $key === 'hierarki' && $t->is_individual)
-            ->map(fn (CommitteeTier $t): array => [
-                ...$t->only(['id', 'sort', 'label', 'role', 'is_individual', 'min_amount', 'max_amount', 'can_escalate', 'can_approve', 'can_cancel', 'can_reject']),
-                'people' => User::role($t->role)->count(),
-            ])->values();
-
-        return Inertia::render('committees/mechanism-show', [
-            'mechanismKey' => $key,
-            'defaultId' => $default?->id,
-            'levels' => $key === 'conflict' ? [] : $levels,
-            'paths' => $key === 'conflict' ? [] : CommitteePath::with('product')->where('is_default', false)->where('mechanism', $key)->get()
-                ->map(fn (CommitteePath $p): array => ['id' => $p->id, 'title' => $p->title(), 'follows_default' => $p->follows_default, 'is_active' => $p->is_active])->values(),
-            'members' => $key === 'conflict' ? ['total' => CommitteeMembers::query()->count(), 'withoutNik' => CommitteeMembers::query()->whereNull('nik_hash')->count()] : null,
-            'canManage' => true,
-        ]);
+        return [
+            'productOptions' => Product::orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} — {$p->name}"]),
+            // Valid conditions per product: the product's own plus cross-product ones (e.g. RELOAN).
+            'conditionMap' => CommitteePath::where('is_active', true)->get()
+                ->groupBy(fn (CommitteePath $p) => $p->product_id ?? 'global')
+                ->map(fn ($paths) => $paths->map(fn (CommitteePath $p): string => (string) $p->condition)->unique()->sort()->values()),
+            'committeeMembers' => CommitteeMembers::options(),
+        ];
     }
 
     /** Who decides for a given product, condition and amount. Reads rules only. */
@@ -157,7 +158,7 @@ class CommitteeController extends Controller
 
         $path->delete();
 
-        return to_route('committees.index')->with('success', "Committee path {$title} deleted.");
+        return to_route('committees.paths')->with('success', "Committee path {$title} deleted.");
     }
 
     public function storeTier(CommitteeTierRequest $request, CommitteePath $path): RedirectResponse

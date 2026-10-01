@@ -70,7 +70,7 @@ it('refuses to edit tiers of a path that follows the defaults until it is custom
 it('does not list or delete the default path', function () {
     $default = CommitteeLevels::defaultPath();
 
-    $this->get('/committees')->assertInertia(fn ($page) => $page
+    $this->get('/committees/paths')->assertInertia(fn ($page) => $page
         ->where('defaultLevels.id', $default->id)
         ->where('paths', fn ($paths) => collect($paths)->doesntContain('is_default', true)));
     $this->delete("/committees/{$default->id}")->assertForbidden();
@@ -109,16 +109,12 @@ it('leaves the analyst staff out of the committee members but still recognises t
         ->and(CommitteeMembers::findByNik('9999000000000077')?->is($staff))->toBeTrue();
 });
 
-it('explains the mechanism from the live rules', function () {
-    $this->get('/committees/mechanism')->assertOk()->assertInertia(fn ($page) => $page
-        ->component('committees/mechanism')
-        ->has('items', 3));
-
-    $this->get('/committees/mechanism/plafon')->assertInertia(fn ($page) => $page
-        ->component('committees/mechanism-show')
+it('shows the default ladder as the hub and the other parts as tabs', function () {
+    $this->get('/committees')->assertOk()->assertInertia(fn ($page) => $page
+        ->component('committees/index')
         ->has('levels', 5)
-        ->where('levels.0.is_individual', true));
-    $this->get('/committees/mechanism/hierarki')->assertInertia(fn ($page) => $page->has('levels', 4));
-    $this->get('/committees/mechanism/conflict')->assertOk();
-    $this->get('/committees/mechanism/other')->assertNotFound();
+        ->where('levels.0.is_individual', true)
+        ->has('special'));
+    $this->get('/committees/exceptions')->assertInertia(fn ($page) => $page->component('committees/exceptions'));
+    $this->get('/committees/paths')->assertInertia(fn ($page) => $page->component('committees/paths'));
 });

@@ -123,8 +123,8 @@ Route::middleware('auth')->group(function () {
         Route::get('committees/members', [CommitteeMemberController::class, 'index'])->name('committees.members');
         Route::put('committees/members/{user}', [CommitteeMemberController::class, 'update'])->whereNumber('user')->name('committees.members.update');
         Route::delete('committees/members/{user}', [CommitteeMemberController::class, 'destroy'])->whereNumber('user')->name('committees.members.destroy');
-        Route::get('committees/mechanism', [CommitteeController::class, 'mechanism'])->name('committees.mechanism');
-        Route::get('committees/mechanism/{key}', [CommitteeController::class, 'mechanismShow'])->name('committees.mechanism.show');
+        Route::get('committees/paths', [CommitteeController::class, 'paths'])->name('committees.paths');
+        Route::get('committees/exceptions', [CommitteeController::class, 'exceptions'])->name('committees.exceptions');
         Route::get('committees/authority', [CommitteeController::class, 'authority'])->name('committees.authority');
         Route::get('committees/{path}', [CommitteeController::class, 'show'])->name('committees.show');
         Route::scopeBindings()->group(function () {

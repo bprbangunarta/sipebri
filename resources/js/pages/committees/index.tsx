@@ -1,230 +1,134 @@
-import { Head, router, useForm } from '@inertiajs/react';
-import {
-    Gavel,
-    MoreHorizontal,
-    Pencil,
-    Plus,
-    Scale,
-    SlidersHorizontal,
-    Trash2,
-} from 'lucide-react';
+import { Head, router } from '@inertiajs/react';
+import { Scale, SlidersHorizontal } from 'lucide-react';
 import { useState } from 'react';
-import { AuthorityCheck } from '@/pages/committees/authority-check';
+import { CommitteeTabs } from '@/components/committee-tabs';
 import { Button } from '@/components/ui/button';
-import { Combobox } from '@/components/ui/combobox';
-import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
-import {
-    DropdownContent,
-    DropdownItem,
-    DropdownMenu,
-    DropdownSeparator,
-    DropdownTrigger,
-} from '@/components/ui/dropdown';
-import { Field } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Badge, PageHeader } from '@/components/ui/misc';
-import { Tip } from '@/components/ui/tooltip';
+import { rupiah } from '@/lib/format';
+import { AuthorityCheck } from '@/pages/committees/authority-check';
 
 type Option = { value: number | string; label: string };
-export type PathRow = {
+
+type Level = {
     id: number;
-    product_id: number | null;
-    product_label: string;
-    condition: string | null;
-    condition_label: string;
-    mechanism: string;
-    mechanism_label: string;
-    is_active: boolean;
-    is_default: boolean;
-    follows_default: boolean;
-    followers?: number | null;
-    note: string | null;
-    tiers_count: number;
-    title: string;
+    label: string | null;
+    role: string;
+    is_individual: boolean;
+    min_amount: number | null;
+    max_amount: number | null;
+    can_escalate: boolean;
+    can_approve: boolean;
+    can_cancel: boolean;
+    can_reject: boolean;
+    people: number;
 };
 
 type Props = {
-    paths: PathRow[];
+    defaultId: number | null;
+    levels: Level[];
+    followers: number;
+    special: number;
     productOptions: Option[];
-    pathOptions: Option[];
     conditionMap: Record<string, string[]>;
     committeeMembers: Option[];
-    mechanisms: Option[];
-    defaultLevels: { id: number; followers: number } | null;
     canManage: boolean;
 };
 
-export default function CommitteesIndex({
-    paths,
+const DECISIONS = [
+    ['can_escalate', 'Escalate'],
+    ['can_approve', 'Approve'],
+    ['can_cancel', 'Cancel'],
+    ['can_reject', 'Reject'],
+] as const;
+
+export default function CommitteeLevels({
+    defaultId,
+    levels,
+    followers,
+    special,
     productOptions,
-    pathOptions,
     conditionMap,
     committeeMembers,
-    mechanisms,
-    defaultLevels,
     canManage,
 }: Props) {
-    const [editing, setEditing] = useState<PathRow | 'new' | null>(null);
-    const [toDelete, setToDelete] = useState<PathRow | null>(null);
     const [checking, setChecking] = useState(false);
-    const [deleting, setDeleting] = useState(false);
-    const form = useForm({
-        product_id: '',
-        condition: '',
-        mechanism: 'plafon',
-        is_active: true,
-        note: '',
-        copy_from: '',
-        follows_default: true,
-    });
 
-    const openForm = (row: PathRow | 'new') => {
-        form.clearErrors();
-        form.setData(
-            row === 'new'
-                ? {
-                      product_id: '',
-                      condition: '',
-                      mechanism: 'plafon',
-                      is_active: true,
-                      note: '',
-                      copy_from: '',
-                      follows_default: true,
-                  }
-                : {
-                      product_id: row.product_id ? String(row.product_id) : '',
-                      condition: row.condition ?? '',
-                      mechanism: row.mechanism,
-                      is_active: row.is_active,
-                      note: row.note ?? '',
-                      copy_from: '',
-                      follows_default: row.follows_default,
-                  },
-        );
-        setEditing(row);
-    };
-
-    const submit = (e: React.FormEvent) => {
-        e.preventDefault();
-        const options = {
-            preserveScroll: true,
-            onSuccess: () => setEditing(null),
-        };
-        if (editing === 'new') {
-            form.post('/committees', options);
-        } else if (editing) {
-            form.put(`/committees/${editing.id}`, options);
-        }
-    };
-
-    const confirmDelete = () => {
-        if (!toDelete) {
-            return;
-        }
-        router.delete(`/committees/${toDelete.id}`, {
-            onStart: () => setDeleting(true),
-            onFinish: () => {
-                setDeleting(false);
-                setToDelete(null);
-            },
-        });
-    };
-
-    const columns: Column<PathRow>[] = [
+    const columns: Column<Level>[] = [
         {
-            key: 'product',
-            header: 'Product',
+            key: 'order',
+            header: '#',
+            narrow: true,
+            className: 'text-muted tabular-nums',
+            cell: (_l, i) => i + 1,
+        },
+        {
+            key: 'level',
+            header: 'Level',
             className: 'font-medium',
-            cell: (p) => p.product_label,
+            cell: (l) => l.label ?? '–',
         },
+        { key: 'role', header: 'Who decides', cell: (l) => l.role },
         {
-            key: 'condition',
-            header: 'Condition',
+            key: 'kind',
+            header: 'Kind',
             hideBelow: 'sm',
-            cell: (p) => p.condition_label,
+            cell: (l) => (
+                <Badge tone={l.is_individual ? 'info' : 'neutral'}>
+                    {l.is_individual ? 'Individual' : 'Committee'}
+                </Badge>
+            ),
         },
         {
-            key: 'mechanism',
-            header: 'Mechanism',
+            key: 'range',
+            header: 'Amount',
+            align: 'right',
+            className: 'whitespace-nowrap tabular-nums',
+            cell: (l) =>
+                `${rupiah(l.min_amount ?? 0)} – ${l.max_amount === null ? 'no limit' : rupiah(l.max_amount)}`,
+        },
+        {
+            key: 'decisions',
+            header: 'Decisions',
             hideBelow: 'md',
-            cell: (p) => p.mechanism_label,
+            cell: (l) => (
+                <span className="flex flex-wrap gap-1">
+                    {DECISIONS.filter(([k]) => l[k]).map(([k, label]) => (
+                        <Badge
+                            key={k}
+                            tone={
+                                k === 'can_approve'
+                                    ? 'success'
+                                    : k === 'can_reject'
+                                      ? 'danger'
+                                      : k === 'can_escalate'
+                                        ? 'info'
+                                        : 'neutral'
+                            }
+                        >
+                            {label}
+                        </Badge>
+                    ))}
+                </span>
+            ),
         },
         {
-            key: 'tiers',
-            header: 'Tiers',
+            key: 'people',
+            header: 'People',
             align: 'right',
             hideBelow: 'sm',
             className: 'tabular-nums',
-            cell: (p) => p.tiers_count,
-        },
-        {
-            key: 'levels',
-            header: 'Levels',
-            hideBelow: 'sm',
-            cell: (p) => (
-                <Badge tone={p.follows_default ? 'info' : 'neutral'}>
-                    {p.follows_default ? 'Default' : 'Own'}
-                </Badge>
-            ),
-        },
-        {
-            key: 'status',
-            header: 'Status',
-            cell: (p) => (
-                <Badge tone={p.is_active ? 'success' : 'neutral'}>
-                    {p.is_active ? 'Active' : 'Inactive'}
-                </Badge>
-            ),
-        },
-        {
-            key: 'actions',
-            header: 'Actions',
-            srOnly: true,
-            narrow: true,
-            align: 'right',
-            cell: (p) =>
-                canManage && (
-                    <DropdownMenu>
-                        <Tip label="Actions">
-                            <DropdownTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    aria-label={`Actions for ${p.title}`}
-                                >
-                                    <MoreHorizontal />
-                                </Button>
-                            </DropdownTrigger>
-                        </Tip>
-                        <DropdownContent>
-                            <DropdownItem
-                                icon={<Pencil />}
-                                onSelect={() => openForm(p)}
-                            >
-                                Edit
-                            </DropdownItem>
-                            <DropdownSeparator />
-                            <DropdownItem
-                                danger
-                                icon={<Trash2 />}
-                                onSelect={() => setToDelete(p)}
-                            >
-                                Delete
-                            </DropdownItem>
-                        </DropdownContent>
-                    </DropdownMenu>
-                ),
+            cell: (l) => l.people,
         },
     ];
 
     return (
         <>
-            <Head title="Committee levels" />
+            <Head title="Committees" />
             <PageHeader
-                title="Committee levels"
-                description="Who may decide a loan, by product, condition and amount"
+                title="Committees"
+                description="Who may decide a loan, by amount"
                 actions={
                     <>
                         <Button
@@ -233,193 +137,59 @@ export default function CommitteesIndex({
                         >
                             <Scale /> Check authority
                         </Button>
-                        {defaultLevels && (
+                        {canManage && defaultId && (
                             <Button
-                                variant="outline"
                                 onClick={() =>
-                                    router.visit(
-                                        `/committees/${defaultLevels.id}`,
-                                    )
+                                    router.visit(`/committees/${defaultId}`)
                                 }
                             >
-                                <SlidersHorizontal /> Default levels
-                            </Button>
-                        )}
-                        {canManage && (
-                            <Button onClick={() => openForm('new')}>
-                                <Plus /> Add path
+                                <SlidersHorizontal /> Edit levels
                             </Button>
                         )}
                     </>
                 }
             />
+            <CommitteeTabs current="levels" />
 
             <DataTable
-                rows={paths}
-                rowKey={(p) => p.id}
+                rows={levels}
+                rowKey={(l) => l.id}
                 columns={columns}
-                onRowClick={(p) => router.visit(`/committees/${p.id}`)}
                 empty={{
-                    icon: <Gavel />,
-                    title: 'No committee paths yet',
+                    icon: <SlidersHorizontal />,
+                    title: 'No levels yet',
                     description:
-                        'Create a path per product (or across products for conditions such as RELOAN), then define its tiers.',
-                    action: canManage ? (
-                        <Button size="sm" onClick={() => openForm('new')}>
-                            <Plus /> Add path
-                        </Button>
-                    ) : undefined,
+                        'Run the committee seeder to create the default levels.',
                 }}
             />
 
-            <Modal
-                open={editing !== null}
-                onOpenChange={(open) => !open && setEditing(null)}
-                title={
-                    editing === 'new'
-                        ? 'Add committee path'
-                        : 'Edit committee path'
-                }
-                description="One path per product and condition."
-            >
-                <form onSubmit={submit} noValidate>
-                    <div className="flex flex-col gap-3 p-4">
-                        <Field
-                            label="Product"
-                            error={form.errors.product_id}
-                            hint="Leave empty to apply to all products."
-                        >
-                            <Combobox
-                                clearable
-                                placeholder="All products"
-                                options={productOptions}
-                                value={form.data.product_id}
-                                onChange={(v) =>
-                                    form.setData('product_id', v ?? '')
-                                }
-                                invalid={!!form.errors.product_id}
-                            />
-                        </Field>
-                        <Field
-                            label="Condition / category"
-                            error={form.errors.condition}
-                            hint="Empty means Normal. Stored in uppercase, e.g. RELOAN."
-                        >
-                            <Input
-                                className="uppercase"
-                                value={form.data.condition}
-                                maxLength={30}
-                                onChange={(e) =>
-                                    form.setData('condition', e.target.value)
-                                }
-                                aria-invalid={!!form.errors.condition}
-                            />
-                        </Field>
-                        <Field
-                            label="Mechanism"
-                            required
-                            error={form.errors.mechanism}
-                        >
-                            <Combobox
-                                searchable={false}
-                                options={mechanisms}
-                                value={form.data.mechanism}
-                                onChange={(v) =>
-                                    form.setData('mechanism', v ?? 'plafon')
-                                }
-                                invalid={!!form.errors.mechanism}
-                            />
-                        </Field>
-                        {editing === 'new' && defaultLevels && (
-                            <label className="flex items-start gap-2 text-sm">
-                                <input
-                                    type="checkbox"
-                                    className="mt-0.5 accent-primary"
-                                    checked={
-                                        form.data.follows_default &&
-                                        form.data.copy_from === ''
-                                    }
-                                    disabled={form.data.copy_from !== ''}
-                                    onChange={(e) =>
-                                        form.setData(
-                                            'follows_default',
-                                            e.target.checked,
-                                        )
-                                    }
-                                />
-                                <span>
-                                    Follow the default authority levels
-                                    <span className="block text-xs text-muted">
-                                        Limits are kept in one place; change
-                                        them there and this path follows.
-                                    </span>
-                                </span>
-                            </label>
-                        )}
-                        {editing === 'new' && (
-                            <Field
-                                label="Copy tiers from"
-                                error={form.errors.copy_from}
-                            >
-                                <Combobox
-                                    clearable
-                                    placeholder="Do not copy"
-                                    options={pathOptions}
-                                    value={form.data.copy_from}
-                                    onChange={(v) =>
-                                        form.setData('copy_from', v ?? '')
-                                    }
-                                />
-                            </Field>
-                        )}
-                        <Field label="Note" error={form.errors.note}>
-                            <Input
-                                value={form.data.note}
-                                maxLength={255}
-                                onChange={(e) =>
-                                    form.setData('note', e.target.value)
-                                }
-                            />
-                        </Field>
-                        <label className="flex items-center gap-2 text-sm">
-                            <input
-                                type="checkbox"
-                                className="accent-primary"
-                                checked={form.data.is_active}
-                                onChange={(e) =>
-                                    form.setData('is_active', e.target.checked)
-                                }
-                            />
-                            Active
-                        </label>
-                    </div>
-                    <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setEditing(null)}
-                        >
-                            Cancel
-                        </Button>
-                        <Button type="submit" loading={form.processing}>
-                            {editing === 'new' ? 'Create' : 'Save'}
-                        </Button>
-                    </DialogFooter>
-                </form>
-            </Modal>
-
-            <ConfirmDialog
-                open={toDelete !== null}
-                onOpenChange={(open) => !open && !deleting && setToDelete(null)}
-                title="Delete committee path?"
-                description={
-                    <>
-                        This removes <strong>{toDelete?.title}</strong> and all
-                        of its tiers.
-                    </>
-                }
-                loading={deleting}
-                onConfirm={confirmDelete}
-            />
+            <div className="mt-4 grid gap-3 text-sm text-muted md:grid-cols-3">
+                <p className="border-border rounded-lg border bg-surface p-3">
+                    <span className="mb-1 block font-medium text-ink">
+                        By amount
+                    </span>
+                    The file goes to the level whose amount range covers the
+                    loan. Levels below it only escalate. {followers}{' '}
+                    {followers === 1 ? 'path follows' : 'paths follow'} these
+                    levels, so changing them here changes all of them.
+                </p>
+                <p className="border-border rounded-lg border bg-surface p-3">
+                    <span className="mb-1 block font-medium text-ink">
+                        Individual or committee
+                    </span>
+                    An individual level (analyst staff) is decided by the person
+                    who holds the file. A committee level is decided by that
+                    committee, so only those people are listed under Members.
+                </p>
+                <p className="border-border rounded-lg border bg-surface p-3">
+                    <span className="mb-1 block font-medium text-ink">
+                        Special rules
+                    </span>
+                    {special} {special === 1 ? 'path has' : 'paths have'} a
+                    hierarchy (every committee in order, only the last decides)
+                    or limits of their own. See the Special rules tab.
+                </p>
+            </div>
 
             <AuthorityCheck
                 open={checking}

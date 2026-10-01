@@ -18,7 +18,7 @@ import type { Column } from '@/components/ui/data-table';
 import { Badge, PageHeader } from '@/components/ui/misc';
 import { Tip } from '@/components/ui/tooltip';
 import { rupiah } from '@/lib/format';
-import type { PathRow } from '@/pages/committees/index';
+import type { PathRow } from '@/pages/committees/paths';
 
 type Tier = {
     id: number;
@@ -254,7 +254,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                         </Badge>
                         <Button
                             variant="outline"
-                            onClick={() => router.visit('/committees')}
+                            onClick={() => router.visit('/committees/paths')}
                         >
                             <ArrowLeft /> Back
                         </Button>

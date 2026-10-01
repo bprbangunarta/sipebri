@@ -9,6 +9,7 @@ import type { Column } from '@/components/ui/data-table';
 import { Field } from '@/components/ui/field';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
 import { Input } from '@/components/ui/input';
+import { CommitteeTabs } from '@/components/committee-tabs';
 import { Badge, PageHeader } from '@/components/ui/misc';
 import type { PageMeta } from '@/components/ui/pagination';
 import { Tip } from '@/components/ui/tooltip';
@@ -131,6 +132,7 @@ export default function CommitteeMembers({
                 title="Committee members"
                 description="People whose role decides in a committee tier. Their national ID lets the system recognise them when they apply for a credit."
             />
+            <CommitteeTabs current="members" />
 
             {withoutNik > 0 && (
                 <div

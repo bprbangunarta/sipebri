@@ -113,11 +113,7 @@ class Navigation
                     self::reference('Kondisi', 'dot', 'collateral-conditions'),
                     self::reference('Penilaian', 'dot', 'collateral-methods'),
                 ]],
-                ['label' => 'Data Komite', 'icon' => 'gavel', 'children' => [
-                    ['label' => 'Anggota', 'icon' => 'dot', 'route' => 'committees.members', 'role' => RoleName::SuperAdmin->value],
-                    ['label' => 'Jenjang', 'icon' => 'dot', 'route' => 'committees.index', 'role' => RoleName::SuperAdmin->value],
-                    ['label' => 'Mekanisme', 'icon' => 'dot', 'route' => 'committees.mechanism', 'role' => RoleName::SuperAdmin->value],
-                ]],
+                ['label' => 'Data Komite', 'icon' => 'gavel', 'route' => 'committees.index', 'role' => RoleName::SuperAdmin->value],
             ]],
             ['label' => 'Pengaturan', 'items' => [
                 ['label' => 'Data Perizinan', 'icon' => 'key-round', 'route' => 'permissions.index', 'role' => RoleName::SuperAdmin->value],
