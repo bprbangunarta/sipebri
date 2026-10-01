@@ -118,7 +118,11 @@ Route::middleware('auth')->group(function () {
         Route::put('{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'update'])->name('businesses.update');
         Route::delete('{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'destroy'])->name('businesses.destroy');
     });
-    Route::get('approvals', [ApprovalController::class, 'index'])->middleware('permission:approvals.view')->name('approvals.index');
+    Route::middleware('permission:approvals.view')->prefix('approvals')->name('approvals.')->group(function () {
+        Route::get('/', [ApprovalController::class, 'index'])->name('index');
+        Route::get('{loanApplication}', [ApprovalController::class, 'show'])->name('show');
+        Route::post('{loanApplication}/decide', [ApprovalController::class, 'decide'])->name('decide');
+    });
 
     // Reference data and access management belong to Super Admin only (a role check, not per-module permissions).
     Route::middleware('role:'.RoleName::SuperAdmin->value)->group(function () {

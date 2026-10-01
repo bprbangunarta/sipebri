@@ -23,6 +23,18 @@ class Notify
         return self::send($recipients->all(), $title, $module, $body, $url, $level);
     }
 
+    /** Everybody who holds a role (Spatie role name), except whoever acts. */
+    public static function toRole(string $role, string $title, string $module, ?string $body = null, ?string $url = null, string $level = 'info'): int
+    {
+        $actor = Auth::user();
+
+        $recipients = User::query()->role($role)
+            ->when($actor, fn ($q) => $q->whereKeyNot($actor->getKey()))
+            ->get();
+
+        return self::send($recipients->all(), $title, $module, $body, $url, $level);
+    }
+
     public static function toUser(User $user, string $title, string $module, ?string $body = null, ?string $url = null, string $level = 'info'): void
     {
         self::send([$user], $title, $module, $body, $url, $level);

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Audit\Auditable;
 use App\Enums\LoanStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -52,7 +53,16 @@ use Illuminate\Support\Carbon;
  * @property-read Method|null $method
  * @property-read Installment|null $installment
  * @property-read CommitteePath|null $committeePath
+ * @property int $approved_amount committee outcome: the amount approved (0 unless approved)
+ * @property int $approved_tenor
+ * @property string $approved_rate
+ * @property string $rc_ratio proposed amount as a percentage of the most the applicant's capacity allows
+ * @property Carbon|null $decided_at
+ * @property int|null $decided_by
+ * @property string|null $decision_note
+ * @property string|null $committee_exception why the route differs from the normal one (the applicant is a committee member)
  * @property-read LoanAnalysis|null $analysis
+ * @property-read Collection<int, LoanApproval> $approvals
  */
 #[Fillable([
     'application_code', 'application_date', 'status', 'nik', 'full_name', 'cif_number', 'office_id', 'product_id', 'institution_id',
@@ -60,6 +70,7 @@ use Illuminate\Support\Carbon;
     'interest_rate', 'note', 'supervisor_id', 'surveyor_id', 'survey_date', 'created_by',
     'survey_latitude', 'survey_longitude', 'survey_source', 'survey_located_at', 'survey_located_by', 'survey_address',
     'committee_conflict_user_id', 'committee_conflict_source',
+    'approved_amount', 'approved_tenor', 'approved_rate', 'rc_ratio', 'decided_at', 'decided_by', 'decision_note', 'committee_exception',
 ])]
 class LoanApplication extends Model
 {
@@ -83,6 +94,11 @@ class LoanApplication extends Model
             'survey_latitude' => 'decimal:7',
             'survey_longitude' => 'decimal:7',
             'survey_located_at' => 'datetime',
+            'approved_amount' => 'integer',
+            'approved_tenor' => 'integer',
+            'approved_rate' => 'decimal:2',
+            'rc_ratio' => 'decimal:2',
+            'decided_at' => 'datetime',
         ];
     }
 
@@ -129,6 +145,17 @@ class LoanApplication extends Model
     public function method(): BelongsTo
     {
         return $this->belongsTo(Method::class);
+    }
+
+    /**
+     * @return HasOne<LoanAnalysis, $this>
+     */
+    /**
+     * @return HasMany<LoanApproval, $this>
+     */
+    public function approvals(): HasMany
+    {
+        return $this->hasMany(LoanApproval::class)->orderBy('sort');
     }
 
     /**

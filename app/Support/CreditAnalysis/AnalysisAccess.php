@@ -18,16 +18,13 @@ final class AnalysisAccess
 
     public static function view(User $user, LoanApplication $loan): void
     {
-        abort_unless(
-            $loan->surveyor_id === $user->id || $loan->supervisor_id === $user->id,
-            403,
-            'Berkas ini bukan penugasan Anda.',
-        );
-        abort_unless(
-            in_array($loan->status, [...self::EDITABLE, LoanStatus::Committee], true),
-            403,
-            'Berkas ini tidak berada pada tahap analisa.',
-        );
+        $atCommittee = in_array($loan->status, [LoanStatus::Committee, LoanStatus::Approved, LoanStatus::Rejected, LoanStatus::Cancelled], true);
+
+        // Whoever decides the file may read the worksheet once it is with the committee.
+        $committeeReader = $atCommittee && $user->can('approvals.view');
+
+        abort_unless($loan->surveyor_id === $user->id || $loan->supervisor_id === $user->id || $committeeReader, 403, 'Berkas ini bukan penugasan Anda.');
+        abort_unless(in_array($loan->status, self::EDITABLE, true) || $atCommittee, 403, 'Berkas ini tidak berada pada tahap analisa.');
     }
 
     /**

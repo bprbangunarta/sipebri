@@ -7,6 +7,7 @@ use App\Enums\LoanStatus;
 use App\Models\LoanApplication;
 use App\Models\LoanSurvey;
 use App\Models\User;
+use App\Support\Approvals\ApprovalFlow;
 use App\Support\CreditAnalysis\AnalysisAccess;
 use App\Support\CreditAnalysis\AnalysisPayload;
 use App\Support\CreditAnalysis\AnalysisTemplates;
@@ -95,16 +96,25 @@ class CreditAnalysisController extends Controller
             return back()->with('error', 'Lengkapi dulu: '.implode(', ', $gaps).'.');
         }
 
+        // The committee route comes first: a file that has no one to decide it does not leave the analysis stage.
+        if ($problem = ApprovalFlow::open($loanApplication, $user)) {
+            return back()->with('error', $problem);
+        }
+
         $analysis->update(['submitted_at' => now(), 'submitted_by' => $user->id]);
         $loanApplication->update(['status' => LoanStatus::Committee]);
 
         $message = "Lembar analisa berkas {$loanApplication->application_code} ({$loanApplication->full_name}) sudah diajukan ke komite kredit.";
 
         if ($loanApplication->supervisor) {
-            Notify::toUser($loanApplication->supervisor, 'Berkas siap diputus komite', 'Analisa Kredit', $message, '/credit-analysis');
+            Notify::toUser($loanApplication->supervisor, 'Berkas siap diputus komite', 'Analisa Kredit', $message, '/approvals');
         }
 
-        Notify::toPermission('approvals.view', 'Berkas masuk komite kredit', 'Analisa Kredit', "Berkas {$loanApplication->application_code} - {$loanApplication->full_name} menunggu keputusan komite.", '/approvals');
+        $pending = ApprovalFlow::pending($loanApplication);
+
+        if ($pending !== null && ! $pending->is_individual) {
+            Notify::toRole($pending->role, 'Berkas masuk komite kredit', 'Analisa Kredit', "Berkas {$loanApplication->application_code} - {$loanApplication->full_name} menunggu keputusan {$pending->tier_label}.", "/approvals/{$loanApplication->id}");
+        }
 
         return to_route('credit-analysis.index')->with('success', "Berkas {$loanApplication->application_code} diajukan ke komite kredit.");
     }

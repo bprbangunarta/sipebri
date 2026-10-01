@@ -8,6 +8,7 @@ use App\Models\LoanAnalysis;
 use App\Models\LoanApplication;
 use App\Models\Product;
 use App\Models\User;
+use Database\Seeders\CommitteeSeeder;
 use Database\Seeders\RoleSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -18,6 +19,7 @@ function analysisSetup(): array
     $analyst = User::factory()->create()->assignRole('Staff Analis & Appraisal');
     $kasi = User::factory()->create()->assignRole('Kepala Seksi Analis');
     $product = Product::firstOrCreate(['alias' => 'KRU'], ['code' => 'KRU', 'name' => 'KRU', 'is_active' => true]);
+    test()->seed(CommitteeSeeder::class);
 
     $loan = LoanApplication::create([
         'application_code' => LoanApplication::nextCode(), 'application_date' => now(), 'status' => LoanStatus::Survey,
