@@ -221,9 +221,9 @@ export default function CommitteesIndex({
 
     return (
         <>
-            <Head title="Committees" />
+            <Head title="Committee levels" />
             <PageHeader
-                title="Committees"
+                title="Committee levels"
                 description="Who may decide a loan, by product, condition and amount"
                 actions={
                     <>

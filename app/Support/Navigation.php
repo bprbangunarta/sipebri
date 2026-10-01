@@ -114,8 +114,8 @@ class Navigation
                     self::reference('Penilaian', 'dot', 'collateral-methods'),
                 ]],
                 ['label' => 'Data Komite', 'icon' => 'gavel', 'children' => [
-                    ['label' => 'Jalur & Jenjang', 'icon' => 'dot', 'route' => 'committees.index', 'role' => RoleName::SuperAdmin->value],
                     ['label' => 'Anggota', 'icon' => 'dot', 'route' => 'committees.members', 'role' => RoleName::SuperAdmin->value],
+                    ['label' => 'Jenjang', 'icon' => 'dot', 'route' => 'committees.index', 'role' => RoleName::SuperAdmin->value],
                 ]],
             ]],
             ['label' => 'Pengaturan', 'items' => [

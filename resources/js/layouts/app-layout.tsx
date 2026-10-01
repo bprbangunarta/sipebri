@@ -41,9 +41,7 @@ function NavLink({
     nested?: boolean;
     onNavigate: () => void;
 }) {
-    const { url } = usePage();
-    const path = url.split('?')[0];
-    const active = path === href || path.startsWith(`${href}/`);
+    const active = useIsActive()(href);
 
     return (
         <Link
@@ -63,6 +61,28 @@ function NavLink({
     );
 }
 
+/**
+ * A menu item is active on its own page and on pages below it, unless another menu item matches the page more
+ * specifically (e.g. /committees/members belongs to "Anggota", not to "/committees").
+ */
+function useIsActive() {
+    const { url, props } = usePage();
+    const path = url.split('?')[0];
+    const hrefs = props.navigation.flatMap((section) =>
+        section.items.flatMap((item) =>
+            'children' in item
+                ? item.children.map((child) => child.href)
+                : [item.href],
+        ),
+    );
+    const matches = (href: string) =>
+        path === href || path.startsWith(`${href}/`);
+
+    return (href: string) =>
+        matches(href) &&
+        !hrefs.some((other) => other.length > href.length && matches(other));
+}
+
 function NavGroup({
     label,
     icon,
@@ -74,8 +94,8 @@ function NavGroup({
     children: NavLinkItem[];
     onNavigate: () => void;
 }) {
-    const { url } = usePage();
-    const active = children.some((item) => url.startsWith(item.href));
+    const isActive = useIsActive();
+    const active = children.some((item) => isActive(item.href));
     const [open, setOpen] = useState(active);
     const expanded = open || active;
     const Icon = navIcon(icon);
