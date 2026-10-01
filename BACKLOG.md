@@ -46,7 +46,7 @@ Terakhir diperbarui: 2026-09-30.
 - ✅ Kantor pengguna = relasi ke tabel `offices` (`users.office_id`), disinkronkan dari Codex saat login (hanya kode, alias, nama; kolom Codex lain tidak dipakai sistem ini dan tidak disimpan). Kolom teks `office`/`office_code` di users sudah dihapus.
 - ✅ Login memakai Codex (meniru simontok); peran dari nama peran Codex (`RoleName`, `RoleSeeder`); migrasi mengganti nama peran & tier komite lama (Kasi Analis → Kepala Seksi Analis, dst.).
 - ✅ Data Pengguna menampilkan pengguna tidak aktif juga (soft delete dari Codex) dengan filter status Active/Inactive, kolom username, kantor, dan status; baris tidak aktif tanpa aksi.
-- 🔜 Sisa di halaman **Data Pengguna** (tambah/ubah password/peran) masih versi lama (buat user + password lokal, ubah peran). Sekarang akun berasal dari Codex dan peran di-reset tiap login, jadi halaman ini perlu diubah jadi daftar baca-saja (tanpa tambah/ubah password/peran).
+- ✅ Halaman **Data Pengguna** sudah hanya-baca (daftar, filter peran/status); akun, peran, dan status dikelola di Codex. Tidak ada lagi tambah/ubah kata sandi/ubah peran lokal.
 - 🔜 Sisa pesan validasi kustom & atribut (`->attributes()`) di controller masih Inggris; rapikan saat terjemahan UI (pakai pesan laravel-lang sebisanya).
 - ✅ Terjemahan UI ke bahasa Indonesia selesai untuk seluruh aplikasi (URL tetap Inggris dan sepadan dengan judul UI; lihat `.ai/rules/general.md`).
 - Catatan dev: akun lokal lama (admin@example.com, ao@, dst.) tidak bisa login lagi; barisnya masih ada di database dan akan ditimpa bila id Codex sama.
