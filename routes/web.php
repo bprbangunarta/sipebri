@@ -5,6 +5,7 @@ use App\Http\Controllers\AnalysisAdministrationController;
 use App\Http\Controllers\AnalysisAssessmentController;
 use App\Http\Controllers\AnalysisBusinessController;
 use App\Http\Controllers\AnalysisCollateralController;
+use App\Http\Controllers\AnalysisCorrectionController;
 use App\Http\Controllers\AnalysisFinanceController;
 use App\Http\Controllers\AnalysisMemorandumController;
 use App\Http\Controllers\ApprovalController;
@@ -106,6 +107,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [CreditAnalysisController::class, 'index'])->name('index');
         Route::get('{loanApplication}', [CreditAnalysisController::class, 'show'])->name('show');
         Route::post('{loanApplication}/submit', [CreditAnalysisController::class, 'submit'])->name('submit');
+        Route::post('{loanApplication}/corrections', [AnalysisCorrectionController::class, 'store'])->name('corrections.store');
+        Route::post('{loanApplication}/corrections/{correction}/open', [AnalysisCorrectionController::class, 'open'])->name('corrections.open');
+        Route::post('{loanApplication}/corrections/{correction}/decline', [AnalysisCorrectionController::class, 'decline'])->name('corrections.decline');
+        Route::post('{loanApplication}/corrections/{correction}/close', [AnalysisCorrectionController::class, 'close'])->name('corrections.close');
         Route::put('{loanApplication}/memorandum', [AnalysisMemorandumController::class, 'update'])->name('memorandum.update');
         Route::put('{loanApplication}/administration', [AnalysisAdministrationController::class, 'update'])->name('administration.update');
         Route::put('{loanApplication}/collaterals', [AnalysisCollateralController::class, 'update'])->name('collaterals.update');

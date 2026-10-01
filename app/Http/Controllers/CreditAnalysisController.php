@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Audit\Audit;
 use App\Enums\LoanStatus;
+use App\Models\AnalysisCorrection;
 use App\Models\LoanApplication;
 use App\Models\LoanSurvey;
 use App\Models\User;
@@ -80,7 +81,8 @@ class CreditAnalysisController extends Controller
         return Inertia::render('credit-analysis/show', [
             'record' => $this->record($loanApplication),
             'sections' => AnalysisTemplates::sections($analysis->template ?? AnalysisTemplates::for($loanApplication)),
-            'canEdit' => $loanApplication->surveyor_id === $user->id && in_array($loanApplication->status, [LoanStatus::Survey, LoanStatus::Analysis], true),
+            'canEdit' => AnalysisAccess::canEdit($user, $loanApplication),
+            'corrections' => $this->corrections($loanApplication, $user),
             ...AnalysisPayload::build($loanApplication, $analysis),
         ]);
     }
@@ -91,6 +93,7 @@ class CreditAnalysisController extends Controller
         /** @var User $user */
         $user = $request->user();
         $analysis = AnalysisAccess::edit($user, $loanApplication);
+        abort_if($loanApplication->status === LoanStatus::Approved, 403, 'Berkas ini sudah disetujui; koreksi tidak diajukan ulang ke komite.');
 
         if ($gaps = $analysis->gaps()) {
             return back()->with('error', 'Lengkapi dulu: '.implode(', ', $gaps).'.');
@@ -117,6 +120,40 @@ class CreditAnalysisController extends Controller
         }
 
         return to_route('credit-analysis.index')->with('success', "Berkas {$loanApplication->application_code} diajukan ke komite kredit.");
+    }
+
+    /**
+     * The corrections of an approved file and what this person may do about them.
+     *
+     * @return array<string, mixed>
+     */
+    private function corrections(LoanApplication $loan, User $user): array
+    {
+        $approved = $loan->status === LoanStatus::Approved;
+        $items = $loan->analysis?->corrections()->get() ?? collect();
+        $running = $items->first(fn (AnalysisCorrection $c): bool => in_array($c->status, [AnalysisCorrection::REQUESTED, AnalysisCorrection::OPEN], true));
+        $supervisor = $loan->supervisor_id === $user->id;
+        $analyst = $loan->surveyor_id === $user->id;
+
+        return [
+            'items' => $items->map(fn (AnalysisCorrection $c): array => [
+                'id' => $c->id,
+                'status' => $c->status,
+                'status_label' => AnalysisCorrection::LABELS[$c->status],
+                'reason' => $c->reason,
+                'requested_at' => $c->requested_at?->isoFormat('D MMM YYYY HH:mm'),
+                'opened_at' => $c->opened_at?->isoFormat('D MMM YYYY HH:mm'),
+                'resolved_at' => $c->resolved_at?->isoFormat('D MMM YYYY HH:mm'),
+                'resolution_note' => $c->resolution_note,
+            ])->values()->all(),
+            'approved' => $approved,
+            'running' => $running?->status,
+            'running_id' => $running?->id,
+            'can_ask' => $approved && $analyst && $running === null && $loan->analysis !== null,
+            'can_open' => $approved && $supervisor && $running === null && $loan->analysis !== null,
+            'can_decide_request' => $approved && $supervisor && $running?->status === AnalysisCorrection::REQUESTED,
+            'can_close' => $approved && ($analyst || $supervisor) && $running?->status === AnalysisCorrection::OPEN,
+        ];
     }
 
     /**

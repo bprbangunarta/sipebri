@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AnalysisAdministration;
+use App\Models\LoanAnalysis;
 use App\Models\LoanApplication;
 use App\Models\User;
 use App\Support\CreditAnalysis\AnalysisAccess;
@@ -16,15 +17,15 @@ class AnalysisAdministrationController extends Controller
     {
         /** @var User $user */
         $user = $request->user();
-        $analysis = AnalysisAccess::edit($user, $loanApplication);
+        AnalysisAccess::edit($user, $loanApplication);
 
         $data = array_map(
             fn (mixed $value): int => (int) $value,
             $request->validate(array_fill_keys(AnalysisAdministration::FEES, ['nullable', 'integer', 'min:0', 'max:999999999999'])),
         );
 
-        AnalysisAdministration::query()->firstOrNew(['loan_analysis_id' => $analysis->id])->fill($data)->save();
+        $error = AnalysisAccess::change($user, $loanApplication, fn (LoanAnalysis $analysis) => AnalysisAdministration::query()->firstOrNew(['loan_analysis_id' => $analysis->id])->fill($data)->save());
 
-        return back()->with('success', 'Administrasi berhasil disimpan.');
+        return $error ? back()->with('error', $error) : back()->with('success', 'Administrasi berhasil disimpan.');
     }
 }

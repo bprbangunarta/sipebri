@@ -60,7 +60,7 @@ class AnalysisBusinessController extends Controller
                 'product_label' => $loanApplication->product ? "{$loanApplication->product->alias} : {$loanApplication->product->name}" : null,
             ],
             'business' => AnalysisPayload::business($business->load('items')),
-            'canEdit' => $loanApplication->surveyor_id === $user->id && in_array($loanApplication->status->value, ['survey', 'analysis'], true),
+            'canEdit' => AnalysisAccess::canEdit($user, $loanApplication),
             'options' => [
                 'lengths' => AnalysisBusiness::LENGTHS,
                 'sectors' => AnalysisBusiness::SECTORS,
@@ -90,16 +90,22 @@ class AnalysisBusinessController extends Controller
             return $value === null || $value === '' ? null : Str::upper((string) $value);
         });
 
-        $business->fill($fields);
+        $error = AnalysisAccess::change($user, $loanApplication, function () use ($business, $fields, $data, $user): void {
+            $business->fill($fields);
 
-        if (isset($data['groups'])) {
-            ItemSync::replace($business->items(), $data['groups'], $data['items'] ?? [], ['name', 'qty', 'price', 'sell_price']);
-            $business->unsetRelation('items');
+            if (isset($data['groups'])) {
+                ItemSync::replace($business->items(), $data['groups'], $data['items'] ?? [], ['name', 'qty', 'price', 'sell_price']);
+                $business->unsetRelation('items');
+            }
+
+            $business->recalculate();
+            $business->updated_by = $user->id;
+            $business->save();
+        });
+
+        if ($error) {
+            return back()->with('error', $error);
         }
-
-        $business->recalculate();
-        $business->updated_by = $user->id;
-        $business->save();
 
         return back()->with('success', 'Data usaha berhasil disimpan.');
     }
@@ -111,9 +117,9 @@ class AnalysisBusinessController extends Controller
         AnalysisAccess::edit($user, $loanApplication);
         $this->belongs($loanApplication, $business);
 
-        $business->delete();
+        $error = AnalysisAccess::change($user, $loanApplication, fn () => $business->delete());
 
-        return to_route('credit-analysis.show', $loanApplication)->with('success', 'Usaha berhasil dihapus.');
+        return $error ? back()->with('error', $error) : to_route('credit-analysis.show', $loanApplication)->with('success', 'Usaha berhasil dihapus.');
     }
 
     private function belongs(LoanApplication $loan, AnalysisBusiness $business): void

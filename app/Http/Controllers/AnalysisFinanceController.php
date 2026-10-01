@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AnalysisFinance;
+use App\Models\LoanAnalysis;
 use App\Models\LoanApplication;
 use App\Models\User;
 use App\Support\CreditAnalysis\AnalysisAccess;
@@ -19,7 +20,7 @@ class AnalysisFinanceController extends Controller
     {
         /** @var User $user */
         $user = $request->user();
-        $analysis = AnalysisAccess::edit($user, $loanApplication);
+        AnalysisAccess::edit($user, $loanApplication);
 
         $money = ['nullable', 'integer', 'min:0', 'max:999999999999'];
         $data = $request->validate([
@@ -29,19 +30,21 @@ class AnalysisFinanceController extends Controller
             'items.*.amount' => $money,
         ], [], ['items.*.name' => 'nama kewajiban', 'items.*.amount' => 'nominal kewajiban']);
 
-        $finance = AnalysisFinance::query()->firstOrCreate(['loan_analysis_id' => $analysis->id]);
-        $finance->fill(Arr::map(Arr::except($data, 'items'), fn (mixed $v): int => (int) $v))->save();
+        $error = AnalysisAccess::change($user, $loanApplication, function (LoanAnalysis $analysis) use ($data): void {
+            $finance = AnalysisFinance::query()->firstOrCreate(['loan_analysis_id' => $analysis->id]);
+            $finance->fill(Arr::map(Arr::except($data, 'items'), fn (mixed $v): int => (int) $v))->save();
 
-        ItemSync::replace($finance->items(), ['obligation'], array_map(fn (array $row): array => [...$row, 'group' => 'obligation'], $data['items'] ?? []), ['name', 'amount']);
+            ItemSync::replace($finance->items(), ['obligation'], array_map(fn (array $row): array => [...$row, 'group' => 'obligation'], $data['items'] ?? []), ['name', 'amount']);
+        });
 
-        return back()->with('success', 'Analisa keuangan berhasil disimpan.');
+        return $error ? back()->with('error', $error) : back()->with('success', 'Analisa keuangan berhasil disimpan.');
     }
 
     public function updateOwnership(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
         /** @var User $user */
         $user = $request->user();
-        $analysis = AnalysisAccess::edit($user, $loanApplication);
+        AnalysisAccess::edit($user, $loanApplication);
 
         $rules = collect(AnalysisFinance::ASSETS)->map(fn (array $options): array => ['nullable', Rule::in($options)])->all();
         $data = $request->validate([
@@ -50,11 +53,13 @@ class AnalysisFinanceController extends Controller
             'items.*.name' => ['required', 'string', 'max:150'],
         ], [], ['items.*.name' => 'nama harta']);
 
-        $finance = AnalysisFinance::query()->firstOrCreate(['loan_analysis_id' => $analysis->id]);
-        $finance->fill(Arr::except($data, 'items'))->save();
+        $error = AnalysisAccess::change($user, $loanApplication, function (LoanAnalysis $analysis) use ($data): void {
+            $finance = AnalysisFinance::query()->firstOrCreate(['loan_analysis_id' => $analysis->id]);
+            $finance->fill(Arr::except($data, 'items'))->save();
 
-        ItemSync::replace($finance->items(), ['asset'], array_map(fn (array $row): array => [...$row, 'group' => 'asset'], $data['items'] ?? []), ['name']);
+            ItemSync::replace($finance->items(), ['asset'], array_map(fn (array $row): array => [...$row, 'group' => 'asset'], $data['items'] ?? []), ['name']);
+        });
 
-        return back()->with('success', 'Analisa kepemilikan berhasil disimpan.');
+        return $error ? back()->with('error', $error) : back()->with('success', 'Analisa kepemilikan berhasil disimpan.');
     }
 }

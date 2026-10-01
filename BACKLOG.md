@@ -65,6 +65,8 @@ Terakhir diperbarui: 2026-09-30.
 - Dashboard HRIS belum tahu peran/izin (tampil sama untuk semua yang punya `dashboard.view`).
 - Ekspor/impor Excel (ada di SIPEBRI) belum dibawa.
 
+- 🔜 **Persetujuan ulang**: bila angka yang sudah diputus komite perlu berubah, berkas harus diputus ulang (mode koreksi hanya mengizinkan perubahan non-angka). Bentuknya belum dirancang (pengajuan baru atau putaran persetujuan kedua).
+
 ## Saran peningkatan (belum dikerjakan, keputusan ada di user)
 
 - **Layanan email (OTP).** Kuota pengirim diurus user; ini hanya catatan saran:

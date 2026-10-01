@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AnalysisFiveC;
 use App\Models\AnalysisQualitative;
+use App\Models\LoanAnalysis;
 use App\Models\LoanApplication;
 use App\Models\User;
 use App\Support\CreditAnalysis\AnalysisAccess;
@@ -21,7 +22,7 @@ class AnalysisAssessmentController extends Controller
     {
         /** @var User $user */
         $user = $request->user();
-        $analysis = AnalysisAccess::edit($user, $loanApplication);
+        AnalysisAccess::edit($user, $loanApplication);
 
         $rules = [];
 
@@ -31,16 +32,17 @@ class AnalysisAssessmentController extends Controller
             }
         }
 
-        AnalysisFiveC::query()->firstOrNew(['loan_analysis_id' => $analysis->id])->fill($request->validate($rules))->save();
+        $data = $request->validate($rules);
+        $error = AnalysisAccess::change($user, $loanApplication, fn (LoanAnalysis $analysis) => AnalysisFiveC::query()->firstOrNew(['loan_analysis_id' => $analysis->id])->fill($data)->save());
 
-        return back()->with('success', 'Analisa 5C berhasil disimpan.');
+        return $error ? back()->with('error', $error) : back()->with('success', 'Analisa 5C berhasil disimpan.');
     }
 
     public function updateQualitative(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
         /** @var User $user */
         $user = $request->user();
-        $analysis = AnalysisAccess::edit($user, $loanApplication);
+        AnalysisAccess::edit($user, $loanApplication);
 
         $rules = [];
 
@@ -62,8 +64,8 @@ class AnalysisAssessmentController extends Controller
 
         $data = Arr::map($request->validate($rules), fn (mixed $value): mixed => is_string($value) ? Str::upper($value) : $value);
 
-        AnalysisQualitative::query()->firstOrNew(['loan_analysis_id' => $analysis->id])->fill($data)->save();
+        $error = AnalysisAccess::change($user, $loanApplication, fn (LoanAnalysis $analysis) => AnalysisQualitative::query()->firstOrNew(['loan_analysis_id' => $analysis->id])->fill($data)->save());
 
-        return back()->with('success', 'Analisa kualitatif berhasil disimpan.');
+        return $error ? back()->with('error', $error) : back()->with('success', 'Analisa kualitatif berhasil disimpan.');
     }
 }

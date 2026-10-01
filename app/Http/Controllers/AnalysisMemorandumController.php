@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AnalysisMemorandum;
+use App\Models\LoanAnalysis;
 use App\Models\LoanApplication;
 use App\Models\User;
 use App\Support\CreditAnalysis\AnalysisAccess;
@@ -19,7 +20,7 @@ class AnalysisMemorandumController extends Controller
     {
         /** @var User $user */
         $user = $request->user();
-        $analysis = AnalysisAccess::edit($user, $loanApplication);
+        AnalysisAccess::edit($user, $loanApplication);
 
         $money = ['nullable', 'integer', 'min:0', 'max:999999999999'];
         $rules = [
@@ -40,8 +41,8 @@ class AnalysisMemorandumController extends Controller
         ]);
         $data = Arr::map($validated, fn (mixed $value): mixed => is_string($value) ? Str::upper($value) : ($value ?? 0));
 
-        AnalysisMemorandum::query()->firstOrNew(['loan_analysis_id' => $analysis->id])->fill($data)->save();
+        $error = AnalysisAccess::change($user, $loanApplication, fn (LoanAnalysis $analysis) => AnalysisMemorandum::query()->firstOrNew(['loan_analysis_id' => $analysis->id])->fill($data)->save());
 
-        return back()->with('success', 'Memorandum berhasil disimpan.');
+        return $error ? back()->with('error', $error) : back()->with('success', 'Memorandum berhasil disimpan.');
     }
 }

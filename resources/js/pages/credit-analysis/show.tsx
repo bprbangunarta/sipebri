@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/dialog';
 import { Badge, Card, PageHeader } from '@/components/ui/misc';
 import { rupiah } from '@/lib/format';
+import { CorrectionPanel } from '@/pages/credit-analysis/correction-panel';
+import type { Corrections } from '@/pages/credit-analysis/correction-panel';
 import { Stat } from '@/pages/credit-analysis/parts';
 import { AdministrationSection } from '@/pages/credit-analysis/sections/administration';
 import { BusinessesSection } from '@/pages/credit-analysis/sections/businesses';
@@ -31,6 +33,7 @@ type Props = {
     record: AnalysisRecord;
     sections: Section[];
     canEdit: boolean;
+    corrections: Corrections;
     businesses: BusinessRow[];
     finance: Finance;
     fiveC: FiveC;
@@ -53,6 +56,7 @@ export default function CreditAnalysisShow(props: Props) {
         record,
         sections,
         canEdit,
+        corrections,
         businesses,
         finance,
         fiveC,
@@ -112,7 +116,7 @@ export default function CreditAnalysisShow(props: Props) {
                         >
                             <ArrowLeft /> Kembali
                         </Button>
-                        {canEdit && (
+                        {canEdit && record.status !== 'approved' && (
                             <Button
                                 disabled={!ready}
                                 onClick={() => setConfirming(true)}
@@ -172,6 +176,7 @@ export default function CreditAnalysisShow(props: Props) {
                 </p>
             ) : (
                 canEdit &&
+                record.status !== 'approved' &&
                 !ready && (
                     <p
                         role="status"
@@ -182,6 +187,8 @@ export default function CreditAnalysisShow(props: Props) {
                     </p>
                 )
             )}
+
+            <CorrectionPanel loanId={record.id} corrections={corrections} />
 
             <div className="grid gap-3 lg:grid-cols-[14rem_minmax(0,1fr)]">
                 <nav

@@ -92,6 +92,15 @@ type Props = {
         provision_rate: string | number;
         admin_rate: string | number;
     };
+    corrections: {
+        id: number;
+        status: string;
+        status_label: string;
+        reason: string;
+        opened_at: string | null;
+        resolved_at: string | null;
+        resolution_note: string | null;
+    }[];
     methodOptions: { value: number; label: string }[];
     decisionLabels: Record<string, string>;
 };
@@ -117,6 +126,7 @@ export default function ApprovalShow({
     form: initial,
     methodOptions,
     decisionLabels,
+    corrections,
 }: Props) {
     const form = useForm({
         decision: flow.allowed[0] ?? '',
@@ -341,6 +351,46 @@ export default function ApprovalShow({
                                 value={record.decision_note}
                             />
                         )}
+                    </Panel>
+                )}
+
+                {corrections.length > 0 && (
+                    <Panel
+                        title="Koreksi Analisa Setelah Persetujuan"
+                        columns=""
+                    >
+                        <ul className="flex flex-col gap-1.5 text-sm">
+                            {corrections.map((c) => (
+                                <li
+                                    key={c.id}
+                                    className="rounded-md border border-line p-2"
+                                >
+                                    <Badge
+                                        tone={
+                                            c.status === 'closed'
+                                                ? 'success'
+                                                : c.status === 'open'
+                                                  ? 'info'
+                                                  : 'neutral'
+                                        }
+                                    >
+                                        {c.status_label}
+                                    </Badge>{' '}
+                                    <span className="text-xs text-muted">
+                                        {c.opened_at ?? ''}
+                                        {c.resolved_at
+                                            ? ` → ${c.resolved_at}`
+                                            : ''}
+                                    </span>
+                                    <p className="mt-1">{c.reason}</p>
+                                    {c.resolution_note && (
+                                        <p className="text-xs text-muted">
+                                            Catatan: {c.resolution_note}
+                                        </p>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
                     </Panel>
                 )}
 

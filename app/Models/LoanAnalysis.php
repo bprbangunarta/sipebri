@@ -6,6 +6,7 @@ use App\Audit\Auditable;
 use App\Enums\LoanStatus;
 use App\Support\CreditAnalysis\AnalysisTemplates;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,6 +30,7 @@ use Illuminate\Support\Carbon;
  * @property-read AnalysisQualitative|null $qualitative
  * @property-read AnalysisMemorandum|null $memorandum
  * @property-read AnalysisAdministration|null $administration
+ * @property-read Collection<int, AnalysisCorrection> $corrections
  */
 #[Fillable(['loan_application_id', 'template', 'template_version', 'submitted_at', 'submitted_by'])]
 class LoanAnalysis extends Model
@@ -129,6 +131,20 @@ class LoanAnalysis extends Model
     public function administration(): HasOne
     {
         return $this->hasOne(AnalysisAdministration::class);
+    }
+
+    /**
+     * @return HasMany<AnalysisCorrection, $this>
+     */
+    public function corrections(): HasMany
+    {
+        return $this->hasMany(AnalysisCorrection::class)->orderBy('id');
+    }
+
+    /** The correction that is open now, if the worksheet is open for one. */
+    public function openCorrection(): ?AnalysisCorrection
+    {
+        return $this->corrections()->where('status', AnalysisCorrection::OPEN)->first();
     }
 
     public function isSubmitted(): bool

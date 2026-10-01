@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Audit\Audit;
 use App\Enums\LoanStatus;
+use App\Models\AnalysisCorrection;
 use App\Models\LoanApplication;
 use App\Models\LoanApproval;
 use App\Models\Method;
@@ -88,7 +89,7 @@ class ApprovalController extends Controller
         $this->authorizeView($user, $loanApplication);
         Audit::record('approvals.viewed', 'approvals', 'viewed', $loanApplication, label: $loanApplication->application_code);
 
-        $loanApplication->load(['product:id,alias,name', 'office:id,alias', 'supervisor:id,name', 'surveyor:id,name', 'approvals.method:id,name', 'analysis.submitter:id,name']);
+        $loanApplication->load(['product:id,alias,name', 'office:id,alias', 'supervisor:id,name', 'surveyor:id,name', 'approvals.method:id,name', 'analysis.submitter:id,name', 'analysis.corrections']);
         $basis = ApprovalFlow::basis($loanApplication);
         $pending = $loanApplication->status === LoanStatus::Committee ? ApprovalFlow::pending($loanApplication) : null;
         $myTurn = $pending !== null && ApprovalFlow::mayDecide($user, $pending, $loanApplication);
@@ -149,6 +150,15 @@ class ApprovalController extends Controller
                 'provision_rate' => $last->provision_rate ?? $basis['provision_rate'],
                 'admin_rate' => $last->admin_rate ?? $basis['admin_rate'],
             ],
+            'corrections' => ($loanApplication->analysis->corrections ?? collect())->map(fn (AnalysisCorrection $c): array => [
+                'id' => $c->id,
+                'status_label' => AnalysisCorrection::LABELS[$c->status],
+                'status' => $c->status,
+                'reason' => $c->reason,
+                'opened_at' => $c->opened_at?->isoFormat('D MMM YYYY HH:mm'),
+                'resolved_at' => $c->resolved_at?->isoFormat('D MMM YYYY HH:mm'),
+                'resolution_note' => $c->resolution_note,
+            ])->values()->all(),
             'methodOptions' => $this->methodOptions($loanApplication),
             'decisionLabels' => LoanApproval::LABELS,
         ]);

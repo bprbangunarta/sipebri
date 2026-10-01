@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\LoanStatus;
+use App\Models\AnalysisBusiness;
 use App\Models\AnalysisFinance;
 use App\Models\AnalysisFiveC;
 use App\Models\AnalysisMemorandum;
@@ -48,7 +49,9 @@ function analysedFor(array $people, int $amount, array $loanAttributes = []): Lo
     ]);
 
     $analysis = LoanAnalysis::begin($loan);
-    $analysis->businesses()->create(['type' => 'service', 'code' => 'AUJ'.str_pad((string) $loan->id, 5, '0', STR_PAD_LEFT), 'name' => 'X', 'service_income' => 4_000_000, 'monthly_income' => 4_000_000, 'net_profit' => 4_000_000]);
+    $business = $analysis->businesses()->create(['type' => 'service', 'code' => 'AUJ'.str_pad((string) $loan->id, 5, '0', STR_PAD_LEFT), 'name' => 'X', 'service_income' => 4_000_000]);
+    $business->recalculate();
+    $business->save();
     AnalysisFinance::create(['loan_analysis_id' => $analysis->id, 'cost_staple' => 1_000_000]);
     AnalysisFiveC::create(['loan_analysis_id' => $analysis->id, 'capital_source' => 3]);
     AnalysisMemorandum::create(['loan_analysis_id' => $analysis->id, 'proposed_amount' => $amount, 'term_months' => 12, 'interest_rate' => 12]);
@@ -191,4 +194,100 @@ it('lists what waits for the person and shows the file only to those who take pa
 
     // Whoever may decide can also read the worksheet.
     $this->actingAs($people['kabag'])->get(route('credit-analysis.show', $loan))->assertOk();
+});
+
+/** An approved file with its analysis, ready for corrections. */
+function approvedFile(array $people): LoanApplication
+{
+    $loan = analysedFor($people, 8_000_000);
+    $loan->analysis->businesses()->first()->update(['name' => 'OJEK']);
+    submitAnalysis($people['analyst'], $loan);
+    test()->actingAs($people['analyst'])->post(route('approvals.decide', $loan), decision('approve', ['amount' => 8_000_000]));
+
+    return $loan->fresh();
+}
+
+it('keeps an approved worksheet locked until the section head opens a correction', function () {
+    $people = committeePeople();
+    $loan = approvedFile($people);
+    expect($loan->status)->toBe(LoanStatus::Approved);
+
+    $this->actingAs($people['analyst'])->put(route('credit-analysis.memorandum.update', $loan), ['before_disbursement' => 'x'])->assertForbidden();
+
+    // The analyst asks; the section head opens.
+    $this->post(route('credit-analysis.corrections.store', $loan), ['reason' => 'fix a typo'])->assertSessionHasNoErrors();
+    $correction = $loan->analysis->corrections()->firstOrFail();
+    expect($correction->status)->toBe('requested')
+        ->and(AppNotification::where('user_id', $people['kasi']->id)->where('title', 'Permintaan koreksi analisa')->exists())->toBeTrue();
+    $this->put(route('credit-analysis.memorandum.update', $loan), ['before_disbursement' => 'x'])->assertForbidden();
+    $this->actingAs($people['analyst'])->post(route('credit-analysis.corrections.open', [$loan, $correction]))->assertForbidden();
+
+    $this->actingAs($people['kasi'])->post(route('credit-analysis.corrections.open', [$loan, $correction]))->assertSessionHasNoErrors();
+    expect($correction->fresh()->status)->toBe('open');
+
+    // Text may change, the approval does not.
+    $this->actingAs($people['analyst'])->put(route('credit-analysis.memorandum.update', $loan), ['proposed_amount' => 8_000_000, 'term_months' => 12, 'interest_rate' => 12, 'before_disbursement' => 'bring the deed'])
+        ->assertSessionHas('success');
+    expect($loan->analysis->memorandum->fresh()->before_disbursement)->toBe('BRING THE DEED')->and($loan->fresh()->status)->toBe(LoanStatus::Approved);
+
+    $this->post(route('credit-analysis.corrections.close', [$loan, $correction]), ['reason' => 'typo fixed'])->assertSessionHasNoErrors();
+    expect($correction->fresh()->status)->toBe('closed')->and($correction->fresh()->resolution_note)->toBe('typo fixed');
+    $this->put(route('credit-analysis.memorandum.update', $loan), ['before_disbursement' => 'again'])->assertForbidden();
+});
+
+it('refuses a correction that changes a figure the committee decided on, and undoes it', function () {
+    $people = committeePeople();
+    $loan = approvedFile($people);
+    $this->actingAs($people['kasi'])->post(route('credit-analysis.corrections.store', $loan), ['reason' => 'adjust'])->assertSessionHasNoErrors();
+    expect($loan->analysis->corrections()->first()->status)->toBe('open');
+
+    $this->actingAs($people['analyst']);
+    $this->put(route('credit-analysis.memorandum.update', $loan), ['proposed_amount' => 9_000_000, 'term_months' => 12, 'interest_rate' => 12, 'before_disbursement' => 'changed'])
+        ->assertSessionHas('error');
+    $memorandum = $loan->analysis->memorandum->fresh();
+    expect($memorandum->proposed_amount)->toBe(8_000_000)->and($memorandum->before_disbursement)->toBeNull();
+
+    $this->put(route('credit-analysis.finance.update', $loan), ['cost_staple' => 2_000_000])->assertSessionHas('error');
+    $this->put(route('credit-analysis.five-c.update', $loan), ['capital_source' => 1])->assertSessionHas('error');
+    $this->put(route('credit-analysis.qualitative.update', $loan), ['strength' => 'good location'])->assertSessionHas('success');
+
+    // Taking the business away would change the income the approval rests on.
+    $business = AnalysisBusiness::firstOrFail();
+    $this->delete(route('credit-analysis.businesses.destroy', [$loan, $business]))->assertSessionHas('error');
+    expect(AnalysisBusiness::count())->toBe(1);
+
+    // The name of the business is only text.
+    $this->put(route('credit-analysis.businesses.update', [$loan, $business]), ['name' => 'ojek online', 'service_income' => $business->service_income])->assertSessionHas('success');
+    expect($business->fresh()->name)->toBe('OJEK ONLINE');
+});
+
+it('lets only the section head of the file decide a request, and only for an approved file', function () {
+    $people = committeePeople();
+    $loan = approvedFile($people);
+    $stranger = User::factory()->create()->assignRole('Kepala Seksi Analis');
+
+    $this->actingAs($people['analyst'])->post(route('credit-analysis.corrections.store', $loan), ['reason' => 'fix'])->assertSessionHasNoErrors();
+    $correction = $loan->analysis->corrections()->firstOrFail();
+    $this->post(route('credit-analysis.corrections.store', $loan), ['reason' => 'again'])->assertStatus(422);
+
+    $this->actingAs($stranger)->post(route('credit-analysis.corrections.decline', [$loan, $correction]), ['reason' => 'no'])->assertForbidden();
+    $this->actingAs($people['kasi'])->post(route('credit-analysis.corrections.decline', [$loan, $correction]), [])->assertSessionHasErrors('reason');
+    $this->post(route('credit-analysis.corrections.decline', [$loan, $correction]), ['reason' => 'not needed'])->assertSessionHasNoErrors();
+    expect($correction->fresh()->status)->toBe('declined')
+        ->and(AppNotification::where('user_id', $people['analyst']->id)->where('title', 'Permintaan koreksi ditolak')->exists())->toBeTrue();
+
+    $pending = analysedFor($people, 20_000_000);
+    $this->actingAs($people['analyst'])->post(route('credit-analysis.corrections.store', $pending), ['reason' => 'x'])->assertStatus(422);
+    $this->post(route('credit-analysis.submit', $loan))->assertForbidden();
+});
+
+it('shows the corrections on the worksheet and on the approval', function () {
+    $people = committeePeople();
+    $loan = approvedFile($people);
+    $this->actingAs($people['kasi'])->post(route('credit-analysis.corrections.store', $loan), ['reason' => 'adjust']);
+
+    $this->get(route('credit-analysis.show', $loan))->assertInertia(fn (Assert $page) => $page
+        ->where('canEdit', false)->where('corrections.running', 'open')->where('corrections.can_close', true)->where('corrections.can_open', false)->has('corrections.items', 1));
+    $this->actingAs($people['analyst'])->get(route('credit-analysis.show', $loan))->assertInertia(fn (Assert $page) => $page->where('canEdit', true));
+    $this->get(route('approvals.show', $loan))->assertInertia(fn (Assert $page) => $page->has('corrections', 1)->where('corrections.0.reason', 'adjust'));
 });

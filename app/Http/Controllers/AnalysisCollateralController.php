@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AnalysisCollateral;
+use App\Models\LoanAnalysis;
 use App\Models\LoanApplication;
 use App\Models\User;
 use App\Support\CreditAnalysis\AnalysisAccess;
@@ -19,7 +20,7 @@ class AnalysisCollateralController extends Controller
     {
         /** @var User $user */
         $user = $request->user();
-        $analysis = AnalysisAccess::edit($user, $loanApplication);
+        AnalysisAccess::edit($user, $loanApplication);
 
         $ids = $loanApplication->collaterals()->pluck('collaterals.id')->all();
         $money = ['nullable', 'integer', 'min:0', 'max:999999999999'];
@@ -44,12 +45,14 @@ class AnalysisCollateralController extends Controller
             'rows.*.year' => 'tahun', 'rows.*.land_area' => 'luas', 'rows.*.market_value' => 'nilai pasar', 'rows.*.appraisal_value' => 'nilai taksasi',
         ]);
 
-        foreach ($data['rows'] as $row) {
-            $values = Arr::map(Arr::except($row, 'collateral_id'), fn (mixed $value, string $key): mixed => $key === 'kind' ? $value : (is_string($value) ? Str::upper($value) : ($value ?? 0)));
+        $error = AnalysisAccess::change($user, $loanApplication, function (LoanAnalysis $analysis) use ($data): void {
+            foreach ($data['rows'] as $row) {
+                $values = Arr::map(Arr::except($row, 'collateral_id'), fn (mixed $value, string $key): mixed => $key === 'kind' ? $value : (is_string($value) ? Str::upper($value) : ($value ?? 0)));
 
-            AnalysisCollateral::query()->updateOrCreate(['loan_analysis_id' => $analysis->id, 'collateral_id' => $row['collateral_id']], $values);
-        }
+                AnalysisCollateral::query()->updateOrCreate(['loan_analysis_id' => $analysis->id, 'collateral_id' => $row['collateral_id']], $values);
+            }
+        });
 
-        return back()->with('success', 'Analisa agunan berhasil disimpan.');
+        return $error ? back()->with('error', $error) : back()->with('success', 'Analisa agunan berhasil disimpan.');
     }
 }
