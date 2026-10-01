@@ -152,7 +152,7 @@ function Sidebar({ onNavigate }: { onNavigate: () => void }) {
     return (
         <nav
             className="flex flex-col gap-0.5 overflow-y-auto p-2"
-            aria-label="Main"
+            aria-label="Menu utama"
         >
             {navigation.map((section, index) => (
                 <div
@@ -240,7 +240,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    aria-label="Close menu"
+                                    aria-label="Tutup menu"
                                     onClick={() => setMobileOpen(false)}
                                 >
                                     <X />
@@ -257,7 +257,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                             variant="ghost"
                             size="icon"
                             className="lg:hidden"
-                            aria-label="Open menu"
+                            aria-label="Buka menu"
                             onClick={() => setMobileOpen(true)}
                         >
                             <Menu />
@@ -298,7 +298,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                                             router.visit('/profile')
                                         }
                                     >
-                                        Profile
+                                        Profil
                                     </DropdownItem>
                                     <DropdownItem
                                         icon={<LogOut />}
@@ -306,7 +306,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                                             router.post(logout().url)
                                         }
                                     >
-                                        Log out
+                                        Keluar
                                     </DropdownItem>
                                 </DropdownContent>
                             </DropdownMenu>
@@ -319,14 +319,14 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                         >
                             <ShieldAlert className="size-3.5 shrink-0" />
                             <span className="min-w-0 flex-1 truncate">
-                                Your account is not protected by two-factor
-                                authentication yet.
+                                Akun Anda belum dilindungi verifikasi dua
+                                langkah.
                             </span>
                             <Link
                                 href="/profile"
                                 className="shrink-0 font-medium underline underline-offset-2 hover:no-underline"
                             >
-                                Turn it on
+                                Aktifkan
                             </Link>
                         </div>
                     )}

@@ -2,10 +2,14 @@ import { Link } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
 
 const TABS = [
-    { key: 'levels', label: 'Levels', href: '/committees' },
-    { key: 'paths', label: 'Special rules', href: '/committees/paths' },
-    { key: 'members', label: 'Members', href: '/committees/members' },
-    { key: 'exceptions', label: 'Exceptions', href: '/committees/exceptions' },
+    { key: 'levels', label: 'Jenjang', href: '/committees/levels' },
+    { key: 'paths', label: 'Aturan khusus', href: '/committees/special-rules' },
+    { key: 'members', label: 'Anggota', href: '/committees/members' },
+    {
+        key: 'exceptions',
+        label: 'Pengecualian',
+        href: '/committees/exceptions',
+    },
 ] as const;
 
 export type CommitteeTab = (typeof TABS)[number]['key'];
@@ -14,7 +18,7 @@ export type CommitteeTab = (typeof TABS)[number]['key'];
 export function CommitteeTabs({ current }: { current: CommitteeTab }) {
     return (
         <nav
-            aria-label="Committee sections"
+            aria-label="Bagian data komite"
             className="mb-4 flex gap-4 overflow-x-auto border-b border-line"
         >
             {TABS.map((tab) => (

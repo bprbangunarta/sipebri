@@ -64,7 +64,7 @@ class CommitteeLevels
         $paths = CommitteePath::query()->where('follows_default', true)->where('is_default', false)->get();
         $paths->each(fn (CommitteePath $path) => self::attach($path));
 
-        Audit::record('committees.levels_propagated', 'committees', 'levels_propagated', self::defaultPath(), context: ['paths' => $paths->count()], label: 'Default authority levels');
+        Audit::record('committees.levels_propagated', 'committees', 'levels_propagated', self::defaultPath(), context: ['paths' => $paths->count()], label: 'Jenjang wewenang bawaan');
 
         return $paths->count();
     }

@@ -37,10 +37,10 @@ type Props = {
 };
 
 const DECISIONS = [
-    ['can_escalate', 'Escalate'],
-    ['can_approve', 'Approve'],
-    ['can_cancel', 'Cancel'],
-    ['can_reject', 'Reject'],
+    ['can_escalate', 'Naikkan'],
+    ['can_approve', 'Setujui'],
+    ['can_cancel', 'Batalkan'],
+    ['can_reject', 'Tolak'],
 ] as const;
 
 export default function CommitteeLevels({
@@ -65,32 +65,32 @@ export default function CommitteeLevels({
         },
         {
             key: 'level',
-            header: 'Level',
+            header: 'Jenjang',
             className: 'font-medium',
             cell: (l) => l.label ?? '–',
         },
-        { key: 'role', header: 'Who decides', cell: (l) => l.role },
+        { key: 'role', header: 'Pemutus', cell: (l) => l.role },
         {
             key: 'kind',
-            header: 'Kind',
+            header: 'Jenis',
             hideBelow: 'sm',
             cell: (l) => (
                 <Badge tone={l.is_individual ? 'info' : 'neutral'}>
-                    {l.is_individual ? 'Individual' : 'Committee'}
+                    {l.is_individual ? 'Perorangan' : 'Komite'}
                 </Badge>
             ),
         },
         {
             key: 'range',
-            header: 'Amount',
+            header: 'Plafon',
             align: 'right',
             className: 'whitespace-nowrap tabular-nums',
             cell: (l) =>
-                `${rupiah(l.min_amount ?? 0)} – ${l.max_amount === null ? 'no limit' : rupiah(l.max_amount)}`,
+                `${rupiah(l.min_amount ?? 0)} – ${l.max_amount === null ? 'tanpa batas' : rupiah(l.max_amount)}`,
         },
         {
             key: 'decisions',
-            header: 'Decisions',
+            header: 'Keputusan',
             hideBelow: 'md',
             cell: (l) => (
                 <span className="flex flex-wrap gap-1">
@@ -115,7 +115,7 @@ export default function CommitteeLevels({
         },
         {
             key: 'people',
-            header: 'People',
+            header: 'Orang',
             align: 'right',
             hideBelow: 'sm',
             className: 'tabular-nums',
@@ -125,17 +125,17 @@ export default function CommitteeLevels({
 
     return (
         <>
-            <Head title="Committees" />
+            <Head title="Data Komite" />
             <PageHeader
-                title="Committees"
-                description="Who may decide a loan, by amount"
+                title="Data Komite"
+                description="Siapa yang berwenang memutus kredit, menurut plafon"
                 actions={
                     <>
                         <Button
                             variant="outline"
                             onClick={() => setChecking(true)}
                         >
-                            <Scale /> Check authority
+                            <Scale /> Cek wewenang
                         </Button>
                         {canManage && defaultId && (
                             <Button
@@ -143,7 +143,7 @@ export default function CommitteeLevels({
                                     router.visit(`/committees/${defaultId}`)
                                 }
                             >
-                                <SlidersHorizontal /> Edit levels
+                                <SlidersHorizontal /> Ubah jenjang
                             </Button>
                         )}
                     </>
@@ -157,37 +157,37 @@ export default function CommitteeLevels({
                 columns={columns}
                 empty={{
                     icon: <SlidersHorizontal />,
-                    title: 'No levels yet',
+                    title: 'Belum ada jenjang',
                     description:
-                        'Run the committee seeder to create the default levels.',
+                        'Jalankan seeder komite untuk membuat jenjang bawaan.',
                 }}
             />
 
             <div className="mt-4 grid gap-3 text-sm text-muted md:grid-cols-3">
                 <p className="border-border rounded-lg border bg-surface p-3">
                     <span className="mb-1 block font-medium text-ink">
-                        By amount
+                        Menurut plafon
                     </span>
-                    The file goes to the level whose amount range covers the
-                    loan. Levels below it only escalate. {followers}{' '}
-                    {followers === 1 ? 'path follows' : 'paths follow'} these
-                    levels, so changing them here changes all of them.
+                    Berkas masuk ke jenjang yang rentang plafonnya mencakup
+                    kredit; jenjang di bawahnya hanya menaikkan. {followers}{' '}
+                    jalur mengikuti jenjang ini, jadi mengubahnya di sini
+                    berlaku untuk semuanya.
                 </p>
                 <p className="border-border rounded-lg border bg-surface p-3">
                     <span className="mb-1 block font-medium text-ink">
-                        Individual or committee
+                        Perorangan atau komite
                     </span>
-                    An individual level (analyst staff) is decided by the person
-                    who holds the file. A committee level is decided by that
-                    committee, so only those people are listed under Members.
+                    Jenjang perorangan (staf analis) diputus oleh orang yang
+                    memegang berkas. Jenjang komite diputus oleh komitenya,
+                    sehingga hanya mereka yang masuk daftar Anggota.
                 </p>
                 <p className="border-border rounded-lg border bg-surface p-3">
                     <span className="mb-1 block font-medium text-ink">
-                        Special rules
+                        Aturan khusus
                     </span>
-                    {special} {special === 1 ? 'path has' : 'paths have'} a
-                    hierarchy (every committee in order, only the last decides)
-                    or limits of their own. See the Special rules tab.
+                    {special} jalur memakai hierarki (semua komite dilewati
+                    berurutan, hanya yang terakhir memutus) atau batas sendiri.
+                    Lihat tab Aturan khusus.
                 </p>
             </div>
 

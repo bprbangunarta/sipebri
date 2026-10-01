@@ -57,10 +57,10 @@ it('warns about gaps, overlaps and roles nobody holds', function () {
     $path->tiers()->create(['sort' => 2, 'role' => 'Kepala Bagian Analis', 'min_amount' => 20_000_000, 'max_amount' => null, 'can_approve' => true]);
 
     $inGap = implode(' ', Committee::resolve($path->product_id, null, 15_000_000)['warnings']);
-    expect($inGap)->toContain('No tier is authorised')->toContain('gap between Kepala Seksi Analis and Kepala Bagian Analis');
+    expect($inGap)->toContain('Tidak ada jenjang yang berwenang')->toContain('celah antara Kepala Seksi Analis dan Kepala Bagian Analis');
 
     $decided = implode(' ', Committee::resolve($path->product_id, null, 5_000_000)['warnings']);
-    expect($decided)->toContain('No user holds the role Kepala Seksi Analis');
+    expect($decided)->toContain('Tidak ada pengguna dengan peran Kepala Seksi Analis');
 });
 
 it('serves the authority check as json and validates the amount', function () {
@@ -115,7 +115,7 @@ it('copies tiers from another path and restricts access to Super Admin', functio
     $this->post(route('committees.store'), ['condition' => 'copy', 'mechanism' => 'plafon', 'copy_from' => $source->id]);
     expect(CommitteePath::firstWhere('condition', 'COPY')->tiers()->count())->toBe(5);
 
-    $this->get(route('committees.paths'))->assertInertia(fn (Assert $page) => $page->component('committees/paths'));
+    $this->get(route('committees.paths'))->assertInertia(fn (Assert $page) => $page->component('committees/special-rules'));
 
     $this->actingAs(userWith(['dashboard.view'], 'Nobody'));
     $this->get(route('committees.index'))->assertForbidden();

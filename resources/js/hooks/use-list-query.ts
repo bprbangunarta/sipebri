@@ -28,7 +28,7 @@ export function useListQuery<F extends { search?: string }>({
         () =>
             router.on('networkError', () =>
                 setError(
-                    'Unable to reach the server. Check your connection and try again.',
+                    'Server tidak dapat dihubungi. Periksa koneksi Anda lalu coba lagi.',
                 ),
             ),
         [],

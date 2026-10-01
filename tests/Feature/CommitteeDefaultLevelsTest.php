@@ -24,7 +24,7 @@ it('seeds the default levels once and puts the seeded paths on them', function (
     expect(CommitteePath::where('is_default', true)->count())->toBe(1)
         ->and(($this->path)('KRU')->follows_default)->toBeTrue()
         ->and(($this->path)('KUP')->follows_default)->toBeTrue()
-        ->and(CommitteeLevels::defaultPath()?->title())->toBe('Default authority levels');
+        ->and(CommitteeLevels::defaultPath()?->title())->toBe('Jenjang wewenang bawaan');
 });
 
 it('spreads a change of a default limit to every follower and keeps hierarchy paths without amounts', function () {
@@ -70,7 +70,7 @@ it('refuses to edit tiers of a path that follows the defaults until it is custom
 it('does not list or delete the default path', function () {
     $default = CommitteeLevels::defaultPath();
 
-    $this->get('/committees/paths')->assertInertia(fn ($page) => $page
+    $this->get('/committees/special-rules')->assertInertia(fn ($page) => $page
         ->where('defaultLevels.id', $default->id)
         ->where('paths', fn ($paths) => collect($paths)->doesntContain('is_default', true)));
     $this->delete("/committees/{$default->id}")->assertForbidden();
@@ -94,7 +94,7 @@ it('has an individual staff level up to 10 million that is not a committee', fun
 
     $small = Committee::resolve($kru->product_id, null, 8_000_000);
     expect($small['decider']['role'])->toBe('Staff Analis & Appraisal')
-        ->and($small['decider']['status_label'])->toBe('Decides (file holder)');
+        ->and($small['decider']['status_label'])->toBe('Memutus (pemegang berkas)');
     expect(Committee::resolve($kru->product_id, null, 12_000_000)['decider']['role'])->toBe('Kepala Seksi Analis');
 
     // Hierarchy paths climb committees only.
@@ -110,11 +110,12 @@ it('leaves the analyst staff out of the committee members but still recognises t
 });
 
 it('shows the default ladder as the hub and the other parts as tabs', function () {
-    $this->get('/committees')->assertOk()->assertInertia(fn ($page) => $page
-        ->component('committees/index')
+    $this->get('/committees/levels')->assertOk()->assertInertia(fn ($page) => $page
+        ->component('committees/levels')
         ->has('levels', 5)
         ->where('levels.0.is_individual', true)
         ->has('special'));
     $this->get('/committees/exceptions')->assertInertia(fn ($page) => $page->component('committees/exceptions'));
-    $this->get('/committees/paths')->assertInertia(fn ($page) => $page->component('committees/paths'));
+    $this->get('/committees/special-rules')->assertInertia(fn ($page) => $page->component('committees/special-rules'));
+    $this->get('/committees')->assertRedirect('/committees/levels');
 });

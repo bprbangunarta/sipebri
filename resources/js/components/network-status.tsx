@@ -33,8 +33,8 @@ export function NetworkStatus() {
             )}
             <span>
                 {offline
-                    ? 'No connection. Changes cannot be saved until you are back online.'
-                    : 'Back online.'}
+                    ? 'Tidak ada koneksi. Perubahan belum bisa disimpan sampai Anda kembali online.'
+                    : 'Kembali online.'}
             </span>
         </div>
     );

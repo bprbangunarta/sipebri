@@ -35,7 +35,7 @@ it('generates standard permissions, skips existing ones and gives them to Super 
         ->and($admin->fresh()->can('credit-analysis.update'))->toBeTrue();
 
     $this->post(route('permissions.generate'), ['entity' => 'credit-analysis', 'actions' => ['view', 'delete']])
-        ->assertSessionHas('success', '1 permission(s) created, 1 already existed.');
+        ->assertSessionHas('success', '1 izin berhasil dibuat, 1 sudah ada sebelumnya.');
     expect(Permission::where('name', 'credit-analysis.delete')->exists())->toBeTrue();
 
     $row = AuditLog::query()->where('event', 'permissions.generated')->latest('id')->firstOrFail();
@@ -46,7 +46,7 @@ it('does not duplicate a system permission and validates the input', function ()
     $this->actingAs(superAdmin());
 
     $this->post(route('permissions.generate'), ['entity' => 'surveys', 'actions' => ['view', 'manage']])->assertSessionHasErrors('actions.1');
-    $this->post(route('permissions.generate'), ['entity' => 'surveys', 'actions' => ['view']])->assertSessionHas('success', '0 permission(s) created, 1 already existed.');
+    $this->post(route('permissions.generate'), ['entity' => 'surveys', 'actions' => ['view']])->assertSessionHas('success', '0 izin berhasil dibuat, 1 sudah ada sebelumnya.');
     $this->post(route('permissions.generate'), ['entity' => '', 'actions' => ['view']])->assertSessionHasErrors('entity');
     $this->post(route('permissions.generate'), ['entity' => 'Bad!Name', 'actions' => ['view']])->assertSessionHasErrors('entity');
     $this->post(route('permissions.generate'), ['entity' => 'ok', 'actions' => []])->assertSessionHasErrors('actions');
@@ -59,9 +59,9 @@ it('offers custom permissions in the role matrix and lets a role hold them', fun
     $role = Role::findOrCreate('Auditor', 'web');
 
     $this->get(route('roles.show', $role))->assertInertia(fn (Assert $page) => $page
-        ->where('matrix.2.group', 'Custom')
+        ->where('matrix.2.group', 'Kustom')
         ->where('matrix.2.modules.0.abilities.0.name', 'reports.view_any')
-        ->where('matrix.2.modules.0.abilities.0.label', 'View any'));
+        ->where('matrix.2.modules.0.abilities.0.label', 'Lihat semua'));
 
     $this->put(route('roles.permissions', $role), ['permissions' => ['reports.view_any']])->assertSessionHasNoErrors();
     expect($role->fresh()->hasPermissionTo('reports.view_any'))->toBeTrue();

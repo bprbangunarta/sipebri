@@ -41,8 +41,8 @@ class ProductParameterRequest extends FormRequest
     {
         $validator->after(function (Validator $validator): void {
             $pairs = [
-                'default_method_id' => ['allowed_method_ids', 'The default interest method must be one of the allowed methods.'],
-                'default_installment_id' => ['allowed_installment_ids', 'The default installment system must be one of the allowed systems.'],
+                'default_method_id' => ['allowed_method_ids', 'Metode bunga bawaan harus salah satu dari metode yang diizinkan.'],
+                'default_installment_id' => ['allowed_installment_ids', 'Sistem angsuran bawaan harus salah satu dari sistem yang diizinkan.'],
             ];
 
             foreach ($pairs as $field => [$allowedField, $message]) {
@@ -61,10 +61,10 @@ class ProductParameterRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'min_amount' => 'minimum loan amount', 'max_amount' => 'maximum loan amount',
-            'min_tenor' => 'minimum tenor', 'max_tenor' => 'maximum tenor', 'interest_rate' => 'interest rate',
-            'provision_rate' => 'provision', 'admin_rate' => 'admin fee', 'rc_threshold' => 'RC threshold',
-            'default_method_id' => 'default interest method', 'default_installment_id' => 'default installment system', 'decree' => 'decree number',
+            'min_amount' => 'plafon minimum', 'max_amount' => 'plafon maksimum',
+            'min_tenor' => 'tenor minimum', 'max_tenor' => 'tenor maksimum', 'interest_rate' => 'suku bunga',
+            'provision_rate' => 'provisi', 'admin_rate' => 'biaya administrasi', 'rc_threshold' => 'batas RC',
+            'default_method_id' => 'metode bunga bawaan', 'default_installment_id' => 'sistem angsuran bawaan', 'decree' => 'nomor SK Direksi',
         ];
     }
 
@@ -74,8 +74,8 @@ class ProductParameterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'max_amount.gte' => 'The maximum loan amount cannot be lower than the minimum.',
-            'max_tenor.gte' => 'The maximum tenor cannot be lower than the minimum.',
+            'max_amount.gte' => 'Plafon maksimum tidak boleh lebih kecil dari minimum.',
+            'max_tenor.gte' => 'Tenor maksimum tidak boleh lebih kecil dari minimum.',
         ];
     }
 }

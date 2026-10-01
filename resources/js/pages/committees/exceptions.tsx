@@ -16,12 +16,12 @@ type Props = {
 };
 
 const RULES = [
-    'An applicant is recognised by their national ID (NIK) when the credit is requested. A file can also be flagged by hand.',
-    'Nobody takes part in deciding their own file. When the level that would decide is the applicant’s, the level above decides.',
-    'If the top committee member is the applicant, the highest level below decides, and the file is marked as an exception.',
-    'If the applicant’s role has another holder (such as the second section head), that person acts and the level stays.',
-    'The applicant can never be the section head or the surveyor of their own file.',
-    'Scope: the applicant only. Close family is on the backlog.',
+    'Pemohon dikenali dari NIK saat kredit diajukan. Berkas juga bisa ditandai manual.',
+    'Tidak ada yang ikut memutus berkasnya sendiri. Bila jenjang yang seharusnya memutus adalah milik pemohon, jenjang di atasnya yang memutus.',
+    'Bila anggota komite tertinggi adalah pemohon, jenjang tertinggi di bawahnya yang memutus dan berkas ditandai sebagai pengecualian.',
+    'Bila peran pemohon dipegang orang lain (misalnya Kasi Analis kedua), orang itu yang bertindak dan jenjangnya tetap.',
+    'Pemohon tidak pernah bisa menjadi Kasi Analis atau surveyor berkasnya sendiri.',
+    'Cakupan: pemohon sendiri. Keluarga dekat masih dalam rencana.',
 ];
 
 export default function CommitteeExceptions({
@@ -34,20 +34,20 @@ export default function CommitteeExceptions({
 
     return (
         <>
-            <Head title="Committee exceptions" />
+            <Head title="Pengecualian Komite" />
             <PageHeader
-                title="Committees"
-                description="When the applicant is a committee member"
+                title="Data Komite"
+                description="Bila pemohon adalah anggota komite"
                 actions={
                     <>
                         <Button
                             variant="outline"
                             onClick={() => router.visit('/committees/members')}
                         >
-                            <Users /> Members
+                            <Users /> Anggota
                         </Button>
                         <Button onClick={() => setChecking(true)}>
-                            <Scale /> Check authority
+                            <Scale /> Cek wewenang
                         </Button>
                     </>
                 }
@@ -60,11 +60,9 @@ export default function CommitteeExceptions({
                 ))}
             </ul>
             <p className="mt-3 text-sm text-muted">
-                {members.total} committee{' '}
-                {members.total === 1 ? 'member' : 'members'} ·{' '}
-                {members.withoutNik} without a NIK on record. Use Check
-                authority and pick the applicant to see how a file would be
-                decided.
+                {members.total} anggota komite · {members.withoutNik} belum
+                punya NIK. Pakai Cek wewenang dan pilih pemohon untuk melihat
+                bagaimana sebuah berkas akan diputus.
             </p>
 
             <AuthorityCheck

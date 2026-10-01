@@ -119,11 +119,12 @@ Route::middleware('auth')->group(function () {
             Route::delete('{id}', [MasterDataController::class, 'destroy'])->whereNumber('id')->name('master-data.destroy');
         });
 
-        Route::get('committees', [CommitteeController::class, 'index'])->name('committees.index');
+        Route::redirect('committees', '/committees/levels')->name('committees.index');
+        Route::get('committees/levels', [CommitteeController::class, 'index'])->name('committees.levels');
         Route::get('committees/members', [CommitteeMemberController::class, 'index'])->name('committees.members');
         Route::put('committees/members/{user}', [CommitteeMemberController::class, 'update'])->whereNumber('user')->name('committees.members.update');
         Route::delete('committees/members/{user}', [CommitteeMemberController::class, 'destroy'])->whereNumber('user')->name('committees.members.destroy');
-        Route::get('committees/paths', [CommitteeController::class, 'paths'])->name('committees.paths');
+        Route::get('committees/special-rules', [CommitteeController::class, 'paths'])->name('committees.paths');
         Route::get('committees/exceptions', [CommitteeController::class, 'exceptions'])->name('committees.exceptions');
         Route::get('committees/authority', [CommitteeController::class, 'authority'])->name('committees.authority');
         Route::get('committees/{path}', [CommitteeController::class, 'show'])->name('committees.show');

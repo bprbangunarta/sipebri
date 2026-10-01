@@ -52,8 +52,8 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                 title={role.name}
                 description={
                     role.locked
-                        ? 'This role always has every permission and cannot be changed.'
-                        : 'Choose what this role is allowed to do'
+                        ? 'Peran ini selalu punya semua izin dan tidak bisa diubah.'
+                        : 'Pilih apa saja yang boleh dilakukan peran ini'
                 }
                 actions={
                     <>
@@ -61,7 +61,7 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                             variant="outline"
                             onClick={() => router.visit('/roles')}
                         >
-                            <ArrowLeft /> Back
+                            <ArrowLeft /> Kembali
                         </Button>
                         {editable && (
                             <>
@@ -69,7 +69,7 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                                     variant="outline"
                                     onClick={() => setConfirmDelete(true)}
                                 >
-                                    <Trash2 /> Delete
+                                    <Trash2 /> Hapus
                                 </Button>
                                 <Button
                                     loading={form.processing}
@@ -80,7 +80,7 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                                         )
                                     }
                                 >
-                                    <Save /> Save permissions
+                                    <Save /> Simpan izin
                                 </Button>
                             </>
                         )}
@@ -104,7 +104,7 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                                 className="mb-1 block text-xs font-medium"
                                 htmlFor="role-name"
                             >
-                                Role name
+                                Nama peran
                             </label>
                             <Input
                                 id="role-name"
@@ -125,7 +125,7 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                             variant="outline"
                             loading={rename.processing}
                         >
-                            Rename
+                            Ubah nama
                         </Button>
                     </form>
                 </Card>
@@ -181,11 +181,11 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
             <ConfirmDialog
                 open={confirmDelete}
                 onOpenChange={setConfirmDelete}
-                title="Delete role?"
+                title="Hapus peran?"
                 description={
                     <>
-                        This removes the role <strong>{role.name}</strong>.
-                        Roles assigned to users cannot be deleted.
+                        Ini menghapus peran <strong>{role.name}</strong>. Peran
+                        yang dipakai pengguna tidak bisa dihapus.
                     </>
                 }
                 onConfirm={() => router.delete(`/roles/${role.id}`)}

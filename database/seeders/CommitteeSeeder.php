@@ -24,11 +24,11 @@ class CommitteeSeeder extends Seeder
 
     /** [label, role, min, max, escalate, approve, cancel, reject, individual] */
     private const PLAFON_TIERS = [
-        ['Staff', RoleName::Analyst->value, 1000, 10_000_000, true, true, true, true, true],
-        ['Section', RoleName::AnalysisSectionHead->value, 10_000_001, 35_000_000, true, true, true, true, false],
-        ['Committee I', RoleName::AnalysisDepartmentHead->value, 35_000_001, 100_000_000, true, true, true, true, false],
-        ['Committee II', RoleName::BusinessDirector->value, 100_000_001, 300_000_000, true, true, true, true, false],
-        ['Committee III', RoleName::PresidentDirector->value, 300_000_001, null, false, true, true, true, false],
+        ['Staf', RoleName::Analyst->value, 1000, 10_000_000, true, true, true, true, true],
+        ['Seksi', RoleName::AnalysisSectionHead->value, 10_000_001, 35_000_000, true, true, true, true, false],
+        ['Komite I', RoleName::AnalysisDepartmentHead->value, 35_000_001, 100_000_000, true, true, true, true, false],
+        ['Komite II', RoleName::BusinessDirector->value, 100_000_001, 300_000_000, true, true, true, true, false],
+        ['Komite III', RoleName::PresidentDirector->value, 300_000_001, null, false, true, true, true, false],
     ];
 
     public function run(): void

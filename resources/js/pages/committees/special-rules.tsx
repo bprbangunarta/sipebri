@@ -46,7 +46,7 @@ type Props = {
     canManage: boolean;
 };
 
-export default function CommitteePaths({
+export default function CommitteeSpecialRules({
     paths,
     productOptions,
     pathOptions,
@@ -127,25 +127,25 @@ export default function CommitteePaths({
     const columns: Column<PathRow>[] = [
         {
             key: 'product',
-            header: 'Product',
+            header: 'Produk',
             className: 'font-medium',
             cell: (p) => p.product_label,
         },
         {
             key: 'condition',
-            header: 'Condition',
+            header: 'Kondisi',
             hideBelow: 'sm',
             cell: (p) => p.condition_label,
         },
         {
             key: 'mechanism',
-            header: 'Mechanism',
+            header: 'Mekanisme',
             hideBelow: 'md',
             cell: (p) => p.mechanism_label,
         },
         {
             key: 'tiers',
-            header: 'Tiers',
+            header: 'Jenjang',
             align: 'right',
             hideBelow: 'sm',
             className: 'tabular-nums',
@@ -153,11 +153,11 @@ export default function CommitteePaths({
         },
         {
             key: 'levels',
-            header: 'Levels',
+            header: 'Batas',
             hideBelow: 'sm',
             cell: (p) => (
                 <Badge tone={p.follows_default ? 'info' : 'neutral'}>
-                    {p.follows_default ? 'Default' : 'Own'}
+                    {p.follows_default ? 'Bawaan' : 'Sendiri'}
                 </Badge>
             ),
         },
@@ -166,25 +166,25 @@ export default function CommitteePaths({
             header: 'Status',
             cell: (p) => (
                 <Badge tone={p.is_active ? 'success' : 'neutral'}>
-                    {p.is_active ? 'Active' : 'Inactive'}
+                    {p.is_active ? 'Aktif' : 'Nonaktif'}
                 </Badge>
             ),
         },
         {
             key: 'actions',
-            header: 'Actions',
+            header: 'Aksi',
             srOnly: true,
             narrow: true,
             align: 'right',
             cell: (p) =>
                 canManage && (
                     <DropdownMenu>
-                        <Tip label="Actions">
+                        <Tip label="Aksi">
                             <DropdownTrigger asChild>
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    aria-label={`Actions for ${p.title}`}
+                                    aria-label={`Aksi untuk ${p.title}`}
                                 >
                                     <MoreHorizontal />
                                 </Button>
@@ -195,7 +195,7 @@ export default function CommitteePaths({
                                 icon={<Pencil />}
                                 onSelect={() => openForm(p)}
                             >
-                                Edit
+                                Ubah
                             </DropdownItem>
                             <DropdownSeparator />
                             <DropdownItem
@@ -203,7 +203,7 @@ export default function CommitteePaths({
                                 icon={<Trash2 />}
                                 onSelect={() => setToDelete(p)}
                             >
-                                Delete
+                                Hapus
                             </DropdownItem>
                         </DropdownContent>
                     </DropdownMenu>
@@ -213,14 +213,14 @@ export default function CommitteePaths({
 
     return (
         <>
-            <Head title="Special rules" />
+            <Head title="Aturan Khusus Komite" />
             <PageHeader
-                title="Committees"
-                description="Paths that do not simply follow the default levels"
+                title="Data Komite"
+                description="Jalur yang tidak sekadar mengikuti jenjang bawaan"
                 actions={
                     canManage && (
                         <Button onClick={() => openForm('new')}>
-                            <Plus /> Add path
+                            <Plus /> Tambah jalur
                         </Button>
                     )
                 }
@@ -230,8 +230,8 @@ export default function CommitteePaths({
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
                 <span>
                     {showAll
-                        ? `All ${paths.length} paths.`
-                        : `${paths.length - rows.length} paths follow the default levels and are hidden; the ${rows.length} below have a hierarchy or levels of their own.`}
+                        ? `Semua ${paths.length} jalur.`
+                        : `${paths.length - rows.length} jalur mengikuti jenjang bawaan dan disembunyikan; ${rows.length} jalur di bawah memakai hierarki atau jenjang sendiri.`}
                 </span>
                 <label className="flex items-center gap-2">
                     <input
@@ -240,7 +240,7 @@ export default function CommitteePaths({
                         checked={showAll}
                         onChange={(e) => setShowAll(e.target.checked)}
                     />
-                    Show all paths
+                    Tampilkan semua jalur
                 </label>
             </div>
 
@@ -251,12 +251,12 @@ export default function CommitteePaths({
                 onRowClick={(p) => router.visit(`/committees/${p.id}`)}
                 empty={{
                     icon: <Gavel />,
-                    title: 'No committee paths yet',
+                    title: 'Belum ada jalur komite',
                     description:
-                        'Create a path per product (or across products for conditions such as RELOAN), then define its tiers.',
+                        'Buat satu jalur per produk (atau lintas produk untuk kondisi seperti RELOAN), lalu atur jenjangnya.',
                     action: canManage ? (
                         <Button size="sm" onClick={() => openForm('new')}>
-                            <Plus /> Add path
+                            <Plus /> Tambah jalur
                         </Button>
                     ) : undefined,
                 }}
@@ -267,21 +267,21 @@ export default function CommitteePaths({
                 onOpenChange={(open) => !open && setEditing(null)}
                 title={
                     editing === 'new'
-                        ? 'Add committee path'
-                        : 'Edit committee path'
+                        ? 'Tambah jalur komite'
+                        : 'Ubah jalur komite'
                 }
-                description="One path per product and condition."
+                description="Satu jalur per produk dan kondisi."
             >
                 <form onSubmit={submit} noValidate>
                     <div className="flex flex-col gap-3 p-4">
                         <Field
-                            label="Product"
+                            label="Produk"
                             error={form.errors.product_id}
-                            hint="Leave empty to apply to all products."
+                            hint="Kosongkan agar berlaku untuk semua produk."
                         >
                             <Combobox
                                 clearable
-                                placeholder="All products"
+                                placeholder="Semua produk"
                                 options={productOptions}
                                 value={form.data.product_id}
                                 onChange={(v) =>
@@ -291,9 +291,9 @@ export default function CommitteePaths({
                             />
                         </Field>
                         <Field
-                            label="Condition / category"
+                            label="Kondisi / kategori"
                             error={form.errors.condition}
-                            hint="Empty means Normal. Stored in uppercase, e.g. RELOAN."
+                            hint="Kosong berarti Normal. Disimpan huruf besar, mis. RELOAN."
                         >
                             <Input
                                 className="uppercase"
@@ -306,7 +306,7 @@ export default function CommitteePaths({
                             />
                         </Field>
                         <Field
-                            label="Mechanism"
+                            label="Mekanisme"
                             required
                             error={form.errors.mechanism}
                         >
@@ -338,22 +338,22 @@ export default function CommitteePaths({
                                     }
                                 />
                                 <span>
-                                    Follow the default authority levels
+                                    Ikuti jenjang wewenang bawaan
                                     <span className="block text-xs text-muted">
-                                        Limits are kept in one place; change
-                                        them there and this path follows.
+                                        Batas disimpan di satu tempat; ubah di
+                                        sana dan jalur ini ikut berubah.
                                     </span>
                                 </span>
                             </label>
                         )}
                         {editing === 'new' && (
                             <Field
-                                label="Copy tiers from"
+                                label="Salin jenjang dari"
                                 error={form.errors.copy_from}
                             >
                                 <Combobox
                                     clearable
-                                    placeholder="Do not copy"
+                                    placeholder="Jangan salin"
                                     options={pathOptions}
                                     value={form.data.copy_from}
                                     onChange={(v) =>
@@ -362,7 +362,7 @@ export default function CommitteePaths({
                                 />
                             </Field>
                         )}
-                        <Field label="Note" error={form.errors.note}>
+                        <Field label="Catatan" error={form.errors.note}>
                             <Input
                                 value={form.data.note}
                                 maxLength={255}
@@ -380,7 +380,7 @@ export default function CommitteePaths({
                                     form.setData('is_active', e.target.checked)
                                 }
                             />
-                            Active
+                            Aktif
                         </label>
                     </div>
                     <DialogFooter>
@@ -388,10 +388,10 @@ export default function CommitteePaths({
                             variant="outline"
                             onClick={() => setEditing(null)}
                         >
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
-                            {editing === 'new' ? 'Create' : 'Save'}
+                            {editing === 'new' ? 'Buat' : 'Simpan'}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -400,11 +400,11 @@ export default function CommitteePaths({
             <ConfirmDialog
                 open={toDelete !== null}
                 onOpenChange={(open) => !open && !deleting && setToDelete(null)}
-                title="Delete committee path?"
+                title="Hapus jalur komite?"
                 description={
                     <>
-                        This removes <strong>{toDelete?.title}</strong> and all
-                        of its tiers.
+                        Ini menghapus <strong>{toDelete?.title}</strong> beserta
+                        seluruh jenjangnya.
                     </>
                 }
                 loading={deleting}

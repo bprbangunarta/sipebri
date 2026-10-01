@@ -18,7 +18,7 @@ import type { Column } from '@/components/ui/data-table';
 import { Badge, PageHeader } from '@/components/ui/misc';
 import { Tip } from '@/components/ui/tooltip';
 import { rupiah } from '@/lib/format';
-import type { PathRow } from '@/pages/committees/paths';
+import type { PathRow } from '@/pages/committees/special-rules';
 
 type Tier = {
     id: number;
@@ -41,10 +41,10 @@ type Props = {
 };
 
 const DECISIONS = [
-    ['can_escalate', 'Escalate'],
-    ['can_approve', 'Approve'],
-    ['can_cancel', 'Cancel'],
-    ['can_reject', 'Reject'],
+    ['can_escalate', 'Naikkan'],
+    ['can_approve', 'Setujui'],
+    ['can_cancel', 'Batalkan'],
+    ['can_reject', 'Tolak'],
 ] as const;
 
 export default function CommitteeShow({ path, roles, canManage }: Props) {
@@ -120,17 +120,17 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
         },
         {
             key: 'tier',
-            header: 'Tier',
+            header: 'Jenjang',
             className: 'font-medium',
             cell: (t) => t.label ?? '–',
         },
         {
             key: 'role',
-            header: 'Deciding role',
+            header: 'Peran pemutus',
             cell: (t) => (
                 <span className="flex flex-wrap items-center gap-1.5">
                     {t.role}
-                    {t.is_individual && <Badge tone="info">Individual</Badge>}
+                    {t.is_individual && <Badge tone="info">Perorangan</Badge>}
                 </span>
             ),
         },
@@ -138,17 +138,17 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
             ? [
                   {
                       key: 'range',
-                      header: 'Amount range',
+                      header: 'Rentang plafon',
                       align: 'right',
                       className: 'whitespace-nowrap tabular-nums',
                       cell: (t: Tier) =>
-                          `${rupiah(t.min_amount ?? 0)} – ${t.max_amount === null ? 'no limit' : rupiah(t.max_amount)}`,
+                          `${rupiah(t.min_amount ?? 0)} – ${t.max_amount === null ? 'tanpa batas' : rupiah(t.max_amount)}`,
                   } satisfies Column<Tier>,
               ]
             : []),
         {
             key: 'decisions',
-            header: 'Decisions',
+            header: 'Keputusan',
             cell: (t) => (
                 <span className="flex flex-wrap gap-1">
                     {DECISIONS.filter(([key]) => t[key]).map(([key, label]) => (
@@ -174,17 +174,17 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
             ? [
                   {
                       key: 'actions',
-                      header: 'Actions',
+                      header: 'Aksi',
                       srOnly: true,
                       align: 'right',
                       className: 'whitespace-nowrap',
                       cell: (t: Tier, i: number) => (
                           <>
-                              <Tip label="Move up">
+                              <Tip label="Naikkan urutan">
                                   <Button
                                       variant="ghost"
                                       size="icon"
-                                      aria-label="Move up"
+                                      aria-label="Naikkan urutan"
                                       disabled={i === 0}
                                       onClick={() =>
                                           router.put(
@@ -197,11 +197,11 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                                       <ArrowUp />
                                   </Button>
                               </Tip>
-                              <Tip label="Move down">
+                              <Tip label="Turunkan urutan">
                                   <Button
                                       variant="ghost"
                                       size="icon"
-                                      aria-label="Move down"
+                                      aria-label="Turunkan urutan"
                                       disabled={i === path.tiers.length - 1}
                                       onClick={() =>
                                           router.put(
@@ -214,21 +214,21 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                                       <ArrowDown />
                                   </Button>
                               </Tip>
-                              <Tip label="Edit">
+                              <Tip label="Ubah">
                                   <Button
                                       variant="ghost"
                                       size="icon"
-                                      aria-label={`Edit ${t.role}`}
+                                      aria-label={`Ubah ${t.role}`}
                                       onClick={() => openForm(t)}
                                   >
                                       <Pencil />
                                   </Button>
                               </Tip>
-                              <Tip label="Delete">
+                              <Tip label="Hapus">
                                   <Button
                                       variant="ghost"
                                       size="icon"
-                                      aria-label={`Delete ${t.role}`}
+                                      aria-label={`Hapus ${t.role}`}
                                       onClick={() => setToDelete(t)}
                                   >
                                       <Trash2 />
@@ -250,17 +250,19 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                 actions={
                     <>
                         <Badge tone={path.is_active ? 'success' : 'neutral'}>
-                            {path.is_active ? 'Active' : 'Inactive'}
+                            {path.is_active ? 'Aktif' : 'Nonaktif'}
                         </Badge>
                         <Button
                             variant="outline"
-                            onClick={() => router.visit('/committees/paths')}
+                            onClick={() =>
+                                router.visit('/committees/special-rules')
+                            }
                         >
-                            <ArrowLeft /> Back
+                            <ArrowLeft /> Kembali
                         </Button>
                         {editable && (
                             <Button onClick={() => openForm('new')}>
-                                <Plus /> Add tier
+                                <Plus /> Tambah jenjang
                             </Button>
                         )}
                     </>
@@ -269,27 +271,27 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
 
             {path.is_default && (
                 <p className="mb-3 text-sm text-muted">
-                    These levels are shared by {path.followers ?? 0}{' '}
-                    {path.followers === 1 ? 'path' : 'paths'} that follow the
-                    defaults. Any change here is applied to all of them. On a
-                    hierarchy path only the order of the roles is used.
+                    Jenjang ini dipakai bersama oleh {path.followers ?? 0} jalur
+                    yang mengikuti bawaan. Setiap perubahan di sini berlaku
+                    untuk semuanya. Pada jalur hierarki hanya urutan peran yang
+                    dipakai.
                 </p>
             )}
             {locked && canManage && (
                 <div className="border-border mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border bg-surface px-3 py-2 text-sm">
                     <span>
-                        This path follows the{' '}
+                        Jalur ini mengikuti{' '}
                         <a
                             className="text-primary hover:underline"
-                            href="/committees"
+                            href="/committees/levels"
                             onClick={(e) => {
                                 e.preventDefault();
-                                router.visit('/committees');
+                                router.visit('/committees/levels');
                             }}
                         >
-                            default authority levels
+                            jenjang wewenang bawaan
                         </a>
-                        . Give it levels of its own to change them here.
+                        . Beri jenjang sendiri untuk mengubahnya di sini.
                     </span>
                     <Button
                         size="sm"
@@ -302,19 +304,19 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                             )
                         }
                     >
-                        Customize
+                        Atur sendiri
                     </Button>
                 </div>
             )}
             {!path.is_default && !locked && canManage && (
                 <div className="border-border mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border bg-surface px-3 py-2 text-sm">
-                    <span>This path has authority levels of its own.</span>
+                    <span>Jalur ini memakai jenjang wewenang sendiri.</span>
                     <Button
                         size="sm"
                         variant="outline"
                         onClick={() => setFollowing(true)}
                     >
-                        Follow defaults
+                        Ikuti bawaan
                     </Button>
                 </div>
             )}
@@ -325,36 +327,36 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                 columns={columns}
                 empty={{
                     icon: <Plus />,
-                    title: 'No tiers yet',
+                    title: 'Belum ada jenjang',
                     description:
-                        'Add the deciding levels in the order they escalate.',
+                        'Tambahkan jenjang pemutus sesuai urutan naiknya.',
                 }}
             />
 
             <Modal
                 open={editing !== null}
                 onOpenChange={(open) => !open && setEditing(null)}
-                title={editing === 'new' ? 'Add tier' : 'Edit tier'}
+                title={editing === 'new' ? 'Tambah jenjang' : 'Ubah jenjang'}
                 description={
                     byAmount
-                        ? 'Authority follows the amount range.'
-                        : 'Tiers escalate in order; only the last deciding tier decides.'
+                        ? 'Wewenang mengikuti rentang plafon.'
+                        : 'Jenjang naik berurutan; hanya jenjang pemutus terakhir yang memutus.'
                 }
             >
                 <form onSubmit={submit} noValidate>
                     <div className="flex flex-col gap-3 p-4">
-                        <Field label="Tier name" error={form.errors.label}>
+                        <Field label="Nama jenjang" error={form.errors.label}>
                             <Input
                                 value={form.data.label}
                                 maxLength={50}
                                 onChange={(e) =>
                                     form.setData('label', e.target.value)
                                 }
-                                placeholder="e.g. Committee I"
+                                placeholder="mis. Komite I"
                             />
                         </Field>
                         <Field
-                            label="Deciding role"
+                            label="Peran pemutus"
                             required
                             error={form.errors.role}
                         >
@@ -381,18 +383,18 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                                 }
                             />
                             <span>
-                                Individual authority
+                                Wewenang perorangan
                                 <span className="block text-xs text-muted">
-                                    The person who holds the file decides, not a
-                                    committee. Its holders are not listed as
-                                    committee members.
+                                    Orang yang memegang berkas yang memutus,
+                                    bukan komite. Pemegangnya tidak dimasukkan
+                                    ke daftar anggota komite.
                                 </span>
                             </span>
                         </label>
                         {byAmount && (
                             <div className="grid grid-cols-2 gap-3">
                                 <Field
-                                    label="Minimum amount"
+                                    label="Plafon minimum"
                                     error={form.errors.min_amount}
                                     hint={
                                         form.data.min_amount !== ''
@@ -416,14 +418,14 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                                     />
                                 </Field>
                                 <Field
-                                    label="Maximum amount"
+                                    label="Plafon maksimum"
                                     error={form.errors.max_amount}
                                     hint={
                                         form.data.max_amount !== ''
                                             ? rupiah(
                                                   Number(form.data.max_amount),
                                               )
-                                            : 'Empty = no limit'
+                                            : 'Kosong = tanpa batas'
                                     }
                                 >
                                     <Input
@@ -443,7 +445,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                         )}
                         <fieldset>
                             <legend className="mb-1 text-xs font-medium">
-                                Decisions allowed
+                                Keputusan yang diizinkan
                             </legend>
                             <div className="grid grid-cols-2 gap-1.5">
                                 {DECISIONS.map(([key, label]) => (
@@ -473,10 +475,10 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                             variant="outline"
                             onClick={() => setEditing(null)}
                         >
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
-                            {editing === 'new' ? 'Add' : 'Save'}
+                            {editing === 'new' ? 'Tambah' : 'Simpan'}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -485,9 +487,9 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
             <ConfirmDialog
                 open={following}
                 onOpenChange={setFollowing}
-                title="Follow the default levels?"
-                description="The tiers of this path are replaced by a copy of the default authority levels."
-                confirmLabel="Follow defaults"
+                title="Ikuti jenjang bawaan?"
+                description="Jenjang jalur ini akan diganti dengan salinan jenjang wewenang bawaan."
+                confirmLabel="Ikuti bawaan"
                 onConfirm={() =>
                     router.put(
                         `/committees/${path.id}/follow`,
@@ -503,11 +505,11 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
             <ConfirmDialog
                 open={toDelete !== null}
                 onOpenChange={(open) => !open && setToDelete(null)}
-                title="Delete tier?"
+                title="Hapus jenjang?"
                 description={
                     <>
-                        This removes the tier <strong>{toDelete?.role}</strong>{' '}
-                        from this path.
+                        Ini menghapus jenjang <strong>{toDelete?.role}</strong>{' '}
+                        dari jalur ini.
                     </>
                 }
                 onConfirm={() => {

@@ -30,7 +30,7 @@ export function Combobox({
     options,
     value,
     onChange,
-    placeholder = 'Select…',
+    placeholder = 'Pilih…',
     searchable = true,
     clearable = false,
     invalid,
@@ -107,7 +107,7 @@ export function Combobox({
                 {clearable && selected && (
                     <button
                         type="button"
-                        aria-label="Clear selection"
+                        aria-label="Hapus pilihan"
                         className="absolute top-1/2 right-7 -translate-y-1/2 rounded p-0.5 text-muted hover:text-ink"
                         onClick={() => onChange(null)}
                     >
@@ -136,14 +136,14 @@ export function Combobox({
                             setActive(0);
                         }}
                         onKeyDown={onKeyDown}
-                        placeholder="Search…"
+                        placeholder="Cari…"
                         className="mb-1 h-7 w-full rounded border border-line px-2 text-sm focus:border-primary focus:outline-none"
                     />
                 )}
                 <ul ref={list} role="listbox" className="max-h-56 overflow-auto overscroll-contain" onKeyDown={onKeyDown} tabIndex={-1}>
                     {filtered.length === 0 && (
                         <li className="px-2 py-2 text-center text-xs text-muted">
-                            No results found
+                            Tidak ada hasil
                         </li>
                     )}
                     {filtered.map((option, index) => {

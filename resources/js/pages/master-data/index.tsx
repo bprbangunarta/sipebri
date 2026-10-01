@@ -66,7 +66,7 @@ function cell(field: FieldDef, item: Item) {
     if (field.type === 'boolean') {
         return (
             <Badge tone={value ? 'success' : 'neutral'}>
-                {value ? 'Active' : 'Inactive'}
+                {value ? 'Aktif' : 'Nonaktif'}
             </Badge>
         );
     }
@@ -112,7 +112,7 @@ export default function MasterDataIndex({
 
     const itemUrl = (item: Item) =>
         resource.item_url.replace('__id__', String(item.id));
-    const label = resource.label.toLowerCase();
+    const label = resource.label;
     const primary = resource.fields[0].name;
 
     const openForm = (item: Item | 'new') => {
@@ -172,7 +172,7 @@ export default function MasterDataIndex({
             ? [
                   {
                       key: 'usage',
-                      header: 'In use',
+                      header: 'Dipakai',
                       align: 'right',
                       className: 'tabular-nums',
                       cell: (item: Item) => item.usage_count,
@@ -181,19 +181,19 @@ export default function MasterDataIndex({
             : []),
         {
             key: 'actions',
-            header: 'Actions',
+            header: 'Aksi',
             srOnly: true,
             narrow: true,
             align: 'right',
             cell: (item) =>
                 (canManage || resource.actions.length > 0) && (
                     <DropdownMenu>
-                        <Tip label="Actions">
+                        <Tip label="Aksi">
                             <DropdownTrigger asChild>
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    aria-label={`Actions for ${item[primary]}`}
+                                    aria-label={`Aksi untuk ${item[primary]}`}
                                 >
                                     <MoreHorizontal />
                                 </Button>
@@ -221,7 +221,7 @@ export default function MasterDataIndex({
                                         icon={<Pencil />}
                                         onSelect={() => openForm(item)}
                                     >
-                                        Edit
+                                        Ubah
                                     </DropdownItem>
                                     <DropdownSeparator />
                                     <DropdownItem
@@ -229,7 +229,7 @@ export default function MasterDataIndex({
                                         icon={<Trash2 />}
                                         onSelect={() => setToDelete(item)}
                                     >
-                                        Delete
+                                        Hapus
                                     </DropdownItem>
                                 </>
                             )}
@@ -241,14 +241,14 @@ export default function MasterDataIndex({
 
     return (
         <>
-            <Head title={resource.label} />
+            <Head title={`Data ${resource.label}`} />
             <PageHeader
-                title={resource.label}
-                description={`${resource.section} · ${items.total} ${items.total === 1 ? 'record' : 'records'}`}
+                title={`Data ${resource.label}`}
+                description={`${resource.section} · ${items.total} data`}
                 actions={
                     canManage && (
                         <Button onClick={() => openForm('new')}>
-                            <Plus /> Add {label}
+                            <Plus /> Tambah {label}
                         </Button>
                     )
                 }
@@ -266,8 +266,8 @@ export default function MasterDataIndex({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder={`Search ${label}…`}
-                                label="Search"
+                                placeholder={`Cari ${label}…`}
+                                label="Cari"
                             />
                         }
                     />
@@ -276,10 +276,10 @@ export default function MasterDataIndex({
                 empty={{
                     icon: <Database />,
                     title: hasSearch
-                        ? 'No results found'
-                        : `No ${label} records yet`,
+                        ? 'Tidak ada hasil'
+                        : `Belum ada data ${label}`,
                     description: hasSearch
-                        ? 'Try a different search term.'
+                        ? 'Coba kata kunci lain.'
                         : undefined,
                     action: hasSearch ? (
                         <Button
@@ -287,11 +287,11 @@ export default function MasterDataIndex({
                             size="sm"
                             onClick={() => clear()}
                         >
-                            Clear search
+                            Hapus pencarian
                         </Button>
                     ) : canManage ? (
                         <Button size="sm" onClick={() => openForm('new')}>
-                            <Plus /> Add {label}
+                            <Plus /> Tambah {label}
                         </Button>
                     ) : undefined,
                 }}
@@ -307,7 +307,7 @@ export default function MasterDataIndex({
             <Modal
                 open={editing !== null}
                 onOpenChange={(open) => !open && setEditing(null)}
-                title={editing === 'new' ? `Add ${label}` : `Edit ${label}`}
+                title={editing === 'new' ? `Tambah ${label}` : `Ubah ${label}`}
             >
                 <form onSubmit={submit} noValidate>
                     <div className="flex flex-col gap-3 p-4">
@@ -378,10 +378,10 @@ export default function MasterDataIndex({
                             variant="outline"
                             onClick={() => setEditing(null)}
                         >
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
-                            {editing === 'new' ? 'Create' : 'Save'}
+                            {editing === 'new' ? 'Buat' : 'Simpan'}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -390,17 +390,17 @@ export default function MasterDataIndex({
             <ConfirmDialog
                 open={toDelete !== null}
                 onOpenChange={(open) => !open && !deleting && setToDelete(null)}
-                title={`Delete ${label}?`}
+                title={`Hapus ${label}?`}
                 description={
                     toDelete && toDelete.usage_count > 0 ? (
                         <>
-                            <strong>{String(toDelete[primary])}</strong> is in
-                            use by {toDelete.usage_count} record(s) and cannot
-                            be deleted until they are reassigned.
+                            <strong>{String(toDelete[primary])}</strong> dipakai
+                            oleh {toDelete.usage_count} data dan tidak bisa
+                            dihapus sebelum data itu dialihkan.
                         </>
                     ) : (
                         <>
-                            This will permanently remove{' '}
+                            Ini akan menghapus permanen{' '}
                             <strong>{String(toDelete?.[primary] ?? '')}</strong>
                             .
                         </>

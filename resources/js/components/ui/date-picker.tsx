@@ -37,7 +37,7 @@ export function DatePicker({
     defaultMonth,
     invalid,
     id,
-    placeholder = 'Pick a date',
+    placeholder = 'Pilih tanggal',
 }: Props) {
     const [open, setOpen] = useState(false);
     const selected = value ? parseISO(value) : undefined;

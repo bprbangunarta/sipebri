@@ -49,18 +49,18 @@ const tones: Record<ChainRow['status'], BadgeTone> = {
 
 /** Read-only check of which tier decides a given product, condition and amount. */
 const chainColumns: Column<ChainRow>[] = [
-    { key: 'tier', header: 'Tier', cell: (row) => row.label ?? '–' },
-    { key: 'role', header: 'Role', cell: (row) => row.role },
+    { key: 'tier', header: 'Jenjang', cell: (row) => row.label ?? '–' },
+    { key: 'role', header: 'Peran', cell: (row) => row.role },
     {
         key: 'result',
-        header: 'Result',
+        header: 'Hasil',
         cell: (row) => (
             <Badge tone={tones[row.status]}>{row.status_label}</Badge>
         ),
     },
     {
         key: 'users',
-        header: 'Users',
+        header: 'Pengguna',
         align: 'right',
         className: 'tabular-nums',
         cell: (row) => row.user_count,
@@ -119,14 +119,14 @@ export function AuthorityCheck({
             if (!response.ok) {
                 throw new Error(
                     response.status === 422
-                        ? 'Please check the amount.'
-                        : 'Unable to run the check.',
+                        ? 'Periksa kembali plafonnya.'
+                        : 'Pengecekan gagal dijalankan.',
                 );
             }
             setResult(await response.json());
         } catch (e) {
             setError(
-                e instanceof Error ? e.message : 'Unable to run the check.',
+                e instanceof Error ? e.message : 'Pengecekan gagal dijalankan.',
             );
         } finally {
             setLoading(false);
@@ -137,15 +137,15 @@ export function AuthorityCheck({
         <Modal
             open={open}
             onOpenChange={onOpenChange}
-            title="Check authority"
-            description="Find who decides. Nothing is saved."
+            title="Cek wewenang"
+            description="Cari tahu siapa yang memutus. Tidak ada yang disimpan."
         >
             <div className="flex max-h-[70vh] flex-col gap-3 overflow-auto p-4">
                 <div className="grid gap-3 sm:grid-cols-3">
-                    <Field label="Product">
+                    <Field label="Produk">
                         <Combobox
                             clearable
-                            placeholder="All products"
+                            placeholder="Semua produk"
                             options={productOptions}
                             value={product}
                             onChange={(v) => {
@@ -155,7 +155,7 @@ export function AuthorityCheck({
                             }}
                         />
                     </Field>
-                    <Field label="Condition">
+                    <Field label="Kondisi">
                         <Combobox
                             searchable={false}
                             placeholder="Normal"
@@ -168,7 +168,7 @@ export function AuthorityCheck({
                         />
                     </Field>
                     <Field
-                        label="Amount (IDR)"
+                        label="Plafon (Rp)"
                         hint={amount ? rupiah(Number(amount)) : undefined}
                     >
                         <Input
@@ -183,12 +183,12 @@ export function AuthorityCheck({
                     </Field>
                 </div>
                 <Field
-                    label="Applicant is a committee member"
-                    hint="Simulates a member applying for a credit: they cannot decide their own file, so the approval skips them."
+                    label="Pemohon adalah anggota komite"
+                    hint="Mensimulasikan anggota yang mengajukan kredit: ia tidak boleh memutus berkasnya sendiri, jadi persetujuan melewatinya."
                 >
                     <Combobox
                         clearable
-                        placeholder="No"
+                        placeholder="Tidak"
                         options={memberOptions}
                         value={applicant}
                         onChange={(v) => {
@@ -203,7 +203,7 @@ export function AuthorityCheck({
                         disabled={!validAmount}
                         onClick={run}
                     >
-                        Check
+                        Cek
                     </Button>
                 </div>
                 {error && <p className="text-xs text-danger">{error}</p>}
@@ -221,7 +221,7 @@ export function AuthorityCheck({
                             {result.path.matched_globally && (
                                 <span className="text-muted">
                                     {' '}
-                                    (cross-product path)
+                                    (jalur lintas produk)
                                 </span>
                             )}
                         </p>
@@ -234,13 +234,13 @@ export function AuthorityCheck({
                                 columns={chainColumns}
                                 empty={{
                                     icon: <AlertTriangle />,
-                                    title: 'No tiers',
+                                    title: 'Tidak ada jenjang',
                                 }}
                             />
                         </div>
                         {result.applicant && (
                             <p className="rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-xs text-amber-800">
-                                Applicant:{' '}
+                                Pemohon:{' '}
                                 <strong>
                                     {result.applicant.name}
                                     {result.applicant.role
@@ -250,15 +250,15 @@ export function AuthorityCheck({
                                 {result.chain.some(
                                     (r) => r.status === 'skipped',
                                 )
-                                    ? '. The tiers marked skipped are left out.'
-                                    : '. Their tier stays: another holder of the role acts.'}
+                                    ? '. Jenjang bertanda dilewati tidak ikut memutus.'
+                                    : '. Jenjangnya tetap: pemegang peran lain yang bertindak.'}
                             </p>
                         )}
                         {result.exception && (
                             <p className="flex items-start gap-1.5 rounded-md border border-danger/30 bg-red-50 px-2.5 py-1.5 text-xs text-danger">
                                 <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
                                 <span>
-                                    <strong>Exception.</strong>{' '}
+                                    <strong>Pengecualian.</strong>{' '}
                                     {result.exception}
                                 </span>
                             </p>

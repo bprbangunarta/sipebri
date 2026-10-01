@@ -16,8 +16,8 @@ beforeEach(function () {
 });
 
 dataset('usable', [
-    'institution' => ['institutions', Institution::class, ['code' => 'i1', 'name' => 'Alpha'], ['code' => 'I2', 'name' => 'Beta']],
-    'method' => ['methods', Method::class, ['code' => 'a1', 'name' => 'Alpha'], ['code' => 'A2', 'name' => 'Beta']],
+    'institution' => ['resorts', Institution::class, ['code' => 'i1', 'name' => 'Alpha'], ['code' => 'I2', 'name' => 'Beta']],
+    'method' => ['interest-methods', Method::class, ['code' => 'a1', 'name' => 'Alpha'], ['code' => 'A2', 'name' => 'Beta']],
     'installment' => ['installments', Installment::class, ['code' => 'x', 'name' => 'Alpha', 'period_months' => 3], ['code' => 'X', 'name' => 'Beta', 'period_months' => 0]],
     'product' => ['products', Product::class, ['code' => 'p1', 'alias' => 'pa', 'name' => 'Alpha', 'is_active' => true], ['code' => 'P1', 'alias' => 'PB', 'name' => 'Beta', 'is_active' => false]],
     'region' => ['regions', Region::class, ['code' => '3201', 'regency' => 'a', 'district' => 'b', 'village' => 'c'], ['code' => '3201', 'regency' => 'A', 'district' => 'B', 'village' => 'D']],
@@ -45,20 +45,20 @@ it('validates required and unique values', function () {
     Method::create(['code' => 'M1', 'name' => 'First']);
     $other = Method::create(['code' => 'M2', 'name' => 'Second']);
 
-    $this->post(route('master-data.store', 'methods'), ['code' => '', 'name' => 'X'])->assertSessionHasErrors('code');
-    $this->post(route('master-data.store', 'methods'), ['code' => 'm1', 'name' => 'Dup'])->assertSessionHasErrors('code');
-    $this->put(route('master-data.update', ['methods', $other->id]), ['code' => 'M1', 'name' => 'Second'])->assertSessionHasErrors('code');
-    $this->put(route('master-data.update', ['methods', $other->id]), ['code' => 'M2', 'name' => 'Renamed'])->assertSessionHasNoErrors();
+    $this->post(route('master-data.store', 'interest-methods'), ['code' => '', 'name' => 'X'])->assertSessionHasErrors('code');
+    $this->post(route('master-data.store', 'interest-methods'), ['code' => 'm1', 'name' => 'Dup'])->assertSessionHasErrors('code');
+    $this->put(route('master-data.update', ['interest-methods', $other->id]), ['code' => 'M1', 'name' => 'Second'])->assertSessionHasErrors('code');
+    $this->put(route('master-data.update', ['interest-methods', $other->id]), ['code' => 'M2', 'name' => 'Renamed'])->assertSessionHasNoErrors();
 });
 
 it('scopes uniqueness of ownership codes to the collateral type', function () {
     CollateralType::create(['code' => '05', 'name' => 'Land']);
     CollateralType::create(['code' => '06', 'name' => 'Other']);
 
-    $this->post(route('master-data.store', 'ownership-statuses'), ['collateral_type_code' => '05', 'code' => '01', 'name' => 'A'])->assertSessionHasNoErrors();
-    $this->post(route('master-data.store', 'ownership-statuses'), ['collateral_type_code' => '05', 'code' => '01', 'name' => 'B'])->assertSessionHasErrors('code');
-    $this->post(route('master-data.store', 'ownership-statuses'), ['collateral_type_code' => '06', 'code' => '01', 'name' => 'B'])->assertSessionHasNoErrors();
-    $this->post(route('master-data.store', 'ownership-statuses'), ['collateral_type_code' => '77', 'code' => '02', 'name' => 'C'])->assertSessionHasErrors('collateral_type_code');
+    $this->post(route('master-data.store', 'collateral-classifications'), ['collateral_type_code' => '05', 'code' => '01', 'name' => 'A'])->assertSessionHasNoErrors();
+    $this->post(route('master-data.store', 'collateral-classifications'), ['collateral_type_code' => '05', 'code' => '01', 'name' => 'B'])->assertSessionHasErrors('code');
+    $this->post(route('master-data.store', 'collateral-classifications'), ['collateral_type_code' => '06', 'code' => '01', 'name' => 'B'])->assertSessionHasNoErrors();
+    $this->post(route('master-data.store', 'collateral-classifications'), ['collateral_type_code' => '77', 'code' => '02', 'name' => 'C'])->assertSessionHasErrors('collateral_type_code');
     expect(OwnershipStatus::count())->toBe(2);
 });
 
@@ -67,7 +67,7 @@ it('searches, paginates and reports usage', function () {
         Institution::create(['code' => sprintf('%03d', $i), 'name' => sprintf('Institution %02d', $i)]);
     }
 
-    $this->get(route('master-data.index', 'institutions'))
+    $this->get(route('master-data.index', 'resorts'))
         ->assertInertia(fn (Assert $page) => $page
             ->component('master-data/index')
             ->has('items.data', 25)
@@ -75,7 +75,7 @@ it('searches, paginates and reports usage', function () {
             ->where('items.data.0.usage_count', 0)
             ->where('resource.tracks_usage', true));
 
-    $this->get(route('master-data.index', ['institutions', 'search' => 'Institution 3']))
+    $this->get(route('master-data.index', ['resorts', 'search' => 'Institution 3']))
         ->assertInertia(fn (Assert $page) => $page->has('items.data', 1));
 });
 

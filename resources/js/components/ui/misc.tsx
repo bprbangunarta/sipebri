@@ -38,11 +38,11 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
     return (
         <div className="flex flex-col items-center gap-1 px-4 py-10 text-center">
             <AlertTriangle className="size-8 text-danger/60" />
-            <p className="mt-1 text-sm font-medium">Something went wrong</p>
+            <p className="mt-1 text-sm font-medium">Terjadi kesalahan</p>
             <p className="text-xs text-muted">{message}</p>
             {onRetry && (
                 <Button variant="outline" size="sm" className="mt-2" onClick={onRetry}>
-                    Try again
+                    Coba lagi
                 </Button>
             )}
         </div>

@@ -14,7 +14,7 @@ export default function Bmpk({ amount }: { amount: number | null }) {
             <Head title="BMPK" />
             <PageHeader
                 title="BMPK"
-                description="Legal lending limit. No loan application may exceed it, whatever the product allows."
+                description="Batas Maksimum Pemberian Kredit. Tidak ada pengajuan yang boleh melebihinya, berapa pun batas produknya."
                 actions={
                     <Button
                         loading={form.processing}
@@ -24,14 +24,14 @@ export default function Bmpk({ amount }: { amount: number | null }) {
                             })
                         }
                     >
-                        <Save /> Save
+                        <Save /> Simpan
                     </Button>
                 }
             />
             <Card>
                 <div className="grid gap-3 p-3 sm:max-w-sm">
                     <Field
-                        label="Maximum per loan (IDR)"
+                        label="Maksimum per kredit (Rp)"
                         error={form.errors.amount}
                         hint={rupiah(
                             form.data.amount === ''

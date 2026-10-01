@@ -35,6 +35,6 @@ class ProductParameterController extends Controller
     {
         $product->parameter()->updateOrCreate([], $request->validated());
 
-        return back()->with('success', "Parameters of {$product->alias} saved.");
+        return back()->with('success', "Parameter {$product->alias} berhasil disimpan.");
     }
 }

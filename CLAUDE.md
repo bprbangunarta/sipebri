@@ -7,7 +7,7 @@ Tracking pekerjaan: lihat **BACKLOG.md**. Aturan wajib lain: `AGENTS.md` dan `.a
 ## Aturan kerja
 
 - Balas user dalam **bahasa Indonesia**.
-- **Bahasa kode: Inggris** (class, method, variabel, kolom, route, permission, komentar, PHPDoc, test). Hanya teks UI yang kelak berbahasa Indonesia; terjemahannya dikerjakan bertahap per layar **hanya bila diminta**. Sampai itu, teks UI yang ada (kecuali label sidebar yang sudah Indonesia) dibiarkan. Aturan lengkap: `.ai/rules/general.md`.
+- **Bahasa kode: Inggris** (class, method, variabel, kolom, route, permission, komentar, PHPDoc, test). Hanya teks UI yang berbahasa Indonesia, dikerjakan bertahap per layar **hanya bila diminta**; **URL tetap Inggris** tetapi sepadan dengan judul UI (mis. `/master-data/resorts`). Sudah Indonesia: sidebar, seluruh menu Referensi & Pengaturan, dan komponen bersama. Layar lain (pengajuan, jaminan, jadwal, survei, analisa, dashboard, profil, login) masih Inggris sampai diminta. Aturan lengkap: `.ai/rules/general.md`.
 - Nama peran = nama dari Codex (Indonesia) dan hanya boleh dirujuk lewat `App\Enums\RoleName` (komite, tangga surveyor, gerbang), jangan string tersebar.
 - UI **wajib** mengikuti `.ai/rules/js.md`: pakai ulang `resources/js/components/ui/*`, kontrol `h-8`, token warna tema, kalender `compact-calendar`. Jangan buat gaya baru per halaman.
 - Fungsional dari SIPEBRI ditulis ulang mengikuti struktur proyek ini (bukan disalin). Label "simulasi" tidak dipakai.

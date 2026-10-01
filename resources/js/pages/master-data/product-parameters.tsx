@@ -142,10 +142,10 @@ export default function ProductParameters({
 
     return (
         <>
-            <Head title={`Parameters – ${product.alias}`} />
+            <Head title={`Parameter – ${product.alias}`} />
             <PageHeader
                 title={`${product.alias} – ${product.name}`}
-                description="Board-decree limits. They are references: loan applications are checked against them."
+                description="Batas sesuai SK Direksi. Pengajuan kredit diperiksa terhadap batas ini."
                 actions={
                     <>
                         <Button
@@ -154,7 +154,7 @@ export default function ProductParameters({
                                 router.visit('/master-data/products')
                             }
                         >
-                            <ArrowLeft /> Back
+                            <ArrowLeft /> Kembali
                         </Button>
                         {canManage && (
                             <Button
@@ -166,7 +166,7 @@ export default function ProductParameters({
                                     )
                                 }
                             >
-                                <Save /> Save parameters
+                                <Save /> Simpan parameter
                             </Button>
                         )}
                     </>
@@ -174,9 +174,9 @@ export default function ProductParameters({
             />
 
             <div className="flex flex-col gap-3">
-                <Section title="Limits">
+                <Section title="Batas">
                     <Field
-                        label="Minimum amount (IDR)"
+                        label="Plafon minimum (Rp)"
                         error={errors.min_amount}
                         hint={rupiah(
                             data.min_amount === ''
@@ -187,7 +187,7 @@ export default function ProductParameters({
                         <Input {...num('min_amount')} />
                     </Field>
                     <Field
-                        label="Maximum amount (IDR)"
+                        label="Plafon maksimum (Rp)"
                         error={errors.max_amount}
                         hint={rupiah(
                             data.max_amount === ''
@@ -198,46 +198,46 @@ export default function ProductParameters({
                         <Input {...num('max_amount')} />
                     </Field>
                     <Field
-                        label="Minimum tenor (months)"
+                        label="Tenor minimum (bulan)"
                         error={errors.min_tenor}
                     >
                         <Input {...num('min_tenor')} />
                     </Field>
                     <Field
-                        label="Maximum tenor (months)"
+                        label="Tenor maksimum (bulan)"
                         error={errors.max_tenor}
                     >
                         <Input {...num('max_tenor')} />
                     </Field>
                 </Section>
 
-                <Section title="Rates (% of the loan amount)">
-                    <Field
-                        label="Interest rate (%)"
-                        error={errors.interest_rate}
-                    >
+                <Section title="Bunga & biaya (% dari plafon)">
+                    <Field label="Suku bunga (%)" error={errors.interest_rate}>
                         <Input {...num('interest_rate', '0.001')} />
                     </Field>
-                    <Field label="Provision (%)" error={errors.provision_rate}>
+                    <Field label="Provisi (%)" error={errors.provision_rate}>
                         <Input {...num('provision_rate', '0.001')} />
                     </Field>
-                    <Field label="Admin fee (%)" error={errors.admin_rate}>
+                    <Field
+                        label="Biaya administrasi (%)"
+                        error={errors.admin_rate}
+                    >
                         <Input {...num('admin_rate', '0.001')} />
                     </Field>
                     <Field
-                        label="Maximum RC (%)"
+                        label="RC maksimum (%)"
                         error={errors.rc_threshold}
-                        hint="Repayment capacity threshold."
+                        hint="Batas kemampuan bayar (repayment capacity)."
                     >
                         <Input {...num('rc_threshold', '0.01')} />
                     </Field>
                 </Section>
 
-                <Section title="Interest method & installment system">
+                <Section title="Metode bunga & sistem angsuran">
                     <Field
-                        label="Allowed interest methods"
+                        label="Metode bunga yang diizinkan"
                         className="sm:col-span-2"
-                        hint="None ticked = all allowed."
+                        hint="Tidak ada yang dicentang = semua diizinkan."
                     >
                         <CheckList
                             options={methods}
@@ -247,7 +247,7 @@ export default function ProductParameters({
                         />
                     </Field>
                     <Field
-                        label="Default interest method"
+                        label="Metode bunga bawaan"
                         error={errors.default_method_id}
                         className="sm:col-span-2"
                     >
@@ -262,9 +262,9 @@ export default function ProductParameters({
                         />
                     </Field>
                     <Field
-                        label="Allowed installment systems"
+                        label="Sistem angsuran yang diizinkan"
                         className="sm:col-span-2"
-                        hint="None ticked = all allowed."
+                        hint="Tidak ada yang dicentang = semua diizinkan."
                     >
                         <CheckList
                             options={installments}
@@ -276,7 +276,7 @@ export default function ProductParameters({
                         />
                     </Field>
                     <Field
-                        label="Default installment system"
+                        label="Sistem angsuran bawaan"
                         error={errors.default_installment_id}
                         className="sm:col-span-2"
                     >
@@ -295,11 +295,8 @@ export default function ProductParameters({
                     </Field>
                 </Section>
 
-                <Section title="Other terms">
-                    <Field
-                        label="Decree number (SK Direksi)"
-                        error={errors.decree}
-                    >
+                <Section title="Ketentuan lain">
+                    <Field label="Nomor SK Direksi" error={errors.decree}>
                         <Input
                             id="decree"
                             disabled={!canManage}
@@ -309,7 +306,7 @@ export default function ProductParameters({
                         />
                     </Field>
                     <Field
-                        label="Note"
+                        label="Catatan"
                         error={errors.note}
                         className="sm:col-span-2"
                     >
@@ -321,7 +318,7 @@ export default function ProductParameters({
                             onChange={(e) => setData('note', e.target.value)}
                         />
                     </Field>
-                    <Field label="Collateral">
+                    <Field label="Agunan">
                         <label className="flex h-8 items-center gap-2 text-sm">
                             <input
                                 type="checkbox"
@@ -335,7 +332,7 @@ export default function ProductParameters({
                                     )
                                 }
                             />
-                            Collateral required
+                            Agunan wajib
                         </label>
                     </Field>
                 </Section>

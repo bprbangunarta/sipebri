@@ -29,11 +29,11 @@ class AuditVerifier
             $first = false;
 
             if ($columns['previous_hash'] !== $previous) {
-                return $this->broken($checked, (int) $columns['id'], 'The link to the previous entry does not match (an entry before this one was removed or changed).');
+                return $this->broken($checked, (int) $columns['id'], 'Tautan ke entri sebelumnya tidak cocok (ada entri sebelumnya yang dihapus atau diubah).');
             }
 
             if (! hash_equals(Audit::hash($columns, $previous), (string) $columns['hash'])) {
-                return $this->broken($checked, (int) $columns['id'], 'The content of this entry was changed after it was written.');
+                return $this->broken($checked, (int) $columns['id'], 'Isi entri ini diubah setelah ditulis.');
             }
 
             $previous = (string) $columns['hash'];

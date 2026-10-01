@@ -17,7 +17,7 @@ export function NotificationBell() {
                 <Button
                     variant="ghost"
                     size="icon"
-                    aria-label={`Notifications${unread ? ` (${unread} unread)` : ''}`}
+                    aria-label={`Notifikasi${unread ? ` (${unread} belum dibaca)` : ''}`}
                     className="relative"
                 >
                     <Bell />
@@ -30,7 +30,7 @@ export function NotificationBell() {
             </PopoverTrigger>
             <PopoverContent align="end" className="w-80 p-0">
                 <div className="flex items-center justify-between border-b border-line px-3 py-2">
-                    <p className="text-sm font-semibold">Notifications</p>
+                    <p className="text-sm font-semibold">Notifikasi</p>
                     {unread > 0 && (
                         <button
                             type="button"
@@ -43,13 +43,14 @@ export function NotificationBell() {
                             }
                             className="flex cursor-pointer items-center gap-1 text-xs text-primary hover:underline"
                         >
-                            <CheckCheck className="size-3.5" /> Mark all read
+                            <CheckCheck className="size-3.5" /> Tandai semua
+                            dibaca
                         </button>
                     )}
                 </div>
                 {items.length === 0 ? (
                     <p className="px-3 py-8 text-center text-xs text-muted">
-                        You're all caught up.
+                        Tidak ada notifikasi baru.
                     </p>
                 ) : (
                     <ul className="max-h-80 divide-y divide-line overflow-auto">

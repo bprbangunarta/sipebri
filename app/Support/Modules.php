@@ -11,25 +11,25 @@ use App\Models\Permission;
 class Modules
 {
     public const ABILITY_LABELS = [
-        'view' => 'View',
-        'manage' => 'Manage',
-        'view_any' => 'View any',
-        'create' => 'Create',
-        'update' => 'Update',
-        'delete' => 'Delete',
-        'delete_any' => 'Delete any',
+        'view' => 'Lihat',
+        'manage' => 'Kelola',
+        'view_any' => 'Lihat semua',
+        'create' => 'Buat',
+        'update' => 'Ubah',
+        'delete' => 'Hapus',
+        'delete_any' => 'Hapus semua',
     ];
 
     /** Actions offered by the permission generator. */
     public const STANDARD_ACTIONS = ['view', 'view_any', 'create', 'update', 'delete', 'delete_any'];
 
     public const MAP = [
-        'dashboard' => ['label' => 'Dashboard', 'group' => 'General', 'abilities' => ['view']],
-        'loan-applications' => ['label' => 'Loan Applications', 'group' => 'Credit', 'abilities' => ['view', 'manage']],
-        'collaterals' => ['label' => 'Collaterals', 'group' => 'Credit', 'abilities' => ['view', 'manage']],
-        'scheduling' => ['label' => 'Survey Scheduling', 'group' => 'Credit', 'abilities' => ['view', 'manage']],
-        'surveys' => ['label' => 'Surveys', 'group' => 'Credit', 'abilities' => ['view', 'manage']],
-        'analysis' => ['label' => 'Credit Analysis', 'group' => 'Credit', 'abilities' => ['view']],
+        'dashboard' => ['label' => 'Dashboard', 'group' => 'Umum', 'abilities' => ['view']],
+        'loan-applications' => ['label' => 'Pengajuan Kredit', 'group' => 'Kredit', 'abilities' => ['view', 'manage']],
+        'collaterals' => ['label' => 'Jaminan', 'group' => 'Kredit', 'abilities' => ['view', 'manage']],
+        'scheduling' => ['label' => 'Penjadwalan Survei', 'group' => 'Kredit', 'abilities' => ['view', 'manage']],
+        'surveys' => ['label' => 'Survei', 'group' => 'Kredit', 'abilities' => ['view', 'manage']],
+        'analysis' => ['label' => 'Analisa Kredit', 'group' => 'Kredit', 'abilities' => ['view']],
     ];
 
     /**
@@ -86,7 +86,7 @@ class Modules
             ->map(fn ($names, string $entity): array => [
                 'key' => $entity,
                 'label' => ucfirst(str_replace('-', ' ', $entity)),
-                'group' => 'Custom',
+                'group' => 'Kustom',
                 'abilities' => $names->map(fn (string $name): array => [
                     'name' => $name,
                     'label' => self::ABILITY_LABELS[explode('.', $name, 2)[1]] ?? explode('.', $name, 2)[1],

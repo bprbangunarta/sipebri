@@ -60,10 +60,13 @@ type Props = {
 };
 
 const OUTCOMES = [
-    { value: 'success', label: 'Success' },
-    { value: 'failure', label: 'Failure' },
-    { value: 'denied', label: 'Denied' },
+    { value: 'success', label: 'Berhasil' },
+    { value: 'failure', label: 'Gagal' },
+    { value: 'denied', label: 'Ditolak' },
 ];
+const OUTCOME_LABEL = Object.fromEntries(
+    OUTCOMES.map((o) => [o.value, o.label]),
+) as Record<LogRow['outcome'], string>;
 const TONES: Record<LogRow['outcome'], BadgeTone> = {
     success: 'success',
     failure: 'danger',
@@ -85,16 +88,16 @@ const changedFields = (log: LogRow): string[] =>
     );
 
 const diffColumns = (log: LogRow): Column<string>[] => [
-    { key: 'field', header: 'Field', className: 'font-medium', cell: (f) => f },
+    { key: 'field', header: 'Kolom', className: 'font-medium', cell: (f) => f },
     {
         key: 'before',
-        header: 'Before',
+        header: 'Sebelum',
         className: 'break-all text-muted',
         cell: (f) => show(log.old?.[f]),
     },
     {
         key: 'after',
-        header: 'After',
+        header: 'Sesudah',
         className: 'break-all',
         cell: (f) => show(log.new?.[f]),
     },
@@ -147,7 +150,7 @@ export default function AuditLogsIndex({
     const columns: Column<LogRow>[] = [
         {
             key: 'time',
-            header: 'Time',
+            header: 'Waktu',
             className: 'whitespace-nowrap',
             cell: (log) =>
                 format(
@@ -157,17 +160,17 @@ export default function AuditLogsIndex({
         },
         {
             key: 'user',
-            header: 'User',
+            header: 'Pengguna',
             cell: (log) => (
                 <>
-                    <p className="font-medium">{log.user ?? 'System'}</p>
+                    <p className="font-medium">{log.user ?? 'Sistem'}</p>
                     <p className="text-xs text-muted">{log.ip ?? ''}</p>
                 </>
             ),
         },
         {
             key: 'event',
-            header: 'Event',
+            header: 'Kejadian',
             cell: (log) => (
                 <>
                     <p>{log.event}</p>
@@ -177,29 +180,31 @@ export default function AuditLogsIndex({
         },
         {
             key: 'record',
-            header: 'Record',
+            header: 'Data',
             hideBelow: 'md',
             cell: (log) => log.subject ?? '–',
         },
         {
             key: 'outcome',
-            header: 'Outcome',
+            header: 'Hasil',
             cell: (log) => (
-                <Badge tone={TONES[log.outcome]}>{log.outcome}</Badge>
+                <Badge tone={TONES[log.outcome]}>
+                    {OUTCOME_LABEL[log.outcome]}
+                </Badge>
             ),
         },
         {
             key: 'actions',
-            header: 'Actions',
+            header: 'Aksi',
             srOnly: true,
             narrow: true,
             align: 'right',
             cell: (log) => (
-                <Tip label="Details">
+                <Tip label="Detail">
                     <Button
                         variant="ghost"
                         size="icon"
-                        aria-label={`Details of entry ${log.id}`}
+                        aria-label={`Detail entri ${log.id}`}
                         onClick={() => setSelected(log)}
                     >
                         <Eye />
@@ -211,10 +216,10 @@ export default function AuditLogsIndex({
 
     return (
         <>
-            <Head title="Audit Log" />
+            <Head title="Data Audit Log" />
             <PageHeader
-                title="Audit Log"
-                description="Tamper-evident record of who did what, when and from where"
+                title="Data Audit Log"
+                description="Catatan anti-rusak tentang siapa melakukan apa, kapan, dan dari mana"
                 actions={
                     <div className="flex items-center gap-2">
                         <Button
@@ -223,10 +228,10 @@ export default function AuditLogsIndex({
                             disabled={verifying}
                         >
                             <ShieldCheck />{' '}
-                            {verifying ? 'Verifying…' : 'Verify integrity'}
+                            {verifying ? 'Memeriksa…' : 'Periksa integritas'}
                         </Button>
                         <Button onClick={exportCsv}>
-                            <Download /> Export CSV
+                            <Download /> Ekspor CSV
                         </Button>
                     </div>
                 }
@@ -242,8 +247,8 @@ export default function AuditLogsIndex({
                     }
                 >
                     {verification.ok
-                        ? `Trail intact: ${verification.checked} entries verified.`
-                        : `Trail broken at entry #${verification.broken_at}. ${verification.reason}`}
+                        ? `Rantai utuh: ${verification.checked} entri terverifikasi.`
+                        : `Rantai terputus di entri #${verification.broken_at}. ${verification.reason}`}
                 </div>
             )}
 
@@ -259,8 +264,8 @@ export default function AuditLogsIndex({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search user, event, record, IP…"
-                                label="Search audit log"
+                                placeholder="Cari pengguna, kejadian, data, IP…"
+                                label="Cari audit log"
                             />
                         }
                     >
@@ -268,7 +273,7 @@ export default function AuditLogsIndex({
                             <DatePicker
                                 value={filters.from ?? ''}
                                 min={MIN_DATE}
-                                placeholder="From"
+                                placeholder="Dari"
                                 onChange={(v) => visit({ from: iso(v) })}
                             />
                         </div>
@@ -276,14 +281,14 @@ export default function AuditLogsIndex({
                             <DatePicker
                                 value={filters.to ?? ''}
                                 min={MIN_DATE}
-                                placeholder="To"
+                                placeholder="Sampai"
                                 onChange={(v) => visit({ to: iso(v) })}
                             />
                         </div>
                         <Combobox
                             className="w-full sm:w-40"
                             clearable
-                            placeholder="Module"
+                            placeholder="Modul"
                             options={modules.map((m) => ({
                                 value: m,
                                 label: m,
@@ -295,7 +300,7 @@ export default function AuditLogsIndex({
                             className="w-full sm:w-32"
                             clearable
                             searchable={false}
-                            placeholder="Outcome"
+                            placeholder="Hasil"
                             options={OUTCOMES}
                             value={filters.outcome}
                             onChange={(v) =>
@@ -315,7 +320,7 @@ export default function AuditLogsIndex({
                                     })
                                 }
                             >
-                                <X /> Reset
+                                <X /> Atur ulang
                             </Button>
                         )}
                     </FilterBar>
@@ -324,8 +329,8 @@ export default function AuditLogsIndex({
                 empty={{
                     icon: <ScrollText />,
                     title: hasFilters
-                        ? 'No entries match your filters'
-                        : 'No entries yet',
+                        ? 'Tidak ada entri yang cocok dengan filter'
+                        : 'Belum ada entri',
                 }}
                 pagination={{
                     meta: logs,
@@ -340,7 +345,7 @@ export default function AuditLogsIndex({
                 wide
                 open={selected !== null}
                 onOpenChange={(open) => !open && setSelected(null)}
-                title={selected ? `Entry #${selected.id}` : 'Entry'}
+                title={selected ? `Entri #${selected.id}` : 'Entri'}
                 description={selected?.event}
             >
                 {selected && (
@@ -349,15 +354,15 @@ export default function AuditLogsIndex({
                             <dl className="grid grid-cols-[7rem_1fr] gap-x-3 gap-y-1">
                                 {(
                                     [
-                                        ['Time', selected.at],
+                                        ['Waktu', selected.at],
                                         [
-                                            'User',
+                                            'Pengguna',
                                             [selected.user, selected.username]
                                                 .filter(Boolean)
-                                                .join(' · ') || 'System',
+                                                .join(' · ') || 'Sistem',
                                         ],
                                         [
-                                            'Record',
+                                            'Data',
                                             [
                                                 selected.subject_type,
                                                 selected.subject_id
@@ -368,16 +373,22 @@ export default function AuditLogsIndex({
                                                 .filter(Boolean)
                                                 .join(' · ') || '–',
                                         ],
-                                        ['Outcome', selected.outcome],
-                                        ['IP address', selected.ip ?? '–'],
                                         [
-                                            'Request',
+                                            'Hasil',
+                                            OUTCOME_LABEL[selected.outcome],
+                                        ],
+                                        ['Alamat IP', selected.ip ?? '–'],
+                                        [
+                                            'Permintaan',
                                             [selected.method, selected.url]
                                                 .filter(Boolean)
                                                 .join(' ') || '–',
                                         ],
-                                        ['Browser', selected.user_agent ?? '–'],
-                                        ['Request ID', selected.request_id],
+                                        [
+                                            'Peramban',
+                                            selected.user_agent ?? '–',
+                                        ],
+                                        ['ID permintaan', selected.request_id],
                                         ['Hash', selected.hash],
                                     ] as [string, string][]
                                 ).map(([label, value]) => (
@@ -400,7 +411,7 @@ export default function AuditLogsIndex({
                                         columns={diffColumns(selected)}
                                         empty={{
                                             icon: <ScrollText />,
-                                            title: 'No field changes',
+                                            title: 'Tidak ada perubahan kolom',
                                         }}
                                     />
                                 </div>
@@ -417,7 +428,7 @@ export default function AuditLogsIndex({
                                 variant="outline"
                                 onClick={() => setSelected(null)}
                             >
-                                Close
+                                Tutup
                             </Button>
                         </DialogFooter>
                     </>

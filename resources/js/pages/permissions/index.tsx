@@ -37,8 +37,8 @@ type Props = {
 };
 
 const TYPES = [
-    { value: 'system', label: 'System' },
-    { value: 'custom', label: 'Custom' },
+    { value: 'system', label: 'Sistem' },
+    { value: 'custom', label: 'Kustom' },
 ];
 const DEFAULTS = { per_page: 25 };
 
@@ -105,45 +105,45 @@ export default function PermissionsIndex({
     const columns: Column<Row>[] = [
         {
             key: 'name',
-            header: 'Permission',
+            header: 'Izin',
             className: 'font-mono text-xs',
             cell: (p) => p.name,
         },
         {
             key: 'module',
-            header: 'Module',
+            header: 'Modul',
             hideBelow: 'sm',
             cell: (p) => p.module ?? <span className="text-muted">–</span>,
         },
         {
             key: 'type',
-            header: 'Type',
+            header: 'Jenis',
             cell: (p) => (
                 <Badge tone={p.custom ? 'info' : 'neutral'}>
-                    {p.custom ? 'Custom' : 'System'}
+                    {p.custom ? 'Kustom' : 'Sistem'}
                 </Badge>
             ),
         },
         {
             key: 'roles',
-            header: 'Roles',
+            header: 'Peran',
             align: 'right',
             className: 'tabular-nums',
             cell: (p) => p.roles,
         },
         {
             key: 'actions',
-            header: 'Actions',
+            header: 'Aksi',
             srOnly: true,
             narrow: true,
             align: 'right',
             cell: (p) =>
                 p.custom && (
-                    <Tip label="Delete">
+                    <Tip label="Hapus">
                         <Button
                             variant="ghost"
                             size="icon"
-                            aria-label={`Delete ${p.name}`}
+                            aria-label={`Hapus ${p.name}`}
                             onClick={() => setToDelete(p)}
                         >
                             <Trash2 />
@@ -155,13 +155,13 @@ export default function PermissionsIndex({
 
     return (
         <>
-            <Head title="Permissions" />
+            <Head title="Data Perizinan" />
             <PageHeader
-                title="Permissions"
-                description="Every permission item. System ones are defined in code; custom ones come from the generator."
+                title="Data Perizinan"
+                description="Semua item izin. Izin sistem ditetapkan di kode; izin kustom dibuat lewat generator."
                 actions={
                     <Button onClick={openGenerator}>
-                        <Wand2 /> Generate permissions
+                        <Wand2 /> Buat izin
                     </Button>
                 }
             />
@@ -178,15 +178,15 @@ export default function PermissionsIndex({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search permission…"
-                                label="Search permissions"
+                                placeholder="Cari izin…"
+                                label="Cari izin"
                             />
                         }
                     >
                         <Combobox
                             className="w-full sm:w-48"
                             clearable
-                            placeholder="Entity"
+                            placeholder="Entitas"
                             options={entities.map((e) => ({
                                 value: e,
                                 label: e,
@@ -198,7 +198,7 @@ export default function PermissionsIndex({
                             className="w-full sm:w-36"
                             clearable
                             searchable={false}
-                            placeholder="Type"
+                            placeholder="Jenis"
                             options={TYPES}
                             value={filters.type}
                             onChange={(v) =>
@@ -213,7 +213,7 @@ export default function PermissionsIndex({
                                     clear({ entity: null, type: null })
                                 }
                             >
-                                <X /> Reset
+                                <X /> Atur ulang
                             </Button>
                         )}
                     </FilterBar>
@@ -222,8 +222,8 @@ export default function PermissionsIndex({
                 empty={{
                     icon: <KeyRound />,
                     title: hasFilters
-                        ? 'No permissions match your filters'
-                        : 'No permissions yet',
+                        ? 'Tidak ada izin yang cocok dengan filter'
+                        : 'Belum ada izin',
                 }}
                 pagination={{
                     meta: permissions,
@@ -237,16 +237,16 @@ export default function PermissionsIndex({
             <Modal
                 open={generating}
                 onOpenChange={setGenerating}
-                title="Standard permission generator"
-                description="Creates entity.action permissions; existing ones are skipped."
+                title="Generator izin standar"
+                description="Membuat izin entitas.aksi; yang sudah ada dilewati."
             >
                 <form onSubmit={submit} noValidate>
                     <div className="flex flex-col gap-3 p-4">
                         <Field
-                            label="Entity"
+                            label="Entitas"
                             required
                             error={form.errors.entity}
-                            hint='Lowercase with hyphens, e.g. "credit-analysis".'
+                            hint='Huruf kecil dengan tanda hubung, mis. "credit-analysis".'
                         >
                             <Input
                                 autoFocus
@@ -258,7 +258,7 @@ export default function PermissionsIndex({
                             />
                         </Field>
                         <Field
-                            label="Standard actions"
+                            label="Aksi standar"
                             error={
                                 form.errors.actions ??
                                 (form.errors as Record<string, string>)[
@@ -288,9 +288,9 @@ export default function PermissionsIndex({
                             </div>
                         </Field>
                         <p className="text-xs text-muted">
-                            A permission only protects something once a route or
-                            policy checks it. Super Admin receives new
-                            permissions automatically.
+                            Sebuah izin baru melindungi sesuatu setelah route
+                            atau policy memeriksanya. Super Admin otomatis
+                            menerima izin baru.
                         </p>
                     </div>
                     <DialogFooter>
@@ -298,10 +298,10 @@ export default function PermissionsIndex({
                             variant="outline"
                             onClick={() => setGenerating(false)}
                         >
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
-                            Create permissions
+                            Buat izin
                         </Button>
                     </DialogFooter>
                 </form>
@@ -310,11 +310,11 @@ export default function PermissionsIndex({
             <ConfirmDialog
                 open={toDelete !== null}
                 onOpenChange={(open) => !open && !deleting && setToDelete(null)}
-                title="Delete permission?"
+                title="Hapus izin?"
                 description={
                     <>
-                        This removes <strong>{toDelete?.name}</strong>. It is
-                        not held by any role.
+                        Ini menghapus <strong>{toDelete?.name}</strong>. Izin
+                        ini tidak dipegang peran mana pun.
                     </>
                 }
                 loading={deleting}

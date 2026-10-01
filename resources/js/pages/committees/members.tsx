@@ -55,7 +55,7 @@ export default function CommitteeMembers({
     const columns: Column<Member>[] = [
         {
             key: 'name',
-            header: 'Member',
+            header: 'Anggota',
             cell: (m) => (
                 <>
                     <p className="font-medium">{m.name}</p>
@@ -63,42 +63,42 @@ export default function CommitteeMembers({
                 </>
             ),
         },
-        { key: 'role', header: 'Committee role', cell: (m) => m.role ?? '–' },
+        { key: 'role', header: 'Peran di komite', cell: (m) => m.role ?? '–' },
         {
             key: 'office',
-            header: 'Office',
+            header: 'Kantor',
             hideBelow: 'md',
             cell: (m) => m.office ?? '–',
         },
         {
             key: 'nik',
-            header: 'National ID (NIK)',
+            header: 'NIK (KTP)',
             cell: (m) =>
                 m.nik ? (
                     <span className="flex flex-wrap items-center gap-1.5">
                         <span className="font-mono text-xs">{m.nik}</span>
                         <Badge>
-                            {m.nik_source === 'codex' ? 'Codex' : 'Typed'}
+                            {m.nik_source === 'codex' ? 'Codex' : 'Diketik'}
                         </Badge>
                     </span>
                 ) : (
-                    <Badge tone="warning">Not set</Badge>
+                    <Badge tone="warning">Belum diisi</Badge>
                 ),
         },
         {
             key: 'actions',
-            header: 'Actions',
+            header: 'Aksi',
             srOnly: true,
             narrow: true,
             align: 'right',
             className: 'whitespace-nowrap',
             cell: (m) => (
                 <>
-                    <Tip label="Type or replace the NIK">
+                    <Tip label="Ketik atau ganti NIK">
                         <Button
                             variant="ghost"
                             size="icon"
-                            aria-label={`Edit NIK of ${m.name}`}
+                            aria-label={`Ubah NIK ${m.name}`}
                             onClick={() => {
                                 form.reset();
                                 form.clearErrors();
@@ -109,11 +109,11 @@ export default function CommitteeMembers({
                         </Button>
                     </Tip>
                     {m.nik && (
-                        <Tip label="Remove the NIK">
+                        <Tip label="Hapus NIK">
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                aria-label={`Remove NIK of ${m.name}`}
+                                aria-label={`Hapus NIK ${m.name}`}
                                 onClick={() => setRemoving(m)}
                             >
                                 <X />
@@ -127,10 +127,10 @@ export default function CommitteeMembers({
 
     return (
         <>
-            <Head title="Committee members" />
+            <Head title="Anggota Komite" />
             <PageHeader
-                title="Committee members"
-                description="People whose role decides in a committee tier. Their national ID lets the system recognise them when they apply for a credit."
+                title="Data Komite"
+                description="Orang yang perannya memutus di jenjang komite. NIK membuat sistem mengenali mereka saat mengajukan kredit."
             />
             <CommitteeTabs current="members" />
 
@@ -141,12 +141,10 @@ export default function CommitteeMembers({
                 >
                     <CircleAlert className="mt-0.5 size-3.5 shrink-0" />
                     <span>
-                        {withoutNik}{' '}
-                        {withoutNik === 1 ? 'member has' : 'members have'} no
-                        NIK yet, so a credit applied for by{' '}
-                        {withoutNik === 1 ? 'them' : 'any of them'} cannot be
-                        recognised automatically. The NIK normally comes from
-                        Codex; until it does, type it here.
+                        {withoutNik} anggota belum punya NIK, sehingga kredit
+                        yang mereka ajukan tidak bisa dikenali otomatis. NIK
+                        biasanya datang dari Codex; sampai itu terjadi, ketik di
+                        sini.
                     </span>
                 </div>
             )}
@@ -163,15 +161,15 @@ export default function CommitteeMembers({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search name or username…"
-                                label="Search members"
+                                placeholder="Cari nama atau username…"
+                                label="Cari anggota"
                             />
                         }
                     >
                         <Combobox
                             className="w-full sm:w-56"
                             clearable
-                            placeholder="Role"
+                            placeholder="Peran"
                             options={roles.map((r) => ({ value: r, label: r }))}
                             value={filters.role}
                             onChange={(v) => visit({ role: v })}
@@ -182,7 +180,7 @@ export default function CommitteeMembers({
                                 size="sm"
                                 onClick={() => clear({ role: null })}
                             >
-                                <X /> Reset
+                                <X /> Atur ulang
                             </Button>
                         )}
                     </FilterBar>
@@ -191,11 +189,11 @@ export default function CommitteeMembers({
                 empty={{
                     icon: <UserRound />,
                     title: hasFilters
-                        ? 'No members match your filters'
-                        : 'No committee members yet',
+                        ? 'Tidak ada anggota yang cocok dengan filter'
+                        : 'Belum ada anggota komite',
                     description: hasFilters
                         ? undefined
-                        : 'Members appear once a role is given to a tier of a committee path.',
+                        : 'Anggota muncul setelah sebuah peran dipakai di jenjang komite.',
                 }}
                 pagination={{
                     meta: members,
@@ -209,8 +207,8 @@ export default function CommitteeMembers({
             <Modal
                 open={editing !== null}
                 onOpenChange={(open) => !open && setEditing(null)}
-                title={`NIK of ${editing?.name ?? ''}`}
-                description="16 digits. Only the last four are shown afterwards."
+                title={`NIK ${editing?.name ?? ''}`}
+                description="16 digit. Setelah disimpan hanya empat digit terakhir yang tampil."
             >
                 <form
                     noValidate
@@ -226,12 +224,12 @@ export default function CommitteeMembers({
                 >
                     <div className="p-4">
                         <Field
-                            label="National ID (NIK)"
+                            label="NIK (KTP)"
                             required
                             error={form.errors.nik}
                             hint={
                                 editing?.nik_source === 'codex'
-                                    ? 'This NIK came from Codex; Codex replaces what is typed here the next time it sends one.'
+                                    ? 'NIK ini berasal dari Codex; Codex menggantikan yang diketik di sini saat mengirim NIK lagi.'
                                     : undefined
                             }
                         >
@@ -255,14 +253,14 @@ export default function CommitteeMembers({
                             variant="outline"
                             onClick={() => setEditing(null)}
                         >
-                            Cancel
+                            Batal
                         </Button>
                         <Button
                             type="submit"
                             loading={form.processing}
                             disabled={form.data.nik.length !== 16}
                         >
-                            Save
+                            Simpan
                         </Button>
                     </DialogFooter>
                 </form>
@@ -271,15 +269,14 @@ export default function CommitteeMembers({
             <ConfirmDialog
                 open={removing !== null}
                 onOpenChange={(open) => !open && setRemoving(null)}
-                title="Remove the NIK?"
+                title="Hapus NIK?"
                 description={
                     <>
-                        <strong>{removing?.name}</strong> will no longer be
-                        recognised when applying for a credit, until a NIK is
-                        set again.
+                        <strong>{removing?.name}</strong> tidak lagi dikenali
+                        saat mengajukan kredit, sampai NIK diisi lagi.
                     </>
                 }
-                confirmLabel="Remove"
+                confirmLabel="Hapus"
                 onConfirm={() => {
                     const member = removing;
                     setRemoving(null);

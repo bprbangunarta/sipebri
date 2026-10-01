@@ -30,7 +30,7 @@ class CommitteeTierRequest extends FormRequest
      */
     public function attributes(): array
     {
-        return ['label' => 'tier name', 'role' => 'deciding role', 'min_amount' => 'minimum amount', 'max_amount' => 'maximum amount'];
+        return ['label' => 'nama jenjang', 'role' => 'peran pemutus', 'min_amount' => 'plafon minimum', 'max_amount' => 'plafon maksimum'];
     }
 
     /**
@@ -38,6 +38,6 @@ class CommitteeTierRequest extends FormRequest
      */
     public function messages(): array
     {
-        return ['max_amount.gte' => 'The maximum amount cannot be lower than the minimum amount.'];
+        return ['max_amount.gte' => 'Plafon maksimum tidak boleh lebih kecil dari plafon minimum.'];
     }
 }

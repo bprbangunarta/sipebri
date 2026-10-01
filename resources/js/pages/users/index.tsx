@@ -28,8 +28,8 @@ type Filters = {
 };
 
 const STATUS_OPTIONS = [
-    { value: 'active', label: 'Active' },
-    { value: 'inactive', label: 'Inactive' },
+    { value: 'active', label: 'Aktif' },
+    { value: 'inactive', label: 'Nonaktif' },
 ];
 
 type Props = {
@@ -41,7 +41,7 @@ type Props = {
 const columns: Column<UserRow>[] = [
     {
         key: 'user',
-        header: 'User',
+        header: 'Pengguna',
         cell: (u) => (
             <>
                 <p className="font-medium">{u.name}</p>
@@ -53,12 +53,12 @@ const columns: Column<UserRow>[] = [
     },
     {
         key: 'role',
-        header: 'Role',
-        cell: (u) => u.role ?? <span className="text-muted">No role</span>,
+        header: 'Peran',
+        cell: (u) => u.role ?? <span className="text-muted">Tanpa peran</span>,
     },
     {
         key: 'office',
-        header: 'Office',
+        header: 'Kantor',
         hideBelow: 'md',
         cell: (u) => u.office ?? '–',
     },
@@ -67,13 +67,13 @@ const columns: Column<UserRow>[] = [
         header: 'Status',
         cell: (u) => (
             <Badge tone={u.active ? 'success' : 'neutral'}>
-                {u.active ? 'Active' : 'Inactive'}
+                {u.active ? 'Aktif' : 'Nonaktif'}
             </Badge>
         ),
     },
     {
         key: 'created',
-        header: 'Created',
+        header: 'Dibuat',
         hideBelow: 'sm',
         className: 'whitespace-nowrap',
         cell: (u) => formatDate(u.created_at),
@@ -98,10 +98,10 @@ export default function UsersIndex({ users, filters, roles }: Props) {
 
     return (
         <>
-            <Head title="Users" />
+            <Head title="Data Pengguna" />
             <PageHeader
-                title="Users"
-                description="People mirrored from Codex. Their account, role and status are managed there."
+                title="Data Pengguna"
+                description="Orang yang disalin dari Codex. Akun, peran, dan statusnya dikelola di sana."
             />
 
             <DataTable
@@ -116,15 +116,15 @@ export default function UsersIndex({ users, filters, roles }: Props) {
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search name or email…"
-                                label="Search users"
+                                placeholder="Cari nama atau email…"
+                                label="Cari pengguna"
                             />
                         }
                     >
                         <Combobox
                             className="w-full sm:w-48"
                             clearable
-                            placeholder="Role"
+                            placeholder="Peran"
                             options={roleOptions}
                             value={filters.role}
                             onChange={(v) => visit({ role: v })}
@@ -148,7 +148,7 @@ export default function UsersIndex({ users, filters, roles }: Props) {
                                     clear({ role: null, status: null })
                                 }
                             >
-                                <X /> Reset
+                                <X /> Atur ulang
                             </Button>
                         )}
                     </FilterBar>
@@ -157,10 +157,10 @@ export default function UsersIndex({ users, filters, roles }: Props) {
                 empty={{
                     icon: <UserX />,
                     title: hasFilters
-                        ? 'No users match your filters'
-                        : 'No users yet',
+                        ? 'Tidak ada pengguna yang cocok dengan filter'
+                        : 'Belum ada pengguna',
                     description: hasFilters
-                        ? 'Try a different search or clear the filters.'
+                        ? 'Coba pencarian lain atau hapus filter.'
                         : undefined,
                     action: hasFilters ? (
                         <Button
@@ -168,7 +168,7 @@ export default function UsersIndex({ users, filters, roles }: Props) {
                             size="sm"
                             onClick={() => clear({ role: null, status: null })}
                         >
-                            Clear filters
+                            Hapus filter
                         </Button>
                     ) : undefined,
                 }}

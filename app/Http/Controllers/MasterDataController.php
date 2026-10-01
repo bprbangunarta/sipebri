@@ -60,7 +60,7 @@ class MasterDataController extends Controller
 
         $definition->model()::query()->create($data);
 
-        return back()->with('success', "{$definition->label()} created.");
+        return back()->with('success', "{$definition->label()} berhasil dibuat.");
     }
 
     public function update(Request $request, string $resource, int $id): RedirectResponse
@@ -76,14 +76,14 @@ class MasterDataController extends Controller
                 $link = $record->{$relation}();
 
                 if ($link instanceof HasOneOrMany && $link->getLocalKeyName() === 'code' && ($count = $link->count()) > 0) {
-                    throw ValidationException::withMessages(['code' => sprintf('The code cannot change: it is used by %d %s.', $count, str($noun)->plural($count))]);
+                    throw ValidationException::withMessages(['code' => sprintf('Kode tidak bisa diubah: dipakai oleh %d %s.', $count, $noun)]);
                 }
             }
         }
 
         $record->update($data);
 
-        return back()->with('success', "{$definition->label()} updated.");
+        return back()->with('success', "{$definition->label()} berhasil diperbarui.");
     }
 
     public function destroy(string $resource, int $id): RedirectResponse
@@ -102,11 +102,11 @@ class MasterDataController extends Controller
 
         $record->delete();
 
-        return back()->with('success', "{$definition->label()} deleted.");
+        return back()->with('success', "{$definition->label()} berhasil dihapus.");
     }
 
     private function inUse(string $name, int $count, string $noun): string
     {
-        return sprintf('"%s" is used by %d %s and cannot be deleted. Reassign or remove those first.', $name, $count, str($noun)->plural($count));
+        return sprintf('"%s" dipakai oleh %d %s sehingga tidak bisa dihapus. Alihkan atau hapus dulu data tersebut.', $name, $count, $noun);
     }
 }

@@ -14,11 +14,11 @@ use App\Models\User;
 class Committee
 {
     private const STATUS_LABELS = [
-        'decider' => 'Decides',
-        'escalate' => 'Escalates',
-        'blocked' => 'Cannot decide or escalate',
-        'not_needed' => 'Not needed',
-        'skipped' => 'Skipped (applicant)',
+        'decider' => 'Memutus',
+        'escalate' => 'Menaikkan',
+        'blocked' => 'Tidak bisa memutus atau menaikkan',
+        'not_needed' => 'Tidak diperlukan',
+        'skipped' => 'Dilewati (pemohon)',
     ];
 
     /**
@@ -41,8 +41,8 @@ class Committee
             return [
                 'found' => false,
                 'message' => $condition === null
-                    ? 'There is no committee path for this product under the Normal condition.'
-                    : "The condition/category {$condition} is not intended for this product, so it has no committee path.",
+                    ? 'Tidak ada jalur komite untuk produk ini pada kondisi Normal.'
+                    : "Kondisi/kategori {$condition} tidak berlaku untuk produk ini, jadi tidak ada jalur komite.",
                 'chain' => [],
                 'warnings' => [],
             ];
@@ -56,7 +56,7 @@ class Committee
             'path' => [
                 'id' => $path->id,
                 'title' => $path->title(),
-                'product_label' => $path->product ? "{$path->product->alias} — {$path->product->name}" : 'All products',
+                'product_label' => $path->product ? "{$path->product->alias} — {$path->product->name}" : 'Semua produk',
                 'condition_label' => $path->condition ?: 'Normal',
                 'mechanism' => $path->mechanism,
                 'mechanism_label' => CommitteePath::MECHANISMS[$path->mechanism] ?? $path->mechanism,
@@ -130,7 +130,7 @@ class Committee
             $decider = $above ?? $tiers->last(fn (CommitteeTier $t): bool => $t->sort < $natural->sort && $t->canDecide() && ! in_array($t->id, $skipped, true));
 
             if ($above === null && $decider !== null) {
-                $exception = "{$decider->role} decides although the amount is above its limit: the top committee member is the applicant.";
+                $exception = "{$decider->role} memutus meski plafon melebihi batasnya: anggota komite tertinggi adalah pemohon.";
             }
         }
 
@@ -166,7 +166,7 @@ class Committee
             ? $natural
             : $tiers->last(fn (CommitteeTier $t): bool => ! in_array($t->id, $skipped, true));
         $exception = $natural !== null && $last !== null && ! $last->is($natural)
-            ? "{$last->role} gives the final decision: the top committee member is the applicant."
+            ? "{$last->role} memberi keputusan akhir: anggota komite tertinggi adalah pemohon."
             : null;
 
         $rows = $tiers->map(fn (CommitteeTier $tier): array => self::row(
@@ -197,7 +197,7 @@ class Committee
             ])),
             'individual' => $tier->is_individual,
             'status' => $status,
-            'status_label' => $tier->is_individual && $status === 'decider' ? 'Decides (file holder)' : self::STATUS_LABELS[$status],
+            'status_label' => $tier->is_individual && $status === 'decider' ? 'Memutus (pemegang berkas)' : self::STATUS_LABELS[$status],
             'user_count' => User::role($tier->role)->count(),
         ];
     }
@@ -212,13 +212,13 @@ class Committee
 
         if (! collect($chain)->contains(fn (array $row): bool => $row['status'] === 'decider')) {
             $warnings[] = $hasApplicant && collect($chain)->contains(fn (array $row): bool => $row['status'] === 'skipped')
-                ? 'Nobody is left to decide once the applicant is taken out. Check the committee.'
-                : 'No tier is authorised to decide at this amount. Check the amount range of each tier.';
+                ? 'Tidak ada yang tersisa untuk memutus setelah pemohon dikeluarkan. Periksa komite.'
+                : 'Tidak ada jenjang yang berwenang memutus pada plafon ini. Periksa rentang plafon tiap jenjang.';
         }
 
         foreach ($chain as $row) {
             if ($row['status'] === 'decider' && $row['user_count'] === 0) {
-                $warnings[] = "No user holds the role {$row['role']}, so nobody can decide.";
+                $warnings[] = "Tidak ada pengguna dengan peran {$row['role']}, jadi tidak ada yang bisa memutus.";
             }
         }
 
@@ -238,11 +238,11 @@ class Committee
             $nextMin = $next->min_amount ?? 0;
 
             if ($nextMin > $tier->max_amount + 1) {
-                $warnings[] = "There is a gap between {$tier->role} and {$next->role} (".number_format($tier->max_amount + 1, 0, ',', '.').' – '.number_format($nextMin - 1, 0, ',', '.').').';
+                $warnings[] = "Ada celah antara {$tier->role} dan {$next->role} (".number_format($tier->max_amount + 1, 0, ',', '.').' – '.number_format($nextMin - 1, 0, ',', '.').').';
             }
 
             if ($nextMin <= $tier->max_amount) {
-                $warnings[] = "The amount ranges of {$tier->role} and {$next->role} overlap.";
+                $warnings[] = "Rentang plafon {$tier->role} dan {$next->role} saling tumpang tindih.";
             }
         }
 

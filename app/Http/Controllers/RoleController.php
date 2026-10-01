@@ -55,7 +55,7 @@ class RoleController extends Controller
         $role = Role::query()->create(['name' => trim($data['name']), 'guard_name' => 'web']);
         Audit::record('roles.created', 'roles', 'created', $role, new: ['name' => $role->name], label: $role->name);
 
-        return to_route('roles.show', $role)->with('success', 'Role created. Choose its permissions below.');
+        return to_route('roles.show', $role)->with('success', 'Peran berhasil dibuat. Pilih izinnya di bawah.');
     }
 
     public function update(Request $request, Role $role): RedirectResponse
@@ -70,7 +70,7 @@ class RoleController extends Controller
         $role->update(['name' => trim($data['name'])]);
         Audit::record('roles.renamed', 'roles', 'updated', $role, ['name' => $old], ['name' => $role->name], label: $role->name);
 
-        return back()->with('success', 'Role renamed.');
+        return back()->with('success', 'Nama peran berhasil diubah.');
     }
 
     public function syncPermissions(Request $request, Role $role): RedirectResponse
@@ -95,7 +95,7 @@ class RoleController extends Controller
 
         Audit::record('roles.permissions_changed', 'roles', 'permissions_changed', $role, ['added' => [], 'removed' => array_values(array_diff($before, $after))], ['added' => array_values(array_diff($after, $before)), 'removed' => []], label: $role->name);
 
-        return back()->with('success', 'Permissions updated.');
+        return back()->with('success', 'Izin berhasil diperbarui.');
     }
 
     public function destroy(Role $role): RedirectResponse
@@ -103,16 +103,16 @@ class RoleController extends Controller
         abort_if($role->name === RoleName::SuperAdmin->value, 403, 'The Super Admin role cannot be deleted.');
 
         if ($role->users()->exists()) {
-            return back()->with('error', "\"{$role->name}\" is assigned to users and cannot be deleted.");
+            return back()->with('error', "\"{$role->name}\" dipakai pengguna sehingga tidak bisa dihapus.");
         }
 
         if (($count = CommitteeTier::query()->where('role', $role->name)->count()) > 0) {
-            return back()->with('error', "\"{$role->name}\" decides in {$count} committee ".str('tier')->plural($count).' and cannot be deleted. Change those tiers first.');
+            return back()->with('error', "\"{$role->name}\" memutus di {$count} jenjang komite sehingga tidak bisa dihapus. Ubah jenjang itu terlebih dahulu.");
         }
 
         Audit::record('roles.deleted', 'roles', 'deleted', $role, ['name' => $role->name], label: $role->name);
         $role->delete();
 
-        return to_route('roles.index')->with('success', 'Role deleted.');
+        return to_route('roles.index')->with('success', 'Peran berhasil dihapus.');
     }
 }

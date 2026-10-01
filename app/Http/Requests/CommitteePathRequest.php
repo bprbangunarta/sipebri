@@ -51,7 +51,7 @@ class CommitteePathRequest extends FormRequest
                 ->exists();
 
             if ($exists) {
-                $validator->errors()->add('condition', 'A path for this product and condition already exists.');
+                $validator->errors()->add('condition', 'Jalur untuk produk dan kondisi ini sudah ada.');
             }
         });
     }
@@ -61,6 +61,6 @@ class CommitteePathRequest extends FormRequest
      */
     public function attributes(): array
     {
-        return ['product_id' => 'product', 'condition' => 'condition/category', 'copy_from' => 'source path'];
+        return ['product_id' => 'produk', 'condition' => 'kondisi/kategori', 'copy_from' => 'jalur sumber'];
     }
 }

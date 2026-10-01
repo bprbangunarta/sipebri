@@ -31,7 +31,7 @@ class CommitteeController extends Controller
     {
         $default = CommitteeLevels::defaultPath();
 
-        return Inertia::render('committees/index', [
+        return Inertia::render('committees/levels', [
             'defaultId' => $default?->id,
             'levels' => $default !== null ? $default->tiers->map(fn (CommitteeTier $t): array => [
                 ...$t->only(['id', 'sort', 'label', 'role', 'is_individual', 'min_amount', 'max_amount', 'can_escalate', 'can_approve', 'can_cancel', 'can_reject']),
@@ -47,7 +47,7 @@ class CommitteeController extends Controller
     /** Paths that deviate from the default levels (hierarchy, or levels of their own); the rest can be shown on request. */
     public function paths(): Response
     {
-        return Inertia::render('committees/paths', [
+        return Inertia::render('committees/special-rules', [
             'paths' => CommitteePath::with('product')->withCount('tiers')->where('is_default', false)->orderBy('product_id')->orderBy('condition')->get()
                 ->map(fn (CommitteePath $p): array => $this->pathRow($p)),
             'productOptions' => Product::orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} — {$p->name}"]),
@@ -107,7 +107,7 @@ class CommitteeController extends Controller
             'condition' => ['nullable', 'string', 'max:30'],
             'amount' => ['required', 'integer', 'min:0'],
             'applicant_id' => ['nullable', 'integer', Rule::in(CommitteeMembers::query()->pluck('id')->all())],
-        ], ['applicant_id.in' => 'The selected person is not a committee member.'], ['applicant_id' => 'applicant']);
+        ], ['applicant_id.in' => 'Orang yang dipilih bukan anggota komite.'], ['applicant_id' => 'pemohon']);
 
         $applicant = isset($data['applicant_id']) ? User::find((int) $data['applicant_id']) : null;
 
@@ -131,7 +131,7 @@ class CommitteeController extends Controller
             }
         }
 
-        return to_route('committees.show', $path)->with('success', "Committee path {$path->title()} created.");
+        return to_route('committees.show', $path)->with('success', "Jalur komite {$path->title()} berhasil dibuat.");
     }
 
     public function update(CommitteePathRequest $request, CommitteePath $path): RedirectResponse
@@ -143,22 +143,22 @@ class CommitteeController extends Controller
             CommitteeLevels::attach($path);
         }
 
-        return back()->with('success', "Committee path {$path->title()} updated.");
+        return back()->with('success', "Jalur komite {$path->title()} berhasil diperbarui.");
     }
 
     public function destroy(CommitteePath $path): RedirectResponse
     {
-        abort_if($path->is_default, 403, 'The default authority levels cannot be deleted.');
+        abort_if($path->is_default, 403, 'Jenjang wewenang bawaan tidak bisa dihapus.');
 
         $title = $path->title();
 
         if (($count = $path->loanApplications()->count()) > 0) {
-            return back()->with('error', "{$title} is used by {$count} loan ".str('application')->plural($count).' and cannot be deleted. Set it inactive instead.');
+            return back()->with('error', "{$title} dipakai oleh {$count} pengajuan kredit sehingga tidak bisa dihapus. Nonaktifkan saja.");
         }
 
         $path->delete();
 
-        return to_route('committees.paths')->with('success', "Committee path {$title} deleted.");
+        return to_route('committees.paths')->with('success', "Jalur komite {$title} berhasil dihapus.");
     }
 
     public function storeTier(CommitteeTierRequest $request, CommitteePath $path): RedirectResponse
@@ -169,7 +169,7 @@ class CommitteeController extends Controller
 
         $tier = $path->tiers()->create([...$request->validated(), 'sort' => (int) $path->tiers()->max('sort') + 1]);
 
-        return back()->with('success', "Tier {$tier->role} added.".$this->spread($path));
+        return back()->with('success', "Jenjang {$tier->role} berhasil ditambahkan.".$this->spread($path));
     }
 
     public function updateTier(CommitteeTierRequest $request, CommitteePath $path, CommitteeTier $tier): RedirectResponse
@@ -180,7 +180,7 @@ class CommitteeController extends Controller
 
         $tier->update($request->validated());
 
-        return back()->with('success', "Tier {$tier->role} updated.".$this->spread($path));
+        return back()->with('success', "Jenjang {$tier->role} berhasil diperbarui.".$this->spread($path));
     }
 
     public function destroyTier(CommitteePath $path, CommitteeTier $tier): RedirectResponse
@@ -191,7 +191,7 @@ class CommitteeController extends Controller
 
         $tier->delete();
 
-        return back()->with('success', "Tier {$tier->role} deleted.".$this->spread($path));
+        return back()->with('success', "Jenjang {$tier->role} berhasil dihapus.".$this->spread($path));
     }
 
     /**
@@ -204,7 +204,7 @@ class CommitteeController extends Controller
         $data = $request->validate(['follow' => ['required', 'boolean']]);
 
         if ($data['follow'] && CommitteeLevels::defaultPath() === null) {
-            return back()->with('error', 'There are no default authority levels yet.');
+            return back()->with('error', 'Belum ada jenjang wewenang bawaan.');
         }
 
         $path->update(['follows_default' => (bool) $data['follow']]);
@@ -213,7 +213,7 @@ class CommitteeController extends Controller
             CommitteeLevels::attach($path);
         }
 
-        return back()->with('success', $data['follow'] ? 'This path now follows the default authority levels.' : 'This path now has authority levels of its own.');
+        return back()->with('success', $data['follow'] ? 'Jalur ini sekarang mengikuti jenjang wewenang bawaan.' : 'Jalur ini sekarang memakai jenjang wewenang sendiri.');
     }
 
     /** Move a tier one step up or down. */
@@ -237,12 +237,12 @@ class CommitteeController extends Controller
             $row->update(['sort' => $position + 1]);
         }
 
-        return back()->with('success', 'Tier order updated.'.$this->spread($path));
+        return back()->with('success', 'Urutan jenjang diperbarui.'.$this->spread($path));
     }
 
     private function followsDefault(): RedirectResponse
     {
-        return back()->with('error', 'This path follows the default authority levels. Give it levels of its own first.');
+        return back()->with('error', 'Jalur ini mengikuti jenjang wewenang bawaan. Beri jenjang sendiri terlebih dahulu.');
     }
 
     /** After a change to the default levels, copy them to every path that follows them. */
@@ -254,7 +254,7 @@ class CommitteeController extends Controller
 
         $count = CommitteeLevels::propagate();
 
-        return " Applied to {$count} ".str('path')->plural($count).'.';
+        return " Diterapkan ke {$count} jalur.";
     }
 
     /**
@@ -265,7 +265,7 @@ class CommitteeController extends Controller
         return [
             'id' => $path->id,
             'product_id' => $path->product_id,
-            'product_label' => $path->product ? "{$path->product->alias} — {$path->product->name}" : 'All products',
+            'product_label' => $path->product ? "{$path->product->alias} — {$path->product->name}" : 'Semua produk',
             'condition' => $path->condition,
             'condition_label' => $path->condition ?: 'Normal',
             'mechanism' => $path->mechanism,

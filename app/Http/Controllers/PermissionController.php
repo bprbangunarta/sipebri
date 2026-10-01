@@ -67,7 +67,7 @@ class PermissionController extends Controller
             'entity' => ['required', 'string', 'max:50', 'regex:/^[a-z0-9]+(-[a-z0-9]+)*$/'],
             'actions' => ['required', 'array', 'min:1'],
             'actions.*' => ['string', Rule::in(Modules::STANDARD_ACTIONS)],
-        ], ['entity.regex' => 'Use letters, numbers and single hyphens only, e.g. "credit-analysis".'], ['entity' => 'entity']);
+        ], ['entity.regex' => 'Gunakan huruf, angka, dan tanda hubung tunggal saja, mis. "credit-analysis".'], ['entity' => 'entitas']);
 
         $created = [];
         $skipped = [];
@@ -93,7 +93,7 @@ class PermissionController extends Controller
 
         Audit::record('permissions.generated', 'permissions', 'generated', new: ['created' => $created], context: ['entity' => $data['entity'], 'skipped' => $skipped], label: $data['entity']);
 
-        return back()->with('success', count($created).' permission(s) created'.($skipped === [] ? '.' : ', '.count($skipped).' already existed.'));
+        return back()->with('success', count($created).' izin berhasil dibuat'.($skipped === [] ? '.' : ', '.count($skipped).' sudah ada sebelumnya.'));
     }
 
     public function destroy(Permission $permission): RedirectResponse
@@ -101,12 +101,12 @@ class PermissionController extends Controller
         abort_unless($permission->is_custom, 403, 'System permissions cannot be deleted.');
 
         if (($count = $permission->roles()->count()) > 0) {
-            return back()->with('error', "\"{$permission->name}\" is held by {$count} ".str('role')->plural($count).' and cannot be deleted. Remove it from those roles first.');
+            return back()->with('error', "\"{$permission->name}\" dipegang {$count} peran sehingga tidak bisa dihapus. Lepas dulu dari peran itu.");
         }
 
         $permission->delete();
         app(PermissionRegistrar::class)->forgetCachedPermissions();
 
-        return back()->with('success', 'Permission deleted.');
+        return back()->with('success', 'Izin berhasil dihapus.');
     }
 }

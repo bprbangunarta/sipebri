@@ -14,7 +14,7 @@ export function PasswordInput({ className, ...props }: Omit<ComponentProps<typeo
             <button
                 type="button"
                 onClick={() => setVisible((current) => !current)}
-                aria-label={visible ? 'Hide password' : 'Show password'}
+                aria-label={visible ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
                 aria-pressed={visible}
                 className="absolute top-1/2 right-1.5 flex size-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded text-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none"
             >

@@ -38,7 +38,7 @@ export function Modal({
                             </D.Description>
                         </div>
                         <D.Close asChild>
-                            <Button variant="ghost" size="icon" aria-label="Close">
+                            <Button variant="ghost" size="icon" aria-label="Tutup">
                                 <X />
                             </Button>
                         </D.Close>
@@ -55,7 +55,7 @@ export function ConfirmDialog({
     onOpenChange,
     title,
     description,
-    confirmLabel = 'Delete',
+    confirmLabel = 'Hapus',
     loading,
     onConfirm,
 }: {
@@ -82,7 +82,7 @@ export function ConfirmDialog({
                     </div>
                     <DialogFooter>
                         <AD.Cancel asChild>
-                            <Button variant="outline">Cancel</Button>
+                            <Button variant="outline">Batal</Button>
                         </AD.Cancel>
                         <Button
                             variant="danger"
@@ -99,7 +99,7 @@ export function ConfirmDialog({
 }
 
 /**
- * Footer of every dialog: the dismissing button (Cancel / Back) is the first child and sits at the left,
+ * Footer of every dialog: the dismissing button (Batal / Back) is the first child and sits at the left,
  * the confirming button (Save / Create / Delete) is the last child and sits at the right.
  */
 export function DialogFooter({ children }: { children: ReactNode }) {

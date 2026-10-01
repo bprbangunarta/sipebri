@@ -24,6 +24,6 @@ class BmpkController extends Controller
 
         LendingLimit::setBmpk((int) $data['amount']);
 
-        return back()->with('success', 'BMPK saved.');
+        return back()->with('success', 'BMPK berhasil disimpan.');
     }
 }

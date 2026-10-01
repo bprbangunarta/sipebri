@@ -102,7 +102,7 @@ it('hands the final decision to the committee below when the president director 
 
     expect($result['decider']['role'])->toBe('Direktur Bisnis')
         ->and(collect($result['chain'])->pluck('status')->all())->toBe(['escalate', 'escalate', 'decider', 'skipped'])
-        ->and($result['exception'])->toContain('Direktur Bisnis decides although the amount is above its limit')
+        ->and($result['exception'])->toContain('Direktur Bisnis memutus meski plafon melebihi batasnya')
         ->and($result['applicant'])->toMatchArray(['name' => 'Dirut']);
 
     // A small file never reaches the top committee, so the applicant being there changes nothing.
@@ -117,7 +117,7 @@ it('leaves out the applicant on a hierarchy path and ends at the last remaining 
         ->and(conflictOutcome($s['kup'], 1_000_000, $s['kasiA'])['statuses'])->toBe(['escalate', 'escalate', 'escalate', 'decider']); // Kasi B acts
 
     $top = conflictOutcome($s['kup'], 1_000_000, $s['dirut']);
-    expect($top['decider'])->toBe('Direktur Bisnis')->and($top['statuses'])->toBe(['escalate', 'escalate', 'decider', 'skipped'])->and($top['exception'])->toContain('final decision');
+    expect($top['decider'])->toBe('Direktur Bisnis')->and($top['statuses'])->toBe(['escalate', 'escalate', 'decider', 'skipped'])->and($top['exception'])->toContain('keputusan akhir');
 });
 
 it('says so when nobody is left to decide', function () {
@@ -127,7 +127,7 @@ it('says so when nobody is left to decide', function () {
 
     $result = Committee::resolve($s['kru']->id, null, 20_000_000, $s['kasiA']);
 
-    expect($result['decider'])->toBeNull()->and(implode(' ', $result['warnings']))->toContain('Nobody is left to decide');
+    expect($result['decider'])->toBeNull()->and(implode(' ', $result['warnings']))->toContain('Tidak ada yang tersisa untuk memutus');
 });
 
 it('simulates a committee member applicant on the authority check', function () {

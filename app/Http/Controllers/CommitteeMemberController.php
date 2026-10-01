@@ -55,12 +55,12 @@ class CommitteeMemberController extends Controller
         $taken = User::query()->where('nik_hash', User::nikHash($data['nik']))->whereKeyNot($user->id)->exists();
 
         if ($taken) {
-            throw ValidationException::withMessages(['nik' => 'This NIK already belongs to another person.']);
+            throw ValidationException::withMessages(['nik' => 'NIK ini sudah dimiliki orang lain.']);
         }
 
         $user->setNik($data['nik'], 'manual');
 
-        return back()->with('success', "NIK of {$user->name} saved.");
+        return back()->with('success', "NIK {$user->name} berhasil disimpan.");
     }
 
     public function destroy(User $user): RedirectResponse
@@ -69,6 +69,6 @@ class CommitteeMemberController extends Controller
 
         $user->setNik(null, 'manual');
 
-        return back()->with('success', "NIK of {$user->name} removed.");
+        return back()->with('success', "NIK {$user->name} berhasil dihapus.");
     }
 }

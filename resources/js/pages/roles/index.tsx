@@ -33,21 +33,21 @@ const DEFAULTS = { sort: 'name', direction: 'asc', per_page: 25 };
 const columns: Column<RoleRow>[] = [
     {
         key: 'role',
-        header: 'Role',
+        header: 'Peran',
         sort: 'name',
         className: 'font-medium',
         cell: (r) => (
             <span className="inline-flex items-center gap-1.5">
                 {r.name}
                 {r.locked && (
-                    <Lock className="size-3 text-muted" aria-label="Locked" />
+                    <Lock className="size-3 text-muted" aria-label="Terkunci" />
                 )}
             </span>
         ),
     },
     {
         key: 'users',
-        header: 'Users',
+        header: 'Pengguna',
         sort: 'users_count',
         align: 'right',
         className: 'tabular-nums',
@@ -55,24 +55,24 @@ const columns: Column<RoleRow>[] = [
     },
     {
         key: 'permissions',
-        header: 'Permissions',
+        header: 'Izin',
         sort: 'permissions_count',
         align: 'right',
         className: 'tabular-nums',
-        cell: (r) => (r.locked ? 'All' : r.permissions_count),
+        cell: (r) => (r.locked ? 'Semua' : r.permissions_count),
     },
     {
         key: 'actions',
-        header: 'Actions',
+        header: 'Aksi',
         srOnly: true,
         narrow: true,
         align: 'right',
         cell: (r) => (
-            <Tip label="Open">
+            <Tip label="Buka">
                 <Button
                     variant="ghost"
                     size="icon"
-                    aria-label={`Open ${r.name}`}
+                    aria-label={`Buka ${r.name}`}
                     onClick={() => router.visit(`/roles/${r.id}`)}
                 >
                     <Settings2 />
@@ -109,10 +109,10 @@ export default function RolesIndex({
 
     return (
         <>
-            <Head title="Roles" />
+            <Head title="Data Peranan" />
             <PageHeader
-                title="Roles"
-                description="A role is a set of permissions; each user has exactly one role"
+                title="Data Peranan"
+                description="Peran adalah sekumpulan izin; setiap pengguna punya tepat satu peran"
                 actions={
                     canManage && (
                         <Button
@@ -122,7 +122,7 @@ export default function RolesIndex({
                                 setCreating(true);
                             }}
                         >
-                            <Plus /> Add role
+                            <Plus /> Tambah peran
                         </Button>
                     )
                 }
@@ -140,8 +140,8 @@ export default function RolesIndex({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search role…"
-                                label="Search roles"
+                                placeholder="Cari peran…"
+                                label="Cari peran"
                             />
                         }
                     >
@@ -151,7 +151,7 @@ export default function RolesIndex({
                                 size="sm"
                                 onClick={() => clear()}
                             >
-                                <X /> Reset
+                                <X /> Atur ulang
                             </Button>
                         )}
                     </FilterBar>
@@ -165,8 +165,8 @@ export default function RolesIndex({
                 empty={{
                     icon: <Shield />,
                     title: hasSearch
-                        ? 'No roles match your search'
-                        : 'No roles yet',
+                        ? 'Tidak ada peran yang cocok dengan pencarian'
+                        : 'Belum ada peran',
                 }}
                 pagination={{
                     meta: roles,
@@ -180,12 +180,12 @@ export default function RolesIndex({
             <Modal
                 open={creating}
                 onOpenChange={setCreating}
-                title="Add role"
-                description="You choose its permissions next."
+                title="Tambah peran"
+                description="Izinnya Anda pilih setelah ini."
             >
                 <form onSubmit={submit} noValidate>
                     <div className="p-4">
-                        <Field label="Name" required error={form.errors.name}>
+                        <Field label="Nama" required error={form.errors.name}>
                             <Input
                                 autoFocus
                                 value={form.data.name}
@@ -202,10 +202,10 @@ export default function RolesIndex({
                             variant="outline"
                             onClick={() => setCreating(false)}
                         >
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
-                            Create
+                            Buat
                         </Button>
                     </DialogFooter>
                 </form>

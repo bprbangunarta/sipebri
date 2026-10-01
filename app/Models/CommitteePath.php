@@ -25,8 +25,8 @@ class CommitteePath extends Model
     use Auditable;
 
     public const MECHANISMS = [
-        'plafon' => 'By amount limit',
-        'hierarki' => 'Committee hierarchy',
+        'plafon' => 'Menurut plafon',
+        'hierarki' => 'Hierarki komite',
     ];
 
     protected function casts(): array
@@ -54,10 +54,10 @@ class CommitteePath extends Model
     public function title(): string
     {
         if ($this->is_default) {
-            return 'Default authority levels';
+            return 'Jenjang wewenang bawaan';
         }
 
-        return ($this->product_id === null ? 'All products' : $this->product->alias).' · '.$this->conditionLabel();
+        return ($this->product_id === null ? 'Semua produk' : $this->product->alias).' · '.$this->conditionLabel();
     }
 
     /** Conditions are stored UPPERCASE and shown capitalised. */
