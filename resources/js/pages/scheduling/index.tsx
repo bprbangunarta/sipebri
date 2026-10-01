@@ -56,6 +56,8 @@ type Row = {
     over_limit: boolean;
     walk_in: boolean;
     resurvey: boolean;
+    needs_reschedule: boolean;
+    sent_back_reason: string | null;
     surveyor_role: string;
     surveyor_options: Option[];
     can_cancel: boolean;
@@ -90,6 +92,7 @@ type Props = {
 };
 
 const DEFAULTS = {
+    status: 'submitted',
     sort: 'application_date',
     direction: 'desc',
     per_page: 10,
@@ -231,7 +234,9 @@ export default function SchedulingIndex({
             defaults: DEFAULTS,
             only: ['loans', 'filters'],
         });
-    const hasFilters = Boolean(filters.search || filters.status);
+    const hasFilters = Boolean(
+        filters.search || filters.status !== DEFAULTS.status,
+    );
     const sortBy = (column: string) => visit(nextSort(filters, column));
 
     const columns: Column<Row>[] = [
@@ -298,9 +303,19 @@ export default function SchedulingIndex({
             sort: 'status',
             cell: (l) => (
                 <span className="flex flex-wrap items-center gap-1">
-                    <Badge tone={l.status_tone}>
-                        {l.resurvey ? 'Surveyed' : l.status_label}
-                    </Badge>
+                    {l.needs_reschedule ? (
+                        <Tip
+                            label={`Sent back by the surveyor: ${l.sent_back_reason ?? ''}`}
+                        >
+                            <span>
+                                <Badge tone="warning">Needs reschedule</Badge>
+                            </span>
+                        </Tip>
+                    ) : (
+                        <Badge tone={l.status_tone}>
+                            {l.resurvey ? 'Surveyed' : l.status_label}
+                        </Badge>
+                    )}
                     {l.over_limit && (
                         <Tip label={`Scheduled ${l.schedule_count} times`}>
                             <span>
@@ -427,10 +442,8 @@ export default function SchedulingIndex({
                             }
                         />
                         <Combobox
-                            className="w-full sm:w-40"
-                            clearable
+                            className="w-full sm:w-44"
                             searchable={false}
-                            placeholder="Status"
                             options={statuses}
                             value={filters.status}
                             onChange={(v) => visit({ status: v })}
@@ -457,11 +470,11 @@ export default function SchedulingIndex({
                     title: hasFilters
                         ? 'No files match your filters'
                         : filters.scope === 'mine'
-                          ? 'No files waiting for you'
-                          : 'No files to schedule',
+                          ? 'Nothing waiting to be scheduled for you'
+                          : 'Nothing waiting to be scheduled',
                     description: hasFilters
-                        ? 'Try a different search or clear the filters.'
-                        : 'Submitted files assigned to you appear here.',
+                        ? 'Try a different search or reset the filters.'
+                        : 'Submitted files, and files sent back by a surveyor, appear here. Choose "All statuses" to see scheduled files too.',
                 }}
                 pagination={{
                     meta: loans,

@@ -39,10 +39,12 @@ class SchedulingController extends Controller
     {
         $open = array_map(fn (LoanStatus $s): string => $s->value, self::openStatuses());
         $filters = $request->validate([
-            'search' => ['nullable', 'string', 'max:100'], 'status' => ['nullable', Rule::in($open)], 'scope' => ['nullable', 'in:mine,all'],
+            'search' => ['nullable', 'string', 'max:100'], 'status' => ['nullable', Rule::in([...$open, 'all'])], 'scope' => ['nullable', 'in:mine,all'],
             'sort' => ['nullable', 'string'], 'direction' => ['nullable', 'in:asc,desc'], 'per_page' => ['nullable', 'integer'],
         ]);
         $scope = $filters['scope'] ?? 'mine';
+        // By default the list shows what still has to be scheduled; 'all' lists every open file.
+        $status = $filters['status'] ?? LoanStatus::Submitted->value;
         $sort = in_array($filters['sort'] ?? null, self::SORTABLE, true) ? $filters['sort'] : 'application_date';
         $direction = $filters['direction'] ?? 'desc';
 
@@ -51,20 +53,27 @@ class SchedulingController extends Controller
             ->withCount('surveys')
             ->whereIn('status', $open)
             ->when($scope === 'mine', fn ($q) => $q->where('supervisor_id', $request->user()->id))
-            ->when($filters['status'] ?? null, fn ($q, string $status) => $q->where('status', $status))
+            ->when($status !== 'all', fn ($q) => $q->where('status', $status))
             ->when($filters['search'] ?? null, function ($q, string $term) {
                 $like = '%'.addcslashes($term, '%_\\').'%';
                 $q->where(fn ($w) => $w->where('application_code', 'like', $like)->orWhere('full_name', 'like', $like)->orWhere('nik', 'like', $like));
             })
+            // Unless a sort was asked for, files the surveyor sent back come first: they have waited the longest.
+            ->when(! isset($filters['sort']), fn ($q) => $q->orderByRaw('(loan_applications.status = ? and exists (select 1 from loan_schedules s where s.loan_application_id = loan_applications.id and s.action = ?)) desc', [LoanStatus::Submitted->value, LoanSchedule::ACTION_CANCEL]))
             ->orderBy($sort, $direction)->orderBy('id')
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 10)
             ->withQueryString();
 
         return Inertia::render('scheduling/index', [
             'loans' => $loans->through(fn (LoanApplication $l): array => $this->row($l)),
-            'filters' => ['search' => $filters['search'] ?? '', 'status' => $filters['status'] ?? null, 'scope' => $scope, 'sort' => $sort, 'direction' => $direction, 'per_page' => $loans->perPage()],
+            'filters' => ['search' => $filters['search'] ?? '', 'status' => $status, 'scope' => $scope, 'sort' => $sort, 'direction' => $direction, 'per_page' => $loans->perPage()],
             'perPageOptions' => self::PER_PAGE_OPTIONS,
-            'statuses' => array_map(fn (LoanStatus $s): array => ['value' => $s->value, 'label' => $s->label()], self::openStatuses()),
+            'statuses' => [
+                ['value' => LoanStatus::Submitted->value, 'label' => 'Not scheduled yet'],
+                ['value' => LoanStatus::Scheduling->value, 'label' => 'Scheduled'],
+                ['value' => LoanStatus::Survey->value, 'label' => 'Surveyed'],
+                ['value' => 'all', 'label' => 'All statuses'],
+            ],
             'maxSchedules' => (int) config('credit.max_schedules'),
             'canManage' => $request->user()->can('scheduling.manage'),
             'canCancel' => $request->user()->can('surveys.manage'),
@@ -231,6 +240,8 @@ class SchedulingController extends Controller
     {
         $done = $loan->schedules->whereIn('action', [LoanSchedule::ACTION_SCHEDULE, LoanSchedule::ACTION_RESCHEDULE])->count();
         $walkIn = $this->isWalkIn($loan);
+        // A file back at "submitted" after a cancellation was sent back by its surveyor, not newly submitted.
+        $sentBack = $loan->status === LoanStatus::Submitted ? $loan->schedules->where('action', LoanSchedule::ACTION_CANCEL)->last() : null;
 
         return [
             'id' => $loan->id,
@@ -241,6 +252,8 @@ class SchedulingController extends Controller
             'status' => $loan->status->value,
             'status_label' => $loan->status->label(),
             'status_tone' => $loan->status->tone(),
+            'needs_reschedule' => $sentBack !== null,
+            'sent_back_reason' => $sentBack?->reason,
             'product_label' => $loan->product ? "{$loan->product->alias} : {$loan->product->name}" : null,
             'office_label' => $loan->office?->alias,
             'supervisor_name' => $loan->supervisor?->name,

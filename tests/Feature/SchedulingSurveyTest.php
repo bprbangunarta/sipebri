@@ -183,3 +183,39 @@ it('serves photos through a signed, expiring link on an S3 disk', function () {
 
     expect($url)->toContain('sipebri-test')->toContain('surveys/00700001/a.jpg')->toContain('X-Amz-Signature')->toContain('X-Amz-Expires=1800');
 });
+
+it('lists what still has to be scheduled by default, with files sent back by a surveyor first and flagged', function () {
+    $kasi = roleUser('Kepala Seksi Analis');
+    $analyst = roleUser('Staff Analis & Appraisal');
+    $fresh = submittedLoan($kasi);
+    $sentBack = submittedLoan($kasi);
+    $scheduled = submittedLoan($kasi);
+    $this->actingAs($kasi);
+    $this->post(route('scheduling.store', $scheduled), ['survey_date' => now()->toDateString(), 'surveyor_id' => $analyst->id]);
+    $this->post(route('scheduling.store', $sentBack), ['survey_date' => now()->toDateString(), 'surveyor_id' => $analyst->id]);
+    $this->actingAs($analyst)->post(route('scheduling.cancel', $sentBack), ['reason' => 'Customer is away']);
+    $this->actingAs($kasi);
+
+    $this->get(route('scheduling.index'))->assertInertia(fn (Assert $page) => $page
+        ->has('loans.data', 2)
+        ->where('filters.status', 'submitted')
+        ->where('loans.data.0.id', $sentBack->id)->where('loans.data.0.needs_reschedule', true)->where('loans.data.0.sent_back_reason', 'Customer is away')
+        ->where('loans.data.1.id', $fresh->id)->where('loans.data.1.needs_reschedule', false));
+
+    $this->get(route('scheduling.index', ['status' => 'scheduling']))->assertInertia(fn (Assert $page) => $page
+        ->has('loans.data', 1)->where('loans.data.0.id', $scheduled->id)->where('loans.data.0.needs_reschedule', false));
+    $this->get(route('scheduling.index', ['status' => 'all']))->assertInertia(fn (Assert $page) => $page->has('loans.data', 3));
+    $this->get(route('scheduling.index', ['status' => 'cancelled']))->assertSessionHasErrors('status');
+});
+
+it('stops flagging a file once it is scheduled again', function () {
+    $kasi = roleUser('Kepala Seksi Analis');
+    $analyst = roleUser('Staff Analis & Appraisal');
+    $loan = submittedLoan($kasi);
+    $this->actingAs($kasi)->post(route('scheduling.store', $loan), ['survey_date' => now()->toDateString(), 'surveyor_id' => $analyst->id]);
+    $this->actingAs($analyst)->post(route('scheduling.cancel', $loan), ['reason' => 'Rain']);
+    $this->actingAs($kasi)->post(route('scheduling.store', $loan), ['survey_date' => now()->addDay()->toDateString(), 'surveyor_id' => $analyst->id]);
+
+    $this->get(route('scheduling.index', ['status' => 'all']))->assertInertia(fn (Assert $page) => $page
+        ->where('loans.data.0.status', 'scheduling')->where('loans.data.0.needs_reschedule', false));
+});
