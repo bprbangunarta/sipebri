@@ -79,7 +79,7 @@ Terakhir diperbarui: 2026-09-30.
     - KRS: di staging sistem cicilan bawaan kosong (yang diizinkan hanya Bulanan); di seeder kita bawaan = Bulanan.
 - **Konflik kepentingan: keluarga dekat.** Saat ini hanya pemohon yang merupakan anggota komite itu sendiri yang dikecualikan. Pasangan, anak, atau kerabat lain anggota komite belum ditangani (tidak bisa dideteksi otomatis dari NIK; perlu data hubungan keluarga atau penandaan manual yang wajib). Pertimbangkan bersama kepatuhan.
 - **BMPK.** Saat ini satu angka tetap per pemberian kredit (Rp 2 miliar awal, bisa diubah Super Admin). Bila aturan baru butuh perhitungan penuh (berdasarkan modal, total paparan per peminjam atau kelompok terkait), perlu dimodelkan di tahap analisa; riwayat perubahan angka sudah ada di audit log.
-- **Lokasi survei: sinyal lemah di lapangan.** Tombol "Tandai lokasi" perlu koneksi untuk menyimpan; antrean offline (simpan di ponsel lalu kirim saat sinyal kembali) belum ada. Peta memakai ubin OpenStreetMap publik; untuk volume besar pertimbangkan penyedia ubin sendiri.
+- **Lokasi survei: sinyal lemah di lapangan.** Tombol "Tandai lokasi" perlu koneksi untuk menyimpan; antrean offline **tidak dibuat** (keputusan user: tanpa sinyal aplikasi pun tidak bisa dibuka lewat URL, jadi antrean tidak berguna; indikator jaringan sudah memberi tahu bila koneksi putus). Peta memakai ubin OpenStreetMap publik; untuk volume besar pertimbangkan penyedia ubin sendiri.
 - **Alamat dari koordinat.** Bila kebijakan bank tidak mengizinkan koordinat keluar, atau volume tumbuh (Nominatim publik dibatasi), pasang Nominatim sendiri dan isi `GEOCODER_ENDPOINT`. Sengaja **tidak** dibandingkan dengan alamat KTP nasabah: survei bisa dilakukan di mana saja.
 - **Audit akses baca.** Saat ini hanya halaman detail data sensitif yang dicatat (pengajuan, jaminan, survei, cek nasabah). Halaman daftar (list) sengaja belum dicatat karena volumenya besar. Bila OJK/auditor meminta jejak baca untuk daftar juga, tambahkan pencatatan ringkas (siapa, halaman, filter, jumlah baris), sebaiknya dengan sampling atau ringkasan per sesi agar tabel tidak membengkak, dan perhatikan retensi 5 tahun.
 
@@ -99,7 +99,7 @@ Dicatat agar tidak hilang. Pengujian otomatis (Pest, 206 test) sudah menutup log
 
 **Untuk tugas yang belum dikerjakan (uji saat dibangun)**
 
-- **Antrean offline** di lapangan: tandai lokasi saat tidak ada sinyal lalu kirim otomatis saat pulih, tanpa data ganda.
+- ❌ Antrean offline di lapangan: tidak dibuat (lihat catatan lokasi survei di atas).
 - **Lembar analisa 8 bagian**, **persetujuan komite**, dan **realisasi**: uji kewenangan dengan nominal sungguhan (batas jenjang, BMPK), jejak audit tiap keputusan, dan izin per peran.
 - **Kewenangan komite yang dapat diatur terpusat** (lihat catatan di bagian saran peningkatan): uji perubahan satu angka merambat ke semua jalur yang memakainya.
 - **Terjemahan UI ke bahasa Indonesia** per layar: uji tampilan teks panjang dan pesan validasi campuran.
