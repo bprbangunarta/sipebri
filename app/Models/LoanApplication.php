@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -51,6 +52,7 @@ use Illuminate\Support\Carbon;
  * @property-read Method|null $method
  * @property-read Installment|null $installment
  * @property-read CommitteePath|null $committeePath
+ * @property-read LoanAnalysis|null $analysis
  */
 #[Fillable([
     'application_code', 'application_date', 'status', 'nik', 'full_name', 'cif_number', 'office_id', 'product_id', 'institution_id',
@@ -127,6 +129,14 @@ class LoanApplication extends Model
     public function method(): BelongsTo
     {
         return $this->belongsTo(Method::class);
+    }
+
+    /**
+     * @return HasOne<LoanAnalysis, $this>
+     */
+    public function analysis(): HasOne
+    {
+        return $this->hasOne(LoanAnalysis::class);
     }
 
     /**

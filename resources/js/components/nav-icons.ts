@@ -22,6 +22,10 @@ import {
     Landmark,
     Settings,
     ScrollText,
+    ClipboardList,
+    MessagesSquare,
+    ShieldCheck,
+    Store,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -48,6 +52,10 @@ const icons: Record<string, LucideIcon> = {
     'map-pin': MapPin,
     landmark: Landmark,
     'scroll-text': ScrollText,
+    store: Store,
+    'shield-check': ShieldCheck,
+    messages: MessagesSquare,
+    'clipboard-list': ClipboardList,
 };
 
 /** Sidebar icons are named by the server; add new ones here. */

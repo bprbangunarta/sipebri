@@ -18,7 +18,10 @@ export default function Login() {
                         S
                     </span>
                     <h1 className="text-base font-semibold">SIPEBRI</h1>
-                    <p className="text-xs text-muted">Masuk ke akun Anda</p>
+                    <p className="text-center text-xs text-muted">
+                        Silakan masuk menggunakan akun Anda dengan email atau
+                        username dan kata sandi yang telah terdaftar.
+                    </p>
                 </div>
                 <Card className="p-4">
                     <Form
@@ -29,7 +32,7 @@ export default function Login() {
                         {({ errors, processing }) => (
                             <>
                                 <Field
-                                    label="Nama pengguna"
+                                    label="Kredensial"
                                     error={errors.username}
                                 >
                                     <Input
@@ -39,7 +42,7 @@ export default function Login() {
                                         autoFocus
                                         required
                                         aria-invalid={!!errors.username}
-                                        placeholder="Username Codex Anda"
+                                        placeholder="Email atau Username"
                                     />
                                 </Field>
                                 <Field
@@ -51,6 +54,7 @@ export default function Login() {
                                         autoComplete="current-password"
                                         required
                                         aria-invalid={!!errors.password}
+                                        placeholder="************************"
                                     />
                                 </Field>
                                 <label className="flex items-center gap-2 text-xs text-muted">

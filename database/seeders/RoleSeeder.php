@@ -100,7 +100,7 @@ class RoleSeeder extends Seeder
         'Kepala Kantor Kas' => ['credit-analysis.view'],
         'Customer Service' => ['credit-analysis.view'],
         'Teller' => ['credit-analysis.view'],
-        'Kepala Seksi Analis' => ['surveys.view', 'surveys.manage', 'approvals.view'],
+        'Kepala Seksi Analis' => ['surveys.view', 'surveys.manage', 'credit-analysis.view', 'approvals.view'],
         'Kepala Bagian Analis' => ['surveys.view', 'surveys.manage', 'approvals.view'],
         'Direktur Bisnis' => ['surveys.view', 'surveys.manage', 'approvals.view'],
         'Direktur Utama' => ['surveys.view', 'surveys.manage', 'approvals.view'],

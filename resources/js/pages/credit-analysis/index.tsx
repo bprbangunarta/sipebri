@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { ClipboardCheck } from 'lucide-react';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
@@ -23,6 +23,7 @@ type Row = {
     requested_tenor: number;
     surveyed: boolean;
     collaterals_count: number;
+    in_analysis: boolean;
 };
 type Filters = {
     search: string;
@@ -107,6 +108,15 @@ export default function AnalysisIndex({
             ),
         },
         {
+            key: 'stage',
+            header: 'Tahap',
+            cell: (l) => (
+                <Badge tone={l.in_analysis ? 'info' : 'neutral'}>
+                    {l.in_analysis ? 'Dalam analisa' : 'Siap dianalisa'}
+                </Badge>
+            ),
+        },
+        {
             key: 'collateral',
             header: 'Jaminan',
             align: 'right',
@@ -121,7 +131,7 @@ export default function AnalysisIndex({
             <Head title="Analisa Kredit" />
             <PageHeader
                 title="Analisa Kredit"
-                description="Berkas hasil survei yang ditugaskan kepada Anda dan siap dianalisa"
+                description="Berkas hasil survei yang ditugaskan kepada Anda. Buka satu berkas untuk mengisi lembar analisanya"
             />
 
             <DataTable
@@ -130,6 +140,7 @@ export default function AnalysisIndex({
                 loading={loading}
                 error={error}
                 onRetry={() => visit({})}
+                onRowClick={(l) => router.visit(`/credit-analysis/${l.id}`)}
                 toolbar={
                     <FilterBar
                         search={

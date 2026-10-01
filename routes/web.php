@@ -1,6 +1,12 @@
 <?php
 
 use App\Enums\RoleName;
+use App\Http\Controllers\AnalysisAdministrationController;
+use App\Http\Controllers\AnalysisAssessmentController;
+use App\Http\Controllers\AnalysisBusinessController;
+use App\Http\Controllers\AnalysisCollateralController;
+use App\Http\Controllers\AnalysisFinanceController;
+use App\Http\Controllers\AnalysisMemorandumController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
@@ -96,7 +102,22 @@ Route::middleware('auth')->group(function () {
         Route::post('surveys/{loanApplication}', [SurveyController::class, 'store'])->name('surveys.store');
     });
 
-    Route::get('credit-analysis', [CreditAnalysisController::class, 'index'])->middleware('permission:credit-analysis.view')->name('credit-analysis.index');
+    Route::middleware('permission:credit-analysis.view')->prefix('credit-analysis')->name('credit-analysis.')->group(function () {
+        Route::get('/', [CreditAnalysisController::class, 'index'])->name('index');
+        Route::get('{loanApplication}', [CreditAnalysisController::class, 'show'])->name('show');
+        Route::post('{loanApplication}/submit', [CreditAnalysisController::class, 'submit'])->name('submit');
+        Route::put('{loanApplication}/memorandum', [AnalysisMemorandumController::class, 'update'])->name('memorandum.update');
+        Route::put('{loanApplication}/administration', [AnalysisAdministrationController::class, 'update'])->name('administration.update');
+        Route::put('{loanApplication}/collaterals', [AnalysisCollateralController::class, 'update'])->name('collaterals.update');
+        Route::put('{loanApplication}/finance', [AnalysisFinanceController::class, 'updateFinance'])->name('finance.update');
+        Route::put('{loanApplication}/ownership', [AnalysisFinanceController::class, 'updateOwnership'])->name('ownership.update');
+        Route::put('{loanApplication}/five-c', [AnalysisAssessmentController::class, 'updateFiveC'])->name('five-c.update');
+        Route::put('{loanApplication}/qualitative', [AnalysisAssessmentController::class, 'updateQualitative'])->name('qualitative.update');
+        Route::post('{loanApplication}/businesses', [AnalysisBusinessController::class, 'store'])->name('businesses.store');
+        Route::get('{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'show'])->name('businesses.show');
+        Route::put('{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'update'])->name('businesses.update');
+        Route::delete('{loanApplication}/businesses/{business}', [AnalysisBusinessController::class, 'destroy'])->name('businesses.destroy');
+    });
     Route::get('approvals', [ApprovalController::class, 'index'])->middleware('permission:approvals.view')->name('approvals.index');
 
     // Reference data and access management belong to Super Admin only (a role check, not per-module permissions).
