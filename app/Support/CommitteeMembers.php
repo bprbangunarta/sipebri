@@ -14,11 +14,35 @@ use Illuminate\Database\Eloquent\Builder;
 class CommitteeMembers
 {
     /**
-     * @return list<string> the roles that appear in any committee tier
+     * Every role that decides in some tier, committee or individual. Used to recognise an applicant who could decide.
+     *
+     * @return list<string>
      */
     public static function roles(): array
     {
         return array_values(CommitteeTier::query()->distinct()->pluck('role')->all());
+    }
+
+    /**
+     * Roles that sit in a committee proper: they appear in a tier that is not an individual authority.
+     *
+     * @return list<string>
+     */
+    public static function committeeRoles(): array
+    {
+        return array_values(CommitteeTier::query()->where('is_individual', false)->distinct()->pluck('role')->all());
+    }
+
+    /**
+     * The people of the committees only (the analyst staff, who decide alone, are left out).
+     *
+     * @return Builder<User>
+     */
+    public static function committee(): Builder
+    {
+        $roles = self::committeeRoles();
+
+        return $roles === [] ? User::query()->whereRaw('1 = 0') : User::query()->role($roles);
     }
 
     /**

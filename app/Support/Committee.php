@@ -195,8 +195,9 @@ class Committee
                 'Cancel' => $tier->can_cancel,
                 'Reject' => $tier->can_reject,
             ])),
+            'individual' => $tier->is_individual,
             'status' => $status,
-            'status_label' => self::STATUS_LABELS[$status],
+            'status_label' => $tier->is_individual && $status === 'decider' ? 'Decides (file holder)' : self::STATUS_LABELS[$status],
             'user_count' => User::role($tier->role)->count(),
         ];
     }

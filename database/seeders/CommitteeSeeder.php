@@ -22,20 +22,13 @@ class CommitteeSeeder extends Seeder
 
     private const HIERARCHY_PRODUCTS = ['KUP', 'KKO'];
 
-    /** [label, role, min, max, escalate, approve, cancel, reject] */
+    /** [label, role, min, max, escalate, approve, cancel, reject, individual] */
     private const PLAFON_TIERS = [
-        ['Section', RoleName::AnalysisSectionHead->value, 1000, 35_000_000, true, true, true, true],
-        ['Committee I', RoleName::AnalysisDepartmentHead->value, 35_000_001, 100_000_000, true, true, true, true],
-        ['Committee II', RoleName::BusinessDirector->value, 100_000_001, 300_000_000, true, true, true, true],
-        ['Committee III', RoleName::PresidentDirector->value, 300_000_001, null, false, true, true, true],
-    ];
-
-    /** [label, role, escalate, approve, cancel, reject] */
-    private const HIERARCHY_TIERS = [
-        ['Section', RoleName::AnalysisSectionHead->value, true, false, false, false],
-        ['Committee I', RoleName::AnalysisDepartmentHead->value, true, false, false, false],
-        ['Committee II', RoleName::BusinessDirector->value, true, false, false, false],
-        ['Committee III', RoleName::PresidentDirector->value, false, true, true, true],
+        ['Staff', RoleName::Analyst->value, 1000, 10_000_000, true, true, true, true, true],
+        ['Section', RoleName::AnalysisSectionHead->value, 10_000_001, 35_000_000, true, true, true, true, false],
+        ['Committee I', RoleName::AnalysisDepartmentHead->value, 35_000_001, 100_000_000, true, true, true, true, false],
+        ['Committee II', RoleName::BusinessDirector->value, 100_000_001, 300_000_000, true, true, true, true, false],
+        ['Committee III', RoleName::PresidentDirector->value, 300_000_001, null, false, true, true, true, false],
     ];
 
     public function run(): void
@@ -65,8 +58,8 @@ class CommitteeSeeder extends Seeder
 
         $path = CommitteePath::create(['product_id' => null, 'condition' => '(DEFAULT)', 'mechanism' => 'plafon', 'is_active' => false, 'is_default' => true, 'note' => 'Authority levels shared by every path that follows the defaults.']);
 
-        foreach (self::PLAFON_TIERS as $i => [$label, $role, $min, $max, $escalate, $approve, $cancel, $reject]) {
-            $path->tiers()->create(['sort' => $i + 1, 'label' => $label, 'role' => $role, 'min_amount' => $min, 'max_amount' => $max, 'can_escalate' => $escalate, 'can_approve' => $approve, 'can_cancel' => $cancel, 'can_reject' => $reject]);
+        foreach (self::PLAFON_TIERS as $i => [$label, $role, $min, $max, $escalate, $approve, $cancel, $reject, $individual]) {
+            $path->tiers()->create(['sort' => $i + 1, 'label' => $label, 'role' => $role, 'is_individual' => $individual, 'min_amount' => $min, 'max_amount' => $max, 'can_escalate' => $escalate, 'can_approve' => $approve, 'can_cancel' => $cancel, 'can_reject' => $reject]);
         }
     }
 
@@ -86,23 +79,7 @@ class CommitteeSeeder extends Seeder
         }
 
         // A path created here starts on the shared default levels (adjust them once, every follower changes).
-        if (CommitteeLevels::defaultPath() !== null) {
-            $path->forceFill(['follows_default' => true])->save();
-            CommitteeLevels::attach($path);
-
-            return;
-        }
-
-        if ($mechanism === 'plafon') {
-            foreach (self::PLAFON_TIERS as $i => [$label, $role, $min, $max, $escalate, $approve, $cancel, $reject]) {
-                $path->tiers()->create(['sort' => $i + 1, 'label' => $label, 'role' => $role, 'min_amount' => $min, 'max_amount' => $max, 'can_escalate' => $escalate, 'can_approve' => $approve, 'can_cancel' => $cancel, 'can_reject' => $reject]);
-            }
-
-            return;
-        }
-
-        foreach (self::HIERARCHY_TIERS as $i => [$label, $role, $escalate, $approve, $cancel, $reject]) {
-            $path->tiers()->create(['sort' => $i + 1, 'label' => $label, 'role' => $role, 'can_escalate' => $escalate, 'can_approve' => $approve, 'can_cancel' => $cancel, 'can_reject' => $reject]);
-        }
+        $path->forceFill(['follows_default' => true])->save();
+        CommitteeLevels::attach($path);
     }
 }

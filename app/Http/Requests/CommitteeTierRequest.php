@@ -17,6 +17,7 @@ class CommitteeTierRequest extends FormRequest
             'role' => ['required', 'string', Rule::exists('roles', 'name')],
             'min_amount' => ['nullable', 'integer', 'min:0'],
             'max_amount' => ['nullable', 'integer', 'min:0', 'gte:min_amount'],
+            'is_individual' => ['boolean'],
             'can_escalate' => ['boolean'],
             'can_approve' => ['boolean'],
             'can_cancel' => ['boolean'],

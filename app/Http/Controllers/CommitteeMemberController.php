@@ -25,7 +25,7 @@ class CommitteeMemberController extends Controller
             'per_page' => ['nullable', 'integer'],
         ]);
 
-        $members = CommitteeMembers::query()->with(['roles:id,name', 'office:id,alias,name'])
+        $members = CommitteeMembers::committee()->with(['roles:id,name', 'office:id,alias,name'])
             ->when($filters['search'] ?? null, function ($q, string $term) {
                 $like = '%'.addcslashes($term, '%_\\').'%';
                 $q->where(fn ($w) => $w->where('name', 'like', $like)->orWhere('username', 'like', $like));
@@ -41,8 +41,8 @@ class CommitteeMemberController extends Controller
                 'office' => $u->office?->alias, 'nik' => CommitteeMembers::mask($u->nik), 'nik_source' => $u->nik_source,
             ]),
             'filters' => ['search' => $filters['search'] ?? '', 'role' => $filters['role'] ?? null, 'per_page' => $members->perPage()],
-            'roles' => CommitteeMembers::roles(),
-            'withoutNik' => CommitteeMembers::query()->whereNull('nik_hash')->count(),
+            'roles' => CommitteeMembers::committeeRoles(),
+            'withoutNik' => CommitteeMembers::committee()->whereNull('nik_hash')->count(),
         ]);
     }
 

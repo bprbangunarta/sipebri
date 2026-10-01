@@ -59,6 +59,45 @@ class CommitteeController extends Controller
         ]);
     }
 
+    /** The mechanisms that decide who may approve a loan, as a list; each one opens its configuration. */
+    public function mechanism(): Response
+    {
+        $paths = CommitteePath::query()->where('is_default', false)->get();
+        $own = fn (string $mechanism): int => $paths->where('mechanism', $mechanism)->where('follows_default', false)->count();
+
+        return Inertia::render('committees/mechanism', [
+            'items' => [
+                ['key' => 'plafon', 'name' => 'Authority by amount', 'summary' => 'The loan amount picks the level that decides.', 'paths' => $paths->where('mechanism', 'plafon')->count(), 'own' => $own('plafon')],
+                ['key' => 'hierarki', 'name' => 'Committee hierarchy', 'summary' => 'The file climbs every committee; only the last one decides.', 'paths' => $paths->where('mechanism', 'hierarki')->count(), 'own' => $own('hierarki')],
+                ['key' => 'conflict', 'name' => 'Applicant is a committee member', 'summary' => 'Nobody decides their own file; the level above takes over.', 'paths' => null, 'own' => null],
+            ],
+        ]);
+    }
+
+    /** The configuration behind one mechanism, from the live rules. */
+    public function mechanismShow(string $key): Response
+    {
+        abort_unless(in_array($key, ['plafon', 'hierarki', 'conflict'], true), 404);
+
+        $default = CommitteeLevels::defaultPath();
+        $levels = ($default !== null ? $default->tiers : collect())
+            ->reject(fn (CommitteeTier $t): bool => $key === 'hierarki' && $t->is_individual)
+            ->map(fn (CommitteeTier $t): array => [
+                ...$t->only(['id', 'sort', 'label', 'role', 'is_individual', 'min_amount', 'max_amount', 'can_escalate', 'can_approve', 'can_cancel', 'can_reject']),
+                'people' => User::role($t->role)->count(),
+            ])->values();
+
+        return Inertia::render('committees/mechanism-show', [
+            'mechanismKey' => $key,
+            'defaultId' => $default?->id,
+            'levels' => $key === 'conflict' ? [] : $levels,
+            'paths' => $key === 'conflict' ? [] : CommitteePath::with('product')->where('is_default', false)->where('mechanism', $key)->get()
+                ->map(fn (CommitteePath $p): array => ['id' => $p->id, 'title' => $p->title(), 'follows_default' => $p->follows_default, 'is_active' => $p->is_active])->values(),
+            'members' => $key === 'conflict' ? ['total' => CommitteeMembers::query()->count(), 'withoutNik' => CommitteeMembers::query()->whereNull('nik_hash')->count()] : null,
+            'canManage' => true,
+        ]);
+    }
+
     /** Who decides for a given product, condition and amount. Reads rules only. */
     public function authority(Request $request): JsonResponse
     {

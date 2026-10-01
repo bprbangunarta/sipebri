@@ -25,6 +25,7 @@ type Tier = {
     sort: number;
     label: string | null;
     role: string;
+    is_individual: boolean;
     min_amount: number | null;
     max_amount: number | null;
     can_escalate: boolean;
@@ -56,6 +57,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
     const form = useForm({
         label: '',
         role: '',
+        is_individual: false,
         min_amount: '' as string | number,
         max_amount: '' as string | number,
         can_escalate: false,
@@ -72,6 +74,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                 ? {
                       label: '',
                       role: '',
+                      is_individual: false,
                       min_amount: '',
                       max_amount: '',
                       can_escalate: false,
@@ -82,6 +85,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                 : {
                       label: tier.label ?? '',
                       role: tier.role,
+                      is_individual: tier.is_individual,
                       min_amount: tier.min_amount ?? '',
                       max_amount: tier.max_amount ?? '',
                       can_escalate: tier.can_escalate,
@@ -120,7 +124,16 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
             className: 'font-medium',
             cell: (t) => t.label ?? '–',
         },
-        { key: 'role', header: 'Deciding role', cell: (t) => t.role },
+        {
+            key: 'role',
+            header: 'Deciding role',
+            cell: (t) => (
+                <span className="flex flex-wrap items-center gap-1.5">
+                    {t.role}
+                    {t.is_individual && <Badge tone="info">Individual</Badge>}
+                </span>
+            ),
+        },
         ...(byAmount
             ? [
                   {
@@ -355,6 +368,27 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                                 invalid={!!form.errors.role}
                             />
                         </Field>
+                        <label className="flex items-start gap-2 text-sm">
+                            <input
+                                type="checkbox"
+                                className="mt-0.5 accent-primary"
+                                checked={form.data.is_individual}
+                                onChange={(e) =>
+                                    form.setData(
+                                        'is_individual',
+                                        e.target.checked,
+                                    )
+                                }
+                            />
+                            <span>
+                                Individual authority
+                                <span className="block text-xs text-muted">
+                                    The person who holds the file decides, not a
+                                    committee. Its holders are not listed as
+                                    committee members.
+                                </span>
+                            </span>
+                        </label>
                         {byAmount && (
                             <div className="grid grid-cols-2 gap-3">
                                 <Field

@@ -31,8 +31,9 @@ class CommitteeLevels
             return;
         }
 
-        $levels = $default->tiers()->get();
         $hierarchy = $path->mechanism !== 'plafon';
+        // A hierarchy path climbs committees only; an individual authority (the file holder) has no seat in it.
+        $levels = $default->tiers()->get()->reject(fn (CommitteeTier $level): bool => $hierarchy && $level->is_individual)->values();
 
         DB::transaction(function () use ($path, $levels, $hierarchy): void {
             $path->tiers()->get()->each(fn (CommitteeTier $tier) => $tier->delete());
@@ -41,7 +42,7 @@ class CommitteeLevels
                 $last = $i === $levels->count() - 1;
 
                 $path->tiers()->create([
-                    'sort' => $level->sort, 'label' => $level->label, 'role' => $level->role,
+                    'sort' => $level->sort, 'label' => $level->label, 'role' => $level->role, 'is_individual' => $level->is_individual,
                     'min_amount' => $hierarchy ? null : $level->min_amount,
                     'max_amount' => $hierarchy ? null : $level->max_amount,
                     'can_escalate' => $hierarchy ? ! $last : $level->can_escalate,

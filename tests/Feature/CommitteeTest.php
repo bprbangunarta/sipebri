@@ -24,11 +24,11 @@ it('picks the tier whose amount range covers the loan on an amount path', functi
     $small = Committee::resolve($kru->id, null, 20_000_000);
     expect($small['found'])->toBeTrue()
         ->and($small['decider']['role'])->toBe('Kepala Seksi Analis')
-        ->and($small['chain'][1]['status'])->toBe('not_needed');
+        ->and($small['chain'][2]['status'])->toBe('not_needed');
 
     $large = Committee::resolve($kru->id, null, 500_000_000);
     expect($large['decider']['role'])->toBe('Direktur Utama')
-        ->and(collect($large['chain'])->pluck('status')->all())->toBe(['escalate', 'escalate', 'escalate', 'decider']);
+        ->and(collect($large['chain'])->pluck('status')->all())->toBe(['escalate', 'escalate', 'escalate', 'escalate', 'decider']);
 });
 
 it('requires climbing every tier on a hierarchy path', function () {
@@ -69,7 +69,7 @@ it('serves the authority check as json and validates the amount', function () {
 
     $this->getJson(route('committees.authority', ['amount' => 5_000_000]))->assertOk()->assertJsonPath('found', false);
     $this->getJson(route('committees.authority', ['amount' => -1]))->assertUnprocessable();
-    $this->getJson(route('committees.authority', ['product_id' => Product::first()->id, 'amount' => 5_000_000]))->assertOk()->assertJsonPath('decider.role', 'Kepala Seksi Analis');
+    $this->getJson(route('committees.authority', ['product_id' => Product::first()->id, 'amount' => 20_000_000]))->assertOk()->assertJsonPath('decider.role', 'Kepala Seksi Analis');
 });
 
 it('manages paths and tiers', function () {
@@ -113,7 +113,7 @@ it('copies tiers from another path and restricts access to Super Admin', functio
     $source = CommitteePath::where('product_id', $kru->id)->firstOrFail();
 
     $this->post(route('committees.store'), ['condition' => 'copy', 'mechanism' => 'plafon', 'copy_from' => $source->id]);
-    expect(CommitteePath::firstWhere('condition', 'COPY')->tiers()->count())->toBe(4);
+    expect(CommitteePath::firstWhere('condition', 'COPY')->tiers()->count())->toBe(5);
 
     $this->get(route('committees.index'))->assertInertia(fn (Assert $page) => $page->component('committees/index'));
 

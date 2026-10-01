@@ -15,19 +15,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $role Spatie role that holds the decision authority.
  * @property int|null $min_amount
  * @property int|null $max_amount
+ * @property bool $is_individual The file holder decides (e.g. analyst staff); not a sitting committee.
  * @property bool $can_escalate
  * @property bool $can_approve
  * @property bool $can_cancel
  * @property bool $can_reject
  */
-#[Fillable(['committee_path_id', 'sort', 'label', 'role', 'min_amount', 'max_amount', 'can_escalate', 'can_approve', 'can_cancel', 'can_reject'])]
+#[Fillable(['committee_path_id', 'sort', 'label', 'role', 'is_individual', 'min_amount', 'max_amount', 'can_escalate', 'can_approve', 'can_cancel', 'can_reject'])]
 class CommitteeTier extends Model
 {
     use Auditable;
 
     protected function casts(): array
     {
-        return ['can_escalate' => 'boolean', 'can_approve' => 'boolean', 'can_cancel' => 'boolean', 'can_reject' => 'boolean'];
+        return ['is_individual' => 'boolean', 'can_escalate' => 'boolean', 'can_approve' => 'boolean', 'can_cancel' => 'boolean', 'can_reject' => 'boolean'];
     }
 
     /**

@@ -116,6 +116,7 @@ class Navigation
                 ['label' => 'Data Komite', 'icon' => 'gavel', 'children' => [
                     ['label' => 'Anggota', 'icon' => 'dot', 'route' => 'committees.members', 'role' => RoleName::SuperAdmin->value],
                     ['label' => 'Jenjang', 'icon' => 'dot', 'route' => 'committees.index', 'role' => RoleName::SuperAdmin->value],
+                    ['label' => 'Mekanisme', 'icon' => 'dot', 'route' => 'committees.mechanism', 'role' => RoleName::SuperAdmin->value],
                 ]],
             ]],
             ['label' => 'Pengaturan', 'items' => [
