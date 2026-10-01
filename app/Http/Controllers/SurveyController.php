@@ -98,20 +98,20 @@ class SurveyController extends Controller
         $this->authorizeSurveyor($request, $loanApplication);
 
         if ($loanApplication->status !== LoanStatus::Scheduling) {
-            return back()->with('error', 'The survey result is locked.');
+            return back()->with('error', 'Hasil survei sudah terkunci.');
         }
 
         $data = $request->validate([
             'photo' => ['required', 'image', 'max:8192'],
             'collateral_id' => ['nullable', 'integer'],
-        ], [], ['photo' => 'photo']);
+        ], [], ['photo' => 'foto']);
 
         // A photo belongs to the survey location (no collateral) or to one collateral of the file.
         $collateralId = isset($data['collateral_id']) ? $loanApplication->collaterals()->whereKey((int) $data['collateral_id'])->firstOrFail()->id : null;
         $max = (int) config('credit.max_survey_photos');
 
         if ($loanApplication->photos()->whereNull('loan_survey_id')->where('collateral_id', $collateralId)->count() >= $max) {
-            return back()->with('error', "At most {$max} photos for each place.");
+            return back()->with('error', "Maksimal {$max} foto untuk tiap tempat.");
         }
 
         $file = $request->file('photo');
@@ -127,7 +127,7 @@ class SurveyController extends Controller
             'created_by' => $request->user()->name,
         ]);
 
-        return back()->with('success', 'Photo saved.');
+        return back()->with('success', 'Foto berhasil disimpan.');
     }
 
     public function destroyPhoto(Request $request, LoanApplication $loanApplication, LoanSurveyPhoto $photo): RedirectResponse
@@ -135,13 +135,13 @@ class SurveyController extends Controller
         $this->authorizeSurveyor($request, $loanApplication);
 
         if ($loanApplication->status !== LoanStatus::Scheduling || $photo->loan_survey_id !== null) {
-            return back()->with('error', 'Photos of a saved survey cannot be deleted.');
+            return back()->with('error', 'Foto dari survei yang sudah disimpan tidak bisa dihapus.');
         }
 
         LoanSurveyPhoto::disk()->delete($photo->path);
         $photo->delete();
 
-        return back()->with('success', 'Photo deleted.');
+        return back()->with('success', 'Foto berhasil dihapus.');
     }
 
     /** Save the survey result: the file becomes "survey" and is locked. */
@@ -150,21 +150,21 @@ class SurveyController extends Controller
         $this->authorizeSurveyor($request, $loanApplication);
 
         if ($loanApplication->status !== LoanStatus::Scheduling) {
-            return back()->with('error', 'The survey result is locked.');
+            return back()->with('error', 'Hasil survei sudah terkunci.');
         }
 
         $photos = $loanApplication->photos()->whereNull('loan_survey_id')->get();
 
         // The survey location is mandatory: its position and at least one photo. Collateral positions and photos are optional.
         if ($loanApplication->survey_latitude === null) {
-            return back()->with('error', 'Mark the survey location before saving.');
+            return back()->with('error', 'Tandai lokasi survei sebelum menyimpan.');
         }
 
         if ($photos->whereNull('collateral_id')->isEmpty()) {
-            return back()->with('error', 'Upload at least one photo of the survey location before saving.');
+            return back()->with('error', 'Unggah minimal satu foto lokasi survei sebelum menyimpan.');
         }
 
-        $data = $request->validate(['note' => ['nullable', 'string', 'max:500']], [], ['note' => 'survey note']);
+        $data = $request->validate(['note' => ['nullable', 'string', 'max:500']], [], ['note' => 'catatan survei']);
 
         $survey = LoanSurvey::create([
             'loan_application_id' => $loanApplication->id,
@@ -189,15 +189,15 @@ class SurveyController extends Controller
             'survey_latitude' => null, 'survey_longitude' => null, 'survey_source' => null, 'survey_located_at' => null, 'survey_located_by' => null, 'survey_address' => null,
         ]);
 
-        Notify::toUser($request->user(), 'File ready for analysis', 'Survey', "Survey of file {$loanApplication->application_code} is done; it now appears under Analysis.", '/credit-analysis');
+        Notify::toUser($request->user(), 'Berkas siap dianalisa', 'Survei', "Survei berkas {$loanApplication->application_code} selesai; berkas kini muncul di Analisa Kredit.", '/credit-analysis');
 
-        return back()->with('success', 'Survey saved. The file is now ready for analysis.');
+        return back()->with('success', 'Survei berhasil disimpan. Berkas kini siap dianalisa.');
     }
 
     /** Only the assigned surveyor may open the worksheet. */
     private function authorizeSurveyor(Request $request, LoanApplication $loan): void
     {
-        abort_unless($loan->surveyor_id === $request->user()->id, 403, 'This file is not assigned to you.');
+        abort_unless($loan->surveyor_id === $request->user()->id, 403, 'Berkas ini tidak ditugaskan kepada Anda.');
     }
 
     /**

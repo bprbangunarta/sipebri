@@ -1,4 +1,5 @@
 import { format, parseISO } from 'date-fns';
+import { id as idLocale } from 'date-fns/locale';
 import { CalendarDays } from 'lucide-react';
 import { useState } from 'react';
 import { DayPicker } from 'react-day-picker';
@@ -52,7 +53,7 @@ export function DatePicker({
                     className={cn(controlClass, 'flex items-center justify-between text-left')}
                 >
                     <span className={cn(!selected && 'text-muted/70')}>
-                        {selected ? format(selected, 'dd MMM yyyy') : placeholder}
+                        {selected ? format(selected, 'dd MMM yyyy', { locale: idLocale }) : placeholder}
                     </span>
                     <CalendarDays className="size-3.5 text-muted" />
                 </button>
@@ -60,6 +61,7 @@ export function DatePicker({
             <PopoverContent className="w-fit p-1.5">
                 <DayPicker
                     mode="single"
+                    locale={idLocale}
                     captionLayout="dropdown"
                     startMonth={min}
                     endMonth={max}

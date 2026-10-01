@@ -143,14 +143,14 @@ it('needs the survey location and a photo of it before the survey can be saved, 
     [$analyst, $loan, $collateral] = surveyFile();
     $this->actingAs($analyst);
 
-    $this->post(route('surveys.store', $loan), [])->assertSessionHas('error', 'Mark the survey location before saving.');
+    $this->post(route('surveys.store', $loan), [])->assertSessionHas('error', 'Tandai lokasi survei sebelum menyimpan.');
 
     $this->post(route('surveys.locations.store', $loan), ['target' => 'survey', 'coordinates' => '-6.4, 107.8']);
-    $this->post(route('surveys.store', $loan), [])->assertSessionHas('error', 'Upload at least one photo of the survey location before saving.');
+    $this->post(route('surveys.store', $loan), [])->assertSessionHas('error', 'Unggah minimal satu foto lokasi survei sebelum menyimpan.');
 
     // A collateral photo does not stand in for the survey location photo.
     $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('c.jpg'), 'collateral_id' => $collateral->id])->assertSessionHasNoErrors();
-    $this->post(route('surveys.store', $loan), [])->assertSessionHas('error', 'Upload at least one photo of the survey location before saving.');
+    $this->post(route('surveys.store', $loan), [])->assertSessionHas('error', 'Unggah minimal satu foto lokasi survei sebelum menyimpan.');
 
     $this->post(route('surveys.photos.store', $loan), ['photo' => UploadedFile::fake()->image('s.jpg')])->assertSessionHasNoErrors();
     $this->post(route('surveys.store', $loan), ['note' => 'done'])->assertSessionHas('success');

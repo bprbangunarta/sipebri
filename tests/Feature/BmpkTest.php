@@ -33,7 +33,7 @@ it('refuses a loan above the BMPK even when the product allows more', function (
     $loan = LoanApplication::create(['application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A', 'created_by' => $officer->id]);
 
     $this->put(route('loan-applications.update', $loan), loanPayload($s, ['requested_amount' => 2_000_000_001]))
-        ->assertSessionHasErrors(['requested_amount' => 'The loan amount exceeds the legal lending limit (BMPK) of Rp2.000.000.000.']);
+        ->assertSessionHasErrors(['requested_amount' => 'Plafon melebihi batas maksimum pemberian kredit (BMPK) sebesar Rp2.000.000.000.']);
     $this->put(route('loan-applications.update', $loan), loanPayload($s, ['requested_amount' => 2_000_000_000]))->assertSessionHasNoErrors();
 });
 
@@ -44,7 +44,7 @@ it('keeps the stricter product limit when it is below the BMPK', function () {
     $loan = LoanApplication::create(['application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A', 'created_by' => $officer->id]);
 
     $this->put(route('loan-applications.update', $loan), loanPayload($s, ['requested_amount' => 60_000_000]))
-        ->assertSessionHasErrors(['requested_amount' => 'The maximum loan amount is Rp50.000.000 for this product.']);
+        ->assertSessionHasErrors(['requested_amount' => 'Plafon maksimum untuk produk ini adalah Rp50.000.000.']);
 });
 
 it('lets only Super Admin change the BMPK, and records the change', function () {

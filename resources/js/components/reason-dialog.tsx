@@ -14,7 +14,7 @@ export function ReasonDialog({
     action,
     confirmLabel,
     onClose,
-    fieldLabel = 'Reason',
+    fieldLabel = 'Alasan',
     hint,
     tone = 'danger',
     extra,
@@ -75,7 +75,7 @@ export function ReasonDialog({
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>
-                        Back
+                        Kembali
                     </Button>
                     <Button
                         type="submit"

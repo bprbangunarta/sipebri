@@ -33,11 +33,11 @@ function Progress({ row }: { row: Row }) {
         <span className="flex flex-wrap gap-1">
             <Badge tone={row.has_location ? 'success' : 'warning'}>
                 {row.has_location && <Check className="mr-0.5 size-3" />}
-                Location
+                Lokasi
             </Badge>
             <Badge tone={row.survey_photos > 0 ? 'success' : 'warning'}>
                 {row.survey_photos > 0 && <Check className="mr-0.5 size-3" />}
-                Photos {row.survey_photos}
+                Foto {row.survey_photos}
             </Badge>
         </span>
     );
@@ -75,7 +75,7 @@ export default function SurveysIndex({
     const columns: Column<Row>[] = [
         {
             key: 'file',
-            header: 'File',
+            header: 'Berkas',
             cell: (l) => (
                 <>
                     <p className="font-medium">{l.application_code}</p>
@@ -89,7 +89,7 @@ export default function SurveysIndex({
         },
         {
             key: 'applicant',
-            header: 'Applicant',
+            header: 'Pemohon',
             cell: (l) => (
                 <>
                     {l.full_name}
@@ -99,7 +99,7 @@ export default function SurveysIndex({
         },
         {
             key: 'amount',
-            header: 'Amount',
+            header: 'Plafon',
             align: 'right',
             hideBelow: 'md',
             className: 'whitespace-nowrap tabular-nums',
@@ -114,13 +114,13 @@ export default function SurveysIndex({
         },
         {
             key: 'progress',
-            header: 'Progress',
+            header: 'Kemajuan',
             hideBelow: 'sm',
             cell: (l) => <Progress row={l} />,
         },
         {
             key: 'actions',
-            header: 'Actions',
+            header: 'Aksi',
             srOnly: true,
             align: 'right',
             className: 'whitespace-nowrap',
@@ -129,14 +129,14 @@ export default function SurveysIndex({
                     <Tip
                         label={
                             l.has_location
-                                ? 'Mark the location again with your GPS'
-                                : 'Mark the survey location with your GPS'
+                                ? 'Tandai ulang lokasi dengan GPS Anda'
+                                : 'Tandai lokasi survei dengan GPS Anda'
                         }
                     >
                         <Button
                             size="sm"
                             variant="outline"
-                            aria-label={`Mark location of ${l.application_code}`}
+                            aria-label={`Tandai lokasi ${l.application_code}`}
                             disabled={marking !== null}
                             onClick={() => ask(l)}
                         >
@@ -147,8 +147,8 @@ export default function SurveysIndex({
                             )}
                             <span className="hidden sm:inline">
                                 {l.has_location
-                                    ? 'Mark again'
-                                    : 'Mark location'}
+                                    ? 'Tandai ulang'
+                                    : 'Tandai lokasi'}
                             </span>
                         </Button>
                     </Tip>
@@ -165,10 +165,10 @@ export default function SurveysIndex({
 
     return (
         <>
-            <Head title="Surveys" />
+            <Head title="Proses Survey" />
             <PageHeader
-                title="Surveys"
-                description={`Files scheduled for you today, ${formatDate(today)}`}
+                title="Proses Survey"
+                description={`Berkas yang dijadwalkan untuk Anda hari ini, ${formatDate(today)}`}
             />
 
             <DataTable
@@ -183,8 +183,8 @@ export default function SurveysIndex({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search code, name, NIK…"
-                                label="Search files"
+                                placeholder="Cari kode, nama, NIK…"
+                                label="Cari berkas"
                             />
                         }
                     />
@@ -192,24 +192,25 @@ export default function SurveysIndex({
                 columns={columns}
                 empty={{
                     icon: <MapPin />,
-                    title: 'No surveys today',
+                    title: 'Tidak ada survei hari ini',
                     description:
-                        'Files show up here on their scheduled survey date.',
+                        'Berkas tampil di sini pada tanggal surveinya.',
                 }}
             />
 
             <ConfirmDialog
                 open={replace !== null}
                 onOpenChange={(open) => !open && setReplace(null)}
-                title="Replace the saved position?"
+                title="Ganti posisi yang tersimpan?"
                 description={
                     <>
-                        File <strong>{replace?.application_code}</strong>{' '}
-                        already has a survey location from {replace?.located_at}
-                        . Marking again replaces it with your current position.
+                        Berkas <strong>{replace?.application_code}</strong>{' '}
+                        sudah punya lokasi survei dari {replace?.located_at}.
+                        Menandai ulang akan menggantinya dengan posisi Anda saat
+                        ini.
                     </>
                 }
-                confirmLabel="Replace"
+                confirmLabel="Ganti"
                 onConfirm={() => {
                     const l = replace;
                     setReplace(null);

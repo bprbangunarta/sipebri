@@ -23,16 +23,16 @@ enum LoanStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Draft => 'Draft',
-            self::Submitted => 'Submitted',
-            self::Scheduling => 'Scheduled',
-            self::Survey => 'Surveyed',
-            self::Analysis => 'In analysis',
-            self::Committee => 'At committee',
-            self::Approved => 'Approved',
-            self::Rejected => 'Rejected',
-            self::Cancelled => 'Cancelled',
-            self::Disbursed => 'Disbursed',
+            self::Draft => 'Draf',
+            self::Submitted => 'Diajukan',
+            self::Scheduling => 'Dijadwalkan',
+            self::Survey => 'Disurvei',
+            self::Analysis => 'Dalam analisa',
+            self::Committee => 'Di komite',
+            self::Approved => 'Disetujui',
+            self::Rejected => 'Ditolak',
+            self::Cancelled => 'Dibatalkan',
+            self::Disbursed => 'Dicairkan',
         };
     }
 

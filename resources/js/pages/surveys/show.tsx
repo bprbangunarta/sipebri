@@ -94,9 +94,9 @@ type Props = {
 
 const SOURCES: Record<string, string> = {
     gps: 'GPS',
-    paste: 'Pasted',
-    map: 'Map pin',
-    photo: 'Photo GPS',
+    paste: 'Ditempel',
+    map: 'Pin peta',
+    photo: 'GPS foto',
 };
 
 function Section({
@@ -149,8 +149,8 @@ export default function SurveyShow({
         (p) => !p.saved && p.collateral_id === null,
     ).length;
     const missing = [
-        !surveyPlace.location && 'mark the survey location',
-        pendingSurveyPhotos === 0 && 'add a photo of the survey location',
+        !surveyPlace.location && 'tandai lokasi survei',
+        pendingSurveyPhotos === 0 && 'tambahkan foto lokasi survei',
     ].filter(Boolean) as string[];
 
     const pins: Pin[] = useMemo(
@@ -218,15 +218,15 @@ export default function SurveyShow({
 
     return (
         <>
-            <Head title={`Survey ${loan.application_code}`} />
+            <Head title={`Survei ${loan.application_code}`} />
             <PageHeader
-                title={`Survey ${loan.application_code}`}
-                description={`Scheduled ${formatDate(loan.survey_date)}`}
+                title={`Survei ${loan.application_code}`}
+                description={`Dijadwalkan ${formatDate(loan.survey_date)}`}
                 actions={
                     <>
                         {loan.locked && (
                             <Badge tone="success">
-                                <Lock className="mr-1 size-3" /> Saved
+                                <Lock className="mr-1 size-3" /> Tersimpan
                             </Badge>
                         )}
                         {!loan.locked && (
@@ -239,14 +239,14 @@ export default function SurveyShow({
                                 ) : (
                                     <LocateFixed />
                                 )}{' '}
-                                Mark location
+                                Tandai lokasi
                             </Button>
                         )}
                         <Button
                             variant="outline"
                             onClick={() => router.visit('/surveys')}
                         >
-                            <ArrowLeft /> Back
+                            <ArrowLeft /> Kembali
                         </Button>
                     </>
                 }
@@ -254,29 +254,27 @@ export default function SurveyShow({
 
             <div className="grid gap-3 lg:grid-cols-3">
                 <div className="flex flex-col gap-3 lg:col-span-2">
-                    <Section title="Applicant">
+                    <Section title="Pemohon">
                         <dl className="grid gap-3 p-3 sm:grid-cols-2">
-                            <Detail label="Name">{loan.full_name}</Detail>
-                            <Detail label="National ID (NIK)">
+                            <Detail label="Nama">{loan.full_name}</Detail>
+                            <Detail label="NIK (KTP)">
                                 <span className="font-mono">{loan.nik}</span>
                             </Detail>
-                            <Detail label="Address">{customer?.address}</Detail>
-                            <Detail label="Phone">{customer?.phone}</Detail>
-                            <Detail label="Employer">
+                            <Detail label="Alamat">{customer?.address}</Detail>
+                            <Detail label="Telepon">{customer?.phone}</Detail>
+                            <Detail label="Tempat kerja">
                                 {customer?.employer_name}
                             </Detail>
-                            <Detail label="CIF number">
-                                {loan.cif_number}
-                            </Detail>
+                            <Detail label="Nomor CIF">{loan.cif_number}</Detail>
                         </dl>
                     </Section>
 
                     <Section
-                        title="Locations and photos"
+                        title="Lokasi dan foto"
                         action={
                             !loan.locked && (
                                 <span className="text-xs text-muted">
-                                    Required: survey location and its photo
+                                    Wajib: lokasi survei dan fotonya
                                 </span>
                             )
                         }
@@ -325,28 +323,28 @@ export default function SurveyShow({
                 </div>
 
                 <div className="flex flex-col gap-3">
-                    <Section title="Loan request">
+                    <Section title="Permohonan kredit">
                         <dl className="grid gap-3 p-3">
-                            <Detail label="Product">
-                                {loan.product_label}
-                            </Detail>
-                            <Detail label="Amount">
+                            <Detail label="Produk">{loan.product_label}</Detail>
+                            <Detail label="Plafon">
                                 {rupiah(loan.requested_amount)}
                             </Detail>
                             <Detail label="Tenor">
                                 {loan.requested_tenor} months
                             </Detail>
-                            <Detail label="Usage">{loan.usage_type}</Detail>
-                            <Detail label="Section head">
+                            <Detail label="Penggunaan">
+                                {loan.usage_type}
+                            </Detail>
+                            <Detail label="Kasi Analis">
                                 {loan.supervisor_name}
                             </Detail>
-                            <Detail label="Schedule note">
+                            <Detail label="Catatan jadwal">
                                 {loan.schedule_note}
                             </Detail>
                         </dl>
                     </Section>
 
-                    <Section title="Result">
+                    <Section title="Hasil">
                         <form
                             className="flex flex-col gap-3 p-3"
                             onSubmit={(e) => {
@@ -356,7 +354,10 @@ export default function SurveyShow({
                                 });
                             }}
                         >
-                            <Field label="Survey note" error={form.errors.note}>
+                            <Field
+                                label="Catatan survei"
+                                error={form.errors.note}
+                            >
                                 <textarea
                                     className="min-h-20 w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none disabled:opacity-60"
                                     maxLength={500}
@@ -370,9 +371,8 @@ export default function SurveyShow({
                             {loan.locked ? (
                                 survey && (
                                     <p className="text-xs text-muted">
-                                        Saved by {survey.created_by} on{' '}
-                                        {survey.created_at}. The result is
-                                        locked.
+                                        Disimpan oleh {survey.created_by} pada{' '}
+                                        {survey.created_at}. Hasilnya terkunci.
                                     </p>
                                 )
                             ) : (
@@ -383,20 +383,19 @@ export default function SurveyShow({
                                             variant="outline"
                                             onClick={() => setCancelling(true)}
                                         >
-                                            <X /> Cancel and ask for a new
-                                            schedule
+                                            <X /> Batalkan dan minta jadwal baru
                                         </Button>
                                         <Button
                                             type="submit"
                                             loading={form.processing}
                                             disabled={missing.length > 0}
                                         >
-                                            <Check /> Save survey result
+                                            <Check /> Simpan hasil survei
                                         </Button>
                                     </div>
                                     {missing.length > 0 && (
                                         <p className="text-xs text-muted">
-                                            First {missing.join(' and ')}.
+                                            Dahulu {missing.join(' dan ')}.
                                         </p>
                                     )}
                                 </>
@@ -407,12 +406,12 @@ export default function SurveyShow({
             </div>
 
             <ReasonDialog
-                title="Cancel survey"
-                description="Tell the section head why the survey cannot take place as scheduled."
+                title="Batalkan survei"
+                description="Beri tahu Kasi Analis mengapa survei tidak bisa dilaksanakan sesuai jadwal."
                 action={cancelling ? `/scheduling/${loan.id}/cancel` : null}
-                confirmLabel="Send request"
-                fieldLabel="Cancellation reason"
-                hint="The file goes back to the section head to be scheduled again. The earlier schedule history is kept; the position and photos entered for this visit are discarded."
+                confirmLabel="Kirim permintaan"
+                fieldLabel="Alasan pembatalan"
+                hint="Berkas kembali ke Kasi Analis untuk dijadwalkan ulang. Riwayat jadwal sebelumnya tetap ada; posisi dan foto yang dimasukkan untuk kunjungan ini dibuang."
                 tone="primary"
                 extra={{ return: 'surveys' }}
                 onClose={() => setCancelling(false)}
@@ -421,15 +420,15 @@ export default function SurveyShow({
             <ConfirmDialog
                 open={replace !== null}
                 onOpenChange={(open) => !open && setReplace(null)}
-                title="Replace the saved position?"
+                title="Ganti posisi yang tersimpan?"
                 description={
                     <>
-                        <strong>{replace?.label}</strong> already has a position
-                        from {replace?.location?.located_at}. Marking again
-                        replaces it with your current position.
+                        <strong>{replace?.label}</strong> sudah punya posisi
+                        dari {replace?.location?.located_at}. Menandai ulang
+                        akan menggantinya dengan posisi Anda saat ini.
                     </>
                 }
-                confirmLabel="Replace"
+                confirmLabel="Ganti"
                 onConfirm={() => {
                     const place = replace;
                     setReplace(null);
@@ -443,14 +442,14 @@ export default function SurveyShow({
             <ConfirmDialog
                 open={clearing !== null}
                 onOpenChange={(open) => !open && setClearing(null)}
-                title="Remove the position?"
+                title="Hapus posisi?"
                 description={
                     <>
-                        The saved position of <strong>{clearing?.label}</strong>{' '}
-                        is removed.
+                        Posisi tersimpan <strong>{clearing?.label}</strong> akan
+                        dihapus.
                     </>
                 }
-                confirmLabel="Remove"
+                confirmLabel="Hapus"
                 onConfirm={() => {
                     const place = clearing;
                     setClearing(null);
@@ -515,9 +514,9 @@ function PlaceBlock({
                     <p className="flex flex-wrap items-center gap-1.5 text-sm font-medium">
                         {place.label}
                         {required ? (
-                            <Badge tone="info">Required</Badge>
+                            <Badge tone="info">Wajib</Badge>
                         ) : (
-                            <Badge>Optional</Badge>
+                            <Badge>Opsional</Badge>
                         )}
                     </p>
                     {place.detail && (
@@ -537,24 +536,24 @@ function PlaceBlock({
                             ) : (
                                 <LocateFixed />
                             )}{' '}
-                            {loc ? 'Mark again' : 'Mark here'}
+                            {loc ? 'Tandai ulang' : 'Tandai di sini'}
                         </Button>
-                        <Tip label="Enter or fix the position">
+                        <Tip label="Isi atau perbaiki posisi">
                             <Button
                                 size="icon"
                                 variant="ghost"
-                                aria-label={`Edit position of ${place.label}`}
+                                aria-label={`Ubah posisi ${place.label}`}
                                 onClick={onEdit}
                             >
                                 <Pencil />
                             </Button>
                         </Tip>
                         {loc && (
-                            <Tip label="Remove the position">
+                            <Tip label="Hapus posisi">
                                 <Button
                                     size="icon"
                                     variant="ghost"
-                                    aria-label={`Remove position of ${place.label}`}
+                                    aria-label={`Hapus posisi ${place.label}`}
                                     onClick={onClear}
                                 >
                                     <X />
@@ -598,15 +597,15 @@ function PlaceBlock({
                                 : 'text-xs text-muted'
                         }
                     >
-                        {required && <CircleAlert className="size-3.5" />} No
-                        position yet
+                        {required && <CircleAlert className="size-3.5" />} Belum
+                        ada posisi
                     </p>
                 )}
 
                 {loc?.address && (
                     <p
                         className="text-xs text-muted"
-                        title="Approximate address from OpenStreetMap, found from the coordinates. Check it on site."
+                        title="Perkiraan alamat dari OpenStreetMap, berdasarkan koordinat. Cek di lokasi."
                     >
                         ≈ {loc.address}
                     </p>
@@ -626,7 +625,7 @@ function PlaceBlock({
                                 >
                                     <img
                                         src={p.url}
-                                        alt={`Photo of ${place.label}`}
+                                        alt={`Foto ${place.label}`}
                                         className="aspect-square w-full object-cover"
                                     />
                                 </a>
@@ -634,7 +633,7 @@ function PlaceBlock({
                                     <figcaption className="flex justify-end p-1">
                                         <button
                                             type="button"
-                                            aria-label="Delete photo"
+                                            aria-label="Hapus foto"
                                             className="cursor-pointer text-danger"
                                             onClick={() => onDeletePhoto(p.id)}
                                         >
@@ -671,13 +670,11 @@ function PlaceBlock({
                             ) : (
                                 <Camera />
                             )}{' '}
-                            Add photos
+                            Tambah foto
                         </Button>
                         <span className="text-xs text-muted">
-                            {pending}/{maxPhotos} photos
-                            {required &&
-                                pending === 0 &&
-                                ' · at least 1 needed'}
+                            {pending}/{maxPhotos} foto
+                            {required && pending === 0 && ' · minimal 1'}
                         </span>
                     </div>
                 )}
@@ -720,7 +717,7 @@ function EditLocation({
             ? [
                   {
                       key: 'draft',
-                      label: 'New position',
+                      label: 'Posisi baru',
                       latitude: picked.lat,
                       longitude: picked.lng,
                       tone: 'draft',
@@ -751,7 +748,10 @@ function EditLocation({
                 preserveScroll: true,
                 onSuccess: onClose,
                 onError: (errors) =>
-                    form.setError('text', errors.coordinates ?? 'Not saved.'),
+                    form.setError(
+                        'text',
+                        errors.coordinates ?? 'Tidak tersimpan.',
+                    ),
                 onFinish: () => setBusy(false),
             },
         );
@@ -762,8 +762,8 @@ function EditLocation({
             wide
             open={place !== null}
             onOpenChange={(open) => !open && onClose()}
-            title={`Position of ${place?.label ?? ''}`}
-            description="Paste coordinates or a Google Maps link, or click the map to place a pin."
+            title={`Posisi ${place?.label ?? ''}`}
+            description="Tempel koordinat atau tautan Google Maps, atau klik peta untuk memasang pin."
         >
             <form
                 noValidate
@@ -783,9 +783,9 @@ function EditLocation({
             >
                 <div className="flex max-h-[70vh] flex-col gap-3 overflow-y-auto p-4">
                     <Field
-                        label="Coordinates or map link"
+                        label="Koordinat atau tautan peta"
                         error={form.errors.text}
-                        hint="For example -6.4643, 107.8083, or the link of a location shared over WhatsApp."
+                        hint="Contoh -6.4643, 107.8083, atau tautan lokasi yang dibagikan lewat WhatsApp."
                     >
                         <Input
                             autoFocus
@@ -815,7 +815,7 @@ function EditLocation({
                     {withGps.length > 0 && (
                         <div className="flex flex-col gap-1.5">
                             <p className="text-xs font-medium">
-                                Photos that still carry GPS data
+                                Foto yang masih membawa data GPS
                             </p>
                             <div className="flex flex-wrap gap-2">
                                 {withGps.map((p, i) => (
@@ -827,7 +827,7 @@ function EditLocation({
                                         disabled={busy}
                                         onClick={() => send({ photo_id: p.id })}
                                     >
-                                        <MapPin /> Use photo {i + 1} (
+                                        <MapPin /> Pakai foto {i + 1} (
                                         {p.latitude?.toFixed(5)},{' '}
                                         {p.longitude?.toFixed(5)})
                                     </Button>
@@ -838,14 +838,14 @@ function EditLocation({
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>
-                        Cancel
+                        Batal
                     </Button>
                     <Button
                         type="submit"
                         loading={busy}
                         disabled={form.data.text.trim() === ''}
                     >
-                        Save position
+                        Simpan posisi
                     </Button>
                 </DialogFooter>
             </form>

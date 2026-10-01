@@ -80,7 +80,7 @@ class CollateralController extends Controller
     {
         $collateral = Collateral::create([...$this->normalized($this->validated($request)), 'created_by' => $request->user()->id]);
 
-        return to_route('collaterals.index')->with('success', 'Collateral '.($collateral->cbs_id ?? "#{$collateral->id}").' created.');
+        return to_route('collaterals.index')->with('success', 'Jaminan '.($collateral->cbs_id ?? "#{$collateral->id}").' berhasil dibuat.');
     }
 
     public function update(Request $request, Collateral $collateral): RedirectResponse
@@ -92,18 +92,18 @@ class CollateralController extends Controller
 
         $collateral->update($data);
 
-        return to_route('collaterals.index')->with('success', 'Collateral '.($collateral->cbs_id ?? "#{$collateral->id}").' updated.');
+        return to_route('collaterals.index')->with('success', 'Jaminan '.($collateral->cbs_id ?? "#{$collateral->id}").' berhasil diperbarui.');
     }
 
     public function destroy(Collateral $collateral): RedirectResponse
     {
         if (($count = $collateral->loanApplications()->count()) > 0) {
-            return back()->with('error', "This collateral is attached to {$count} loan ".str('application')->plural($count).' and cannot be deleted. Detach it first.');
+            return back()->with('error', "Jaminan ini dilekatkan ke {$count} pengajuan sehingga tidak bisa dihapus. Lepaskan dulu.");
         }
 
         $collateral->delete();
 
-        return back()->with('success', 'Collateral deleted.');
+        return back()->with('success', 'Jaminan berhasil dihapus.');
     }
 
     /**
@@ -161,11 +161,11 @@ class CollateralController extends Controller
             'insurance_date' => [...$onEdit, 'date'],
             'ppap_code' => ['nullable', 'string', 'exists:collateral_methods,code'],
         ], [], [
-            'cbs_id' => 'collateral ID', 'credit_account' => 'credit account', 'collateral_type_code' => 'collateral type',
-            'binding_type_code' => 'binding type', 'document_number' => 'document number', 'owner_name' => 'owner name',
-            'owner_address' => 'collateral address', 'region_code' => 'location', 'condition_code' => 'condition',
-            'condition_date' => 'condition date', 'insurance_code' => 'insured', 'insurance_date' => 'insurance date',
-            'ppap_code' => 'valuation method', 'description' => 'description',
+            'cbs_id' => 'ID agunan', 'credit_account' => 'rekening kredit', 'collateral_type_code' => 'jenis agunan',
+            'binding_type_code' => 'jenis pengikatan', 'document_number' => 'nomor dokumen', 'owner_name' => 'nama pemilik',
+            'owner_address' => 'alamat agunan', 'region_code' => 'lokasi', 'condition_code' => 'kondisi',
+            'condition_date' => 'tanggal kondisi', 'insurance_code' => 'asuransi', 'insurance_date' => 'tanggal asuransi',
+            'ppap_code' => 'metode penilaian', 'description' => 'keterangan',
         ]);
     }
 

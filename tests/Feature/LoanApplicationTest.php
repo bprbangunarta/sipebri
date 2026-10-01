@@ -112,7 +112,7 @@ it('enforces product limits on the application data', function () {
     $this->actingAs($officer = loanOfficer());
     $loan = LoanApplication::create(['application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A', 'created_by' => $officer->id]);
 
-    $this->put(route('loan-applications.update', $loan), loanPayload($s, ['requested_amount' => 60_000_000]))->assertSessionHasErrors(['requested_amount' => 'The maximum loan amount is Rp50.000.000 for this product.']);
+    $this->put(route('loan-applications.update', $loan), loanPayload($s, ['requested_amount' => 60_000_000]))->assertSessionHasErrors(['requested_amount' => 'Plafon maksimum untuk produk ini adalah Rp50.000.000.']);
     $this->put(route('loan-applications.update', $loan), loanPayload($s, ['requested_amount' => 500]))->assertSessionHasErrors('requested_amount');
     $this->put(route('loan-applications.update', $loan), loanPayload($s, ['requested_tenor' => 36]))->assertSessionHasErrors('requested_tenor');
     $this->put(route('loan-applications.update', $loan), loanPayload($s, ['method_id' => $s['otherMethod']->id]))->assertSessionHasErrors('method_id');

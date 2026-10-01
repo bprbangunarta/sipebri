@@ -153,7 +153,7 @@ it('leaves the other section head when a section head applies, and refuses the a
         ->has('references.supervisors', 1)->where('references.supervisors.0.value', $s['kasiB']->id));
 
     $this->put(route('loan-applications.update', $loan), committeeLoanPayload($s, ['supervisor_id' => $s['kasiA']->id]))
-        ->assertSessionHasErrors(['supervisor_id' => 'The section head cannot be the applicant. Choose another section head.']);
+        ->assertSessionHasErrors(['supervisor_id' => 'Kasi Analis tidak boleh pemohon sendiri. Pilih Kasi Analis lain.']);
     $this->put(route('loan-applications.update', $loan), committeeLoanPayload($s, ['supervisor_id' => $s['kasiB']->id]))->assertSessionHasNoErrors();
     expect($loan->fresh()->supervisor_id)->toBe($s['kasiB']->id);
 });

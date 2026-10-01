@@ -114,10 +114,10 @@ function ScheduleDialog({
             onOpenChange={(open) => !open && onClose()}
             title={
                 row?.resurvey
-                    ? 'Schedule a re-survey'
+                    ? 'Jadwalkan survei ulang'
                     : row?.schedule_count
-                      ? 'Reschedule survey'
-                      : 'Schedule survey'
+                      ? 'Jadwalkan ulang survei'
+                      : 'Jadwalkan survei'
             }
             description={
                 row ? `${row.application_code} · ${row.full_name}` : undefined
@@ -141,19 +141,19 @@ function ScheduleDialog({
                         {row.over_limit && (
                             <p className="flex items-start gap-1.5 rounded-md bg-amber-50 p-2 text-xs text-amber-700">
                                 <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />{' '}
-                                This file was already scheduled{' '}
-                                {row.schedule_count} times. Please make sure it
-                                is still worth pursuing.
+                                Berkas ini sudah dijadwalkan{' '}
+                                {row.schedule_count} kali. Pastikan masih layak
+                                dilanjutkan.
                             </p>
                         )}
                         {row.walk_in && (
                             <p className="rounded-md bg-primary-soft p-2 text-xs text-primary">
-                                This product has no field survey; the file goes
-                                straight to analysis.
+                                Produk ini tanpa survei lapangan; berkas
+                                langsung ke analisa.
                             </p>
                         )}
                         <Field
-                            label="Survey date"
+                            label="Tanggal survei"
                             required
                             error={form.errors.survey_date}
                         >
@@ -176,14 +176,14 @@ function ScheduleDialog({
                             label="Surveyor"
                             required
                             error={form.errors.surveyor_id}
-                            hint={`Role: ${row.surveyor_role}`}
+                            hint={`Peran: ${row.surveyor_role}`}
                         >
                             <Combobox
                                 options={row.surveyor_options}
                                 placeholder={
                                     row.surveyor_options.length
-                                        ? 'Select…'
-                                        : 'No user holds this role'
+                                        ? 'Pilih…'
+                                        : 'Tidak ada pengguna dengan peran ini'
                                 }
                                 value={form.data.surveyor_id}
                                 onChange={(v) =>
@@ -192,7 +192,7 @@ function ScheduleDialog({
                                 invalid={!!form.errors.surveyor_id}
                             />
                         </Field>
-                        <Field label="Note" error={form.errors.note}>
+                        <Field label="Catatan" error={form.errors.note}>
                             <Input
                                 value={form.data.note}
                                 maxLength={255}
@@ -204,10 +204,10 @@ function ScheduleDialog({
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={onClose}>
-                            Cancel
+                            Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
-                            Save schedule
+                            Simpan jadwal
                         </Button>
                     </DialogFooter>
                 </form>
@@ -242,7 +242,7 @@ export default function SchedulingIndex({
     const columns: Column<Row>[] = [
         {
             key: 'file',
-            header: 'File',
+            header: 'Berkas',
             sort: 'application_code',
             cell: (l) => (
                 <>
@@ -253,7 +253,7 @@ export default function SchedulingIndex({
         },
         {
             key: 'applicant',
-            header: 'Applicant',
+            header: 'Pemohon',
             sort: 'full_name',
             cell: (l) => (
                 <>
@@ -266,7 +266,7 @@ export default function SchedulingIndex({
         },
         {
             key: 'amount',
-            header: 'Amount',
+            header: 'Plafon',
             align: 'right',
             hideBelow: 'md',
             className: 'whitespace-nowrap tabular-nums',
@@ -281,14 +281,14 @@ export default function SchedulingIndex({
         },
         {
             key: 'survey',
-            header: 'Survey',
+            header: 'Survei',
             sort: 'survey_date',
             cell: (l) => (
                 <>
                     {l.survey_date ? (
                         formatDate(l.survey_date)
                     ) : (
-                        <span className="text-muted">Not scheduled</span>
+                        <span className="text-muted">Belum dijadwalkan</span>
                     )}
                     <p className="text-xs text-muted">
                         {l.surveyor_name ?? '–'}
@@ -305,19 +305,21 @@ export default function SchedulingIndex({
                 <span className="flex flex-wrap items-center gap-1">
                     {l.needs_reschedule ? (
                         <Tip
-                            label={`Sent back by the surveyor: ${l.sent_back_reason ?? ''}`}
+                            label={`Dikembalikan surveyor: ${l.sent_back_reason ?? ''}`}
                         >
                             <span>
-                                <Badge tone="warning">Needs reschedule</Badge>
+                                <Badge tone="warning">
+                                    Perlu dijadwalkan ulang
+                                </Badge>
                             </span>
                         </Tip>
                     ) : (
                         <Badge tone={l.status_tone}>
-                            {l.resurvey ? 'Surveyed' : l.status_label}
+                            {l.resurvey ? 'Disurvei' : l.status_label}
                         </Badge>
                     )}
                     {l.over_limit && (
-                        <Tip label={`Scheduled ${l.schedule_count} times`}>
+                        <Tip label={`Dijadwalkan ${l.schedule_count} kali`}>
                             <span>
                                 <AlertTriangle className="size-3.5 text-amber-600" />
                             </span>
@@ -328,18 +330,18 @@ export default function SchedulingIndex({
         },
         {
             key: 'actions',
-            header: 'Actions',
+            header: 'Aksi',
             srOnly: true,
             narrow: true,
             align: 'right',
             cell: (l) => (
                 <DropdownMenu>
-                    <Tip label="Actions">
+                    <Tip label="Aksi">
                         <DropdownTrigger asChild>
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                aria-label={`Actions for ${l.application_code}`}
+                                aria-label={`Aksi untuk ${l.application_code}`}
                             >
                                 <MoreHorizontal />
                             </Button>
@@ -352,10 +354,10 @@ export default function SchedulingIndex({
                                 onSelect={() => setScheduling(l)}
                             >
                                 {l.resurvey
-                                    ? 'Schedule re-survey'
+                                    ? 'Jadwalkan survei ulang'
                                     : l.schedule_count
-                                      ? 'Reschedule'
-                                      : 'Schedule survey'}
+                                      ? 'Jadwalkan ulang'
+                                      : 'Jadwalkan survei'}
                             </DropdownItem>
                         )}
                         {canManage && l.status === 'scheduling' && (
@@ -363,7 +365,7 @@ export default function SchedulingIndex({
                                 icon={<CalendarPlus />}
                                 onSelect={() => setScheduling(l)}
                             >
-                                Reschedule
+                                Jadwalkan ulang
                             </DropdownItem>
                         )}
                         {l.can_cancel && (
@@ -373,14 +375,14 @@ export default function SchedulingIndex({
                                     setCancelUrl(`/scheduling/${l.id}/cancel`)
                                 }
                             >
-                                Cancel schedule
+                                Batalkan jadwal
                             </DropdownItem>
                         )}
                         <DropdownItem
                             icon={<History />}
                             onSelect={() => setHistory(l)}
                         >
-                            History
+                            Riwayat
                         </DropdownItem>
                         {canManage && (
                             <>
@@ -392,7 +394,7 @@ export default function SchedulingIndex({
                                         setVoidUrl(`/scheduling/${l.id}/void`)
                                     }
                                 >
-                                    Void application
+                                    Batalkan pengajuan
                                 </DropdownItem>
                             </>
                         )}
@@ -404,10 +406,10 @@ export default function SchedulingIndex({
 
     return (
         <>
-            <Head title="Survey scheduling" />
+            <Head title="Penjadwalan" />
             <PageHeader
-                title="Survey scheduling"
-                description="Set the survey date and surveyor for submitted files"
+                title="Penjadwalan"
+                description="Tentukan tanggal survei dan surveyor untuk berkas yang diajukan"
             />
 
             <DataTable
@@ -422,8 +424,8 @@ export default function SchedulingIndex({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search code, name, NIK…"
-                                label="Search files"
+                                placeholder="Cari kode, nama, NIK…"
+                                label="Cari berkas"
                             />
                         }
                     >
@@ -431,8 +433,8 @@ export default function SchedulingIndex({
                             className="w-full sm:w-40"
                             searchable={false}
                             options={[
-                                { value: 'mine', label: 'My files' },
-                                { value: 'all', label: 'All section heads' },
+                                { value: 'mine', label: 'Berkas saya' },
+                                { value: 'all', label: 'Semua Kasi Analis' },
                             ]}
                             value={filters.scope}
                             onChange={(v) =>
@@ -454,7 +456,7 @@ export default function SchedulingIndex({
                                 size="sm"
                                 onClick={() => clear({ status: null })}
                             >
-                                <X /> Reset
+                                <X /> Atur ulang
                             </Button>
                         )}
                     </FilterBar>
@@ -468,13 +470,13 @@ export default function SchedulingIndex({
                 empty={{
                     icon: <CalendarDays />,
                     title: hasFilters
-                        ? 'No files match your filters'
+                        ? 'Tidak ada berkas yang cocok dengan filter'
                         : filters.scope === 'mine'
-                          ? 'Nothing waiting to be scheduled for you'
-                          : 'Nothing waiting to be scheduled',
+                          ? 'Tidak ada berkas yang menunggu jadwal dari Anda'
+                          : 'Tidak ada berkas yang menunggu jadwal',
                     description: hasFilters
-                        ? 'Try a different search or reset the filters.'
-                        : 'Submitted files, and files sent back by a surveyor, appear here. Choose "All statuses" to see scheduled files too.',
+                        ? 'Coba pencarian lain atau atur ulang filter.'
+                        : 'Berkas yang diajukan, dan berkas yang dikembalikan surveyor, tampil di sini. Pilih "Semua status" untuk melihat berkas terjadwal juga.',
                 }}
                 pagination={{
                     meta: loans,
@@ -491,24 +493,24 @@ export default function SchedulingIndex({
                 onClose={() => setScheduling(null)}
             />
             <ReasonDialog
-                title="Cancel survey schedule"
-                description="The file returns to the section head for rescheduling."
+                title="Batalkan jadwal survei"
+                description="Berkas kembali ke Kasi Analis untuk dijadwalkan ulang."
                 action={cancelUrl}
-                confirmLabel="Cancel schedule"
+                confirmLabel="Batalkan jadwal"
                 onClose={() => setCancelUrl(null)}
             />
             <ReasonDialog
-                title="Void application"
-                description="The application is closed and cannot be reopened."
+                title="Batalkan pengajuan"
+                description="Pengajuan ditutup dan tidak bisa dibuka kembali."
                 action={voidUrl}
-                confirmLabel="Void application"
+                confirmLabel="Batalkan pengajuan"
                 onClose={() => setVoidUrl(null)}
             />
 
             <Modal
                 open={history !== null}
                 onOpenChange={(open) => !open && setHistory(null)}
-                title="Scheduling history"
+                title="Riwayat penjadwalan"
                 description={
                     history
                         ? `${history.application_code} · ${history.full_name}`
@@ -518,7 +520,7 @@ export default function SchedulingIndex({
                 <ul className="max-h-[60vh] divide-y divide-line overflow-auto">
                     {history?.history.length === 0 && (
                         <li className="p-4 text-center text-xs text-muted">
-                            Nothing recorded yet.
+                            Belum ada catatan.
                         </li>
                     )}
                     {history?.history.map((h) => (

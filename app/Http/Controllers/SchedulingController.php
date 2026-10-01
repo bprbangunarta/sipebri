@@ -69,10 +69,10 @@ class SchedulingController extends Controller
             'filters' => ['search' => $filters['search'] ?? '', 'status' => $status, 'scope' => $scope, 'sort' => $sort, 'direction' => $direction, 'per_page' => $loans->perPage()],
             'perPageOptions' => self::PER_PAGE_OPTIONS,
             'statuses' => [
-                ['value' => LoanStatus::Submitted->value, 'label' => 'Not scheduled yet'],
-                ['value' => LoanStatus::Scheduling->value, 'label' => 'Scheduled'],
-                ['value' => LoanStatus::Survey->value, 'label' => 'Surveyed'],
-                ['value' => 'all', 'label' => 'All statuses'],
+                ['value' => LoanStatus::Submitted->value, 'label' => 'Belum dijadwalkan'],
+                ['value' => LoanStatus::Scheduling->value, 'label' => 'Dijadwalkan'],
+                ['value' => LoanStatus::Survey->value, 'label' => 'Disurvei'],
+                ['value' => 'all', 'label' => 'Semua status'],
             ],
             'maxSchedules' => (int) config('credit.max_schedules'),
             'canManage' => $request->user()->can('scheduling.manage'),
@@ -84,7 +84,7 @@ class SchedulingController extends Controller
     public function store(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
         if (! in_array($loanApplication->status, self::openStatuses(), true)) {
-            return back()->with('error', 'This file is not at the scheduling stage.');
+            return back()->with('error', 'Berkas ini tidak berada di tahap penjadwalan.');
         }
 
         $done = $this->scheduleCount($loanApplication);
@@ -94,7 +94,7 @@ class SchedulingController extends Controller
             'survey_date' => ['required', 'date', 'after_or_equal:today'],
             'surveyor_id' => ['required', 'integer', Rule::in($allowed)],
             'note' => ['nullable', 'string', 'max:255'],
-        ], ['surveyor_id.in' => 'This surveyor is not allowed at this stage.'], ['survey_date' => 'survey date', 'surveyor_id' => 'surveyor']);
+        ], ['surveyor_id.in' => 'Surveyor ini tidak diizinkan pada tahap ini.'], ['survey_date' => 'tanggal survei', 'surveyor_id' => 'surveyor']);
 
         $surveyor = User::query()->whereKey($data['surveyor_id'])->firstOrFail();
         $walkIn = $this->isWalkIn($loanApplication);
@@ -124,13 +124,13 @@ class SchedulingController extends Controller
 
         Notify::toUser(
             $surveyor,
-            $walkIn ? 'File ready for analysis' : 'Survey assignment',
-            'Scheduling',
-            "File {$loanApplication->application_code} ({$loanApplication->full_name}) ".($walkIn ? 'has no field survey and is ready for analysis.' : 'is to be surveyed on '.$loanApplication->survey_date->format('d M Y').'.'),
+            $walkIn ? 'Berkas siap dianalisa' : 'Penugasan survei',
+            'Penjadwalan',
+            "Berkas {$loanApplication->application_code} ({$loanApplication->full_name}) ".($walkIn ? 'tidak perlu survei lapangan dan siap dianalisa.' : 'akan disurvei pada '.$loanApplication->survey_date->translatedFormat('d M Y').'.'),
             $walkIn ? '/credit-analysis' : '/surveys',
         );
 
-        return back()->with('success', $walkIn ? 'Schedule saved. This product has no field survey, so the file is ready for analysis.' : 'Survey schedule saved.');
+        return back()->with('success', $walkIn ? 'Jadwal tersimpan. Produk ini tanpa survei lapangan, jadi berkas siap dianalisa.' : 'Jadwal survei berhasil disimpan.');
     }
 
     /**
@@ -142,10 +142,10 @@ class SchedulingController extends Controller
         abort_unless($loanApplication->surveyor_id === $request->user()->id, 403);
 
         if ($loanApplication->status !== LoanStatus::Scheduling) {
-            return back()->with('error', 'This file has no active survey schedule.');
+            return back()->with('error', 'Berkas ini tidak punya jadwal survei aktif.');
         }
 
-        $data = $request->validate(['reason' => ['required', 'string', 'max:255'], 'return' => ['nullable', 'in:surveys']], [], ['reason' => 'cancellation reason']);
+        $data = $request->validate(['reason' => ['required', 'string', 'max:255'], 'return' => ['nullable', 'in:surveys']], [], ['reason' => 'alasan pembatalan']);
         $done = $this->scheduleCount($loanApplication);
 
         $this->record($loanApplication, LoanSchedule::ACTION_CANCEL, $data['reason'], $request->user()->name, $done);
@@ -154,10 +154,10 @@ class SchedulingController extends Controller
 
         $exceeded = $done >= (int) config('credit.max_schedules');
 
-        Notify::toPermission('scheduling.manage', $exceeded ? 'Rescheduling limit exceeded' : 'Reschedule requested', 'Scheduling',
-            "File {$loanApplication->application_code}: {$data['reason']}".($exceeded ? " (already scheduled {$done} times)" : ''), '/scheduling', $exceeded ? 'warning' : 'info');
+        Notify::toPermission('scheduling.manage', $exceeded ? 'Batas jadwal ulang terlampaui' : 'Permintaan jadwal ulang', 'Penjadwalan',
+            "Berkas {$loanApplication->application_code}: {$data['reason']}".($exceeded ? " (sudah dijadwalkan {$done} kali)" : ''), '/scheduling', $exceeded ? 'warning' : 'info');
 
-        $message = $exceeded ? "Schedule cancelled. The file has been scheduled {$done} times — please review it." : 'Schedule cancelled; the file awaits a new schedule.';
+        $message = $exceeded ? "Jadwal dibatalkan. Berkas sudah dijadwalkan {$done} kali — mohon ditinjau." : 'Jadwal dibatalkan; berkas menunggu jadwal baru.';
 
         // From the survey page the file is no longer the surveyor's, so going back to it would be refused.
         return ($data['return'] ?? null) === 'surveys' ? to_route('surveys.index')->with('success', $message) : back()->with('success', $message);
@@ -182,17 +182,17 @@ class SchedulingController extends Controller
     public function void(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
         if (! in_array($loanApplication->status, self::openStatuses(), true)) {
-            return back()->with('error', 'This file is not at the scheduling stage.');
+            return back()->with('error', 'Berkas ini tidak berada di tahap penjadwalan.');
         }
 
-        $data = $request->validate(['reason' => ['required', 'string', 'max:255']], [], ['reason' => 'cancellation reason']);
+        $data = $request->validate(['reason' => ['required', 'string', 'max:255']], [], ['reason' => 'alasan pembatalan']);
 
         $this->record($loanApplication, LoanSchedule::ACTION_VOID, $data['reason'], $request->user()->name, $this->scheduleCount($loanApplication));
         $loanApplication->update(['status' => LoanStatus::Cancelled, 'surveyor_id' => null, 'survey_date' => null]);
 
-        Notify::toPermission('loan-applications.manage', 'Application cancelled', 'Scheduling', "File {$loanApplication->application_code}: {$data['reason']}", '/loan-applications', 'warning');
+        Notify::toPermission('loan-applications.manage', 'Pengajuan dibatalkan', 'Penjadwalan', "Berkas {$loanApplication->application_code}: {$data['reason']}", '/loan-applications', 'warning');
 
-        return back()->with('success', 'Application cancelled.');
+        return back()->with('success', 'Pengajuan berhasil dibatalkan.');
     }
 
     private function record(LoanApplication $loan, string $action, string $reason, string $by, int $sequence): void

@@ -54,7 +54,7 @@ export default function AnalysisIndex({
     const columns: Column<Row>[] = [
         {
             key: 'file',
-            header: 'File',
+            header: 'Berkas',
             sort: 'application_code',
             cell: (l) => (
                 <>
@@ -65,7 +65,7 @@ export default function AnalysisIndex({
         },
         {
             key: 'applicant',
-            header: 'Applicant',
+            header: 'Pemohon',
             sort: 'full_name',
             cell: (l) => (
                 <>
@@ -76,7 +76,7 @@ export default function AnalysisIndex({
         },
         {
             key: 'amount',
-            header: 'Amount',
+            header: 'Plafon',
             sort: 'requested_amount',
             align: 'right',
             hideBelow: 'sm',
@@ -92,7 +92,7 @@ export default function AnalysisIndex({
         },
         {
             key: 'survey',
-            header: 'Survey',
+            header: 'Survei',
             sort: 'survey_date',
             hideBelow: 'md',
             cell: (l) => (
@@ -100,7 +100,7 @@ export default function AnalysisIndex({
                     {formatDate(l.survey_date)}
                     <p>
                         <Badge tone={l.surveyed ? 'success' : 'info'}>
-                            {l.surveyed ? 'Surveyed' : 'No visit needed'}
+                            {l.surveyed ? 'Disurvei' : 'Tanpa kunjungan'}
                         </Badge>
                     </p>
                 </>
@@ -108,7 +108,7 @@ export default function AnalysisIndex({
         },
         {
             key: 'collateral',
-            header: 'Collateral',
+            header: 'Jaminan',
             align: 'right',
             hideBelow: 'lg',
             className: 'tabular-nums',
@@ -118,10 +118,10 @@ export default function AnalysisIndex({
 
     return (
         <>
-            <Head title="Analysis" />
+            <Head title="Analisa Kredit" />
             <PageHeader
-                title="Analysis"
-                description="Surveyed files assigned to you that are ready to be analysed"
+                title="Analisa Kredit"
+                description="Berkas hasil survei yang ditugaskan kepada Anda dan siap dianalisa"
             />
 
             <DataTable
@@ -136,8 +136,8 @@ export default function AnalysisIndex({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search code, name, NIK…"
-                                label="Search files"
+                                placeholder="Cari kode, nama, NIK…"
+                                label="Cari berkas"
                             />
                         }
                     />
@@ -151,18 +151,18 @@ export default function AnalysisIndex({
                 empty={{
                     icon: <ClipboardCheck />,
                     title: filters.search
-                        ? 'No files match your search'
-                        : 'Nothing to analyse yet',
+                        ? 'Tidak ada berkas yang cocok dengan pencarian'
+                        : 'Belum ada yang perlu dianalisa',
                     description: filters.search
-                        ? 'Try a different search term.'
-                        : 'Files appear here once their survey is saved (or, for walk-in products, once they are scheduled).',
+                        ? 'Coba kata kunci lain.'
+                        : 'Berkas tampil di sini setelah surveinya disimpan (atau, untuk produk tanpa survei lapangan, setelah dijadwalkan).',
                     action: filters.search ? (
                         <button
                             type="button"
                             className="cursor-pointer text-xs text-primary hover:underline"
                             onClick={() => clear()}
                         >
-                            Clear search
+                            Hapus pencarian
                         </button>
                     ) : undefined,
                 }}

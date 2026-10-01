@@ -24,7 +24,7 @@ class LocationTargets
             'key' => 'survey',
             'type' => 'survey',
             'collateral_id' => null,
-            'label' => 'Survey location',
+            'label' => 'Lokasi survei',
             'detail' => (string) $address,
             'location' => self::surveyLocation($loan),
         ]];
@@ -37,7 +37,7 @@ class LocationTargets
                 'collateral_id' => $c->id,
                 'label' => trim(($c->cbs_id ?? "#{$c->id}").' — '.$c->owner_name),
                 'detail' => collect([
-                    $c->document_number ? 'Doc '.$c->document_number : null,
+                    $c->document_number ? 'Dok '.$c->document_number : null,
                     $types[$c->collateral_type_code] ?? $c->collateral_type_code,
                     $c->owner_address ?: $c->description,
                 ])->filter()->implode(' · '),

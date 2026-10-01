@@ -1,7 +1,8 @@
 import { format, parseISO } from 'date-fns';
+import { id } from 'date-fns/locale';
 
 export function formatDate(iso: string | null | undefined): string {
-    return iso ? format(parseISO(iso), 'dd MMM yyyy') : '–';
+    return iso ? format(parseISO(iso), 'dd MMM yyyy', { locale: id }) : '–';
 }
 
 const rupiahFormat = new Intl.NumberFormat('id-ID', {

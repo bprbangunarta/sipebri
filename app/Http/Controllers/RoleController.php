@@ -60,7 +60,7 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role): RedirectResponse
     {
-        abort_if($role->name === RoleName::SuperAdmin->value, 403, 'The Super Admin role cannot be changed.');
+        abort_if($role->name === RoleName::SuperAdmin->value, 403, 'Peran Super Admin tidak bisa diubah.');
         $data = $request->validate(['name' => ['required', 'string', 'max:100', Rule::unique('roles', 'name')->ignore($role)]]);
         if ($role->name !== trim($data['name']) && ($count = CommitteeTier::query()->where('role', $role->name)->count()) > 0) {
             return back()->withErrors(['name' => "\"{$role->name}\" decides in {$count} committee ".str('tier')->plural($count).' and cannot be renamed. Change those tiers first.']);
@@ -75,7 +75,7 @@ class RoleController extends Controller
 
     public function syncPermissions(Request $request, Role $role): RedirectResponse
     {
-        abort_if($role->name === RoleName::SuperAdmin->value, 403, 'The Super Admin role always has every permission.');
+        abort_if($role->name === RoleName::SuperAdmin->value, 403, 'Peran Super Admin selalu punya semua izin.');
         $data = $request->validate([
             'permissions' => ['array'],
             'permissions.*' => ['string', Rule::in(Modules::permissions())],
@@ -100,7 +100,7 @@ class RoleController extends Controller
 
     public function destroy(Role $role): RedirectResponse
     {
-        abort_if($role->name === RoleName::SuperAdmin->value, 403, 'The Super Admin role cannot be deleted.');
+        abort_if($role->name === RoleName::SuperAdmin->value, 403, 'Peran Super Admin tidak bisa dihapus.');
 
         if ($role->users()->exists()) {
             return back()->with('error', "\"{$role->name}\" dipakai pengguna sehingga tidak bisa dihapus.");

@@ -72,7 +72,7 @@ class LoanApplicationController extends Controller
             'statuses' => LoanStatus::options(),
             'products' => Product::orderBy('code')->get(['id', 'alias', 'name'])->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} : {$p->name}"]),
             'canManage' => $request->user()->can('loan-applications.manage'),
-            'customerSource' => 'the customer master (Codex)',
+            'customerSource' => 'sistem nasabah (Codex)',
             'committeeMembers' => CommitteeMembers::options(),
         ]);
     }
@@ -87,7 +87,7 @@ class LoanApplicationController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return response()->json(['found' => false, 'customer' => null, 'message' => 'The customer system cannot be reached right now. Please try again shortly.'], 503);
+            return response()->json(['found' => false, 'customer' => null, 'message' => 'Sistem nasabah tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.'], 503);
         }
 
         // A committee member applying for a credit cannot take part in deciding it, so the file has to know from the start.
@@ -109,18 +109,18 @@ class LoanApplicationController extends Controller
         $data = $request->validate([
             'nik' => ['required', 'digits:16'],
             'committee_conflict_user_id' => ['nullable', 'integer', $this->committeeMemberRule()],
-        ], [], ['nik' => 'NIK', 'committee_conflict_user_id' => 'committee member']);
+        ], [], ['nik' => 'NIK', 'committee_conflict_user_id' => 'anggota komite']);
 
         try {
             $customer = CustomerDirectory::find($data['nik']);
         } catch (Throwable $e) {
             report($e);
 
-            throw ValidationException::withMessages(['nik' => 'The customer system cannot be reached right now. Please try again shortly.']);
+            throw ValidationException::withMessages(['nik' => 'Sistem nasabah tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
         }
 
         if (! $customer) {
-            throw ValidationException::withMessages(['nik' => 'This national ID is not registered in the customer system, so the application cannot continue.']);
+            throw ValidationException::withMessages(['nik' => 'NIK ini belum terdaftar di sistem nasabah, sehingga pengajuan tidak bisa dilanjutkan.']);
         }
 
         // Recognised by national ID: decided by the system and not open to being switched off. Otherwise the officer may flag a
@@ -140,7 +140,7 @@ class LoanApplicationController extends Controller
             'created_by' => $request->user()->id,
         ]);
 
-        return to_route('loan-applications.show', $loan)->with('success', "Application {$loan->application_code} opened. Complete the steps below.");
+        return to_route('loan-applications.show', $loan)->with('success', "Pengajuan {$loan->application_code} dibuka. Lengkapi langkah di bawah.");
     }
 
     public function show(Request $request, LoanApplication $loanApplication): Response
@@ -193,9 +193,9 @@ class LoanApplicationController extends Controller
             'office_id' => ['required', 'integer', 'exists:offices,id'],
             'supervisor_id' => ['required', 'integer', function (string $attribute, mixed $value, \Closure $fail) use ($conflictId): void {
                 if ($conflictId !== null && (int) $value === $conflictId) {
-                    $fail('The section head cannot be the applicant. Choose another section head.');
+                    $fail('Kasi Analis tidak boleh pemohon sendiri. Pilih Kasi Analis lain.');
                 } elseif (! User::role(RoleName::AnalysisSectionHead->value)->whereKey($value)->exists()) {
-                    $fail('The selected section head does not hold the analysis section head role.');
+                    $fail('Orang yang dipilih tidak memegang peran Kasi Analis.');
                 }
             }],
             'committee_conflict_user_id' => ['nullable', 'integer', $this->committeeMemberRule()],
@@ -203,15 +203,15 @@ class LoanApplicationController extends Controller
             'marketing' => ['nullable', 'string', 'max:100'],
             'note' => ['nullable', 'string', 'max:255'],
         ], $this->parameterMessages($parameter, $productMax, $bmpk), [
-            'product_id' => 'product', 'committee_path_id' => 'category', 'requested_amount' => 'loan amount', 'requested_tenor' => 'tenor',
-            'method_id' => 'interest method', 'installment_id' => 'installment system', 'interest_rate' => 'interest rate', 'usage_type' => 'usage',
-            'office_id' => 'office', 'supervisor_id' => 'section head',
+            'product_id' => 'produk', 'committee_path_id' => 'kategori', 'requested_amount' => 'plafon', 'requested_tenor' => 'tenor',
+            'method_id' => 'metode bunga', 'installment_id' => 'sistem angsuran', 'interest_rate' => 'suku bunga', 'usage_type' => 'penggunaan',
+            'office_id' => 'kantor', 'supervisor_id' => 'Kasi Analis',
         ]);
 
         // The category must be a committee path of this product or one that applies to every product.
         $path = CommitteePath::query()->findOrFail((int) $data['committee_path_id']);
         if ($path->product_id !== null && $path->product_id !== (int) $data['product_id']) {
-            throw ValidationException::withMessages(['committee_path_id' => 'This category does not belong to the selected product.']);
+            throw ValidationException::withMessages(['committee_path_id' => 'Kategori ini bukan milik produk yang dipilih.']);
         }
 
         if (filled($data['marketing'] ?? null)) {
@@ -225,18 +225,18 @@ class LoanApplicationController extends Controller
         ]);
         $warning = $this->tenorWarning($loanApplication);
 
-        return back()->with('success', 'Application data saved.')->with('warning', $warning);
+        return back()->with('success', 'Data pengajuan berhasil disimpan.')->with('warning', $warning);
     }
 
     public function attachCollateral(Request $request, LoanApplication $loanApplication): RedirectResponse
     {
         $this->authorize('modify', $loanApplication);
-        $data = $request->validate(['collateral_id' => ['required', 'integer', 'exists:collaterals,id']], [], ['collateral_id' => 'collateral']);
+        $data = $request->validate(['collateral_id' => ['required', 'integer', 'exists:collaterals,id']], [], ['collateral_id' => 'jaminan']);
 
         $loanApplication->collaterals()->syncWithoutDetaching([$data['collateral_id']]);
         Audit::record('loan_applications.collateral_attached', 'loan_applications', 'collateral_attached', $loanApplication, new: ['collateral_id' => (int) $data['collateral_id']]);
 
-        return back()->with('success', 'Collateral attached.');
+        return back()->with('success', 'Jaminan berhasil dilekatkan.');
     }
 
     /** A collateral created straight from the file and attached to it. */
@@ -252,7 +252,7 @@ class LoanApplicationController extends Controller
             'owner_address' => ['required', 'string', 'max:255'],
             'region_code' => ['required', 'string', 'max:8', 'exists:regions,code'],
             'description' => ['required', 'string', 'max:255'],
-        ], [], ['collateral_type_code' => 'collateral type', 'document_number' => 'document number', 'owner_name' => 'owner name', 'owner_address' => 'collateral address', 'region_code' => 'location']);
+        ], [], ['collateral_type_code' => 'jenis agunan', 'document_number' => 'nomor dokumen', 'owner_name' => 'nama pemilik', 'owner_address' => 'alamat agunan', 'region_code' => 'lokasi']);
 
         foreach (['document_number', 'owner_name', 'owner_address', 'description'] as $key) {
             $data[$key] = mb_strtoupper($data[$key]);
@@ -262,7 +262,7 @@ class LoanApplicationController extends Controller
         $loanApplication->collaterals()->syncWithoutDetaching([$collateral->id]);
         Audit::record('loan_applications.collateral_attached', 'loan_applications', 'collateral_attached', $loanApplication, new: ['collateral_id' => $collateral->id], context: ['created_with_file' => true]);
 
-        return back()->with('success', 'New collateral added to the file.');
+        return back()->with('success', 'Jaminan baru berhasil ditambahkan ke berkas.');
     }
 
     public function detachCollateral(LoanApplication $loanApplication, Collateral $collateral): RedirectResponse
@@ -271,7 +271,7 @@ class LoanApplicationController extends Controller
         $loanApplication->collaterals()->detach($collateral->id);
         Audit::record('loan_applications.collateral_detached', 'loan_applications', 'collateral_detached', $loanApplication, ['collateral_id' => $collateral->id]);
 
-        return back()->with('success', 'Collateral detached.');
+        return back()->with('success', 'Jaminan berhasil dilepas.');
     }
 
     /** Submit a draft once the application data and collateral are complete. */
@@ -280,15 +280,15 @@ class LoanApplicationController extends Controller
         $this->authorize('modify', $loanApplication);
 
         if (in_array(false, $this->checklist($loanApplication), true)) {
-            return back()->with('error', 'Complete the customer, application data and collateral steps before submitting.');
+            return back()->with('error', 'Lengkapi langkah nasabah, data pengajuan, dan jaminan sebelum mengajukan.');
         }
 
         $loanApplication->update(['status' => LoanStatus::Submitted]);
 
-        Notify::toPermission('scheduling.manage', 'New application awaiting scheduling', 'Loan applications',
-            "File {$loanApplication->application_code} ({$loanApplication->full_name}) is ready for a survey schedule.", '/scheduling');
+        Notify::toPermission('scheduling.manage', 'Pengajuan baru menunggu penjadwalan', 'Pengajuan',
+            "Berkas {$loanApplication->application_code} ({$loanApplication->full_name}) siap dijadwalkan survei.", '/scheduling');
 
-        return back()->with('success', 'Application submitted.');
+        return back()->with('success', 'Pengajuan berhasil diajukan.');
     }
 
     public function destroy(LoanApplication $loanApplication): RedirectResponse
@@ -298,7 +298,7 @@ class LoanApplicationController extends Controller
         $code = $loanApplication->application_code;
         $loanApplication->delete();
 
-        return to_route('loan-applications.index')->with('success', "Application {$code} deleted.");
+        return to_route('loan-applications.index')->with('success', "Pengajuan {$code} berhasil dihapus.");
     }
 
     /**
@@ -336,7 +336,7 @@ class LoanApplicationController extends Controller
             return null;
         }
 
-        return "A tenor of {$tenor} months is not a multiple of {$period} months for the {$loan->installment->name} installment system. The principal instalment may not be a whole number.";
+        return "Tenor {$tenor} bulan bukan kelipatan {$period} bulan untuk sistem angsuran {$loan->installment->name}. Angsuran pokok bisa tidak bulat.";
     }
 
     /**
@@ -347,8 +347,8 @@ class LoanApplicationController extends Controller
         $idr = LendingLimit::format(...);
         // The BMPK message wins when it is the stricter of the two limits.
         $max = $bmpk !== null && ($productMax === null || $bmpk <= $productMax)
-            ? ['requested_amount.max' => "The loan amount exceeds the legal lending limit (BMPK) of {$idr($bmpk)}."]
-            : ($productMax !== null ? ['requested_amount.max' => "The maximum loan amount is {$idr($productMax)} for this product."] : []);
+            ? ['requested_amount.max' => "Plafon melebihi batas maksimum pemberian kredit (BMPK) sebesar {$idr($bmpk)}."]
+            : ($productMax !== null ? ['requested_amount.max' => "Plafon maksimum untuk produk ini adalah {$idr($productMax)}."] : []);
 
         if (! $p) {
             return $max;
@@ -356,11 +356,11 @@ class LoanApplicationController extends Controller
 
         return [
             ...$max,
-            'requested_amount.min' => "The minimum loan amount is {$idr($p->min_amount)} for this product.",
-            'requested_tenor.min' => "The minimum tenor is {$p->min_tenor} months for this product.",
-            'requested_tenor.max' => "The maximum tenor is {$p->max_tenor} months for this product.",
-            'method_id.in' => 'This interest method is not allowed for the product.',
-            'installment_id.in' => 'This installment system is not allowed for the product.',
+            'requested_amount.min' => "Plafon minimum untuk produk ini adalah {$idr($p->min_amount)}.",
+            'requested_tenor.min' => "Tenor minimum untuk produk ini adalah {$p->min_tenor} bulan.",
+            'requested_tenor.max' => "Tenor maksimum untuk produk ini adalah {$p->max_tenor} bulan.",
+            'method_id.in' => 'Metode bunga ini tidak diizinkan untuk produk tersebut.',
+            'installment_id.in' => 'Sistem angsuran ini tidak diizinkan untuk produk tersebut.',
         ];
     }
 
@@ -394,7 +394,7 @@ class LoanApplicationController extends Controller
     {
         return function (string $attribute, mixed $value, \Closure $fail): void {
             if (filled($value) && ! CommitteeMembers::query()->whereKey((int) $value)->exists()) {
-                $fail('The selected person is not a committee member.');
+                $fail('Orang yang dipilih bukan anggota komite.');
             }
         };
     }

@@ -98,7 +98,7 @@ class PermissionController extends Controller
 
     public function destroy(Permission $permission): RedirectResponse
     {
-        abort_unless($permission->is_custom, 403, 'System permissions cannot be deleted.');
+        abort_unless($permission->is_custom, 403, 'Izin sistem tidak bisa dihapus.');
 
         if (($count = $permission->roles()->count()) > 0) {
             return back()->with('error', "\"{$permission->name}\" dipegang {$count} peran sehingga tidak bisa dihapus. Lepas dulu dari peran itu.");

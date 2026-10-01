@@ -49,7 +49,7 @@ class SurveyLocationController extends Controller
                 ->update(['latitude' => $latitude, 'longitude' => $longitude, 'location_source' => $source, 'located_at' => now(), 'located_by' => $by, 'location_address' => $address]);
         }
 
-        return back()->with('success', 'Location saved.');
+        return back()->with('success', 'Lokasi berhasil disimpan.');
     }
 
     public function destroy(Request $request, LoanApplication $loanApplication): RedirectResponse
@@ -67,7 +67,7 @@ class SurveyLocationController extends Controller
                 ->update(['latitude' => null, 'longitude' => null, 'location_source' => null, 'located_at' => null, 'located_by' => null, 'location_address' => null]);
         }
 
-        return back()->with('success', 'Location removed.');
+        return back()->with('success', 'Lokasi berhasil dihapus.');
     }
 
     /**
@@ -84,9 +84,9 @@ class SurveyLocationController extends Controller
     /** Only the assigned surveyor, and only until the survey result is saved. */
     private function blocked(Request $request, LoanApplication $loan): ?RedirectResponse
     {
-        abort_unless($loan->surveyor_id === $request->user()->id, 403, 'This file is not assigned to you.');
+        abort_unless($loan->surveyor_id === $request->user()->id, 403, 'Berkas ini tidak ditugaskan kepada Anda.');
 
-        return $loan->status !== LoanStatus::Scheduling ? back()->with('error', 'The survey result is locked.') : null;
+        return $loan->status !== LoanStatus::Scheduling ? back()->with('error', 'Hasil survei sudah terkunci.') : null;
     }
 
     /** A collateral can only be located through a file it is attached to. */
@@ -105,25 +105,25 @@ class SurveyLocationController extends Controller
             $photo = $loan->photos()->whereKey((int) $data['photo_id'])->firstOrFail();
             $point = $photo->latitude !== null && $photo->longitude !== null ? Coordinates::inside((float) $photo->latitude, (float) $photo->longitude) : null;
 
-            return $point !== null ? [...$point, 'photo'] : throw ValidationException::withMessages(['coordinates' => 'This photo carries no GPS position.']);
+            return $point !== null ? [...$point, 'photo'] : throw ValidationException::withMessages(['coordinates' => 'Foto ini tidak membawa posisi GPS.']);
         }
 
         if (isset($data['latitude'], $data['longitude'])) {
             $point = Coordinates::inside((float) $data['latitude'], (float) $data['longitude']);
 
-            return $point !== null ? [...$point, $data['source'] ?? 'map'] : throw ValidationException::withMessages(['coordinates' => 'The position must be inside Indonesia.']);
+            return $point !== null ? [...$point, $data['source'] ?? 'map'] : throw ValidationException::withMessages(['coordinates' => 'Posisi harus berada di Indonesia.']);
         }
 
         $text = (string) ($data['coordinates'] ?? '');
 
         if (Coordinates::isShortLink($text)) {
-            throw ValidationException::withMessages(['coordinates' => 'Short map links hide the position. Open the link, then copy the coordinates or the full address from the browser.']);
+            throw ValidationException::withMessages(['coordinates' => 'Tautan peta singkat menyembunyikan posisi. Buka tautannya, lalu salin koordinat atau alamat lengkap dari peramban.']);
         }
 
         $point = Coordinates::parse($text);
 
         return $point !== null
             ? [...$point, 'paste']
-            : throw ValidationException::withMessages(['coordinates' => 'Paste coordinates such as -6.4643, 107.8083 or a Google Maps link with them; the position must be inside Indonesia.']);
+            : throw ValidationException::withMessages(['coordinates' => 'Tempel koordinat seperti -6.4643, 107.8083 atau tautan Google Maps yang memuatnya; posisi harus berada di Indonesia.']);
     }
 }

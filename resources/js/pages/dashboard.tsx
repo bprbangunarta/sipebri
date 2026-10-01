@@ -132,7 +132,7 @@ function HorizontalBars({
                 />
                 <Tooltip
                     cursor={{ fill: 'oklch(0.96 0.005 260)' }}
-                    formatter={(v) => [v, 'Files']}
+                    formatter={(v) => [v, 'Berkas']}
                 />
                 <Bar
                     dataKey="total"
@@ -182,7 +182,7 @@ function VerticalBars({
                 />
                 <Tooltip
                     cursor={{ fill: 'oklch(0.96 0.005 260)' }}
-                    formatter={(v) => [v, 'Files']}
+                    formatter={(v) => [v, 'Berkas']}
                 />
                 <Bar
                     dataKey="total"
@@ -219,7 +219,7 @@ function Donut({ data, total }: { data: Slice[]; total: number }) {
                                 />
                             ))}
                         </Pie>
-                        <Tooltip formatter={(v) => [v, 'Files']} />
+                        <Tooltip formatter={(v) => [v, 'Berkas']} />
                     </PieChart>
                 </ResponsiveContainer>
                 <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
@@ -267,8 +267,8 @@ export default function Dashboard({
 }: Props) {
     const description =
         scope === 'all'
-            ? 'Credit files across all offices'
-            : 'Credit files you opened';
+            ? 'Berkas kredit di semua kantor'
+            : 'Berkas kredit yang Anda buka';
 
     if (stats.total === 0) {
         return (
@@ -278,8 +278,8 @@ export default function Dashboard({
                 <Card>
                     <EmptyState
                         icon={<FileText />}
-                        title="No credit files yet"
-                        description="The overview appears here once loan applications exist."
+                        title="Belum ada berkas kredit"
+                        description="Ringkasan tampil di sini setelah ada pengajuan kredit."
                     />
                 </Card>
             </>
@@ -293,39 +293,39 @@ export default function Dashboard({
 
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
                 <Kpi
-                    label="In process"
+                    label="Dalam proses"
                     value={stats.in_process}
-                    note={`of ${stats.total} files`}
+                    note={`dari ${stats.total} berkas`}
                 />
-                <Kpi label="Drafts" value={stats.drafts} />
-                <Kpi label="New this month" value={stats.this_month} />
+                <Kpi label="Draf" value={stats.drafts} />
+                <Kpi label="Baru bulan ini" value={stats.this_month} />
                 <Kpi
-                    label="Requested, in process"
+                    label="Plafon diajukan, dalam proses"
                     value={rupiah(stats.amount_in_process)}
                 />
             </div>
 
             <div className="mt-3 grid gap-3 lg:grid-cols-3">
                 <ChartCard
-                    title="New files"
-                    subtitle="Last 12 months, by application date"
+                    title="Berkas baru"
+                    subtitle="12 bulan terakhir, menurut tanggal pengajuan"
                     className="lg:col-span-2"
                 >
                     <VerticalBars data={byMonth} xKey="month" />
                 </ChartCard>
-                <ChartCard title="By status">
+                <ChartCard title="Menurut status">
                     <Donut data={byStatus} total={stats.total} />
                 </ChartCard>
-                <ChartCard title="By product" className="lg:col-span-2">
+                <ChartCard title="Menurut produk" className="lg:col-span-2">
                     <HorizontalBars data={byProduct} />
                 </ChartCard>
-                <ChartCard title="By office">
+                <ChartCard title="Menurut kantor">
                     <HorizontalBars data={byOffice} />
                 </ChartCard>
                 <Card className="lg:col-span-2">
                     <div className="border-b border-line px-3 py-2">
                         <h2 className="text-sm font-semibold">
-                            Latest applications
+                            Pengajuan terbaru
                         </h2>
                     </div>
                     <ul className="divide-y divide-line">
@@ -351,12 +351,12 @@ export default function Dashboard({
                 <Card>
                     <div className="border-b border-line px-3 py-2">
                         <h2 className="text-sm font-semibold">
-                            Upcoming surveys
+                            Survei mendatang
                         </h2>
                     </div>
                     {upcomingSurveys.length === 0 ? (
                         <p className="px-3 py-4 text-sm text-muted">
-                            No surveys scheduled.
+                            Belum ada survei terjadwal.
                         </p>
                     ) : (
                         <ul className="divide-y divide-line">

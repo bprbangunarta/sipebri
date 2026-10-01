@@ -92,21 +92,21 @@ export default function CollateralsIndex({
     const columns: Column<Row>[] = [
         {
             key: 'id',
-            header: 'Collateral ID',
+            header: 'ID agunan',
             sort: 'cbs_id',
             className: 'font-medium',
             cell: (c) => c.cbs_id ?? `#${c.id}`,
         },
         {
             key: 'type',
-            header: 'Type',
+            header: 'Jenis',
             sort: 'collateral_type_code',
             hideBelow: 'md',
             cell: (c) => c.type_label,
         },
         {
             key: 'owner',
-            header: 'Owner',
+            header: 'Pemilik',
             sort: 'owner_name',
             cell: (c) => (
                 <>
@@ -119,13 +119,13 @@ export default function CollateralsIndex({
         },
         {
             key: 'document',
-            header: 'Document',
+            header: 'Dokumen',
             hideBelow: 'lg',
             cell: (c) => c.document_number,
         },
         {
             key: 'appraisal',
-            header: 'Appraisal',
+            header: 'Taksasi',
             sort: 'appraisal_value',
             align: 'right',
             className: 'whitespace-nowrap tabular-nums',
@@ -133,19 +133,19 @@ export default function CollateralsIndex({
         },
         {
             key: 'actions',
-            header: 'Actions',
+            header: 'Aksi',
             srOnly: true,
             narrow: true,
             align: 'right',
             cell: (c) =>
                 canManage && (
                     <DropdownMenu>
-                        <Tip label="Actions">
+                        <Tip label="Aksi">
                             <DropdownTrigger asChild>
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    aria-label={`Actions for ${c.cbs_id ?? c.id}`}
+                                    aria-label={`Aksi untuk ${c.cbs_id ?? c.id}`}
                                 >
                                     <MoreHorizontal />
                                 </Button>
@@ -158,7 +158,7 @@ export default function CollateralsIndex({
                                     router.visit(`/collaterals/${c.id}/edit`)
                                 }
                             >
-                                Edit
+                                Ubah
                             </DropdownItem>
                             <DropdownSeparator />
                             <DropdownItem
@@ -166,7 +166,7 @@ export default function CollateralsIndex({
                                 icon={<Trash2 />}
                                 onSelect={() => setToDelete(c)}
                             >
-                                Delete
+                                Hapus
                             </DropdownItem>
                         </DropdownContent>
                     </DropdownMenu>
@@ -176,16 +176,16 @@ export default function CollateralsIndex({
 
     return (
         <>
-            <Head title="Collaterals" />
+            <Head title="Jaminan" />
             <PageHeader
-                title="Collaterals"
-                description="Assets offered against loans, recorded in the core banking format"
+                title="Jaminan"
+                description="Agunan yang diajukan untuk kredit, dicatat dalam format core banking"
                 actions={
                     canManage && (
                         <Button
                             onClick={() => router.visit('/collaterals/create')}
                         >
-                            <Plus /> Add collateral
+                            <Plus /> Tambah jaminan
                         </Button>
                     )
                 }
@@ -203,15 +203,15 @@ export default function CollateralsIndex({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search ID, owner, document…"
-                                label="Search collaterals"
+                                placeholder="Cari ID, pemilik, dokumen…"
+                                label="Cari jaminan"
                             />
                         }
                     >
                         <Combobox
                             className="w-full sm:w-56"
                             clearable
-                            placeholder="Collateral type"
+                            placeholder="Jenis agunan"
                             options={typeOptions}
                             value={filters.type}
                             onChange={(v) => visit({ type: v })}
@@ -222,7 +222,7 @@ export default function CollateralsIndex({
                                 size="sm"
                                 onClick={() => clear({ type: null })}
                             >
-                                <X /> Reset
+                                <X /> Atur ulang
                             </Button>
                         )}
                     </FilterBar>
@@ -236,25 +236,25 @@ export default function CollateralsIndex({
                 empty={{
                     icon: <Landmark />,
                     title: hasFilters
-                        ? 'No collaterals match your filters'
-                        : 'No collaterals yet',
+                        ? 'Tidak ada jaminan yang cocok dengan filter'
+                        : 'Belum ada jaminan',
                     description: hasFilters
-                        ? 'Try a different search or clear the filters.'
-                        : 'Collaterals can also be added straight from a loan application.',
+                        ? 'Coba pencarian lain atau hapus filter.'
+                        : 'Jaminan juga bisa ditambahkan langsung dari pengajuan.',
                     action: hasFilters ? (
                         <Button
                             variant="outline"
                             size="sm"
                             onClick={() => clear({ type: null })}
                         >
-                            Clear filters
+                            Hapus filter
                         </Button>
                     ) : canManage ? (
                         <Button
                             size="sm"
                             onClick={() => router.visit('/collaterals/create')}
                         >
-                            <Plus /> Add collateral
+                            <Plus /> Tambah jaminan
                         </Button>
                     ) : undefined,
                 }}
@@ -270,15 +270,15 @@ export default function CollateralsIndex({
             <ConfirmDialog
                 open={toDelete !== null}
                 onOpenChange={(open) => !open && !deleting && setToDelete(null)}
-                title="Delete collateral?"
+                title="Hapus jaminan?"
                 description={
                     <>
-                        This removes{' '}
+                        Ini menghapus{' '}
                         <strong>
                             {toDelete?.cbs_id ?? `#${toDelete?.id}`}
                         </strong>
-                        . Collaterals attached to a loan application cannot be
-                        deleted.
+                        . Jaminan yang dilekatkan ke pengajuan tidak bisa
+                        dihapus.
                     </>
                 }
                 loading={deleting}

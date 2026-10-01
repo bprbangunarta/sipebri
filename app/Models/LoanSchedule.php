@@ -39,11 +39,11 @@ class LoanSchedule extends Model
     public const ACTION_VOID = 'void';
 
     public const LABELS = [
-        self::ACTION_SCHEDULE => 'Scheduled',
-        self::ACTION_RESCHEDULE => 'Rescheduled',
-        self::ACTION_CANCEL => 'Schedule cancelled',
-        self::ACTION_RESURVEY => 'Re-survey scheduled',
-        self::ACTION_VOID => 'Application voided',
+        self::ACTION_SCHEDULE => 'Dijadwalkan',
+        self::ACTION_RESCHEDULE => 'Dijadwalkan ulang',
+        self::ACTION_CANCEL => 'Jadwal dibatalkan',
+        self::ACTION_RESURVEY => 'Survei ulang dijadwalkan',
+        self::ACTION_VOID => 'Pengajuan dibatalkan',
     ];
 
     public const UPDATED_AT = null;

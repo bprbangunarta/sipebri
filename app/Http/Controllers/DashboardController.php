@@ -122,7 +122,7 @@ class DashboardController extends Controller
         $months = [];
         for ($i = 0; $i < 12; $i++) {
             $month = $start->addMonths($i);
-            $months[] = ['month' => $month->format('M y'), 'total' => (int) ($counts[$month->format('Y-m')] ?? 0)];
+            $months[] = ['month' => $month->translatedFormat('M y'), 'total' => (int) ($counts[$month->format('Y-m')] ?? 0)];
         }
 
         return $months;

@@ -22,9 +22,9 @@ export type LocationPlace = {
 
 const SOURCES: Record<string, string> = {
     gps: 'GPS',
-    paste: 'Pasted',
-    map: 'Map pin',
-    photo: 'Photo GPS',
+    paste: 'Ditempel',
+    map: 'Pin peta',
+    photo: 'GPS foto',
 };
 
 /** Read-only view of where a file was surveyed and where its collaterals are: a map plus one line per place. */
@@ -89,7 +89,7 @@ export function LocationsPanel({ places }: { places: LocationPlace[] }) {
                                 {p.location.address && (
                                     <p
                                         className="text-muted"
-                                        title="Approximate address from OpenStreetMap, found from the coordinates. Check it on site."
+                                        title="Perkiraan alamat dari OpenStreetMap, berdasarkan koordinat. Cek di lokasi."
                                     >
                                         ≈ {p.location.address}
                                     </p>
@@ -97,7 +97,7 @@ export function LocationsPanel({ places }: { places: LocationPlace[] }) {
                             </div>
                         ) : (
                             <span className="text-xs text-muted">
-                                No position recorded
+                                Belum ada posisi tercatat
                             </span>
                         )}
                     </li>

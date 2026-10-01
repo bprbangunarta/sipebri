@@ -10,7 +10,7 @@ export function currentPosition(): Promise<GeolocationPosition> {
         if (!window.isSecureContext) {
             reject(
                 new Error(
-                    'Location needs a secure connection. Open the app through https:// (or localhost), not a plain http:// address.',
+                    'Lokasi butuh koneksi aman. Buka aplikasi lewat https:// (atau localhost), bukan alamat http:// biasa.',
                 ),
             );
 
@@ -18,7 +18,7 @@ export function currentPosition(): Promise<GeolocationPosition> {
         }
 
         if (!navigator.geolocation) {
-            reject(new Error('This device cannot provide a location.'));
+            reject(new Error('Perangkat ini tidak bisa memberikan lokasi.'));
 
             return;
         }
@@ -29,10 +29,10 @@ export function currentPosition(): Promise<GeolocationPosition> {
                 reject(
                     new Error(
                         error.code === error.PERMISSION_DENIED
-                            ? 'Location access is blocked. Allow it for this site in the browser settings and try again.'
+                            ? 'Akses lokasi diblokir. Izinkan untuk situs ini di pengaturan peramban lalu coba lagi.'
                             : error.code === error.TIMEOUT
-                              ? 'Getting your location took too long. Move to an open area and try again.'
-                              : 'Your location is unavailable. Turn on location services (GPS) and try again.',
+                              ? 'Mengambil lokasi terlalu lama. Pindah ke area terbuka lalu coba lagi.'
+                              : 'Lokasi Anda tidak tersedia. Nyalakan layanan lokasi (GPS) lalu coba lagi.',
                     ),
                 ),
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 },
@@ -55,7 +55,7 @@ export async function markPosition(
 
         if (accuracy > WEAK_GPS_METERS) {
             toast.warning(
-                `Weak GPS signal (about ±${accuracy} m). The position is saved; mark it again in the open for a better fix.`,
+                `Sinyal GPS lemah (sekitar ±${accuracy} m). Posisi tersimpan; tandai ulang di area terbuka untuk hasil lebih baik.`,
             );
         }
 
@@ -72,7 +72,7 @@ export async function markPosition(
         );
     } catch (e) {
         toast.error(
-            e instanceof Error ? e.message : 'Unable to read your location.',
+            e instanceof Error ? e.message : 'Tidak bisa membaca lokasi Anda.',
         );
         onFinish();
     }

@@ -47,12 +47,12 @@ type Props = {
 };
 
 const VALUES = [
-    ['guarantee_value', 'Guarantee value'],
-    ['adjustment_value', 'Adjusted value'],
-    ['fair_value', 'Fair value'],
-    ['njop_value', 'NJOP value'],
-    ['appraisal_value', 'Appraisal value'],
-    ['independent_value', 'Independent value'],
+    ['guarantee_value', 'Nilai jaminan'],
+    ['adjustment_value', 'Nilai penyesuaian'],
+    ['fair_value', 'Nilai wajar'],
+    ['njop_value', 'Nilai NJOP'],
+    ['appraisal_value', 'Nilai taksasi'],
+    ['independent_value', 'Nilai independen'],
 ] as const;
 
 function Section({
@@ -125,34 +125,37 @@ export default function CollateralForm({ collateral, options }: Props) {
 
     return (
         <>
-            <Head title={isEdit ? 'Edit collateral' : 'Add collateral'} />
+            <Head title={isEdit ? 'Ubah jaminan' : 'Tambah jaminan'} />
             <PageHeader
                 title={
                     isEdit
-                        ? `Edit ${collateral.cbs_id ?? `collateral #${collateral.id}`}`
-                        : 'Add collateral'
+                        ? `Ubah ${collateral.cbs_id ?? `jaminan #${collateral.id}`}`
+                        : 'Tambah jaminan'
                 }
                 description={
                     isEdit
-                        ? 'Condition, insurance and appraisal are required at this stage. The appraiser is recorded as you.'
-                        : 'Fields marked * are required'
+                        ? 'Kondisi, asuransi, dan taksasi wajib diisi pada tahap ini. Penilai tercatat atas nama Anda.'
+                        : 'Kolom bertanda * wajib diisi'
                 }
             />
 
             <form onSubmit={submit} className="flex flex-col gap-3" noValidate>
-                <Section title="Collateral">
+                <Section title="Jaminan">
                     <Field
-                        label="Collateral ID"
+                        label="ID agunan"
                         error={errors.cbs_id}
-                        hint="Core banking ID, if known"
+                        hint="ID core banking, bila sudah ada"
                     >
                         <Input {...text('cbs_id', true)} maxLength={50} />
                     </Field>
-                    <Field label="Credit account" error={errors.credit_account}>
+                    <Field
+                        label="Rekening kredit"
+                        error={errors.credit_account}
+                    >
                         <Input {...text('credit_account')} maxLength={30} />
                     </Field>
                     <Field
-                        label="Collateral type"
+                        label="Jenis agunan"
                         required
                         error={errors.collateral_type_code}
                     >
@@ -167,7 +170,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         />
                     </Field>
                     <Field
-                        label="Binding type"
+                        label="Jenis pengikatan"
                         error={errors.binding_type_code}
                     >
                         <Combobox
@@ -181,7 +184,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         />
                     </Field>
                     <Field
-                        label="Document number"
+                        label="Nomor dokumen"
                         required
                         error={errors.document_number}
                         className="lg:col-span-2"
@@ -192,7 +195,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         />
                     </Field>
                     <Field
-                        label="Description"
+                        label="Keterangan"
                         required
                         error={errors.description}
                         className="lg:col-span-2"
@@ -201,9 +204,9 @@ export default function CollateralForm({ collateral, options }: Props) {
                     </Field>
                 </Section>
 
-                <Section title="Owner & location">
+                <Section title="Pemilik & lokasi">
                     <Field
-                        label="Owner name"
+                        label="Nama pemilik"
                         required
                         error={errors.owner_name}
                         className="lg:col-span-2"
@@ -211,7 +214,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         <Input {...text('owner_name', true)} maxLength={100} />
                     </Field>
                     <Field
-                        label="Location (regency)"
+                        label="Lokasi (kabupaten/kota)"
                         required
                         error={errors.region_code}
                         className="lg:col-span-2"
@@ -225,7 +228,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         />
                     </Field>
                     <Field
-                        label="Collateral address"
+                        label="Alamat agunan"
                         required
                         error={errors.owner_address}
                         className="sm:col-span-2 lg:col-span-4"
@@ -237,7 +240,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                     </Field>
                 </Section>
 
-                <Section title="Values (IDR)">
+                <Section title="Nilai (Rp)">
                     {VALUES.map(([name, label]) => (
                         <Field
                             key={name}
@@ -261,7 +264,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         </Field>
                     ))}
                     <Field
-                        label="Independent appraiser"
+                        label="Penilai independen"
                         error={errors.independent_name}
                     >
                         <Input
@@ -270,7 +273,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         />
                     </Field>
                     <Field
-                        label="Independent appraisal date"
+                        label="Tanggal penilaian independen"
                         error={errors.independent_at}
                     >
                         <DatePicker
@@ -284,9 +287,9 @@ export default function CollateralForm({ collateral, options }: Props) {
                     </Field>
                 </Section>
 
-                <Section title="Condition & insurance">
+                <Section title="Kondisi & asuransi">
                     <Field
-                        label="Condition"
+                        label="Kondisi"
                         required={isEdit}
                         error={errors.condition_code}
                     >
@@ -300,7 +303,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         />
                     </Field>
                     <Field
-                        label="Condition date"
+                        label="Tanggal kondisi"
                         required={isEdit}
                         error={errors.condition_date}
                     >
@@ -314,7 +317,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         />
                     </Field>
                     <Field
-                        label="Insured"
+                        label="Diasuransikan"
                         required={isEdit}
                         error={errors.insurance_code}
                     >
@@ -322,8 +325,8 @@ export default function CollateralForm({ collateral, options }: Props) {
                             id="insurance_code"
                             searchable={false}
                             options={[
-                                { value: 'Y', label: 'Yes' },
-                                { value: 'T', label: 'No' },
+                                { value: 'Y', label: 'Ya' },
+                                { value: 'T', label: 'Tidak' },
                             ]}
                             value={data.insurance_code}
                             onChange={(v) =>
@@ -332,7 +335,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                         />
                     </Field>
                     <Field
-                        label="Insurance start date"
+                        label="Tanggal mulai asuransi"
                         required={isEdit}
                         error={errors.insurance_date}
                     >
@@ -345,7 +348,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                             invalid={!!errors.insurance_date}
                         />
                     </Field>
-                    <Field label="Valuation method" error={errors.ppap_code}>
+                    <Field label="Metode penilaian" error={errors.ppap_code}>
                         <Combobox
                             id="ppap_code"
                             searchable={false}
@@ -361,10 +364,10 @@ export default function CollateralForm({ collateral, options }: Props) {
                         variant="outline"
                         onClick={() => router.visit('/collaterals')}
                     >
-                        Cancel
+                        Batal
                     </Button>
                     <Button type="submit" loading={form.processing}>
-                        {isEdit ? 'Save changes' : 'Create collateral'}
+                        {isEdit ? 'Simpan perubahan' : 'Buat jaminan'}
                     </Button>
                 </div>
             </form>

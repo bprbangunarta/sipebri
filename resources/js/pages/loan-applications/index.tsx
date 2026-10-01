@@ -102,7 +102,7 @@ function NewApplication({
             setMember(body.committee_member ?? null);
             setMessage(body.message);
         } catch {
-            setMessage('Unable to reach the server. Please try again.');
+            setMessage('Server tidak dapat dihubungi. Coba lagi.');
         } finally {
             setLooking(false);
         }
@@ -124,8 +124,8 @@ function NewApplication({
         <Modal
             open={open}
             onOpenChange={close}
-            title="New loan application"
-            description={`The applicant is looked up in ${source} by national ID.`}
+            title="Pengajuan kredit baru"
+            description={`Pemohon dicari di ${source} berdasarkan NIK.`}
         >
             <form
                 onSubmit={(e) => {
@@ -136,10 +136,10 @@ function NewApplication({
             >
                 <div className="flex flex-col gap-3 p-4">
                     <Field
-                        label="National ID (NIK)"
+                        label="NIK (KTP)"
                         required
                         error={form.errors.nik ?? undefined}
-                        hint="16 digits"
+                        hint="16 digit"
                     >
                         <div className="flex gap-2">
                             <Input
@@ -175,7 +175,7 @@ function NewApplication({
                                 ) : (
                                     <Search />
                                 )}{' '}
-                                Look up
+                                Cari
                             </Button>
                         </div>
                     </Field>
@@ -185,13 +185,13 @@ function NewApplication({
                     {customer && (
                         <dl className="grid grid-cols-2 gap-2 rounded-md border border-line bg-canvas p-2.5 text-sm">
                             <div className="col-span-2">
-                                <dt className="text-xs text-muted">Name</dt>
+                                <dt className="text-xs text-muted">Nama</dt>
                                 <dd className="font-medium">
                                     {customer.full_name}
                                 </dd>
                             </div>
                             <div>
-                                <dt className="text-xs text-muted">Birth</dt>
+                                <dt className="text-xs text-muted">Lahir</dt>
                                 <dd>
                                     {[
                                         customer.birth_place,
@@ -203,11 +203,11 @@ function NewApplication({
                                 </dd>
                             </div>
                             <div>
-                                <dt className="text-xs text-muted">Source</dt>
+                                <dt className="text-xs text-muted">Sumber</dt>
                                 <dd>{customer.source}</dd>
                             </div>
                             <div className="col-span-2">
-                                <dt className="text-xs text-muted">Address</dt>
+                                <dt className="text-xs text-muted">Alamat</dt>
                                 <dd>{customer.address ?? '–'}</dd>
                             </div>
                         </dl>
@@ -220,13 +220,12 @@ function NewApplication({
                             <ShieldAlert className="mt-0.5 size-3.5 shrink-0" />
                             <span>
                                 <strong>
-                                    The applicant is a committee member:{' '}
-                                    {member.name}
+                                    Pemohon adalah anggota komite: {member.name}
                                     {member.role ? ` (${member.role})` : ''}.
                                 </strong>{' '}
-                                The file is marked from the start. They cannot
-                                decide it or be its section head, and the
-                                approval skips them.
+                                Berkas ditandai sejak awal. Ia tidak bisa
+                                memutus maupun menjadi Kasi Analisnya, dan
+                                persetujuan melewatinya.
                             </span>
                         </div>
                     )}
@@ -245,16 +244,16 @@ function NewApplication({
                                         );
                                     }}
                                 />
-                                The applicant is a committee member
+                                Pemohon adalah anggota komite
                             </label>
                             {flagged && (
                                 <Field
-                                    label="Committee member"
+                                    label="Anggota komite"
                                     required
                                     error={
                                         form.errors.committee_conflict_user_id
                                     }
-                                    hint="Not recognised by national ID (no NIK on record yet), so choose the person."
+                                    hint="Tidak dikenali dari NIK (belum ada NIK tercatat), jadi pilih orangnya."
                                 >
                                     <Combobox
                                         options={members}
@@ -279,7 +278,7 @@ function NewApplication({
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => close(false)}>
-                        Cancel
+                        Batal
                     </Button>
                     <Button
                         type="submit"
@@ -289,7 +288,7 @@ function NewApplication({
                             (flagged && !form.data.committee_conflict_user_id)
                         }
                     >
-                        Open application
+                        Buka pengajuan
                     </Button>
                 </DialogFooter>
             </form>
@@ -323,7 +322,7 @@ export default function LoanApplicationsIndex({
     const columns: Column<LoanRow>[] = [
         {
             key: 'file',
-            header: 'File',
+            header: 'Berkas',
             sort: 'application_code',
             cell: (l) => (
                 <>
@@ -336,7 +335,7 @@ export default function LoanApplicationsIndex({
         },
         {
             key: 'applicant',
-            header: 'Applicant',
+            header: 'Pemohon',
             sort: 'full_name',
             cell: (l) => (
                 <>
@@ -347,13 +346,13 @@ export default function LoanApplicationsIndex({
         },
         {
             key: 'product',
-            header: 'Product',
+            header: 'Produk',
             hideBelow: 'md',
             cell: (l) => l.product_label ?? '–',
         },
         {
             key: 'amount',
-            header: 'Amount',
+            header: 'Plafon',
             sort: 'requested_amount',
             align: 'right',
             hideBelow: 'sm',
@@ -379,14 +378,14 @@ export default function LoanApplicationsIndex({
 
     return (
         <>
-            <Head title="Loan applications" />
+            <Head title="Pengajuan" />
             <PageHeader
-                title="Loan applications"
-                description="Your loan files, from registration to the committee decision"
+                title="Pengajuan"
+                description="Berkas kredit Anda, dari pendaftaran sampai keputusan komite"
                 actions={
                     canManage && (
                         <Button onClick={() => setCreating(true)}>
-                            <Plus /> New application
+                            <Plus /> Pengajuan baru
                         </Button>
                     )
                 }
@@ -404,8 +403,8 @@ export default function LoanApplicationsIndex({
                             <SearchInput
                                 value={search}
                                 onChange={onSearch}
-                                placeholder="Search code, name, NIK…"
-                                label="Search applications"
+                                placeholder="Cari kode, nama, NIK…"
+                                label="Cari pengajuan"
                             />
                         }
                     >
@@ -421,7 +420,7 @@ export default function LoanApplicationsIndex({
                         <Combobox
                             className="w-full sm:w-56"
                             clearable
-                            placeholder="Product"
+                            placeholder="Produk"
                             options={products}
                             value={filters.product}
                             onChange={(v) =>
@@ -436,7 +435,7 @@ export default function LoanApplicationsIndex({
                                     clear({ status: null, product: null })
                                 }
                             >
-                                <X /> Reset
+                                <X /> Atur ulang
                             </Button>
                         )}
                     </FilterBar>
@@ -451,11 +450,11 @@ export default function LoanApplicationsIndex({
                 empty={{
                     icon: <FileText />,
                     title: hasFilters
-                        ? 'No applications match your filters'
-                        : 'No applications yet',
+                        ? 'Tidak ada pengajuan yang cocok dengan filter'
+                        : 'Belum ada pengajuan',
                     description: hasFilters
-                        ? 'Try a different search or clear the filters.'
-                        : 'Open a new application with the applicant’s national ID.',
+                        ? 'Coba pencarian lain atau hapus filter.'
+                        : 'Buka pengajuan baru dengan NIK pemohon.',
                     action: hasFilters ? (
                         <Button
                             variant="outline"
@@ -464,11 +463,11 @@ export default function LoanApplicationsIndex({
                                 clear({ status: null, product: null })
                             }
                         >
-                            Clear filters
+                            Hapus filter
                         </Button>
                     ) : canManage ? (
                         <Button size="sm" onClick={() => setCreating(true)}>
-                            <Plus /> New application
+                            <Plus /> Pengajuan baru
                         </Button>
                     ) : undefined,
                 }}

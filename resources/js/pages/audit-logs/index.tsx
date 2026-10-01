@@ -1,5 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 import { Download, Eye, ScrollText, ShieldCheck, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -156,6 +157,7 @@ export default function AuditLogsIndex({
                 format(
                     new Date(log.at.replace(' ', 'T')),
                     'dd MMM yyyy HH:mm:ss',
+                    { locale: id },
                 ),
         },
         {

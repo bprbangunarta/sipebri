@@ -191,8 +191,8 @@ function NewCollateral({
             open={open}
             onOpenChange={onOpenChange}
             wide
-            title="New collateral"
-            description="It is attached to this file straight away."
+            title="Jaminan baru"
+            description="Langsung dilekatkan ke berkas ini."
         >
             <form
                 onSubmit={(e) => {
@@ -209,7 +209,7 @@ function NewCollateral({
             >
                 <div className="grid max-h-[65vh] gap-3 overflow-auto p-4 sm:grid-cols-2">
                     <Field
-                        label="Collateral type"
+                        label="Jenis agunan"
                         required
                         error={form.errors.collateral_type_code}
                         className="sm:col-span-2"
@@ -224,7 +224,7 @@ function NewCollateral({
                         />
                     </Field>
                     <Field
-                        label="Binding type"
+                        label="Jenis pengikatan"
                         error={form.errors.binding_type_code}
                         className="sm:col-span-2"
                     >
@@ -237,15 +237,11 @@ function NewCollateral({
                             }
                         />
                     </Field>
-                    {upper('document_number', 'Document number')}
-                    {upper('owner_name', 'Owner name')}
-                    {upper(
-                        'owner_address',
-                        'Collateral address',
-                        'sm:col-span-2',
-                    )}
+                    {upper('document_number', 'Nomor dokumen')}
+                    {upper('owner_name', 'Nama pemilik')}
+                    {upper('owner_address', 'Alamat agunan', 'sm:col-span-2')}
                     <Field
-                        label="Location (regency)"
+                        label="Lokasi (kabupaten/kota)"
                         required
                         error={form.errors.region_code}
                         className="sm:col-span-2"
@@ -259,17 +255,17 @@ function NewCollateral({
                             invalid={!!form.errors.region_code}
                         />
                     </Field>
-                    {upper('description', 'Description', 'sm:col-span-2')}
+                    {upper('description', 'Keterangan', 'sm:col-span-2')}
                 </div>
                 <DialogFooter>
                     <Button
                         variant="outline"
                         onClick={() => onOpenChange(false)}
                     >
-                        Cancel
+                        Batal
                     </Button>
                     <Button type="submit" loading={form.processing}>
-                        Add collateral
+                        Tambah jaminan
                     </Button>
                 </DialogFooter>
             </form>
@@ -355,12 +351,12 @@ export default function LoanApplicationShow({
     };
 
     const checklist: [string, boolean][] = [
-        ['Customer found in the customer system', loan.checklist.customer],
-        ['Application data complete', loan.checklist.application],
+        ['Nasabah ditemukan di sistem nasabah', loan.checklist.customer],
+        ['Data pengajuan lengkap', loan.checklist.application],
         [
             loan.collateral_required
-                ? 'Collateral attached (required by the product)'
-                : 'Collateral (optional for this product)',
+                ? 'Jaminan terlampir (wajib untuk produk ini)'
+                : 'Jaminan (opsional untuk produk ini)',
             loan.checklist.collateral,
         ],
     ];
@@ -368,7 +364,7 @@ export default function LoanApplicationShow({
     const collateralColumns: Column<(typeof collaterals)[number]>[] = [
         {
             key: 'collateral',
-            header: 'Collateral',
+            header: 'Jaminan',
             cell: (c) => (
                 <>
                     <p className="font-medium">
@@ -382,13 +378,13 @@ export default function LoanApplicationShow({
         },
         {
             key: 'document',
-            header: 'Document',
+            header: 'Dokumen',
             hideBelow: 'sm',
             cell: (c) => c.document_number,
         },
         {
             key: 'appraisal',
-            header: 'Appraisal',
+            header: 'Taksasi',
             align: 'right',
             className: 'whitespace-nowrap tabular-nums',
             cell: (c) => rupiah(c.appraisal_value),
@@ -397,16 +393,16 @@ export default function LoanApplicationShow({
             ? [
                   {
                       key: 'actions',
-                      header: 'Actions',
+                      header: 'Aksi',
                       srOnly: true,
                       narrow: true,
                       align: 'right',
                       cell: (c: (typeof collaterals)[number]) => (
-                          <Tip label="Detach">
+                          <Tip label="Lepas">
                               <Button
                                   variant="ghost"
                                   size="icon"
-                                  aria-label="Detach collateral"
+                                  aria-label="Lepas jaminan"
                                   onClick={() =>
                                       router.delete(
                                           `/loan-applications/${loan.id}/collaterals/${c.id}`,
@@ -425,9 +421,9 @@ export default function LoanApplicationShow({
 
     return (
         <>
-            <Head title={`Application ${loan.application_code}`} />
+            <Head title={`Pengajuan ${loan.application_code}`} />
             <PageHeader
-                title={`Application ${loan.application_code}`}
+                title={`Pengajuan ${loan.application_code}`}
                 description={`${loan.full_name} · ${formatDate(loan.application_date)}`}
                 actions={
                     <>
@@ -438,7 +434,7 @@ export default function LoanApplicationShow({
                             variant="outline"
                             onClick={() => router.visit('/loan-applications')}
                         >
-                            <ArrowLeft /> Back
+                            <ArrowLeft /> Kembali
                         </Button>
                     </>
                 }
@@ -447,32 +443,26 @@ export default function LoanApplicationShow({
             {!editable && (
                 <p className="mb-3 rounded-md border border-line bg-surface px-3 py-2 text-xs text-muted">
                     {loan.status === 'draft'
-                        ? 'Only the person who opened this file can change it.'
-                        : 'This file has been submitted and is locked.'}
+                        ? 'Hanya yang membuka berkas ini yang bisa mengubahnya.'
+                        : 'Berkas ini sudah diajukan dan terkunci.'}
                 </p>
             )}
 
             <div className="flex flex-col gap-3">
-                <Step
-                    number={1}
-                    title="Applicant"
-                    done={loan.checklist.customer}
-                >
+                <Step number={1} title="Pemohon" done={loan.checklist.customer}>
                     <dl className="grid gap-3 p-3 sm:grid-cols-3">
                         <div>
-                            <dt className="text-xs text-muted">Name</dt>
+                            <dt className="text-xs text-muted">Nama</dt>
                             <dd className="text-sm font-medium">
                                 {loan.full_name}
                             </dd>
                         </div>
                         <div>
-                            <dt className="text-xs text-muted">
-                                National ID (NIK)
-                            </dt>
+                            <dt className="text-xs text-muted">NIK (KTP)</dt>
                             <dd className="font-mono text-sm">{loan.nik}</dd>
                         </div>
                         <div>
-                            <dt className="text-xs text-muted">CIF number</dt>
+                            <dt className="text-xs text-muted">Nomor CIF</dt>
                             <dd className="text-sm">
                                 {loan.cif_number ?? '–'}
                             </dd>
@@ -486,7 +476,7 @@ export default function LoanApplicationShow({
                             <ShieldAlert className="mt-0.5 size-3.5 shrink-0" />
                             <span>
                                 <strong>
-                                    The applicant is a committee member:{' '}
+                                    Pemohon adalah anggota komite:{' '}
                                     {loan.committee_conflict.name}
                                     {loan.committee_conflict.role
                                         ? ` (${loan.committee_conflict.role})`
@@ -494,10 +484,11 @@ export default function LoanApplicationShow({
                                     .
                                 </strong>{' '}
                                 {loan.committee_conflict.source === 'nik'
-                                    ? 'Recognised by national ID. '
-                                    : 'Flagged by hand. '}
-                                They cannot decide this file, be its section
-                                head or survey it, and the approval skips them.
+                                    ? 'Dikenali dari NIK. '
+                                    : 'Ditandai manual. '}
+                                Ia tidak bisa memutus berkas ini, menjadi Kasi
+                                Analis atau mensurveinya, dan persetujuan
+                                melewatinya.
                             </span>
                         </div>
                     )}
@@ -506,7 +497,7 @@ export default function LoanApplicationShow({
                 <form onSubmit={save} noValidate>
                     <Step
                         number={2}
-                        title="Application data"
+                        title="Data pengajuan"
                         done={loan.checklist.application}
                         action={
                             editable && (
@@ -515,7 +506,7 @@ export default function LoanApplicationShow({
                                     size="sm"
                                     loading={form.processing}
                                 >
-                                    <Save /> Save
+                                    <Save /> Simpan
                                 </Button>
                             )
                         }
@@ -525,7 +516,7 @@ export default function LoanApplicationShow({
                             className="grid gap-3 p-3 sm:grid-cols-2 lg:grid-cols-4"
                         >
                             <Field
-                                label="Application date"
+                                label="Tanggal pengajuan"
                                 required
                                 error={errors.application_date}
                             >
@@ -541,7 +532,7 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Product"
+                                label="Produk"
                                 required
                                 error={errors.product_id}
                                 className="lg:col-span-2"
@@ -555,18 +546,18 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Category"
+                                label="Kategori"
                                 required
                                 error={errors.committee_path_id}
-                                hint="Decides the committee path"
+                                hint="Menentukan jalur komite"
                             >
                                 <Combobox
                                     id="committee_path_id"
                                     searchable={false}
                                     placeholder={
                                         data.product_id
-                                            ? 'Select…'
-                                            : 'Choose a product first'
+                                            ? 'Pilih…'
+                                            : 'Pilih produk dulu'
                                     }
                                     options={categories}
                                     value={data.committee_path_id}
@@ -577,7 +568,7 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Loan amount (IDR)"
+                                label="Plafon kredit (Rp)"
                                 required
                                 error={errors.requested_amount}
                                 hint={
@@ -607,12 +598,12 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Tenor (months)"
+                                label="Tenor (bulan)"
                                 required
                                 error={errors.requested_tenor}
                                 hint={
                                     parameter
-                                        ? `${parameter.min_tenor} – ${parameter.max_tenor} months${period > 1 ? `, multiples of ${period}` : ''}`
+                                        ? `${parameter.min_tenor} – ${parameter.max_tenor} bulan${period > 1 ? `, kelipatan ${period}` : ''}`
                                         : undefined
                                 }
                             >
@@ -631,7 +622,7 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Interest method"
+                                label="Metode bunga"
                                 required
                                 error={errors.method_id}
                             >
@@ -646,7 +637,7 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Installment system"
+                                label="Sistem angsuran"
                                 required
                                 error={errors.installment_id}
                             >
@@ -661,7 +652,7 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Interest rate (%)"
+                                label="Suku bunga (%)"
                                 required
                                 error={errors.interest_rate}
                             >
@@ -678,7 +669,7 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Usage"
+                                label="Penggunaan"
                                 required
                                 error={errors.usage_type}
                             >
@@ -694,7 +685,7 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Office"
+                                label="Kantor"
                                 required
                                 error={errors.office_id}
                             >
@@ -709,10 +700,10 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Section head"
+                                label="Kasi Analis"
                                 required
                                 error={errors.supervisor_id}
-                                hint="Schedules the survey"
+                                hint="Menjadwalkan survei"
                             >
                                 <Combobox
                                     id="supervisor_id"
@@ -729,12 +720,12 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Applicant is a committee member"
+                                label="Pemohon adalah anggota komite"
                                 error={errors.committee_conflict_user_id}
                                 hint={
                                     loan.committee_conflict?.source === 'nik'
-                                        ? 'Recognised by national ID; cannot be changed.'
-                                        : 'Only if the system did not recognise them.'
+                                        ? 'Dikenali dari NIK; tidak bisa diubah.'
+                                        : 'Hanya bila sistem tidak mengenalinya.'
                                 }
                             >
                                 <fieldset
@@ -746,7 +737,7 @@ export default function LoanApplicationShow({
                                     <Combobox
                                         id="committee_conflict_user_id"
                                         clearable
-                                        placeholder="No"
+                                        placeholder="Tidak"
                                         options={refs.committeeMembers}
                                         value={data.committee_conflict_user_id}
                                         onChange={(v) =>
@@ -765,10 +756,7 @@ export default function LoanApplicationShow({
                                     />
                                 </fieldset>
                             </Field>
-                            <Field
-                                label="Institution"
-                                error={errors.institution_id}
-                            >
+                            <Field label="Resort" error={errors.institution_id}>
                                 <Combobox
                                     id="institution_id"
                                     clearable
@@ -779,7 +767,7 @@ export default function LoanApplicationShow({
                                     }
                                 />
                             </Field>
-                            <Field label="Marketing" error={errors.marketing}>
+                            <Field label="Pemasar" error={errors.marketing}>
                                 <Input
                                     className="uppercase"
                                     value={data.marketing}
@@ -790,7 +778,7 @@ export default function LoanApplicationShow({
                                 />
                             </Field>
                             <Field
-                                label="Note"
+                                label="Catatan"
                                 error={errors.note}
                                 className="sm:col-span-2"
                             >
@@ -808,7 +796,7 @@ export default function LoanApplicationShow({
 
                 <Step
                     number={3}
-                    title="Collateral"
+                    title="Jaminan"
                     done={loan.checklist.collateral && collaterals.length > 0}
                     action={
                         editable && (
@@ -817,7 +805,7 @@ export default function LoanApplicationShow({
                                 variant="outline"
                                 onClick={() => setNewCollateral(true)}
                             >
-                                <Plus /> New collateral
+                                <Plus /> Jaminan baru
                             </Button>
                         )
                     }
@@ -826,7 +814,7 @@ export default function LoanApplicationShow({
                         <div className="flex flex-wrap items-center gap-2 border-b border-line p-2.5">
                             <Combobox
                                 className="min-w-64 flex-1"
-                                placeholder="Attach an existing collateral…"
+                                placeholder="Lekatkan jaminan yang sudah ada…"
                                 options={attachable}
                                 value={attach}
                                 onChange={(v) => setAttach(v ?? '')}
@@ -845,7 +833,7 @@ export default function LoanApplicationShow({
                                     )
                                 }
                             >
-                                Attach
+                                Lekatkan
                             </Button>
                         </div>
                     )}
@@ -856,10 +844,10 @@ export default function LoanApplicationShow({
                         columns={collateralColumns}
                         empty={{
                             icon: <CircleAlert />,
-                            title: 'No collateral attached',
+                            title: 'Belum ada jaminan',
                             description: loan.collateral_required
-                                ? 'This product requires collateral.'
-                                : 'Collateral is optional for this product.',
+                                ? 'Produk ini mewajibkan jaminan.'
+                                : 'Jaminan opsional untuk produk ini.',
                         }}
                     />
                 </Step>
@@ -867,7 +855,7 @@ export default function LoanApplicationShow({
                 {locations.some((p) => p.location) && (
                     <Card>
                         <h2 className="border-b border-line px-3 py-2 text-sm font-semibold">
-                            Locations
+                            Lokasi
                         </h2>
                         <LocationsPanel places={locations} />
                     </Card>
@@ -875,7 +863,7 @@ export default function LoanApplicationShow({
 
                 {loan.status === 'draft' && (
                     <Card className="p-3">
-                        <h2 className="mb-2 text-sm font-semibold">Submit</h2>
+                        <h2 className="mb-2 text-sm font-semibold">Ajukan</h2>
                         <ul className="mb-3 flex flex-col gap-1">
                             {checklist.map(([label, ok]) => (
                                 <li
@@ -905,13 +893,13 @@ export default function LoanApplicationShow({
                                         )
                                     }
                                 >
-                                    <Send /> Submit application
+                                    <Send /> Ajukan pengajuan
                                 </Button>
                                 <Button
                                     variant="outline"
                                     onClick={() => setConfirmDelete(true)}
                                 >
-                                    <Trash2 /> Delete draft
+                                    <Trash2 /> Hapus draf
                                 </Button>
                             </div>
                         )}
@@ -928,11 +916,11 @@ export default function LoanApplicationShow({
             <ConfirmDialog
                 open={confirmDelete}
                 onOpenChange={setConfirmDelete}
-                title="Delete draft?"
+                title="Hapus draf?"
                 description={
                     <>
-                        This removes application{' '}
-                        <strong>{loan.application_code}</strong> for{' '}
+                        Ini menghapus pengajuan{' '}
+                        <strong>{loan.application_code}</strong> atas nama{' '}
                         {loan.full_name}.
                     </>
                 }

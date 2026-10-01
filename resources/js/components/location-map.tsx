@@ -144,7 +144,7 @@ export function LocationMap({ pins, height = 260, onPick, className }: Props) {
                 className,
             )}
             role="region"
-            aria-label="Map"
+            aria-label="Peta"
         />
     );
 }
@@ -170,7 +170,7 @@ function popup(pin: MapPin): HTMLElement {
     link.href = mapsUrl(pin.latitude, pin.longitude);
     link.target = '_blank';
     link.rel = 'noopener noreferrer';
-    link.textContent = 'Open in Google Maps';
+    link.textContent = 'Buka di Google Maps';
     box.append(title, coords, link);
 
     return box;
