@@ -439,7 +439,8 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                                 />
                             </div>
                             <p className="text-xs text-muted">
-                                Cannot scan? Enter this key in the app:
+                                Tidak bisa memindai? Masukkan kunci ini di
+                                aplikasi:
                             </p>
                             <code className="rounded bg-canvas px-2 py-1 font-mono text-xs break-all select-all">
                                 {twoFactor.setup.secret}
