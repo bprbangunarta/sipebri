@@ -181,4 +181,63 @@ document.addEventListener('DOMContentLoaded', function () {
 
    form.querySelectorAll('.kpmi-rupiah').forEach(formatRupiah);
    perbarui();
+
+   // ---- Kirim ke Komite ----
+   function isianSekarang() {
+      var data = new FormData(form);
+      data.delete('_token');
+      return new URLSearchParams(data).toString();
+   }
+
+   var isianAwal = isianSekarang();
+
+   function escapeHtml(teks) {
+      var el = document.createElement('div');
+      el.textContent = teks;
+      return el.innerHTML;
+   }
+
+   var tombolKomite = $('tombol-komite');
+   if (tombolKomite) {
+      tombolKomite.addEventListener('click', function (e) {
+         e.preventDefault();
+
+         var formKomite = $('form-komite');
+         var belumDisimpan = isianSekarang() !== isianAwal;
+         var rekomendasi = tombolKomite.dataset.rekomendasi;
+         var skor = parseFloat(tombolKomite.dataset.skor).toLocaleString('id-ID', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+
+         var html =
+            '<div style="text-align:left">' +
+            '<p style="margin:0 0 10px">Rekomendasi analisa tersimpan: <b>' + escapeHtml(rekomendasi) + '</b> (skor ' + skor + ').</p>' +
+            '<p style="margin:0 0 10px"><b>Pastikan analisa sudah sesuai dan benar</b> sebelum dikirim. ' +
+            'Setelah dikirim, pengajuan masuk ke tahap persetujuan Komite.</p>' +
+            '<p style="margin:0">Yang dikirim adalah analisa yang <b>sudah disimpan</b>.</p>' +
+            (belumDisimpan
+               ? '<p style="margin:12px 0 0;padding:8px 10px;background:#fdeeec;border-left:4px solid #dd4b39;color:#a52a1c">' +
+                 'Ada isian yang <b>belum disimpan</b>. Perubahan itu tidak ikut terkirim. Tekan Batal lalu SIMPAN dulu jika ingin ikut.</p>'
+               : '') +
+            '</div>';
+
+         if (typeof Swal === 'undefined') {
+            if (confirm('Kirim analisa yang tersimpan ke Komite?\nRekomendasi: ' + rekomendasi)) formKomite.submit();
+            return;
+         }
+
+         Swal.fire({
+            title: 'Kirim ke Komite?',
+            html: html,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#00a65a',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, kirim',
+            cancelButtonText: 'Batal',
+            reverseButtons: true,
+            focusCancel: true
+         }).then(function (hasil) {
+            if (hasil.isConfirmed) formKomite.submit();
+         });
+      });
+   }
 });

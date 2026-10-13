@@ -327,7 +327,7 @@ satu-satunya syarat adalah analisa KPMI sudah tersimpan. Persetujuan selanjutnya
 | Kondisi | Perilaku |
 |---|---|
 | Analisa belum disimpan | Tombol redup dan tidak bisa diklik |
-| Analisa tersimpan | Tombol aktif, ada konfirmasi yang menyebut rekomendasinya |
+| Analisa tersimpan | Tombol aktif, ada dialog konfirmasi (SweetAlert) sebelum dikirim |
 | Rekomendasi TUNDA | Tetap bisa dikirim, rekomendasi tampil di konfirmasi dan ikut ke Komite lewat analisa tersimpan |
 | Sudah dikirim | Tombol berubah menjadi "Sudah dikirim ke Komite" dan tidak bisa diklik |
 
@@ -338,3 +338,14 @@ Saat dikirim, sistem melakukan hal yang sama dengan konfirmasi analisa produk la
 3. Halaman berpindah ke daftar Komite dengan pesan "Konfirmasi berhasil".
 
 Yang dikirim adalah analisa yang **sudah tersimpan**, bukan isian yang belum disimpan.
+
+**Dialog konfirmasi.** Klik tombol tidak langsung mengirim. Dialog "Kirim ke Komite?" tampil dengan isi:
+
+- rekomendasi dan skor analisa yang tersimpan,
+- peringatan agar memastikan analisa sudah sesuai dan benar, karena setelah dikirim pengajuan masuk ke tahap
+  persetujuan Komite,
+- penjelasan bahwa yang dikirim adalah analisa yang sudah disimpan.
+
+Jika ada isian yang diubah tetapi belum disimpan, dialog menambah peringatan merah bahwa perubahan itu tidak ikut
+terkirim dan sebaiknya SIMPAN dulu. Pengiriman hanya berjalan setelah menekan **Ya, kirim**; tombol **Batal**
+menutup dialog tanpa mengirim.

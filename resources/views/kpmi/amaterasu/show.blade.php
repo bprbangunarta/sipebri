@@ -447,8 +447,8 @@
                               <a class="btn btn-sm btn-success disabled">SUDAH DIKIRIM KE KOMITE</a>
                            </span>
                         @else
-                           <button type="submit" form="form-komite" class="btn btn-sm btn-success pull-right" style="margin-right: 6px;"
-                              onclick="return confirm('Kirim analisa yang tersimpan ke Komite?\nRekomendasi: {{ $analisa->rekomendasi }}')">
+                           <button type="submit" form="form-komite" id="tombol-komite" class="btn btn-sm btn-success pull-right" style="margin-right: 6px;"
+                              data-rekomendasi="{{ $analisa->rekomendasi }}" data-skor="{{ $analisa->skor_total }}">
                               KIRIM KE KOMITE
                            </button>
                         @endif
