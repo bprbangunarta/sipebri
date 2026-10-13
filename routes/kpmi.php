@@ -8,4 +8,5 @@ Route::prefix('kpmi')->middleware('auth')->group(function () {
    Route::get('/analisa/{kode_pengajuan}', [AmaterasuController::class, 'show'])->name('kpmi.amaterasi.show');
    Route::post('/analisa/{kode_pengajuan}', [AmaterasuController::class, 'store'])->name('kpmi.amaterasi.store');
    Route::get('/analisa/{kode_pengajuan}/cetak', [AmaterasuController::class, 'cetak'])->name('kpmi.amaterasi.cetak');
+   Route::post('/analisa/{kode_pengajuan}/komite', [AmaterasuController::class, 'komite'])->name('kpmi.amaterasi.komite');
 });

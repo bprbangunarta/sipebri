@@ -437,11 +437,30 @@
                         <button type="submit" class="btn btn-sm btn-primary pull-right">
                            SIMPAN
                         </button>
+
+                        @if (! $analisa)
+                           <span class="pull-right" title="Simpan analisa dulu agar bisa dikirim ke Komite" style="cursor: not-allowed; margin-right: 6px;">
+                              <a class="btn btn-sm btn-success disabled">KIRIM KE KOMITE</a>
+                           </span>
+                        @elseif ($pengajuan->tracking === 'Persetujuan Komite')
+                           <span class="pull-right" title="Pengajuan sudah dikirim ke Komite" style="cursor: not-allowed; margin-right: 6px;">
+                              <a class="btn btn-sm btn-success disabled">SUDAH DIKIRIM KE KOMITE</a>
+                           </span>
+                        @else
+                           <button type="submit" form="form-komite" class="btn btn-sm btn-success pull-right" style="margin-right: 6px;"
+                              onclick="return confirm('Kirim analisa yang tersimpan ke Komite?\nRekomendasi: {{ $analisa->rekomendasi }}')">
+                              KIRIM KE KOMITE
+                           </button>
+                        @endif
                      </div>
                   </div>
                </div>
             </div>
          </div>
+      </form>
+
+      <form id="form-komite" method="POST" action="{{ route('kpmi.amaterasi.komite', $kodeRoute) }}">
+         @csrf
       </form>
    </section>
 </div>

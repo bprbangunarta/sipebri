@@ -78,6 +78,38 @@ class AmaterasuController extends Controller
             ->with('success', 'Analisa berhasil disimpan. Rekomendasi: ' . $hasil['header']['rekomendasi'] . '.');
     }
 
+    /**
+     * Kirim ke Komite. Untuk KPMI tidak ada syarat analisa standar (collateral, sandi lapbul, administrasi);
+     * cukup analisa KPMI sudah tersimpan. Perubahan tracking sama dengan konfirmasi analisa produk lain.
+     */
+    public function komite(string $kode_pengajuan)
+    {
+        $kode = $this->kodePengajuan($kode_pengajuan);
+        $pengajuan = DataPengajuan::getPengajuan($kode);
+
+        if (! $pengajuan->analisa) {
+            return redirect()
+                ->route('kpmi.amaterasi.show', $kode_pengajuan)
+                ->withErrors(['analisa' => 'Analisa belum disimpan, simpan dulu sebelum dikirim ke Komite.']);
+        }
+
+        if ($pengajuan->tracking === 'Persetujuan Komite') {
+            return redirect()
+                ->route('kpmi.amaterasi.show', $kode_pengajuan)
+                ->withErrors(['analisa' => 'Pengajuan ini sudah dikirim ke Komite.']);
+        }
+
+        DB::transaction(function () use ($kode) {
+            DB::table('data_tracking')->where('pengajuan_kode', $kode)->update(['analisa_kredit' => now()]);
+            DataPengajuan::where('kode_pengajuan', $kode)->update([
+                'tracking' => 'Persetujuan Komite',
+                'status'   => 'Sudah Otorisasi',
+            ]);
+        });
+
+        return redirect()->route('komite.kredit')->with('success', 'Konfirmasi berhasil');
+    }
+
     public function cetak(string $kode_pengajuan)
     {
         $kode = $this->kodePengajuan($kode_pengajuan);

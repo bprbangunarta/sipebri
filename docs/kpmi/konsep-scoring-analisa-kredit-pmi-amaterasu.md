@@ -317,3 +317,24 @@ Isinya berurutan:
 
 Semua angka diambil dari analisa yang tersimpan (bobot dan angsuran saat analisa dibuat), sehingga hasil cetak
 tidak berubah walau data pengajuan berubah di kemudian hari. Kelompok dan urutan kriteria mengikuti file Excel konsep.
+
+## 12. Kirim ke Komite
+
+Setelah analisa disimpan, tombol hijau **KIRIM KE KOMITE** di panel Hasil Analisa mengirim pengajuan ke Komite.
+Untuk KPMI **tidak ada syarat analisa standar** (collateral, sandi lapbul, administrasi) seperti produk lain;
+satu-satunya syarat adalah analisa KPMI sudah tersimpan. Persetujuan selanjutnya mengikuti proses Komite yang sudah ada.
+
+| Kondisi | Perilaku |
+|---|---|
+| Analisa belum disimpan | Tombol redup dan tidak bisa diklik |
+| Analisa tersimpan | Tombol aktif, ada konfirmasi yang menyebut rekomendasinya |
+| Rekomendasi TUNDA | Tetap bisa dikirim, rekomendasi tampil di konfirmasi dan ikut ke Komite lewat analisa tersimpan |
+| Sudah dikirim | Tombol berubah menjadi "Sudah dikirim ke Komite" dan tidak bisa diklik |
+
+Saat dikirim, sistem melakukan hal yang sama dengan konfirmasi analisa produk lain:
+
+1. Tahap pengajuan menjadi **Persetujuan Komite** dan statusnya menjadi **Sudah Otorisasi**.
+2. Waktu analisa kredit pada data tracking diisi dengan waktu saat itu.
+3. Halaman berpindah ke daftar Komite dengan pesan "Konfirmasi berhasil".
+
+Yang dikirim adalah analisa yang **sudah tersimpan**, bukan isian yang belum disimpan.
