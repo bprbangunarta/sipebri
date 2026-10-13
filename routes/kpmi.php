@@ -6,4 +6,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('kpmi')->middleware('auth')->group(function () {
    Route::get('/analisa/{kode_pengajuan}', [AmaterasuController::class, 'show'])->name('kpmi.amaterasi.show');
+   Route::post('/analisa/{kode_pengajuan}', [AmaterasuController::class, 'store'])->name('kpmi.amaterasi.store');
 });

@@ -256,3 +256,40 @@ Hasil satu analisa disimpan di dua tabel. Satu pengajuan hanya punya satu analis
 Bobot dan angsuran dicatat per analisa, sehingga jika bobot atau data pengajuan berubah di kemudian hari,
 analisa yang sudah ada tidak ikut berubah. Skor dan rekomendasi dihitung ulang di server saat disimpan,
 tidak dipercaya dari kiriman halaman.
+
+## 10. Menyimpan dan membuka kembali analisa
+
+**Syarat agar analisa bisa disimpan.** Semua isian harus lengkap, kecuali Skor Lendana dan catatan:
+
+| Isian | Aturan |
+|---|---|
+| Penghasilan bersih | Wajib, minimal Rp1 |
+| Biaya hidup | Wajib, boleh 0 |
+| Angsuran kredit berjalan | Wajib, isi 0 jika tidak ada |
+| 7 pilihan Ya/Tidak | Wajib dijawab |
+| 14 penilaian | Wajib diberi nilai 0–5 |
+| Skor Lendana | Opsional, 0–100 |
+| Catatan analis | Opsional |
+
+Berbeda dengan Excel yang membiarkan sel kosong dihitung 0, analisa yang belum lengkap **tidak bisa disimpan**.
+Halaman tetap menghitung hasil sementara saat mengisi, tetapi yang tersimpan hanya analisa yang lengkap.
+Jika ada yang kurang, halaman menampilkan daftar isian yang belum diisi dan isian lain tidak hilang.
+
+**Perhitungan saat menyimpan dilakukan ulang di server**, dengan aturan yang sama dengan halaman. Angka hasil
+yang tampil di halaman tidak dipercaya begitu saja. Angsuran kredit ini juga dihitung ulang dari data pengajuan.
+
+**Hasil uji** (aturan server, sama dengan angka di dokumen):
+
+| Skenario | Skor | Syarat wajib terpenuhi | Rekomendasi |
+|---|---|---|---|
+| Contoh Excel, angsuran otomatis Rp2.120.255 | 80,0 | 7 dari 7 | LAYAK |
+| DSR tepat 35% | 80,0 | 7 dari 7 | LAYAK |
+| DSR tepat 40% | 78,4 | 7 dari 7 | Dipertimbangkan Komite |
+| DSR tepat 45% | 76,8 | 7 dari 7 | Dipertimbangkan Komite |
+| DSR tepat 50% | 73,6 | 6 dari 7 | TUNDA |
+| Sisa uang stress tepat 0 | 67,2 | 5 dari 7 | TUNDA |
+| Pemahaman program dijawab Tidak | 76,0 | 6 dari 7 | TUNDA |
+
+**Menyimpan ulang.** Satu pengajuan hanya punya satu analisa. Menyimpan lagi memperbarui analisa yang sama
+(23 baris detail diganti), dan pengubahnya dicatat. Saat halaman dibuka lagi, semua isian terisi dari analisa
+yang tersimpan, disertai waktu dan nama penyimpan terakhir.

@@ -3,17 +3,21 @@
 namespace App\Http\Controllers\KPMI;
 
 use App\Http\Controllers\Controller;
+use App\Models\KPMI\DataAnalisa;
 use App\Models\KPMI\DataPengajuan;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class AmaterasuController extends Controller
 {
     public function show(string $kode_pengajuan)
     {
-        // $kode = Crypt::decrypt($kode_pengajuan);
-        $kode = '00361336';
+        $kode = $this->kodePengajuan($kode_pengajuan);
         $pengajuan = DataPengajuan::getPengajuan($kode);
         // dd($pengajuan);
+
+        $analisa = $pengajuan->analisa;
 
         $syaratWajib     = $this->syaratWajib();
         $syaratPendukung = $this->syaratPendukung();
@@ -21,14 +25,63 @@ class AmaterasuController extends Controller
 
         return view('kpmi.amaterasu.show', [
             'pengajuan'       => $pengajuan,
+            'analisa'         => $analisa,
+            'kodeRoute'       => $kode_pengajuan,
             'syaratWajib'     => $syaratWajib,
             'syaratPendukung' => $syaratPendukung,
             'penilaian'       => $penilaian,
             'totalIsian'      => 3 + count($syaratWajib) + count($syaratPendukung) + collect($penilaian)->flatten(1)->count(),
             'angsuran'        => $this->hitungAngsuran($pengajuan),
             'konfigurasi'     => $this->konfigurasi($syaratWajib, $syaratPendukung, $penilaian),
-            'contoh'          => $this->contoh(),
+            'isian'           => $this->isian($analisa),
         ]);
+    }
+
+    public function store(Request $request, string $kode_pengajuan)
+    {
+        $kode = $this->kodePengajuan($kode_pengajuan);
+        $pengajuan = DataPengajuan::getPengajuan($kode);
+
+        $this->rapikanAngka($request);
+        $input = $request->validate($this->aturanValidasi(), $this->pesanValidasi(), $this->namaIsian());
+
+        $angsuran = $this->hitungAngsuran($pengajuan);
+        $hasil    = $this->hitung($input, $angsuran);
+        $user     = auth()->user()?->username;
+
+        DB::transaction(function () use ($kode, $input, $angsuran, $hasil, $user) {
+            $analisa = DataAnalisa::firstOrNew(['pengajuan_kode' => $kode]);
+
+            $analisa->fill([
+                'skor_lendana'      => $input['skor_lendana'] ?? null,
+                'penghasilan'       => $input['penghasilan'],
+                'biaya_hidup'       => $input['biaya_hidup'],
+                'angsuran_berjalan' => $input['angsuran_berjalan'],
+                'angsuran_kredit'   => $angsuran,
+                'catatan'           => $input['catatan'] ?? null,
+            ] + $hasil['header']);
+
+            if ($analisa->exists) {
+                $analisa->update_user = $user;
+            } else {
+                $analisa->input_user = $user;
+            }
+
+            $analisa->save();
+
+            $analisa->details()->delete();
+            $analisa->details()->createMany($hasil['detail']);
+        });
+
+        return redirect()
+            ->route('kpmi.amaterasi.show', $kode_pengajuan)
+            ->with('success', 'Analisa berhasil disimpan. Rekomendasi: ' . $hasil['header']['rekomendasi'] . '.');
+    }
+
+    private function kodePengajuan(string $kode_pengajuan): string
+    {
+        // return Crypt::decrypt($kode_pengajuan);
+        return '00361336';
     }
 
     /**
@@ -45,6 +98,196 @@ class AmaterasuController extends Controller
         }
 
         return (int) round($plafon * $bunga / (1 - pow(1 + $bunga, -$bulan)));
+    }
+
+    /**
+     * Hitung ulang di server: nilai, skor, syarat wajib dan rekomendasi.
+     * Aturannya sama persis dengan kpmi_amaterasu.js.
+     */
+    private function hitung(array $in, int $angsuran): array
+    {
+        $konfigurasi = $this->konfigurasi($this->syaratWajib(), $this->syaratPendukung(), $this->penilaian());
+        $aturan      = $konfigurasi['aturan'];
+        $eps         = 1e-9;
+
+        $penghasilan = (int) $in['penghasilan'];
+        $biayaHidup  = (int) $in['biaya_hidup'];
+        $seluruhAngsuran = (int) $in['angsuran_berjalan'] + $angsuran;
+
+        $dsr         = $seluruhAngsuran / $penghasilan;
+        $sisa        = $penghasilan - $biayaHidup - $seluruhAngsuran;
+        $penghasilanStress = $penghasilan * $aturan['stress_penghasilan'];
+        $sisaStress  = $penghasilanStress - $biayaHidup * $aturan['stress_biaya'] - $seluruhAngsuran;
+
+        $nilaiDsr = 1;
+        foreach ($aturan['dsr'] as [$batas, $nilai]) {
+            if ($dsr <= $batas + $eps) {
+                $nilaiDsr = $nilai;
+                break;
+            }
+        }
+
+        if ($sisaStress <= 0) {
+            $nilaiStress = 1;
+        } else {
+            $rasio       = $sisaStress / $penghasilanStress;
+            $nilaiStress = $rasio >= $aturan['stress_rasio']['nilai_5'] - $eps ? 5
+                : ($rasio >= $aturan['stress_rasio']['nilai_4'] - $eps ? 4 : 3);
+        }
+
+        $detail = [];
+        $baris = function (string $kriteria, ?string $jawaban, int $nilai, int $bobot, bool $wajib) use (&$detail) {
+            $detail[] = [
+                'kriteria' => $kriteria,
+                'jawaban'  => $jawaban,
+                'nilai'    => $nilai,
+                'bobot'    => $bobot,
+                'skor'     => $bobot * $nilai / 5,
+                'wajib'    => $wajib,
+            ];
+        };
+
+        foreach ($konfigurasi['syarat'] as $s) {
+            $baris($s['name'], $in[$s['name']], $in[$s['name']] === 'Ya' ? 5 : 0, $s['bobot'], $s['wajib']);
+        }
+        foreach ($konfigurasi['penilaian'] as $p) {
+            $baris($p['name'], null, (int) $in[$p['name']], $p['bobot'], false);
+        }
+        $baris('dsr', null, $nilaiDsr, $konfigurasi['rc']['dsr']['bobot'], true);
+        $baris('stress', null, $nilaiStress, $konfigurasi['rc']['stress']['bobot'], true);
+
+        $skorTotal = round(array_sum(array_column($detail, 'skor')), 2);
+        $totalWajib = count(array_filter($detail, fn($d) => $d['wajib']));
+        $gagal = count(array_filter($detail, fn($d) => $d['wajib'] && $d['nilai'] < $aturan['gate_minimal']));
+
+        if ($gagal > 0) {
+            $rekomendasi = 'TUNDA';
+        } elseif ($skorTotal >= $aturan['skor_layak']) {
+            $rekomendasi = 'LAYAK DIREKOMENDASIKAN';
+        } elseif ($skorTotal >= $aturan['skor_komite']) {
+            $rekomendasi = 'DIPERTIMBANGKAN KOMITE';
+        } else {
+            $rekomendasi = 'TIDAK DIREKOMENDASIKAN';
+        }
+
+        return [
+            'header' => [
+                'dsr'                     => round($dsr, 4),
+                'sisa_penghasilan'        => (int) round($sisa),
+                'sisa_penghasilan_stress' => (int) round($sisaStress),
+                'nilai_dsr'               => $nilaiDsr,
+                'nilai_stress'            => $nilaiStress,
+                'skor_total'              => $skorTotal,
+                'syarat_terpenuhi'        => $totalWajib - $gagal,
+                'syarat_total'            => $totalWajib,
+                'rekomendasi'             => $rekomendasi,
+            ],
+            'detail' => $detail,
+        ];
+    }
+
+    /**
+     * Isian rupiah dikirim dengan pemisah ribuan ("9.000.000"); ambil angkanya saja.
+     */
+    private function rapikanAngka(Request $request): void
+    {
+        $angka = [];
+        foreach (['penghasilan', 'biaya_hidup', 'angsuran_berjalan'] as $nama) {
+            $digit = preg_replace('/\D/', '', (string) $request->input($nama));
+            $angka[$nama] = $digit === '' ? null : $digit;
+        }
+
+        $request->merge($angka);
+    }
+
+    private function aturanValidasi(): array
+    {
+        $aturan = [
+            'skor_lendana'      => ['nullable', 'numeric', 'between:0,100'],
+            'penghasilan'       => ['required', 'integer', 'min:1'],
+            'biaya_hidup'       => ['required', 'integer', 'min:0'],
+            'angsuran_berjalan' => ['required', 'integer', 'min:0'],
+            'catatan'           => ['nullable', 'string', 'max:2000'],
+        ];
+
+        foreach (array_merge($this->syaratWajib(), $this->syaratPendukung()) as $s) {
+            $aturan[$s['name']] = ['required', 'in:Ya,Tidak'];
+        }
+        foreach (collect($this->penilaian())->flatten(1) as $p) {
+            $aturan[$p['name']] = ['required', 'integer', 'between:0,5'];
+        }
+
+        return $aturan;
+    }
+
+    private function pesanValidasi(): array
+    {
+        return [
+            'required' => ':attribute belum diisi.',
+            'in'       => ':attribute harus Ya atau Tidak.',
+            'integer'  => ':attribute harus berupa angka.',
+            'numeric'  => ':attribute harus berupa angka.',
+            'min'      => ':attribute tidak boleh kurang dari :min.',
+            'between'  => ':attribute harus antara :min dan :max.',
+            'max'      => ':attribute terlalu panjang.',
+        ];
+    }
+
+    private function namaIsian(): array
+    {
+        $nama = [
+            'skor_lendana'      => 'Skor Lendana',
+            'penghasilan'       => 'Penghasilan bersih',
+            'biaya_hidup'       => 'Biaya hidup',
+            'angsuran_berjalan' => 'Angsuran kredit berjalan',
+        ];
+
+        foreach (array_merge($this->syaratWajib(), $this->syaratPendukung()) as $s) {
+            $nama[$s['name']] = $s['label'];
+        }
+        foreach (collect($this->penilaian())->flatten(1) as $p) {
+            $nama[$p['name']] = $p['label'];
+        }
+
+        return $nama;
+    }
+
+    /**
+     * Nilai awal form: isian terakhir yang gagal divalidasi, atau analisa tersimpan, atau kosong.
+     */
+    private function isian(?DataAnalisa $analisa): array
+    {
+        $lama = session()->getOldInput();
+        if (! empty($lama)) {
+            foreach (['penghasilan', 'biaya_hidup', 'angsuran_berjalan'] as $nama) {
+                $lama[$nama] = preg_replace('/\D/', '', (string) ($lama[$nama] ?? ''));
+            }
+            foreach (collect($this->penilaian())->flatten(1) as $p) {
+                if (isset($lama[$p['name']])) {
+                    $lama[$p['name']] = (int) $lama[$p['name']];
+                }
+            }
+
+            return $lama;
+        }
+
+        if (! $analisa) {
+            return [];
+        }
+
+        $isian = [
+            'skor_lendana'      => $analisa->skor_lendana,
+            'penghasilan'       => $analisa->penghasilan,
+            'biaya_hidup'       => $analisa->biaya_hidup,
+            'angsuran_berjalan' => $analisa->angsuran_berjalan,
+            'catatan'           => $analisa->catatan,
+        ];
+
+        foreach ($analisa->details as $detail) {
+            $isian[$detail->kriteria] = $detail->jawaban ?? $detail->nilai;
+        }
+
+        return $isian;
     }
 
     private function syaratWajib(): array
@@ -124,43 +367,6 @@ class AmaterasuController extends Controller
                 'dsr'               => [[0.35, 5], [0.40, 4], [0.45, 3], [0.50, 2]],
                 'stress_rasio'      => ['nilai_5' => 0.20, 'nilai_4' => 0.10],
             ],
-        ];
-    }
-
-    /**
-     * SEMENTARA: nilai statis untuk melihat hasil perhitungan (mengikuti contoh pada file Excel konsep).
-     * Hapus saat form sudah memakai data tersimpan.
-     */
-    private function contoh(): array
-    {
-        return [
-            'skor_lendana'      => 97.4,
-            'penghasilan'       => 9000000,
-            'biaya_hidup'       => 1000000,
-            'angsuran_berjalan' => 0,
-
-            'pembayar_primer'     => 'Ya',
-            'bukti_penghasilan'   => 'Ya',
-            'utang_terverifikasi' => 'Ya',
-            'debitur_bersama'     => 'Ya',
-            'paham_program'       => 'Ya',
-            'milestone_refund'    => 'Ya',
-            'pencairan_bertahap'  => 'Ya',
-
-            'identitas_alamat'  => 3,
-            'slik'              => 5,
-            'keterbukaan'       => 2,
-            'dukungan_keluarga' => 1,
-            'interview'         => 4,
-            'motivasi'          => 4,
-            'kognitif'          => 3,
-            'disiplin'          => 2,
-            'kesehatan'         => 4,
-            'rekam_jejak_lpk'   => 5,
-            'penempatan'        => 2,
-            'mitigasi'          => 0,
-            'monitoring'        => 2,
-            'dokumen_kredit'    => 2,
         ];
     }
 }

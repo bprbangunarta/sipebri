@@ -21,22 +21,60 @@
          .kpmi-hint { color: #777; margin: 0 0 12px; }
          .kpmi-opt .btn { min-width: 38px; }
          .kpmi-row td { vertical-align: middle !important; }
+         .kpmi-petunjuk { background: #f4f8fb; border: 1px solid #d6e4ef; border-left: 4px solid #3c8dbc;
+            color: #333; padding: 10px 15px; margin-bottom: 15px; border-radius: 3px; }
+         .kpmi-petunjuk .kpmi-garis { display: inline-block; width: 4px; height: 14px; vertical-align: -2px; margin: 0 4px 0 2px; }
+         .kpmi-hasil { border: 1px solid #ddd; border-left: 5px solid #999; background: #f7f7f7; color: #333;
+            padding: 10px 15px; margin-bottom: 12px; text-align: center; border-radius: 3px; }
+         .kpmi-hasil small { color: #555; display: block; }
+         .kpmi-hasil h4 { margin: 4px 0 2px; font-weight: 600; }
+         .kpmi-hasil.hasil-success { background: #eaf6ee; border-color: #b7dfc4; border-left-color: #00a65a; }
+         .kpmi-hasil.hasil-success h4 { color: #0b6b3a; }
+         .kpmi-hasil.hasil-warning { background: #fff6e0; border-color: #f0dca6; border-left-color: #f39c12; }
+         .kpmi-hasil.hasil-warning h4 { color: #8a5a00; }
+         .kpmi-hasil.hasil-danger { background: #fdeeec; border-color: #f0c4be; border-left-color: #dd4b39; }
+         .kpmi-hasil.hasil-danger h4 { color: #a52a1c; }
          .kpmi-row.terisi td:first-child { border-left: 3px solid #00a65a; }
          .kpmi-row:not(.terisi) td:first-child { border-left: 3px solid #f39c12; }
       </style>
 
+      @if (session('success'))
+         <div class="alert alert-success alert-dismissible" style="margin-bottom: 15px;">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <i class="fa fa-check"></i> {{ session('success') }}
+         </div>
+      @endif
+
+      @if ($errors->any())
+         <div class="alert alert-danger" style="margin-bottom: 15px;">
+            <b>Analisa belum tersimpan.</b> Lengkapi isian berikut:
+            <ul style="margin: 5px 0 0 18px; padding: 0;">
+               @foreach ($errors->all() as $pesan)
+                  <li>{{ $pesan }}</li>
+               @endforeach
+            </ul>
+         </div>
+      @endif
+
       <div class="row">
          <div class="col-md-12">
-            <div class="callout callout-info" style="margin-bottom: 15px;">
+            <div class="kpmi-petunjuk">
                <b>Cara mengisi:</b> kerjakan <b>Langkah 1 &rarr; 2 &rarr; 3</b> dari atas ke bawah.
                Hasil analisa di panel kanan terhitung otomatis dan berubah setiap Anda mengisi.
-               Garis <span style="color:#f39c12;"><b>oranye</b></span> berarti belum diisi,
-               <span style="color:#00a65a;"><b>hijau</b></span> berarti sudah.
+               <br>
+               <span class="kpmi-garis" style="background: #f39c12;"></span> belum diisi
+               &nbsp;&nbsp;
+               <span class="kpmi-garis" style="background: #00a65a;"></span> sudah diisi
+               @if ($analisa)
+                  <br>Tersimpan {{ $analisa->updated_at->format('d-m-Y H:i') }}
+                  oleh {{ $analisa->update_user ?? $analisa->input_user ?? '-' }}.
+               @endif
             </div>
          </div>
       </div>
 
-      <form id="form-analisa" autocomplete="off" data-config="{{ json_encode($konfigurasi) }}" data-angsuran="{{ $angsuran }}">
+      <form id="form-analisa" method="POST" action="{{ route('kpmi.amaterasi.store', $kodeRoute) }}" autocomplete="off" data-config="{{ json_encode($konfigurasi) }}" data-angsuran="{{ $angsuran }}">
+         @csrf
          <div class="row">
             {{-- ===================== KOLOM KIRI: ISIAN ===================== --}}
             <div class="col-lg-8">
@@ -95,7 +133,7 @@
                                  <td>Skor Lendana</td>
                                  <td>
                                     <div class="input-group input-group-sm" style="width: 170px;">
-                                       <input type="number" step="0.1" min="0" max="100" name="skor_lendana" class="form-control" placeholder="0 - 100" value="{{ $contoh['skor_lendana'] ?? '' }}">
+                                       <input type="number" step="0.1" min="0" max="100" name="skor_lendana" class="form-control" placeholder="0 - 100" value="{{ $isian['skor_lendana'] ?? '' }}">
                                        <span class="input-group-addon">referensi</span>
                                     </div>
                                  </td>
@@ -153,7 +191,7 @@
                               <label>Penghasilan bersih</label>
                               <div class="input-group">
                                  <span class="input-group-addon">Rp</span>
-                                 <input type="text" inputmode="numeric" name="penghasilan" class="form-control kpmi-rupiah kpmi-isian" placeholder="0" value="{{ $contoh['penghasilan'] ?? '' }}">
+                                 <input type="text" inputmode="numeric" name="penghasilan" class="form-control kpmi-rupiah kpmi-isian" placeholder="0" value="{{ $isian['penghasilan'] ?? '' }}">
                               </div>
                               <p class="help-block">Rata-rata 6-12 bulan</p>
                            </div>
@@ -163,7 +201,7 @@
                               <label>Biaya hidup rumah tangga</label>
                               <div class="input-group">
                                  <span class="input-group-addon">Rp</span>
-                                 <input type="text" inputmode="numeric" name="biaya_hidup" class="form-control kpmi-rupiah kpmi-isian" placeholder="0" value="{{ $contoh['biaya_hidup'] ?? '' }}">
+                                 <input type="text" inputmode="numeric" name="biaya_hidup" class="form-control kpmi-rupiah kpmi-isian" placeholder="0" value="{{ $isian['biaya_hidup'] ?? '' }}">
                               </div>
                               <p class="help-block">Termasuk tanggungan dan kebutuhan dasar</p>
                            </div>
@@ -176,7 +214,7 @@
                               <label>Angsuran kredit berjalan</label>
                               <div class="input-group">
                                  <span class="input-group-addon">Rp</span>
-                                 <input type="text" inputmode="numeric" name="angsuran_berjalan" class="form-control kpmi-rupiah kpmi-isian" placeholder="0" value="{{ $contoh['angsuran_berjalan'] ?? '' }}">
+                                 <input type="text" inputmode="numeric" name="angsuran_berjalan" class="form-control kpmi-rupiah kpmi-isian" placeholder="0" value="{{ $isian['angsuran_berjalan'] ?? '' }}">
                               </div>
                               <p class="help-block">Isi 0 jika tidak ada. Cocokkan dengan SLIK</p>
                            </div>
@@ -252,8 +290,8 @@
                                  <td style="padding-left: 15px;">{{ $s['label'] }}</td>
                                  <td style="width: 140px;" class="text-right">
                                     <div class="btn-group btn-group-sm kpmi-opt" data-toggle="buttons">
-                                       <label class="btn btn-default" data-on="btn-success"><input type="radio" name="{{ $s['name'] }}" value="Ya" class="kpmi-isian-radio" data-wajib="1" @checked(($contoh[$s['name']] ?? null) === 'Ya')>Ya</label>
-                                       <label class="btn btn-default" data-on="btn-danger"><input type="radio" name="{{ $s['name'] }}" value="Tidak" class="kpmi-isian-radio" data-wajib="1" @checked(($contoh[$s['name']] ?? null) === 'Tidak')>Tidak</label>
+                                       <label class="btn btn-default" data-on="btn-success"><input type="radio" name="{{ $s['name'] }}" value="Ya" class="kpmi-isian-radio" data-wajib="1" @checked(($isian[$s['name']] ?? null) === 'Ya')>Ya</label>
+                                       <label class="btn btn-default" data-on="btn-danger"><input type="radio" name="{{ $s['name'] }}" value="Tidak" class="kpmi-isian-radio" data-wajib="1" @checked(($isian[$s['name']] ?? null) === 'Tidak')>Tidak</label>
                                     </div>
                                  </td>
                               </tr>
@@ -267,8 +305,8 @@
                                  <td style="padding-left: 15px;">{{ $s['label'] }}</td>
                                  <td style="width: 140px;" class="text-right">
                                     <div class="btn-group btn-group-sm kpmi-opt" data-toggle="buttons">
-                                       <label class="btn btn-default" data-on="btn-success"><input type="radio" name="{{ $s['name'] }}" value="Ya" class="kpmi-isian-radio" data-wajib="0" @checked(($contoh[$s['name']] ?? null) === 'Ya')>Ya</label>
-                                       <label class="btn btn-default" data-on="btn-danger"><input type="radio" name="{{ $s['name'] }}" value="Tidak" class="kpmi-isian-radio" data-wajib="0" @checked(($contoh[$s['name']] ?? null) === 'Tidak')>Tidak</label>
+                                       <label class="btn btn-default" data-on="btn-success"><input type="radio" name="{{ $s['name'] }}" value="Ya" class="kpmi-isian-radio" data-wajib="0" @checked(($isian[$s['name']] ?? null) === 'Ya')>Ya</label>
+                                       <label class="btn btn-default" data-on="btn-danger"><input type="radio" name="{{ $s['name'] }}" value="Tidak" class="kpmi-isian-radio" data-wajib="0" @checked(($isian[$s['name']] ?? null) === 'Tidak')>Tidak</label>
                                     </div>
                                  </td>
                               </tr>
@@ -304,7 +342,7 @@
                                     <td style="width: 250px;" class="text-right">
                                        <div class="btn-group btn-group-sm kpmi-opt" data-toggle="buttons">
                                           @for ($n = 0; $n <= 5; $n++)
-                                             <label class="btn btn-default" data-on="btn-primary"><input type="radio" name="{{ $item['name'] }}" value="{{ $n }}" class="kpmi-isian-radio" data-bobot="{{ $item['bobot'] }}" @checked(($contoh[$item['name']] ?? null) === $n)>{{ $n }}</label>
+                                             <label class="btn btn-default" data-on="btn-primary"><input type="radio" name="{{ $item['name'] }}" value="{{ $n }}" class="kpmi-isian-radio" data-bobot="{{ $item['bobot'] }}" @checked(($isian[$item['name']] ?? null) === $n)>{{ $n }}</label>
                                           @endfor
                                        </div>
                                     </td>
@@ -321,7 +359,7 @@
                   <div class="box-body">
                      <div class="form-group" style="margin-bottom: 0;">
                         <label>Catatan analis <small class="text-muted">(opsional)</small></label>
-                        <textarea name="catatan" class="form-control" rows="3" placeholder="Hal penting yang perlu diketahui Komite..."></textarea>
+                        <textarea name="catatan" class="form-control" rows="3" placeholder="Hal penting yang perlu diketahui Komite...">{{ $isian['catatan'] ?? '' }}</textarea>
                      </div>
                   </div>
                </div>
@@ -346,10 +384,10 @@
                            </div>
                         </div>
 
-                        <div id="hasil-rekomendasi-box" class="callout callout-default text-center" style="margin-bottom: 12px; background: #f4f4f4; border-color: #ddd;">
-                           <small class="text-muted">REKOMENDASI</small>
-                           <h4 id="hasil-rekomendasi" style="margin: 6px 0 0;">Belum ada hasil</h4>
-                           <small id="hasil-catatan" class="text-muted"></small>
+                        <div id="hasil-rekomendasi-box" class="kpmi-hasil">
+                           <small>REKOMENDASI</small>
+                           <h4 id="hasil-rekomendasi">Belum ada hasil</h4>
+                           <small id="hasil-catatan"></small>
                         </div>
 
                         <div class="row text-center" style="margin-bottom: 10px;">
@@ -382,7 +420,7 @@
                            KEMBALI
                         </a>
 
-                        <button type="button" class="btn btn-sm btn-primary pull-right">
+                        <button type="submit" class="btn btn-sm btn-primary pull-right">
                            SIMPAN
                         </button>
                      </div>

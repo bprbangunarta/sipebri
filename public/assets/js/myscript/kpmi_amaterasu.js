@@ -93,10 +93,10 @@ document.addEventListener('DOMContentLoaded', function () {
       total = Math.round(total * 100) / 100;
 
       var rekomendasi;
-      if (gagal.length > 0) rekomendasi = { teks: 'TUNDA', kelas: 'callout-danger' };
-      else if (total >= aturan.skor_layak) rekomendasi = { teks: 'LAYAK DIREKOMENDASIKAN', kelas: 'callout-success' };
-      else if (total >= aturan.skor_komite) rekomendasi = { teks: 'DIPERTIMBANGKAN KOMITE', kelas: 'callout-warning' };
-      else rekomendasi = { teks: 'TIDAK DIREKOMENDASIKAN', kelas: 'callout-danger' };
+      if (gagal.length > 0) rekomendasi = { teks: 'TUNDA', kelas: 'hasil-danger' };
+      else if (total >= aturan.skor_layak) rekomendasi = { teks: 'LAYAK DIREKOMENDASIKAN', kelas: 'hasil-success' };
+      else if (total >= aturan.skor_komite) rekomendasi = { teks: 'DIPERTIMBANGKAN KOMITE', kelas: 'hasil-warning' };
+      else rekomendasi = { teks: 'TIDAK DIREKOMENDASIKAN', kelas: 'hasil-danger' };
 
       return {
          dsr: dsr, sisa: sisa, sisaStress: sisaStress, nDsr: nDsr, nStress: nStress,
@@ -151,9 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
       gate.className = h.gagal.length === 0 ? 'text-green' : 'text-red';
 
       var box = $('hasil-rekomendasi-box');
-      box.className = 'callout text-center ' + h.rekomendasi.kelas;
-      box.removeAttribute('style');
-      box.style.marginBottom = '12px';
+      box.className = 'kpmi-hasil ' + h.rekomendasi.kelas;
       $('hasil-rekomendasi').textContent = h.rekomendasi.teks;
       $('hasil-catatan').textContent = belumDiisi > 0
          ? 'Hasil sementara: ' + belumDiisi + ' isian belum diisi dihitung bernilai 0.'
