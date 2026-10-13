@@ -1046,3 +1046,4 @@ Route::view('/error', 'errors.500');
 require __DIR__ . '/auth.php';
 
 require base_path('routes/codex.php');
+require base_path('routes/kpmi.php');

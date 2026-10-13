@@ -53,6 +53,7 @@ class AnalisaController extends Controller
             ->select(
                 'data_pengajuan.kode_pengajuan',
                 'data_pengajuan.tracking',
+                'data_pengajuan.resort_kode',
                 'data_pengajuan.kategori',
                 'data_nasabah.kode_nasabah',
                 'data_nasabah.nama_nasabah',
