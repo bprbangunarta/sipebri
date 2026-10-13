@@ -293,3 +293,26 @@ yang tampil di halaman tidak dipercaya begitu saja. Angsuran kredit ini juga dih
 **Menyimpan ulang.** Satu pengajuan hanya punya satu analisa. Menyimpan lagi memperbarui analisa yang sama
 (23 baris detail diganti), dan pengubahnya dicatat. Saat halaman dibuka lagi, semua isian terisi dari analisa
 yang tersimpan, disertai waktu dan nama penyimpan terakhir.
+
+## 11. Cetak analisa
+
+Setelah analisa tersimpan, halaman analisa menampilkan ikon cetak di pojok kanan atas kotak Hasil Analisa dan
+tombol **CETAK** di bagian bawah panel. Keduanya membuka halaman cetak di tab baru.
+Yang dicetak adalah analisa yang **sudah tersimpan**, bukan isian yang masih berubah di layar. Jika analisa belum
+disimpan, halaman kembali ke form dengan pesan agar menyimpan dulu.
+
+Halaman cetak berformat A4 (sekitar dua halaman) dan dicetak lewat tombol "Cetak / Simpan PDF" di browser.
+Isinya berurutan:
+
+| Bagian | Isi |
+|---|---|
+| Judul | Analisa Kredit KPMI, produk, dan nama LPK |
+| 1. Data pengajuan dan debitur | Kode pengajuan, debitur, plafon, bunga, jangka waktu, angsuran per bulan, pendamping, skor Lendana |
+| 2. Kemampuan bayar keluarga | Penghasilan, biaya hidup, angsuran, DSR, sisa penghasilan, dan hitungan stress test |
+| 3. Penilaian dan skor | 23 kriteria per kelompok, dengan keterangan, bobot, nilai, skor, dan status syarat wajib |
+| 4. Hasil analisa | Skor, syarat wajib terpenuhi, rekomendasi, dan daftar syarat yang belum terpenuhi |
+| 5. Catatan analis | Catatan yang diisi analis |
+| Penutup | Nama pembuat analisa, tanggal, dan waktu cetak |
+
+Semua angka diambil dari analisa yang tersimpan (bobot dan angsuran saat analisa dibuat), sehingga hasil cetak
+tidak berubah walau data pengajuan berubah di kemudian hari. Kelompok dan urutan kriteria mengikuti file Excel konsep.

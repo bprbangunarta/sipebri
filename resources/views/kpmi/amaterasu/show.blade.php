@@ -371,6 +371,14 @@
                   <div class="box box-success">
                      <div class="box-header with-border">
                         <h3 class="box-title">Hasil Analisa</h3>
+                        @if ($analisa)
+                           <div class="box-tools pull-right">
+                              <a href="{{ route('kpmi.amaterasi.cetak', $kodeRoute) }}" target="_blank" class="btn btn-box-tool"
+                                 title="Cetak analisa yang sudah tersimpan" style="font-size: 16px;">
+                                 <i class="fa fa-print"></i>
+                              </a>
+                           </div>
+                        @endif
                      </div>
 
                      <div class="box-body">
@@ -419,6 +427,13 @@
                         <a href="{{ route('permohonan.analisa') }}" class="btn btn-sm btn-default">
                            KEMBALI
                         </a>
+
+                        @if ($analisa)
+                           <a href="{{ route('kpmi.amaterasi.cetak', $kodeRoute) }}" target="_blank" class="btn btn-sm btn-default"
+                              title="Mencetak analisa yang sudah tersimpan">
+                              <i class="fa fa-print"></i> CETAK
+                           </a>
+                        @endif
 
                         <button type="submit" class="btn btn-sm btn-primary pull-right">
                            SIMPAN

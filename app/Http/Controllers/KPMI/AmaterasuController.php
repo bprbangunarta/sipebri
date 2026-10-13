@@ -78,6 +78,59 @@ class AmaterasuController extends Controller
             ->with('success', 'Analisa berhasil disimpan. Rekomendasi: ' . $hasil['header']['rekomendasi'] . '.');
     }
 
+    public function cetak(string $kode_pengajuan)
+    {
+        $kode = $this->kodePengajuan($kode_pengajuan);
+        $pengajuan = DataPengajuan::getPengajuan($kode);
+        $analisa = $pengajuan->analisa;
+
+        if (! $analisa) {
+            return redirect()
+                ->route('kpmi.amaterasi.show', $kode_pengajuan)
+                ->withErrors(['analisa' => 'Analisa belum disimpan, simpan dulu sebelum mencetak.']);
+        }
+
+        return view('kpmi.amaterasu.cetak', $this->dataCetak($pengajuan, $analisa));
+    }
+
+    /**
+     * Data halaman cetak. Urutan kelompok mengikuti file Excel konsep.
+     */
+    private function dataCetak(DataPengajuan $pengajuan, DataAnalisa $analisa): array
+    {
+        $konfigurasi = $this->konfigurasi($this->syaratWajib(), $this->syaratPendukung(), $this->penilaian());
+
+        $label = [
+            'dsr'    => 'DSR setelah kredit',
+            'stress' => 'Sisa penghasilan saat stress test',
+        ];
+        foreach (array_merge($konfigurasi['syarat'], $konfigurasi['penilaian']) as $k) {
+            $label[$k['name']] = $k['label'];
+        }
+
+        $kelompok = [
+            'Character & SLIK'         => ['identitas_alamat', 'slik', 'keterbukaan', 'dukungan_keluarga'],
+            'Kesiapan Siswa'           => ['interview', 'motivasi', 'kognitif', 'disiplin', 'kesehatan'],
+            'Kemampuan Bayar Keluarga' => ['pembayar_primer', 'bukti_penghasilan', 'utang_terverifikasi', 'dsr', 'stress'],
+            'Program & LPK'            => ['rekam_jejak_lpk', 'paham_program', 'milestone_refund', 'penempatan'],
+            'Struktur & Mitigasi'      => ['debitur_bersama', 'mitigasi', 'pencairan_bertahap', 'monitoring', 'dokumen_kredit'],
+        ];
+
+        $detail = $analisa->details()->get()->keyBy('kriteria');
+
+        return [
+            'pengajuan'   => $pengajuan,
+            'analisa'     => $analisa,
+            'detail'      => $detail,
+            'kelompok'    => $kelompok,
+            'label'       => $label,
+            'aturan'      => $konfigurasi['aturan'],
+            'gateMinimal' => $konfigurasi['aturan']['gate_minimal'],
+            'belumTerpenuhi' => $detail->filter(fn($d) => $d->wajib && $d->nilai < $konfigurasi['aturan']['gate_minimal'])
+                ->keys()->map(fn($k) => $label[$k])->values()->all(),
+        ];
+    }
+
     private function kodePengajuan(string $kode_pengajuan): string
     {
         // return Crypt::decrypt($kode_pengajuan);

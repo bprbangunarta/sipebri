@@ -57,7 +57,7 @@
                                         {{ \Carbon\Carbon::parse($item->tgl_daftar)->format('Y-m-d') }}
                                     </td>
                                     <td class="text-center" style="vertical-align: middle;">
-                                        {{ $item->kode_pengajuan . '/' . $item->resort_kode }}
+                                        {{ $item->kode_pengajuan }}
                                     </td>
                                     <td style="vertical-align: middle;">{{ $item->nama_nasabah }}</td>
                                     <td style="vertical-align: middle;">{{ $item->alamat_ktp }}</td>
