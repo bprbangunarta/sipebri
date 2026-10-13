@@ -296,8 +296,9 @@ yang tersimpan, disertai waktu dan nama penyimpan terakhir.
 
 ## 11. Cetak analisa
 
-Setelah analisa tersimpan, halaman analisa menampilkan ikon cetak di pojok kanan atas kotak Hasil Analisa dan
-tombol **CETAK** di bagian bawah panel. Keduanya membuka halaman cetak di tab baru.
+Halaman analisa selalu menampilkan ikon cetak di pojok kanan atas kotak Hasil Analisa. Sebelum analisa tersimpan
+ikon redup dan tidak bisa diklik (keterangan: simpan analisa dulu). Setelah tersimpan, ikon aktif dan membuka
+halaman cetak di tab baru.
 Yang dicetak adalah analisa yang **sudah tersimpan**, bukan isian yang masih berubah di layar. Jika analisa belum
 disimpan, halaman kembali ke form dengan pesan agar menyimpan dulu.
 
@@ -316,3 +317,10 @@ Isinya berurutan:
 
 Semua angka diambil dari analisa yang tersimpan (bobot dan angsuran saat analisa dibuat), sehingga hasil cetak
 tidak berubah walau data pengajuan berubah di kemudian hari. Kelompok dan urutan kriteria mengikuti file Excel konsep.
+
+## 12. Catatan data uji
+
+Analisa yang tersimpan untuk pengajuan **00361336 (ALIF NURAULIA)** adalah **data contoh** dari file Excel konsep,
+dibuat untuk melihat tampilan halaman dan cetakan. Catatannya bertuliskan "DATA CONTOH" dan penyimpannya `CONTOH`.
+Hasilnya (skor 80,0, LAYAK DIREKOMENDASIKAN) bukan hasil analisa sebenarnya. Menyimpan ulang dari halaman analisa
+menimpa data contoh ini.
