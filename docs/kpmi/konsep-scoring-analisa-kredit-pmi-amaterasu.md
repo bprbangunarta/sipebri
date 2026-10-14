@@ -616,3 +616,31 @@ partial), sehingga perbaikan satu bagian cukup di satu file.
 Daftar kolom, bobot, dan aturan hitung tidak ada di file tampilan; semuanya dikirim dari
 `AmaterasuController`. Perilaku di browser (hitung, tab, unggah, dialog) ada di
 `public/assets/js/myscript/kpmi_amaterasu.js`.
+
+## 20. RC pada modal persetujuan komite
+
+Setelah pengajuan masuk ke Komite, persetujuan dilakukan lewat modal **Persetujuan Komite** pada halaman daftar komite
+(alur lama, route `komite.kredit`). Tampilan modal itu memuat `public/assets/js/myscript/persetujuan_komite.js`.
+
+**Masalah.** Kolom **RC** pada modal kosong untuk KPMI. Penyebabnya:
+
+- RC pada alur lama baru dihitung saat petugas mengetik usulan plafon atau bunga, atau mengganti metode, dan tidak
+  dihitung saat modal dibuka.
+- Rumus RC memakai "keuangan per bulan" dari data keuangan usaha (`au_keuangan`). KPMI tidak punya data itu, sehingga
+  nilainya kosong dan hasil hitungnya kosong atau "Infinity%". Nilai RC kosong ikut tersimpan sebagai 0 pada catatan usulan.
+
+**Perbaikan** hanya berlaku untuk **produk KPM (data_produk 15) pada resort LPK01**; produk lain tidak berubah:
+
+- Endpoint kecil `POST /kpmi/komite/rc` mengembalikan kemampuan angsuran dari analisa kredit KPMI (penghasilan − biaya
+  hidup − angsuran berjalan), dengan peran akses yang sama seperti route komite. Untuk produk atau resort lain endpoint
+  menjawab "bukan KPMI" dan JS memakai perilaku lama.
+- JS memakai nilai itu sebagai "keuangan per bulan" sehingga rumus RC yang sudah ada (anuitas, flat, efektif) bekerja.
+- **RC langsung terisi saat modal dibuka**, dihitung dari plafon pengajuan, dan dihitung ulang saat usulan plafon, bunga,
+  atau metode diubah. Bila usulan plafon kosong, dihitung dari plafon pengajuan.
+- Contoh pengajuan 00361381: kemampuan angsuran Rp9.000.000, plafon Rp50.000.000, tenor 18 bulan, bunga 32%, metode
+  efektif anuitas menghasilkan RC 39,26%, sama dengan yang tampil di memorandum.
+- Controller komite lama (`KomiteController`) tidak diubah.
+
+**File cadangan.** Sebelum diubah, JS lama disalin ke `public/assets/js/myscript/persetujuan_komite.backup.js`.
+Perubahan hanya satu blok yang diberi komentar "KPM (data_produk 15) resort LPK01" pada `persetujuan_komite.js`;
+untuk mengembalikan kondisi lama, salin isi file cadangan ke file aslinya.

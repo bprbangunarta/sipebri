@@ -551,6 +551,27 @@ class AmaterasuController extends Controller
         return $this->kembaliKeMemorandum($kode_pengajuan, 'mm-sandi', 'Sandi lapbul berhasil disimpan.');
     }
 
+    /**
+     * Data RC untuk modal persetujuan komite (halaman daftar komite alur lama). Hanya untuk produk KPM
+     * (data_produk 15) pada resort LPK01. Alur lama mengambil "keuangan per bulan" dari data keuangan usaha yang tidak ada
+     * untuk KPMI, sehingga RC kosong; di sini diganti kemampuan angsuran dari analisa kredit KPMI.
+     */
+    public function komiteRc(Request $request)
+    {
+        $pengajuan = DataPengajuan::getPengajuan((string) $request->input('field'));
+
+        if (! $pengajuan || $pengajuan->produk_kode !== 'KPM' || $pengajuan->resort_kode !== 'LPK01') {
+            return response()->json(['kpmi' => false]);
+        }
+
+        $kemampuan = $this->kemampuanAngsuran($pengajuan->analisa);
+
+        return response()->json([
+            'kpmi'              => true,
+            'keuangan_perbulan' => $kemampuan !== null && $kemampuan > 0 ? $kemampuan : null,
+        ]);
+    }
+
     public function cetak(string $kode_pengajuan)
     {
         $pengajuan = $this->ambilPengajuan($kode_pengajuan);

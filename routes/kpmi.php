@@ -13,6 +13,11 @@ Route::prefix('kpmi')->middleware('auth')->group(function () {
    Route::post('/analisa/{kode_pengajuan}/memorandum/kebutuhan', [AmaterasuController::class, 'memorandumKebutuhan'])->name('kpmi.amaterasi.memorandum.kebutuhan');
    Route::post('/analisa/{kode_pengajuan}/memorandum/usulan', [AmaterasuController::class, 'memorandumUsulan'])->name('kpmi.amaterasi.memorandum.usulan');
    Route::post('/analisa/{kode_pengajuan}/memorandum/sandi', [AmaterasuController::class, 'memorandumSandi'])->name('kpmi.amaterasi.memorandum.sandi');
+
+   // dipakai modal persetujuan pada halaman daftar komite (alur lama); peran sama dengan route komite.kredit
+   Route::post('/komite/rc', [AmaterasuController::class, 'komiteRc'])
+      ->middleware('role:Staff Analis|Kasi Analis|Kabag Analis|Direktur Bisnis|Direksi|Customer Service|Kepala Kantor Kas')
+      ->name('kpmi.komite.rc');
    Route::get('/analisa/{kode_pengajuan}/dokumen/{jenis}', [AmaterasuController::class, 'dokumenLihat'])->name('kpmi.amaterasi.dokumen.lihat');
    Route::post('/analisa/{kode_pengajuan}/dokumen/{jenis}', [AmaterasuController::class, 'dokumenSimpan'])->name('kpmi.amaterasi.dokumen.simpan');
    Route::delete('/analisa/{kode_pengajuan}/dokumen/{jenis}', [AmaterasuController::class, 'dokumenHapus'])->name('kpmi.amaterasi.dokumen.hapus');

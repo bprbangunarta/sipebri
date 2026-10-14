@@ -66,6 +66,68 @@ $(document).ready(function () {
                 $("#bunga").val(hasil.suku_bunga);
                 $("#admin").val(hasil.b_admin) ?? 0;
 
+                //KPM (data_produk 15) resort LPK01: RC memakai kemampuan angsuran dari analisa kredit KPMI,
+                //bukan keuangan usaha. Produk lain tidak berubah. Cadangan: persetujuan_komite.backup.js
+                if (hasil.produk_kode === "KPM") {
+                    $.ajax({
+                        url: "/kpmi/komite/rc",
+                        type: "post",
+                        dataType: "json",
+                        cache: false,
+                        data: { field: pengajuan, _token: token },
+                        success: function (kpmi) {
+                            if (!kpmi || !kpmi.kpmi) {
+                                return;
+                            }
+
+                            hasil.keuangan_perbulan = kpmi.keuangan_perbulan;
+
+                            var hitungRcKpmi = function () {
+                                var keuangan = parseFloat(hasil.keuangan_perbulan);
+                                if (!(keuangan > 0)) {
+                                    $("#rc").val("");
+                                    return;
+                                }
+
+                                //usulan kosong: hitung dari plafon pengajuan
+                                var usulan =
+                                    parseFloat(
+                                        $("#usulan_plafon").val().replace(/[^\d]/g, "")
+                                    ) ||
+                                    parseFloat(hasil.plafon) ||
+                                    0;
+                                var sb = parseFloat($("#bunga").val());
+                                var jangka_waktu = parseFloat(hasil.jangka_waktu);
+                                var metode = $("#metode").val() || hasil.metode_rps;
+
+                                if (metode == "EFEKTIF ANUITAS") {
+                                    var bunga = sb / 100 / 12;
+                                    var anuitas =
+                                        (usulan * bunga) /
+                                        (1 - 1 / Math.pow(1 + bunga, jangka_waktu));
+                                    $("#rc").val(((anuitas / keuangan) * 100).toFixed(2) + "%");
+                                } else if (metode == "EFEKTIF MUSIMAN" || metode == "EFEKTIF") {
+                                    var bg = (((usulan * sb) / 100) * 30) / 365;
+                                    $("#rc").val(((bg / keuangan) * 100).toFixed(2) + " %");
+                                } else {
+                                    var bungaFlat = (usulan * sb) / 100 / 12;
+                                    var angsuran = Math.ceil(bungaFlat) + usulan / jangka_waktu;
+                                    $("#rc").val(((angsuran / keuangan) * 100).toFixed(2) + " %");
+                                }
+                            };
+
+                            hitungRcKpmi();
+                            $("#metode").off("change.kpmi").on("change.kpmi", hitungRcKpmi);
+                            $("#usulan_plafon, #bunga")
+                                .off("keyup.kpmi")
+                                .on("keyup.kpmi", hitungRcKpmi);
+                        },
+                        error: function (xhr) {
+                            console.error("Error:", xhr.responseText);
+                        },
+                    });
+                }
+
                 //Persetujuan
                 if (
                     kategori === "RELOAN" ||
