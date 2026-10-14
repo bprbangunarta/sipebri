@@ -64,7 +64,8 @@
                </div>
             @endforeach
 
-            <button type="submit" class="btn btn-primary btn-block">SIMPAN</button>
+            <p id="peringatan-max" class="text-red" style="display: none; margin: 0 0 8px;"></p>
+            <button type="submit" class="btn btn-primary btn-block" id="simpan-usulan">SIMPAN</button>
             @if ($kemampuanAngsuran === null)
                <p class="text-yellow" style="margin: 12px 0 0;"><i class="fa fa-exclamation-circle"></i> Simpan analisa kredit (tab 1) agar Max Plafond dan Repayment Capacity terisi.</p>
             @elseif ($kemampuanAngsuran <= 0)

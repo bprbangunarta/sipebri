@@ -512,6 +512,14 @@ kapital. Kode analisa berawalan `AUT`.
   dihitung ulang di server dan masuk ke kolom max plafond memorandum. Jika bunga 0%, faktor anuitas sama dengan n.
   Contoh pengajuan dengan kemampuan angsuran Rp4.630.000, tenor 18 bulan, bunga 32%: Max Plafond Rp65.510.997; usulan
   plafond Rp50.000.000 menghasilkan Repayment Capacity 76,32%.
+- **Batas usulan plafond.** Usulan plafond **tidak boleh melebihi Max Plafond** (setara Repayment Capacity paling
+  tinggi 100%). Sistem lama tidak membatasi ini (hanya minimal Rp500.000); batas ini ditambahkan khusus KPMI.
+  - Di layar: jika usulan melebihi batas, kolom berwarna merah, muncul pesan beserta Max Plafond dan Repayment Capacity,
+    dan tombol Simpan nonaktif. Batas ikut berubah bila jangka waktu atau bunga diubah, misalnya memperpanjang tenor
+    menaikkan Max Plafond.
+  - Di server: usulan yang melebihi batas ditolak dengan pesan yang menyebut usulan, Max Plafond, kemampuan angsuran,
+    tenor, dan bunga. Usulan tepat sama dengan Max Plafond diterima; lebih satu rupiah ditolak.
+  - Batas hanya berlaku bila Max Plafond bisa dihitung; tanpa analisa kredit yang tersimpan tidak ada batas.
 - Jika analisa kredit belum disimpan, atau kemampuan angsurannya nol atau negatif, kedua kolom kosong dan halaman
   menjelaskan alasannya. Repayment Capacity hanya ditampilkan; tabel memorandum lama tidak punya kolom untuknya.
 - **Taksasi Agunan tidak ada** pada KPMI karena tidak memakai agunan.

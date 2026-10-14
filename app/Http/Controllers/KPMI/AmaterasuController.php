@@ -13,6 +13,7 @@ use App\Models\KPMI\DataMemorandum;
 use App\Models\KPMI\DataPengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -407,8 +408,8 @@ class AmaterasuController extends Controller
     /**
      * Memorandum - usulan kredit. Seperti alur lama, usulan mengubah plafon, tenor, bunga, dan biaya pada data
      * pengajuan (plafon awal dicatat sekali di temp_plafon) dan disimpan di tabel memorandum alur lama.
-     * Max plafond dihitung dari kemampuan angsuran pada analisa kredit (lihat kemampuanAngsuran); repayment capacity
-     * hanya ditampilkan. Taksasi agunan tidak dipakai karena KPMI tanpa agunan.
+     * Max plafond dihitung dari kemampuan angsuran pada analisa kredit (lihat kemampuanAngsuran) dan menjadi batas
+     * usulan plafond; repayment capacity hanya ditampilkan. Taksasi agunan tidak dipakai karena KPMI tanpa agunan.
      */
     public function memorandumUsulan(Request $request, string $kode_pengajuan)
     {
@@ -453,9 +454,24 @@ class AmaterasuController extends Controller
             'syarat_tambahan' => 'Syarat tambahan', 'syarat_lainnya' => 'Syarat lainnya',
         ]);
 
+        // usulan plafond tidak boleh melebihi max plafond (dari kemampuan angsuran pada analisa kredit)
+        $kemampuan = $this->kemampuanAngsuran($pengajuan->analisa);
+        $maxPlafond = $kemampuan !== null && $kemampuan > 0
+            ? $this->maxPlafond($kemampuan, (float) $input['suku_bunga'], (int) $input['jangka_waktu'])
+            : null;
+
+        if ($maxPlafond !== null && (int) $input['usulan_plafond'] > $maxPlafond) {
+            throw ValidationException::withMessages([
+                'usulan_plafond' => 'Usulan plafond Rp ' . number_format((int) $input['usulan_plafond'], 0, ',', '.')
+                    . ' melebihi Max Plafond Rp ' . number_format($maxPlafond, 0, ',', '.')
+                    . ' (kemampuan angsuran Rp ' . number_format($kemampuan, 0, ',', '.') . ' per bulan, jangka waktu '
+                    . (int) $input['jangka_waktu'] . ' bulan, bunga ' . (float) $input['suku_bunga'] . '%).',
+            ]);
+        }
+
         $dua = fn($v) => number_format((float) $v, 2, '.', '');
 
-        DB::transaction(function () use ($kode, $input, $kodeUser, $pengajuan, $dua) {
+        DB::transaction(function () use ($kode, $input, $kodeUser, $pengajuan, $dua, $maxPlafond) {
             $dataPengajuan = [
                 'plafon'       => (string) (int) $input['usulan_plafond'],
                 'jangka_waktu' => (string) (int) $input['jangka_waktu'],
@@ -471,12 +487,8 @@ class AmaterasuController extends Controller
 
             DataPengajuan::where('kode_pengajuan', $kode)->update($dataPengajuan);
 
-            $kemampuan = $this->kemampuanAngsuran($pengajuan->analisa);
-
             $data = [
-                'max_plafond'       => $kemampuan !== null && $kemampuan > 0
-                    ? $this->maxPlafond($kemampuan, (float) $input['suku_bunga'], (int) $input['jangka_waktu'])
-                    : null,
+                'max_plafond'       => $maxPlafond,
                 'usulan_plafond'    => (int) $input['usulan_plafond'],
                 'jangka_waktu'      => (string) (int) $input['jangka_waktu'],
                 'pengikatan'        => (string) $input['pengikatan'],

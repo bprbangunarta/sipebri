@@ -511,8 +511,20 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       var faktor = bunga === 0 ? tenor : (1 - Math.pow(1 + bunga, -tenor)) / bunga;
-      maks.value = angka(Math.round(kemampuan * faktor), 0);
+      var batas = Math.round(kemampuan * faktor);
+      maks.value = angka(batas, 0);
       rc.value = (plafond / faktor / kemampuan * 100).toFixed(2);
+
+      // usulan plafond tidak boleh melebihi max plafond
+      var lebih = plafond > batas;
+      var peringatan = $('peringatan-max');
+      var tombol = $('simpan-usulan');
+      $('f-usulan_plafond').closest('.form-group').classList.toggle('has-error', lebih);
+      peringatan.style.display = lebih ? '' : 'none';
+      peringatan.textContent = lebih
+         ? 'Usulan plafond melebihi Max Plafond Rp ' + angka(batas, 0) + ' (Repayment Capacity ' + rc.value + '%). Turunkan usulan atau sesuaikan jangka waktu.'
+         : '';
+      tombol.disabled = lebih;
    }
 
    document.addEventListener('input', function (e) {
@@ -534,6 +546,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
    document.querySelectorAll('.kpmi-uang').forEach(function (el) { if (el.value !== '') formatUang(el); });
    hitungKebutuhan();
+   hitungUsulan();
 
    // ---- Kirim ke Komite ----
    function isianSekarang() {
