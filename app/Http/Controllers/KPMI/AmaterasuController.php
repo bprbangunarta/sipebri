@@ -22,6 +22,9 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 class AmaterasuController extends Controller
 {
+    /** Penalti pelunasan baku KPMI (persen), sama dengan angka pada perjanjian kredit PMI. */
+    private const PENALTI_BAKU = 3.00;
+
     public function show(string $kode_pengajuan)
     {
         $pengajuan = $this->ambilPengajuan($kode_pengajuan);
@@ -1001,7 +1004,7 @@ class AmaterasuController extends Controller
             // persen biaya selalu dua desimal (1.00, 3.50) seperti pada analisa lainnya
             'biaya_admin'    => number_format((float) $pengajuan->b_admin, 2, '.', ''),
             'biaya_provisi'  => number_format((float) $pengajuan->b_provisi, 2, '.', ''),
-            'biaya_penalti'  => number_format((float) $pengajuan->b_penalti, 2, '.', ''),
+            'biaya_penalti'  => number_format($this->penaltiAwal($pengajuan), 2, '.', ''),
             'administrasi'   => (int) round($plafon * (float) $pengajuan->b_admin / 100),
             'provisi'        => (int) round($plafon * (float) $pengajuan->b_provisi / 100),
         ];
@@ -1079,6 +1082,18 @@ class AmaterasuController extends Controller
         }
 
         return (int) round($kemampuan * (1 - pow(1 + $bunga, -$tenor)) / $bunga);
+    }
+
+    /**
+     * Nilai awal B.Penalti. Pengajuan KPMI datang dengan b_penalti 0, sehingga bila tidak ditangani nilai 0 tersimpan
+     * kembali dan penalti tidak pernah terisi pada cetakan lain. Selama usulan kredit belum pernah disimpan, nilai 0
+     * diganti penalti baku; setelah usulan disimpan, nilai yang tersimpan dipakai apa adanya (termasuk 0 bila disengaja).
+     */
+    private function penaltiAwal(DataPengajuan $pengajuan): float
+    {
+        $penalti = (float) $pengajuan->b_penalti;
+
+        return $penalti <= 0 && ! $pengajuan->memorandum ? self::PENALTI_BAKU : $penalti;
     }
 
     /** Kelengkapan tiga bagian memorandum untuk resume tab Pengajuan Komite. */

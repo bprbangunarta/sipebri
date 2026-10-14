@@ -494,6 +494,12 @@ kapital. Kode analisa berawalan `AUT`.
 | Bunga dan biaya | S.Bunga, Biaya Admin, B.Provisi, B.Penalti (semua dalam %), Pengikatan Asuransi |
 | Syarat | Sebelum Realisasi, Syarat Tambahan, Syarat Lainnya |
 
+- **B.Penalti baku 3,00%.** Pengajuan KPMI datang dengan `b_penalti` 0, sehingga bila B.Penalti dibiarkan sesuai isian
+  awal, nilai 0 tersimpan kembali dan penalti tidak pernah terisi pada cetakan lain (perjanjian kredit, realisasi,
+  analisa) yang membaca `data_pengajuan.b_penalti`. Karena itu selama **usulan kredit belum pernah disimpan**, nilai 0
+  diganti penalti baku **3,00%** (angka yang sama dengan perjanjian kredit PMI), dan disimpan ke
+  `data_pengajuan.b_penalti` saat usulan disimpan. Setelah usulan tersimpan, nilai yang tersimpan dipakai apa adanya,
+  termasuk 0 bila memang disengaja. Biaya admin dan provisi tidak diberi nilai baku karena besarnya ditentukan analis.
 - **Penulisan persen.** Biaya Admin, B.Provisi, dan B.Penalti selalu tampil **dua desimal** seperti pada analisa lainnya
   (misalnya `1.00`, `3.50`). Bila petugas mengetik `1` atau `2,5` lalu pindah kolom, isinya otomatis menjadi `1.00`
   dan `2.50`; huruf dibuang dan kolom kosong tetap kosong. S.Bunga ditampilkan apa adanya seperti pada data pengajuan.

@@ -1695,12 +1695,21 @@ class DataCetakController extends Controller
                 $jth_tempo = $targetDate->copy()->addMonths($cek->grace_period + 1);
 
                 $cek->tgl_bln_thn_tempo = $jth_tempo->isoformat('D MMMM Y');
-                // dd($cek->jwt);
-                return view('cetak.perjanjian-kredit.cetak-pk-pmi', [
-                    'data' => $cek,
-                    'jaminan' => $jaminan,
-                    'agunan' => $cek_jaminan,
-                ]);
+                if($cek->resort_kode == "LPK01")
+                {
+                    return view('kpmi.amaterasu.cetak-perjanjian', [
+                        'data' => $cek,
+                        'jaminan' => $jaminan,
+                        'agunan' => $cek_jaminan,
+                    ]);
+                } else
+                {
+                    return view('cetak.perjanjian-kredit.cetak-pk-pmi', [
+                        'data' => $cek,
+                        'jaminan' => $jaminan,
+                        'agunan' => $cek_jaminan,
+                    ]);
+                }
             } elseif ($cek->produk_kode == 'KRU' && $cek->metode_rps == 'EFEKTIF' || $cek->produk_kode == 'KRS' && $cek->metode_rps == 'EFEKTIF') {
 
                 return view('cetak.perjanjian-kredit.cetak-pk-kru-efektif', [

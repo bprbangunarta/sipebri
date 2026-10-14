@@ -79,6 +79,7 @@
             <p class="text-red" style="margin: 12px 0 0;">*Pengisian Sektor Ekonomi ada di tab <b>Sandi Lapbul</b>.</p>
             <p class="text-muted" style="margin: 4px 0 0; font-size: 12px;">
                Menyimpan usulan juga mengubah plafon, jangka waktu, bunga, dan biaya pada data pengajuan, seperti pada alur lama.
+               B.Penalti terisi awal 3,00% (penalti baku KPMI) selama usulan belum pernah disimpan; angka ini disimpan ke data pengajuan dan dipakai pada cetakan lain.
             </p>
          </form>
       </div>
