@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\KPMI;
 
 use App\Http\Controllers\Controller;
+use App\Models\Midle;
+use App\Models\KPMI\DataAdministrasi;
 use App\Models\KPMI\DataAnalisa;
 use App\Models\KPMI\DataDokumen;
 use App\Models\KPMI\DataPengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -45,6 +48,7 @@ class AmaterasuController extends Controller
             'memorandum'      => $this->memorandum(),
             'administrasi'    => $this->administrasi(),
             'awalTahap'       => $this->nilaiAwalTahap($pengajuan),
+            'administrasiTersimpan' => $pengajuan->administrasi,
             'dokumenTersimpan' => $pengajuan->dokumen->keyBy('jenis')->map(fn($d) => [
                 'nama'   => $d->nama_asli,
                 'ukuran' => $d->ukuran,
@@ -238,6 +242,75 @@ class AmaterasuController extends Controller
     private function pastikanJenisDokumen(string $jenis): void
     {
         abort_unless(collect($this->dokumenPendukung()['daftar'])->contains('name', $jenis), 404);
+    }
+
+    /**
+     * Simpan biaya administrasi ke tabel administrasi alur lama (satu baris per pengajuan).
+     * Tanpa agunan, APHT dan fiducia selalu 0. Persen administrasi dan provisi pada pengajuan ikut disinkronkan
+     * dari nominal dibagi plafon, sama seperti perubahan biaya pada alur lama.
+     */
+    public function administrasiSimpan(Request $request, string $kode_pengajuan)
+    {
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $kode = $pengajuan->kode_pengajuan;
+        $kodeUser = Auth::user()->code_user;
+
+        if (empty($kodeUser)) {
+            return redirect()
+                ->to(route('kpmi.amaterasi.show', $kode_pengajuan) . '#tab-administrasi')
+                ->withErrors(['administrasi' => 'Kode pengguna tidak ditemukan, biaya administrasi tidak dapat disimpan.']);
+        }
+
+        $kolom = collect($this->administrasi()['biaya']);
+        $bisaDiisi = $kolom->reject(fn($f) => ! empty($f['readonly']))->pluck('name')->all();
+
+        // isian rupiah dikirim dengan pemisah ribuan ("1.750.000"); ambil angkanya, kosong dianggap 0
+        $angka = [];
+        foreach ($bisaDiisi as $nama) {
+            $digit = preg_replace('/\D/', '', (string) $request->input($nama));
+            $angka[$nama] = $digit === '' ? '0' : $digit;
+        }
+        $request->merge($angka);
+
+        $nama = $kolom->pluck('label', 'name')->all();
+        $input = $request->validate(
+            array_fill_keys($bisaDiisi, ['required', 'integer', 'min:0', 'max:2147483647']),
+            [
+                'integer' => ':attribute harus berupa angka.',
+                'max'     => ':attribute terlalu besar.',
+            ],
+            $nama
+        );
+
+        // kolom baca-saja (APHT, fiducia) tidak dipercaya dari kiriman halaman
+        $nilai = array_map('intval', $input) + ['proses_apht' => 0];
+
+        DB::transaction(function () use ($kode, $nilai, $kodeUser, $pengajuan) {
+            $ada = DataAdministrasi::where('pengajuan_kode', $kode)->first();
+
+            if ($ada) {
+                $ada->update($nilai + ['input_user' => $kodeUser]);
+            } else {
+                DataAdministrasi::create($nilai + [
+                    'kode_analisa'   => Midle::kodeacak_adm('ADM', 5),
+                    'pengajuan_kode' => $kode,
+                    'lainnya'        => 0,
+                    'input_user'     => $kodeUser,
+                ]);
+            }
+
+            $plafon = (float) $pengajuan->plafon;
+            if ($plafon > 0) {
+                DataPengajuan::where('kode_pengajuan', $kode)->update([
+                    'b_admin'   => number_format($nilai['administrasi'] / $plafon * 100, 2, '.', ''),
+                    'b_provisi' => number_format($nilai['provisi'] / $plafon * 100, 2, '.', ''),
+                ]);
+            }
+        });
+
+        return redirect()
+            ->to(route('kpmi.amaterasi.show', $kode_pengajuan) . '#tab-administrasi')
+            ->with('success', 'Biaya administrasi berhasil disimpan.');
     }
 
     public function cetak(string $kode_pengajuan)
@@ -621,7 +694,7 @@ class AmaterasuController extends Controller
     {
         $plafon = (float) $pengajuan->plafon;
 
-        return [
+        $awal = [
             'usulan_plafond' => (int) $plafon,
             'jangka_waktu'   => (int) $pengajuan->jangka_waktu,
             'suku_bunga'     => (float) $pengajuan->suku_bunga,
@@ -631,6 +704,17 @@ class AmaterasuController extends Controller
             'administrasi'   => (int) round($plafon * (float) $pengajuan->b_admin / 100),
             'provisi'        => (int) round($plafon * (float) $pengajuan->b_provisi / 100),
         ];
+
+        // biaya administrasi yang sudah disimpan menggantikan nilai awal
+        if ($pengajuan->administrasi) {
+            foreach ($this->administrasi()['biaya'] as $f) {
+                if (isset($pengajuan->administrasi->{$f['name']})) {
+                    $awal[$f['name']] = (int) $pengajuan->administrasi->{$f['name']};
+                }
+            }
+        }
+
+        return $awal;
     }
 
     /**

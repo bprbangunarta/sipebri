@@ -455,7 +455,7 @@ yang tetap tampil di atas pada semua tahap.
 | 1. Analisa Kredit | Penilaian kredit KPMI: kemampuan bayar keluarga, syarat, penilaian, hasil analisa, dan simpan | Sudah tersambung |
 | 2. Analisa Dokumen | Unggah dan pratinjau tujuh dokumen pendukung | Sudah tersambung |
 | 3. Memorandum | Kebutuhan dana, usulan kredit, dan sandi lapbul | Tampilan saja (lihat bagian 17) |
-| 4. Biaya Administrasi | Biaya kredit | Tampilan saja (lihat bagian 17) |
+| 4. Biaya Administrasi | Biaya kredit | Sudah tersambung (lihat bagian 17) |
 | 5. Pengajuan Komite | Resume status tahap 1 sampai 4 dan tombol Kirim ke Komite | Sudah tersambung (lihat bagian 18) |
 
 Tahap 3 dan 4 dibutuhkan karena persetujuan Komite sampai pencairan memakai mekanisme lama, yang memerlukan
@@ -474,10 +474,10 @@ Cara kerja tab:
 
 Tombol **Simpan** ada di panel Hasil Analisa pada tab 1. Tombol **Kirim ke Komite** ada di tab 5, bukan lagi di tab 1.
 
-## 17. Tahap 3 dan 4 (tampilan)
+## 17. Tahap 3 (tampilan) dan tahap 4 (tersambung)
 
-Kedua tahap ini baru berupa tampilan dan **belum tersambung ke penyimpanan**; tombol Simpan pada tiap sub-tab
-sengaja nonaktif. Daftar kolom diatur di controller.
+Tahap 3 (Memorandum) baru berupa tampilan dan **belum tersambung ke penyimpanan**; tombol Simpan pada tiap sub-tab
+sengaja nonaktif. Tahap 4 (Biaya Administrasi) sudah tersambung ke penyimpanan. Daftar kolom diatur di controller.
 
 ### Tab 3. Memorandum (tiga sub-tab)
 
@@ -508,11 +508,28 @@ Pelunasan, Jenis Usaha, Sektor Ekonomi (SLIK), Golongan Debitur, dan Golongan De
 Enam belas kolom rupiah: Administrasi, Provisi, Pertanggungan Asr. Jiwa, Asr. Kendaraan Bermotor, Materai,
 Asr. Jiwa Menurun 1, Transaksi Kredit, Proses SHM, Asr. Jiwa Menurun 2, Asr. Jiwa Menurun 3, Polis dan Materai,
 Pajak STNK, Asr. Jiwa Tetap 1, Asr. Jiwa Tetap 2, Proses APHT (baca-saja), dan Biaya Fiducia (baca-saja).
-Nama kolom mengikuti tabel administrasi pada alur lama agar mudah diadopsi.
 
-**Administrasi** dan **Provisi** terisi awal dari plafon dikalikan persen pengajuan (biaya admin dan provisi), dengan
-pola yang sama seperti contoh sistem lama (plafon 40 juta: 2,5% menjadi 1.000.000 dan 1% menjadi 400.000). Semua
-kolom masih bisa diubah.
+**Nilai awal.** Sebelum pernah disimpan, **Administrasi** dan **Provisi** terisi dari plafon dikalikan persen pengajuan
+(biaya admin dan provisi), dengan pola yang sama seperti sistem lama (plafon 40 juta: 2,5% menjadi 1.000.000 dan 1%
+menjadi 400.000). Setelah disimpan, halaman menampilkan nilai yang tersimpan. Semua kolom kecuali dua yang baca-saja
+bisa diubah.
+
+**Penyimpanan.** Tombol **SIMPAN** menyimpan ke tabel administrasi pada **alur lama** (`a_administrasi`), karena
+persetujuan Komite sampai pencairan masih membacanya. Aturannya mengikuti alur lama:
+
+- Satu baris per pengajuan. Simpan pertama membuat baris baru dengan kode analisa `ADM` + lima angka; simpan
+  berikutnya memperbarui baris yang sama.
+- Kolom isian dikirim dengan pemisah ribuan (misalnya `1.750.000`); yang diambil angkanya saja, kosong dianggap 0,
+  dan batas nilai adalah batas kolom integer database.
+- **Proses APHT dan Biaya Fiducia selalu 0** karena KPMI tidak memakai agunan; nilai kiriman halaman untuk dua kolom
+  itu diabaikan. Kolom `lainnya` pada tabel lama diisi 0 pada simpan pertama dan tidak diubah setelahnya.
+- Persen **biaya admin** dan **provisi** pada data pengajuan disinkronkan dari nominal dibagi plafon (dua desimal),
+  seperti perubahan biaya pada alur lama.
+- Pengguna yang menyimpan dicatat dengan **kode pengguna 3 huruf** (`code_user`, misalnya `HAR`), bukan nama pengguna,
+  karena kolom `input_user` pada tabel lama hanya 3 karakter. Nama pengguna lengkap akan terpotong diam-diam (database
+  tidak dalam mode ketat), sehingga tidak dipakai di tabel ini. Tabel analisa KPMI buatan sendiri tetap memakai nama
+  pengguna lengkap.
+- Biaya fiducia pada tabel memorandum lama belum ikut disimpan, karena tahap 3 belum tersambung.
 
 ## 18. Tab Pengajuan Komite
 
@@ -523,7 +540,7 @@ Tab ini berisi **resume** keempat tahap sebelum pengajuan dikirim ke Komite, dan
 | 1. Analisa Kredit | Skor, syarat wajib terpenuhi, rekomendasi, serta waktu dan penyimpan terakhir | Tersimpan (hijau) atau Belum disimpan (kuning) |
 | 2. Analisa Dokumen | Jumlah dokumen terunggah, diperbarui langsung saat unggah atau hapus | Lengkap atau Belum lengkap; hanya informasi tambahan |
 | 3. Memorandum | Penjelasan bahwa isian belum tersambung ke penyimpanan | Belum tersedia |
-| 4. Biaya Administrasi | Penjelasan bahwa isian belum tersambung ke penyimpanan | Belum tersedia |
+| 4. Biaya Administrasi | Total biaya, administrasi, provisi, serta waktu dan penyimpan terakhir | Tersimpan (hijau) atau Belum disimpan (kuning) |
 
 Setiap baris punya tautan **Buka tahap** untuk berpindah ke tab terkait.
 

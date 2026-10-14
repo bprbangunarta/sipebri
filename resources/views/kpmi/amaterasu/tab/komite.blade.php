@@ -1,4 +1,4 @@
-{{-- Tab 5. Pengajuan Komite: resume tahap 1 sampai 4 dan tombol kirim ke Komite. Variabel: $tahap, $analisa, $pengajuan, $dokumen, $dokumenTersimpan, $totalBobot. --}}
+{{-- Tab 5. Pengajuan Komite: resume tahap 1 sampai 4 dan tombol kirim ke Komite. Variabel: $tahap, $analisa, $pengajuan, $dokumen, $dokumenTersimpan, $administrasi, $administrasiTersimpan, $totalBobot. --}}
    <p class="kpmi-hint" style="margin-bottom: 10px;">
       <i class="fa fa-info-circle"></i> Periksa ringkasan tiap tahap sebelum mengirim pengajuan ke Komite.
    </p>
@@ -54,6 +54,30 @@
                   </td>
                   <td class="text-right">
                      <span id="resume-dokumen-status" class="{{ $dokumenLengkap ? 'text-green' : 'text-aqua' }}"><b>{{ $dokumenLengkap ? 'Lengkap' : 'Belum lengkap' }}</b></span><br>
+                     <a href="#{{ $t['id'] }}" data-buka-tab="{{ $t['id'] }}"><small>Buka tahap</small></a>
+                  </td>
+               @elseif ($t['id'] === 'tab-administrasi')
+                  @php
+                     $totalBiaya = $administrasiTersimpan
+                        ? collect($administrasi['biaya'])->sum(fn($f) => (int) ($administrasiTersimpan->{$f['name']} ?? 0)) + (int) $administrasiTersimpan->lainnya
+                        : 0;
+                  @endphp
+                  <td class="text-center">
+                     <i class="fa fa-lg {{ $administrasiTersimpan ? 'fa-check-circle text-green' : 'fa-exclamation-circle text-yellow' }}"></i>
+                  </td>
+                  <td><b>{{ $loop->iteration }}. {{ $t['nama'] }}</b></td>
+                  <td>
+                     @if ($administrasiTersimpan)
+                        Total biaya <b>Rp {{ number_format($totalBiaya, 0, ',', '.') }}</b> &middot;
+                        administrasi Rp {{ number_format($administrasiTersimpan->administrasi, 0, ',', '.') }} &middot;
+                        provisi Rp {{ number_format($administrasiTersimpan->provisi, 0, ',', '.') }}
+                        <br><small class="text-muted">Tersimpan {{ ($administrasiTersimpan->updated_at ?? $administrasiTersimpan->created_at)?->format('d-m-Y H:i') }} oleh {{ $administrasiTersimpan->input_user }}</small>
+                     @else
+                        Biaya administrasi belum disimpan.
+                     @endif
+                  </td>
+                  <td class="text-right">
+                     <span class="{{ $administrasiTersimpan ? 'text-green' : 'text-yellow' }}"><b>{{ $administrasiTersimpan ? 'Tersimpan' : 'Belum disimpan' }}</b></span><br>
                      <a href="#{{ $t['id'] }}" data-buka-tab="{{ $t['id'] }}"><small>Buka tahap</small></a>
                   </td>
                @else
