@@ -36,6 +36,11 @@ class DataPengajuan extends Model
         return $this->hasOne(DataAnalisa::class, 'pengajuan_kode', 'kode_pengajuan');
     }
 
+    public function dokumen()
+    {
+        return $this->hasMany(DataDokumen::class, 'pengajuan_kode', 'kode_pengajuan');
+    }
+
     public function pendamping()
     {
         return $this->belongsTo(DataPendamping::class, 'kode_pengajuan', 'pengajuan_kode');

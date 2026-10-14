@@ -3,7 +3,12 @@
 Penjelasan rumus pada file
 [konsep-scoring-analisa-kredit-pmi-amaterasu.xlsx](konsep-scoring-analisa-kredit-pmi-amaterasu.xlsx).
 Analisa ini khusus produk KPMI resort LPK01 dan tidak berhubungan dengan analisa kredit existing.
-Dokumen ini hanya membahas **rumus dan keputusan**. Siapa yang mengisi dan apa buktinya belum dibahas.
+Dokumen ini membahas **rumus dan keputusan**, serta fitur pendukung halaman analisa.
+
+**Status konsep.** Parameter analisa kredit (kriteria, bobot, aturan hitung, syarat wajib, dan aturan keputusan)
+sudah **diverifikasi manajemen** dan menjadi acuan tetap. Penambahan berikutnya hanya berupa **informasi
+tambahan** (misalnya dokumen pendukung) yang **tidak mengubah** parameter, rumus, skor, syarat wajib, maupun
+rekomendasi.
 
 ## Ringkasan
 
@@ -14,6 +19,8 @@ Dokumen ini hanya membahas **rumus dan keputusan**. Siapa yang mengisi dan apa b
   **Tidak Direkomendasikan**.
 - Kemampuan bayar **keluarga** adalah inti penilaian (bobot 35 dari 100). Skor kelayakan siswa dari Lendana
   (97,4) hanya ditampilkan dan tidak ikut dihitung.
+- **Dokumen pendukung** (tujuh dokumen dari LPK) hanya **informasi tambahan**. Dokumen itu bukan parameter
+  analisa kredit dan tidak memengaruhi skor, syarat wajib, maupun rekomendasi.
 - **Rumus sudah dibuktikan sama dengan Excel** (lihat bagian Pembuktian). Satu hal harus diperhatikan saat
   dibuat menjadi program: skor dibulatkan dulu sebelum dibandingkan dengan 80 dan 70.
 
@@ -320,7 +327,8 @@ tidak berubah walau data pengajuan berubah di kemudian hari. Kelompok dan urutan
 
 ## 12. Kirim ke Komite
 
-Setelah analisa disimpan, tombol hijau **KIRIM KE KOMITE** di panel Hasil Analisa mengirim pengajuan ke Komite.
+Setelah analisa disimpan, tombol hijau **KIRIM KE KOMITE** di tab **5. Pengajuan Komite** (lihat bagian 16) mengirim
+pengajuan ke Komite.
 Untuk KPMI **tidak ada syarat analisa standar** (collateral, sandi lapbul, administrasi) seperti produk lain;
 satu-satunya syarat adalah analisa KPMI sudah tersimpan. Persetujuan selanjutnya mengikuti proses Komite yang sudah ada.
 
@@ -349,3 +357,206 @@ Yang dikirim adalah analisa yang **sudah tersimpan**, bukan isian yang belum dis
 Jika ada isian yang diubah tetapi belum disimpan, dialog menambah peringatan merah bahwa perubahan itu tidak ikut
 terkirim dan sebaiknya SIMPAN dulu. Pengiriman hanya berjalan setelah menekan **Ya, kirim**; tombol **Batal**
 menutup dialog tanpa mengirim.
+
+## 13. Akses halaman analisa
+
+Halaman analisa, simpan, cetak, dan kirim ke Komite semuanya memakai **kode pengajuan terenkripsi** dari URL
+(tautan di daftar analisa), sehingga setiap pengajuan membuka analisanya sendiri.
+
+| Kondisi | Hasil |
+|---|---|
+| Kode terenkripsi valid, resort LPK01 | Halaman analisa pengajuan itu |
+| Kode rusak atau tidak bisa didekripsi | Ditolak (403) |
+| Pengajuan tidak ada, atau bukan resort LPK01 | Tidak ditemukan (404) |
+
+Modul ini khusus resort LPK01 (LPK Amaterasu), sehingga pengajuan resort lain tidak bisa dibuka lewatnya.
+
+## 14. Tampilan pilihan saat diisi
+
+Warna tombol berubah **langsung saat diklik**, sebelum disimpan:
+
+| Bagian | Tombol dipilih | Warna |
+|---|---|---|
+| Syarat dan kesepakatan | Ya | Hijau |
+| Syarat dan kesepakatan | Tidak | Merah |
+| Penilaian | Nilai 0 sampai 5 | Biru |
+
+Hanya satu tombol per baris yang berwarna; memilih yang lain mengembalikan tombol sebelumnya menjadi polos. Garis di
+sisi kiri baris berubah dari oranye (belum diisi) menjadi hijau (sudah diisi), dan panel Hasil Analisa ikut dihitung
+ulang saat itu juga.
+
+## 15. Dokumen pendukung
+
+> **Informasi tambahan, bukan parameter analisa kredit.** Parameter analisa sudah diverifikasi manajemen (lihat
+> Status konsep di awal). Dokumen pendukung hanya melengkapi berkas pengajuan agar dapat dilihat bersama analisa.
+
+Tahap **2. Analisa Dokumen** pada halaman analisa (lihat bagian 16) berisi kotak **Dokumen pendukung** untuk
+mengunggah tujuh dokumen yang diserahkan LPK:
+
+| No | Dokumen |
+|---|---|
+| 1 | KTP |
+| 2 | Surat Rekomendasi Amaterasu |
+| 3 | Hasil MCU |
+| 4 | Dokumen parameter scoring Lendana |
+| 5 | Hasil SLIK (CLIK) |
+| 6 | Hasil tes psikologi |
+| 7 | Scoring interview |
+
+**Cara memakai.** Tabel punya tiga kolom: Dokumen, File, dan Aksi.
+
+- **Pilih file**: file langsung diunggah dan disimpan saat dipilih, tanpa menunggu tombol SIMPAN. Selama proses
+  tampil "Mengunggah...", lalu tampil nama file dan ukurannya.
+- **Ganti**: memilih file lain untuk dokumen yang sama **menggantikan** file lama.
+- **Lihat**: membuka dialog pratinjau dari file yang tersimpan di server. PDF ditampilkan dengan penampil PDF bawaan
+  browser (bisa digulir, diperbesar, dan dicetak), gambar ditampilkan apa adanya.
+- **Hapus** (tombol silang): ada dialog konfirmasi, dan file di server ikut **dihapus**.
+- Dokumen yang sudah diunggah tetap tampil saat halaman dibuka kembali. Penanda di pojok kanan atas kotak
+  menghitung dokumen terunggah (misalnya 2 / 7) dan menjadi hijau saat lengkap.
+- Nama file yang terlalu panjang dipotong dengan "…" (nama lengkap tampil saat kursor diarahkan).
+
+**Aturan file.** Format PDF, JPG, JPEG, dan PNG, maksimal 5 MB per file. Format dicek dari **isi file**, bukan hanya
+dari nama. Jika tidak sesuai, muncul pesan merah di barisnya dan file tidak disimpan.
+
+**Penyimpanan.**
+
+- File disimpan di storage lokal server (tidak bisa diakses langsung dari browser; hanya lewat tombol Lihat setelah
+  login) pada folder per pengajuan: `kpmi/amaterasu/{kode pengajuan}/`.
+- Nama file berawalan kode pengajuan: `{kode pengajuan}_{jenis}.{ekstensi}`, misalnya `00361336_ktp.pdf` dan
+  `00361336_hasil_mcu.pdf`.
+- Satu pengajuan hanya punya **satu file per jenis dokumen**. Jika diunggah lagi dengan ekstensi berbeda (misalnya
+  PDF diganti PNG), file lama dihapus sehingga tidak menumpuk. Folder pengajuan dihapus saat sudah kosong.
+- Tabel `data_analisas_kpmi_dokumen` mencatat dokumen, satu baris per dokumen, terhubung ke **kode pengajuan**
+  (bukan ke baris analisa, sehingga dokumen tetap ada walau analisa disimpan ulang):
+
+| Kolom | Isi |
+|---|---|
+| Kode pengajuan | Pengajuan pemilik dokumen |
+| Jenis | Salah satu dari tujuh dokumen, misalnya `ktp` atau `hasil_mcu` |
+| Nama asli | Nama file saat diunggah, ditampilkan di halaman |
+| Lokasi | Letak file di storage server |
+| Tipe dan ukuran | Jenis file dan ukuran dalam byte |
+| Pengunggah | Pengguna yang mengunggah, beserta waktunya |
+
+**Keamanan.** Hanya pengajuan resort LPK01 yang bisa diakses. Jenis dokumen di luar tujuh yang terdaftar ditolak.
+Dokumen dikirim dengan pengaturan cache pribadi (tidak disimpan cache bersama) dan tanpa penyimpanan di browser.
+
+**Tidak memengaruhi analisa.** Dokumen, termasuk jumlah dokumen yang terunggah, tidak memengaruhi skor, syarat wajib,
+rekomendasi, tombol Kirim ke Komite, maupun hasil cetak. Dokumen boleh belum lengkap saat analisa disimpan dan dikirim
+ke Komite.
+
+## 16. Tahapan pada halaman analisa
+
+Analisa KPMI terdiri dari lima tab. Halaman analisa menampilkannya di bawah ringkasan data pengajuan dan debitur,
+yang tetap tampil di atas pada semua tahap.
+
+| Tab | Isi | Status |
+|---|---|---|
+| 1. Analisa Kredit | Penilaian kredit KPMI: kemampuan bayar keluarga, syarat, penilaian, hasil analisa, dan simpan | Sudah tersambung |
+| 2. Analisa Dokumen | Unggah dan pratinjau tujuh dokumen pendukung | Sudah tersambung |
+| 3. Memorandum | Kebutuhan dana, usulan kredit, dan sandi lapbul | Tampilan saja (lihat bagian 17) |
+| 4. Biaya Administrasi | Biaya kredit | Tampilan saja (lihat bagian 17) |
+| 5. Pengajuan Komite | Resume status tahap 1 sampai 4 dan tombol Kirim ke Komite | Sudah tersambung (lihat bagian 18) |
+
+Tahap 3 dan 4 dibutuhkan karena persetujuan Komite sampai pencairan memakai mekanisme lama, yang memerlukan
+kolom-kolom tertentu agar hasil cetak sesuai kebutuhan. Keduanya mengadopsi bagian yang sudah ada pada alur lama.
+
+Cara kerja tab:
+
+- Tab 1 menampilkan tanda centang hijau bila analisa sudah tersimpan. Tab 2 menampilkan jumlah dokumen terunggah
+  (misalnya 2/7), hijau bila lengkap. Tab 5 menampilkan tanda centang hijau bila pengajuan sudah dikirim ke Komite.
+- Alamat halaman mengikuti tab yang dibuka (misalnya `#tab-dokumen`), sehingga tab tertentu bisa dibuka langsung
+  dari tautan dan tetap sama saat halaman dimuat ulang.
+- Langkah pengisian di dalam tab 1 diberi huruf **A, B, C** (kemampuan bayar keluarga, syarat dan kesepakatan,
+  penilaian) agar tidak tertukar dengan nomor tab.
+- Judul tab hanya berupa nomor dan nama (tanpa ikon hiasan). Pada layar sempit, deretan tab bisa digeser ke samping
+  agar tetap satu baris.
+
+Tombol **Simpan** ada di panel Hasil Analisa pada tab 1. Tombol **Kirim ke Komite** ada di tab 5, bukan lagi di tab 1.
+
+## 17. Tahap 3 dan 4 (tampilan)
+
+Kedua tahap ini baru berupa tampilan dan **belum tersambung ke penyimpanan**; tombol Simpan pada tiap sub-tab
+sengaja nonaktif. Daftar kolom diatur di controller.
+
+### Tab 3. Memorandum (tiga sub-tab)
+
+**Kebutuhan Dana.** Lima baris, masing-masing berisi nominal dan keterangan: Modal Kerja, Investasi, Konsumtif,
+Pelunasan Kredit, dan Take Over. **Jumlah Kebutuhan Dana** menjumlahkan kelima nominal secara otomatis dan hasilnya
+ikut tampil di kolom Kebutuhan Dana pada sub-tab Usulan Kredit.
+
+**Usulan Kredit.**
+
+| Kelompok | Kolom |
+|---|---|
+| Plafon dan jangka waktu | Kebutuhan Dana (otomatis), Max Plafond (otomatis), Usulan Plafond, Jangka Waktu (bulan), Repayment Capacity (otomatis), Taksasi Agunan (otomatis) |
+| Bunga dan biaya | S.Bunga, Biaya Admin, B.Provisi, B.Penalti (semua dalam %), Pengikatan Asuransi (pilihan) |
+| Syarat | Sebelum Realisasi, Syarat Tambahan, Syarat Lainnya |
+
+Usulan Plafond, Jangka Waktu, S.Bunga, Biaya Admin, B.Provisi, dan B.Penalti terisi awal dari data pengajuan dan
+masih bisa diubah. Kolom bertanda "otomatis" bersifat baca-saja dan menampilkan "-" karena aturan hitungnya belum
+ditentukan untuk KPMI.
+
+**Sandi Lapbul.** Sembilan pilihan: Sifat, Penggunaan Debitur, Golongan Penjamin, Sektor Ekonomi, Sumber Dana
+Pelunasan, Jenis Usaha, Sektor Ekonomi (SLIK), Golongan Debitur, dan Golongan Debitur (SLIK).
+
+> **Daftar pilihan belum lengkap.** Pilihan Sandi Lapbul dan Pengikatan Asuransi baru berisi contoh dari tangkapan
+> layar sistem lama. Daftar lengkapnya perlu diambil dari sistem lama.
+
+### Tab 4. Biaya Administrasi (satu sub-tab: Biaya Kredit)
+
+Enam belas kolom rupiah: Administrasi, Provisi, Pertanggungan Asr. Jiwa, Asr. Kendaraan Bermotor, Materai,
+Asr. Jiwa Menurun 1, Transaksi Kredit, Proses SHM, Asr. Jiwa Menurun 2, Asr. Jiwa Menurun 3, Polis dan Materai,
+Pajak STNK, Asr. Jiwa Tetap 1, Asr. Jiwa Tetap 2, Proses APHT (baca-saja), dan Biaya Fiducia (baca-saja).
+Nama kolom mengikuti tabel administrasi pada alur lama agar mudah diadopsi.
+
+**Administrasi** dan **Provisi** terisi awal dari plafon dikalikan persen pengajuan (biaya admin dan provisi), dengan
+pola yang sama seperti contoh sistem lama (plafon 40 juta: 2,5% menjadi 1.000.000 dan 1% menjadi 400.000). Semua
+kolom masih bisa diubah.
+
+## 18. Tab Pengajuan Komite
+
+Tab ini berisi **resume** keempat tahap sebelum pengajuan dikirim ke Komite, dan tombol **KIRIM KE KOMITE**.
+
+| Tahap | Ringkasan yang tampil | Status |
+|---|---|---|
+| 1. Analisa Kredit | Skor, syarat wajib terpenuhi, rekomendasi, serta waktu dan penyimpan terakhir | Tersimpan (hijau) atau Belum disimpan (kuning) |
+| 2. Analisa Dokumen | Jumlah dokumen terunggah, diperbarui langsung saat unggah atau hapus | Lengkap atau Belum lengkap; hanya informasi tambahan |
+| 3. Memorandum | Penjelasan bahwa isian belum tersambung ke penyimpanan | Belum tersedia |
+| 4. Biaya Administrasi | Penjelasan bahwa isian belum tersambung ke penyimpanan | Belum tersedia |
+
+Setiap baris punya tautan **Buka tahap** untuk berpindah ke tab terkait.
+
+Tombol Kirim ke Komite berperilaku sama seperti sebelumnya (bagian 12): redup bila analisa kredit belum disimpan,
+berubah menjadi "Sudah dikirim ke Komite" bila sudah terkirim, dan memakai dialog konfirmasi yang menyebut rekomendasi
+serta memperingatkan bila ada isian tab 1 yang belum disimpan. Tombol itu hanya bergantung pada tahap 1; tahap 2, 3,
+dan 4 belum memengaruhi pengiriman. Aturan keterkaitan dengan tahap 3 dan 4 akan ditentukan setelah kedua tahap bisa
+disimpan.
+
+## 19. Susunan file tampilan
+
+Halaman analisa dipecah menjadi beberapa partial agar mudah dicari dan diperbaiki. Semua ada di
+`resources/views/kpmi/amaterasu/`. File `show.blade.php` hanya berisi kerangka halaman (judul tab dan pemanggilan
+partial), sehingga perbaikan satu bagian cukup di satu file.
+
+| File | Isi |
+|---|---|
+| `show.blade.php` | Kerangka: pesan, judul kelima tab, dan pemanggilan semua partial |
+| `_style.blade.php` | Seluruh gaya halaman |
+| `_data_pengajuan.blade.php` | Ringkasan debitur, pendamping, dan pengajuan di atas semua tab |
+| `_kolom.blade.php` | Satu kolom isian (rupiah, persen, angka, teks, pilihan) yang dipakai tab 3 dan 4 |
+| `tab/analisa.blade.php` | Tab 1: petunjuk dan form, memanggil lima file di bawah |
+| `tab/analisa_a.blade.php` | Langkah A, kemampuan bayar keluarga |
+| `tab/analisa_b.blade.php` | Langkah B, syarat dan kesepakatan |
+| `tab/analisa_c.blade.php` | Langkah C, penilaian 0 sampai 5 |
+| `tab/analisa_catatan.blade.php` | Catatan analis |
+| `tab/analisa_hasil.blade.php` | Panel hasil analisa di kanan, tombol kembali dan simpan |
+| `tab/dokumen.blade.php` | Tab 2: unggah dokumen pendukung |
+| `tab/memorandum.blade.php` | Tab 3: tiga sub-tab memorandum |
+| `tab/administrasi.blade.php` | Tab 4: biaya kredit |
+| `tab/komite.blade.php` | Tab 5: resume dan tombol kirim ke Komite |
+| `cetak.blade.php` | Halaman cetak (terpisah dari halaman analisa) |
+
+Daftar kolom, bobot, dan aturan hitung tidak ada di file tampilan; semuanya dikirim dari
+`AmaterasuController`. Perilaku di browser (hitung, tab, unggah, dialog) ada di
+`public/assets/js/myscript/kpmi_amaterasu.js`.

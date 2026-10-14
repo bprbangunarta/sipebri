@@ -204,7 +204,7 @@
          </tbody>
       </table>
       <div class="kecil" style="margin-top: 3px;">
-         Skor kriteria = bobot &times; nilai &divide; 5. Nilai 0&ndash;5, nilai 0 berarti data belum tersedia.
+         Skor kriteria = bobot &times; nilai &divide; {{ $aturan['nilai_maks'] }}. Nilai 0&ndash;{{ $aturan['nilai_maks'] }}, nilai 0 berarti data belum tersedia.
          Syarat wajib harus bernilai minimal {{ $gateMinimal }}.
       </div>
 
@@ -212,7 +212,7 @@
       <h2>4. Hasil Analisa</h2>
       <div class="hasil">
          <div style="width: 22%;">
-            <div class="judul">SKOR (dari 100)</div>
+            <div class="judul">SKOR (dari {{ $totalBobot }})</div>
             <div class="angka">{{ $desimal($analisa->skor_total, 1) }}</div>
          </div>
          <div style="width: 26%;">
@@ -237,8 +237,8 @@
       @endif
 
       <div class="kecil" style="margin-top: 6px;">
-         Ada syarat wajib belum terpenuhi: TUNDA. Semua terpenuhi: skor 80 ke atas Layak Direkomendasikan,
-         70&ndash;79,9 Dipertimbangkan Komite, di bawah 70 Tidak Direkomendasikan.
+         Ada syarat wajib belum terpenuhi: TUNDA. Semua terpenuhi: skor {{ $aturan['skor_layak'] }} ke atas Layak Direkomendasikan,
+         {{ $aturan['skor_komite'] }}&ndash;{{ number_format($aturan['skor_layak'] - 0.1, 1, ',', '.') }} Dipertimbangkan Komite, di bawah {{ $aturan['skor_komite'] }} Tidak Direkomendasikan.
       </div>
 
       {{-- 5. CATATAN --}}

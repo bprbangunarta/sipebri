@@ -182,6 +182,329 @@ document.addEventListener('DOMContentLoaded', function () {
    form.querySelectorAll('.kpmi-rupiah').forEach(formatRupiah);
    perbarui();
 
+   // ---- Dokumen pendukung: langsung diunggah, disimpan di server ----
+   var boxDokumen = $('box-dokumen');
+   if (boxDokumen) {
+      var jenisBoleh = JSON.parse(boxDokumen.dataset.jenis);
+      var maksByte = parseFloat(boxDokumen.dataset.maksMb) * 1024 * 1024;
+      var tersimpan = JSON.parse(boxDokumen.dataset.tersimpan || '{}');
+      var urlDokumen = boxDokumen.dataset.urlDokumen;
+      var tokenCsrf = form.querySelector('input[name="_token"]').value;
+      var barisDokumen = boxDokumen.querySelectorAll('tr[data-dokumen]');
+
+      function urlJenis(jenis) {
+         return urlDokumen.replace(/JENIS$/, encodeURIComponent(jenis));
+      }
+
+      function ukuranFile(byte) {
+         return byte >= 1024 * 1024
+            ? (byte / 1024 / 1024).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + ' MB'
+            : Math.max(1, Math.round(byte / 1024)).toLocaleString('id-ID') + ' KB';
+      }
+
+      function hitungDokumen() {
+         var terunggah = boxDokumen.querySelectorAll('tr.terisi[data-dokumen]').length;
+         var penanda = $('dokumen-jumlah');
+         penanda.textContent = terunggah + ' / ' + barisDokumen.length + ' terunggah';
+         penanda.className = 'label pull-right ' + (terunggah === barisDokumen.length ? 'label-success' : 'label-default');
+
+         var resumeTeks = $('resume-dokumen-teks');
+         if (resumeTeks) {
+            var lengkap = terunggah === barisDokumen.length;
+            resumeTeks.textContent = terunggah + ' dari ' + barisDokumen.length + ' dokumen terunggah';
+            $('resume-dokumen-status').innerHTML = '<b>' + (lengkap ? 'Lengkap' : 'Belum lengkap') + '</b>';
+            $('resume-dokumen-status').className = lengkap ? 'text-green' : 'text-aqua';
+            $('resume-dokumen-ikon').className = 'fa fa-lg ' + (lengkap ? 'fa-check-circle text-green' : 'fa-info-circle text-aqua');
+         }
+
+         var penandaTab = $('tab-dokumen-jumlah');
+         if (penandaTab) {
+            penandaTab.textContent = terunggah + '/' + barisDokumen.length;
+            penandaTab.className = 'label ' + (terunggah === barisDokumen.length ? 'label-success' : 'label-default');
+         }
+      }
+
+      // Gambar ulang baris dari data dokumen (null = belum ada); sibuk = sedang mengunggah/menghapus.
+      function gambarBaris(baris, sibuk) {
+         var dok = baris._dok;
+         var status = baris.querySelector('.dokumen-status');
+         var lihat = baris.querySelector('.dokumen-lihat');
+         var hapus = baris.querySelector('.dokumen-hapus');
+         var tombol = baris.querySelector('.dokumen-tombol');
+         var pilih = baris.querySelector('label.btn');
+
+         status.textContent = '';
+         status.removeAttribute('title');
+
+         if (sibuk) {
+            status.className = 'dokumen-status text-muted';
+            var putar = document.createElement('i');
+            putar.className = 'fa fa-spinner fa-spin';
+            status.appendChild(putar);
+            status.appendChild(document.createTextNode(' ' + sibuk));
+         } else if (dok) {
+            status.className = 'dokumen-status';
+            var ikon = document.createElement('i');
+            ikon.className = 'fa fa-file-o';
+            status.appendChild(ikon);
+            status.appendChild(document.createTextNode(' ' + dok.nama + ' '));
+            var kecil = document.createElement('small');
+            kecil.className = 'text-muted';
+            kecil.textContent = '(' + ukuranFile(dok.ukuran) + ')';
+            status.appendChild(kecil);
+            status.title = dok.nama;
+         } else {
+            status.className = 'dokumen-status text-muted';
+            status.textContent = 'Belum diunggah';
+         }
+
+         tombol.textContent = dok ? 'Ganti' : 'Pilih file';
+         lihat.style.display = dok ? '' : 'none';
+         hapus.style.display = dok ? '' : 'none';
+         baris.classList.toggle('terisi', !!dok);
+
+         [lihat, hapus].forEach(function (el) { el.disabled = !!sibuk; });
+         pilih.classList.toggle('disabled', !!sibuk);
+         pilih.style.pointerEvents = sibuk ? 'none' : '';
+      }
+
+      // Pratinjau dari file yang tersimpan di server; PDF dalam bingkai, gambar apa adanya.
+      function lihatDokumen(url, nama, ext) {
+         if (typeof Swal === 'undefined') {
+            window.open(url, '_blank');
+            return;
+         }
+
+         var isi = ext === 'pdf'
+            ? '<iframe src="' + escapeHtml(url) + '" style="width:100%;height:70vh;border:0"></iframe>'
+            : '<img src="' + escapeHtml(url) + '" alt="" style="max-width:100%;max-height:70vh">';
+
+         Swal.fire({
+            titleText: nama,
+            html: isi,
+            width: '900px',
+            showConfirmButton: false,
+            showCloseButton: true
+         });
+      }
+
+      function pesanGalat(res) {
+         var json = res.json || {};
+         if (json.errors && json.errors.file) return json.errors.file[0];
+         return json.message || 'Gagal diproses, coba lagi.';
+      }
+
+      function panggil(url, opsi) {
+         opsi.headers = Object.assign({ 'Accept': 'application/json', 'X-CSRF-TOKEN': tokenCsrf }, opsi.headers || {});
+         opsi.credentials = 'same-origin';
+
+         return fetch(url, opsi).then(function (r) {
+            return r.json().catch(function () { return {}; }).then(function (json) {
+               return { ok: r.ok, status: r.status, json: json };
+            });
+         });
+      }
+
+      barisDokumen.forEach(function (baris) {
+         var jenis = baris.dataset.dokumen;
+         var input = baris.querySelector('.kpmi-file');
+         var galat = baris.querySelector('.dokumen-galat');
+
+         baris._dok = tersimpan[jenis] || null;
+         gambarBaris(baris);
+
+         input.addEventListener('change', function () {
+            galat.style.display = 'none';
+            var file = input.files[0];
+            if (!file) return;
+
+            var ekstensi = file.name.split('.').pop().toLowerCase();
+            var pesan = null;
+
+            if (jenisBoleh.indexOf(ekstensi) === -1) {
+               pesan = 'Format tidak didukung. Gunakan ' + jenisBoleh.join(', ').toUpperCase() + '.';
+            } else if (file.size > maksByte) {
+               pesan = 'Ukuran ' + ukuranFile(file.size) + ' melebihi batas ' + boxDokumen.dataset.maksMb + ' MB.';
+            }
+
+            if (pesan) {
+               input.value = '';
+               galat.textContent = pesan;
+               galat.style.display = '';
+               return;
+            }
+
+            var data = new FormData();
+            data.append('file', file);
+            gambarBaris(baris, 'Mengunggah...');
+
+            panggil(urlJenis(jenis), { method: 'POST', body: data })
+               .then(function (res) {
+                  if (res.ok) {
+                     baris._dok = res.json;
+                  } else {
+                     galat.textContent = pesanGalat(res);
+                     galat.style.display = '';
+                  }
+               })
+               .catch(function () {
+                  galat.textContent = 'Koneksi gagal, file belum terunggah.';
+                  galat.style.display = '';
+               })
+               .then(function () {
+                  input.value = '';
+                  gambarBaris(baris);
+                  hitungDokumen();
+               });
+         });
+
+         baris.querySelector('.dokumen-lihat').addEventListener('click', function () {
+            if (baris._dok) lihatDokumen(urlJenis(jenis), baris._dok.nama, baris._dok.ext);
+         });
+
+         baris.querySelector('.dokumen-hapus').addEventListener('click', function () {
+            if (!baris._dok) return;
+
+            function hapus() {
+               galat.style.display = 'none';
+               gambarBaris(baris, 'Menghapus...');
+
+               panggil(urlJenis(jenis), { method: 'DELETE' })
+                  .then(function (res) {
+                     if (res.ok) {
+                        baris._dok = null;
+                     } else {
+                        galat.textContent = pesanGalat(res);
+                        galat.style.display = '';
+                     }
+                  })
+                  .catch(function () {
+                     galat.textContent = 'Koneksi gagal, file belum terhapus.';
+                     galat.style.display = '';
+                  })
+                  .then(function () {
+                     gambarBaris(baris);
+                     hitungDokumen();
+                  });
+            }
+
+            if (typeof Swal === 'undefined') {
+               if (confirm('Hapus dokumen ' + baris._dok.nama + '?')) hapus();
+               return;
+            }
+
+            Swal.fire({
+               title: 'Hapus dokumen?',
+               text: baris._dok.nama,
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#d33',
+               cancelButtonColor: '#6c757d',
+               confirmButtonText: 'Ya, hapus',
+               cancelButtonText: 'Batal',
+               reverseButtons: true,
+               focusCancel: true
+            }).then(function (hasil) {
+               if (hasil.isConfirmed) hapus();
+            });
+         });
+      });
+
+      hitungDokumen();
+   }
+
+   // ---- Tab tahap analisa ----
+   var tautTab = document.querySelectorAll('.kpmi-tahap > .nav-tabs a[data-tab]');
+
+   function bukaTab(id) {
+      var ada = false;
+      tautTab.forEach(function (a) {
+         var aktif = a.getAttribute('href') === '#' + id;
+         ada = ada || aktif;
+         a.parentNode.classList.toggle('active', aktif);
+      });
+      if (!ada) return false;
+
+      document.querySelectorAll('.kpmi-tahap > .tab-content > .tab-pane').forEach(function (pane) {
+         pane.classList.toggle('active', pane.id === id);
+      });
+      return true;
+   }
+
+   tautTab.forEach(function (a) {
+      a.addEventListener('click', function (e) {
+         e.preventDefault();
+         var id = a.getAttribute('href').slice(1);
+         if (bukaTab(id) && window.history && history.replaceState) history.replaceState(null, '', '#' + id);
+      });
+   });
+
+   // tautan "Buka tahap" pada resume
+   document.querySelectorAll('[data-buka-tab]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+         e.preventDefault();
+         var id = a.dataset.bukaTab;
+         if (bukaTab(id) && window.history && history.replaceState) history.replaceState(null, '', '#' + id);
+         document.querySelector('.kpmi-tahap').scrollIntoView({ block: 'start' });
+      });
+   });
+
+   if (location.hash) bukaTab(location.hash.slice(1));
+
+   // ---- Sub-tab pada tahap Memorandum dan Biaya Administrasi ----
+   document.querySelectorAll('.kpmi-subtab').forEach(function (kotak) {
+      var tautan = kotak.querySelectorAll(':scope > .nav-tabs a[data-subtab]');
+
+      tautan.forEach(function (a) {
+         a.addEventListener('click', function (e) {
+            e.preventDefault();
+            var id = a.getAttribute('href').slice(1);
+
+            tautan.forEach(function (l) { l.parentNode.classList.toggle('active', l === a); });
+            kotak.querySelectorAll(':scope > .tab-content > .tab-pane').forEach(function (pane) {
+               pane.classList.toggle('active', pane.id === id);
+            });
+         });
+      });
+   });
+
+   // ---- Isian rupiah dan persen pada tahap Memorandum dan Biaya Administrasi ----
+   function angkaDigit(el) {
+      var digit = el.value.replace(/\D/g, '');
+      return digit === '' ? 0 : parseInt(digit, 10);
+   }
+
+   function tulisUang(id, nilai) {
+      var el = $(id);
+      if (el) el.value = angka(nilai, 0);
+   }
+
+   // Jumlah kebutuhan dana = penjumlahan lima kebutuhan; ikut tampil di Usulan Kredit.
+   function hitungKebutuhan() {
+      var jumlah = 0;
+      document.querySelectorAll('.kpmi-kebutuhan').forEach(function (el) { jumlah += angkaDigit(el); });
+      tulisUang('f-jumlah_kebutuhan_dana', jumlah);
+      tulisUang('f-kebutuhan_dana', jumlah);
+   }
+
+   function formatUang(el) {
+      var digit = el.value.replace(/\D/g, '');
+      el.value = digit === '' ? '' : angka(parseInt(digit, 10), 0);
+   }
+
+   document.addEventListener('input', function (e) {
+      var el = e.target;
+      if (el.classList.contains('kpmi-uang')) {
+         formatUang(el);
+         if (el.classList.contains('kpmi-kebutuhan')) hitungKebutuhan();
+      } else if (el.classList.contains('kpmi-persen')) {
+         el.value = el.value.replace(',', '.').replace(/[^0-9.]/g, '');
+      }
+   });
+
+   document.querySelectorAll('.kpmi-uang').forEach(function (el) { if (el.value !== '') formatUang(el); });
+   hitungKebutuhan();
+
    // ---- Kirim ke Komite ----
    function isianSekarang() {
       var data = new FormData(form);

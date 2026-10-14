@@ -4,17 +4,20 @@ namespace App\Http\Controllers\KPMI;
 
 use App\Http\Controllers\Controller;
 use App\Models\KPMI\DataAnalisa;
+use App\Models\KPMI\DataDokumen;
 use App\Models\KPMI\DataPengajuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class AmaterasuController extends Controller
 {
     public function show(string $kode_pengajuan)
     {
-        $kode = $this->kodePengajuan($kode_pengajuan);
-        $pengajuan = DataPengajuan::getPengajuan($kode);
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $kode = $pengajuan->kode_pengajuan;
         // dd($pengajuan);
 
         $analisa = $pengajuan->analisa;
@@ -22,6 +25,7 @@ class AmaterasuController extends Controller
         $syaratWajib     = $this->syaratWajib();
         $syaratPendukung = $this->syaratPendukung();
         $penilaian       = $this->penilaian();
+        $konfigurasi     = $this->konfigurasi($syaratWajib, $syaratPendukung, $penilaian);
 
         return view('kpmi.amaterasu.show', [
             'pengajuan'       => $pengajuan,
@@ -32,15 +36,28 @@ class AmaterasuController extends Controller
             'penilaian'       => $penilaian,
             'totalIsian'      => 3 + count($syaratWajib) + count($syaratPendukung) + collect($penilaian)->flatten(1)->count(),
             'angsuran'        => $this->hitungAngsuran($pengajuan),
-            'konfigurasi'     => $this->konfigurasi($syaratWajib, $syaratPendukung, $penilaian),
+            'konfigurasi'     => $konfigurasi,
+            'aturan'          => $konfigurasi['aturan'],
+            'totalWajib'      => collect($konfigurasi['syarat'])->where('wajib', true)->count() + 2, // + DSR dan stress test
+            'totalBobot'      => $this->totalBobot($konfigurasi),
+            'dokumen'         => $this->dokumenPendukung(),
+            'tahap'           => $this->tahapAnalisa(),
+            'memorandum'      => $this->memorandum(),
+            'administrasi'    => $this->administrasi(),
+            'awalTahap'       => $this->nilaiAwalTahap($pengajuan),
+            'dokumenTersimpan' => $pengajuan->dokumen->keyBy('jenis')->map(fn($d) => [
+                'nama'   => $d->nama_asli,
+                'ukuran' => $d->ukuran,
+                'ext'    => pathinfo($d->path, PATHINFO_EXTENSION),
+            ])->all(),
             'isian'           => $this->isian($analisa),
         ]);
     }
 
     public function store(Request $request, string $kode_pengajuan)
     {
-        $kode = $this->kodePengajuan($kode_pengajuan);
-        $pengajuan = DataPengajuan::getPengajuan($kode);
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $kode = $pengajuan->kode_pengajuan;
 
         $this->rapikanAngka($request);
         $input = $request->validate($this->aturanValidasi(), $this->pesanValidasi(), $this->namaIsian());
@@ -84,8 +101,8 @@ class AmaterasuController extends Controller
      */
     public function komite(string $kode_pengajuan)
     {
-        $kode = $this->kodePengajuan($kode_pengajuan);
-        $pengajuan = DataPengajuan::getPengajuan($kode);
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $kode = $pengajuan->kode_pengajuan;
 
         if (! $pengajuan->analisa) {
             return redirect()
@@ -110,10 +127,123 @@ class AmaterasuController extends Controller
         return redirect()->route('komite.kredit')->with('success', 'Konfirmasi berhasil');
     }
 
+    /**
+     * Unggah dokumen pendukung. Satu file per jenis; unggah ulang menggantikan file lama.
+     * Disimpan di storage lokal dengan nama berawalan kode pengajuan: {kode}_{jenis}.{ekstensi}
+     */
+    public function dokumenSimpan(Request $request, string $kode_pengajuan, string $jenis)
+    {
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $this->pastikanJenisDokumen($jenis);
+        $kode = $pengajuan->kode_pengajuan;
+        $dokumen = $this->dokumenPendukung();
+
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:' . implode(',', $dokumen['jenis']), 'max:' . ($dokumen['maks_mb'] * 1024)],
+        ], [
+            'file.required' => 'File belum dipilih.',
+            'file.file'     => 'File tidak valid.',
+            'file.uploaded' => 'Unggah gagal. Ukuran file mungkin melebihi batas server.',
+            'file.mimes'    => 'Format tidak didukung. Gunakan ' . strtoupper(implode(', ', $dokumen['jenis'])) . '.',
+            'file.max'      => 'Ukuran melebihi batas ' . $dokumen['maks_mb'] . ' MB.',
+        ]);
+
+        $file = $request->file('file');
+        $ekstensi = strtolower($file->guessExtension() ?: $file->getClientOriginalExtension());
+        $ekstensi = $ekstensi === 'jpeg' ? 'jpg' : $ekstensi;
+
+        $disk  = Storage::disk('local');
+        $path  = "kpmi/amaterasu/{$kode}/{$kode}_{$jenis}.{$ekstensi}";
+        $lama  = DataDokumen::where('pengajuan_kode', $kode)->where('jenis', $jenis)->first();
+
+        if (! $disk->putFileAs(dirname($path), $file, basename($path))) {
+            return response()->json(['message' => 'File gagal disimpan.'], 500);
+        }
+
+        try {
+            $dokumenBaru = DataDokumen::updateOrCreate(
+                ['pengajuan_kode' => $kode, 'jenis' => $jenis],
+                [
+                    'nama_asli'  => $file->getClientOriginalName(),
+                    'path'       => $path,
+                    'tipe'       => $file->getMimeType(),
+                    'ukuran'     => $file->getSize(),
+                    'input_user' => auth()->user()?->username,
+                ]
+            );
+        } catch (\Throwable $e) {
+            if (! $lama || $lama->path !== $path) {
+                $disk->delete($path);
+            }
+            throw $e;
+        }
+
+        // file lama dengan ekstensi berbeda (misalnya pdf diganti png) dihapus agar tidak menumpuk
+        if ($lama && $lama->path !== $path) {
+            $disk->delete($lama->path);
+        }
+
+        return response()->json([
+            'nama'   => $dokumenBaru->nama_asli,
+            'ukuran' => $dokumenBaru->ukuran,
+            'ext'    => $ekstensi,
+        ]);
+    }
+
+    public function dokumenLihat(string $kode_pengajuan, string $jenis)
+    {
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $this->pastikanJenisDokumen($jenis);
+
+        $dokumen = DataDokumen::where('pengajuan_kode', $pengajuan->kode_pengajuan)->where('jenis', $jenis)->firstOrFail();
+        $disk = Storage::disk('local');
+
+        abort_unless($disk->exists($dokumen->path), 404);
+
+        $respons = response()->file($disk->path($dokumen->path), [
+            'Content-Type'           => $dokumen->tipe ?: 'application/octet-stream',
+            'Content-Disposition'    => 'inline; filename="' . basename($dokumen->path) . '"',
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
+
+        // dokumen berisi data pribadi: jangan disimpan cache bersama
+        $respons->setPrivate();
+        $respons->headers->set('Cache-Control', 'private, no-store');
+
+        return $respons;
+    }
+
+    public function dokumenHapus(string $kode_pengajuan, string $jenis)
+    {
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $this->pastikanJenisDokumen($jenis);
+        $kode = $pengajuan->kode_pengajuan;
+
+        $dokumen = DataDokumen::where('pengajuan_kode', $kode)->where('jenis', $jenis)->first();
+
+        if ($dokumen) {
+            $disk = Storage::disk('local');
+            $dokumen->delete();
+            $disk->delete($dokumen->path);
+
+            // folder pengajuan dihapus bila sudah kosong
+            if (empty($disk->allFiles(dirname($dokumen->path)))) {
+                $disk->deleteDirectory(dirname($dokumen->path));
+            }
+        }
+
+        return response()->json(['ok' => true]);
+    }
+
+    private function pastikanJenisDokumen(string $jenis): void
+    {
+        abort_unless(collect($this->dokumenPendukung()['daftar'])->contains('name', $jenis), 404);
+    }
+
     public function cetak(string $kode_pengajuan)
     {
-        $kode = $this->kodePengajuan($kode_pengajuan);
-        $pengajuan = DataPengajuan::getPengajuan($kode);
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $kode = $pengajuan->kode_pengajuan;
         $analisa = $pengajuan->analisa;
 
         if (! $analisa) {
@@ -158,15 +288,30 @@ class AmaterasuController extends Controller
             'label'       => $label,
             'aturan'      => $konfigurasi['aturan'],
             'gateMinimal' => $konfigurasi['aturan']['gate_minimal'],
+            'totalBobot'  => $this->totalBobot($konfigurasi),
             'belumTerpenuhi' => $detail->filter(fn($d) => $d->wajib && $d->nilai < $konfigurasi['aturan']['gate_minimal'])
                 ->keys()->map(fn($k) => $label[$k])->values()->all(),
         ];
     }
 
-    private function kodePengajuan(string $kode_pengajuan): string
+    /**
+     * Pengajuan dari kode terenkripsi pada URL. Hanya untuk resort LPK01 (Amaterasu).
+     */
+    private function ambilPengajuan(string $kode_pengajuan): DataPengajuan
     {
-        // return Crypt::decrypt($kode_pengajuan);
-        return '00361336';
+        try {
+            $kode = Crypt::decrypt($kode_pengajuan);
+        } catch (DecryptException $e) {
+            abort(403, 'Permintaan anda di Tolak.');
+        }
+
+        $pengajuan = DataPengajuan::getPengajuan($kode);
+
+        if (! $pengajuan || $pengajuan->resort_kode !== 'LPK01') {
+            abort(404);
+        }
+
+        return $pengajuan;
     }
 
     /**
@@ -375,6 +520,140 @@ class AmaterasuController extends Controller
         return $isian;
     }
 
+    /**
+     * Tahap yang diringkas pada tab Pengajuan Komite, berurutan seperti tab pada halaman.
+     */
+    private function tahapAnalisa(): array
+    {
+        return [
+            ['id' => 'tab-analisa', 'nama' => 'Analisa Kredit'],
+            ['id' => 'tab-dokumen', 'nama' => 'Analisa Dokumen'],
+            ['id' => 'tab-memorandum', 'nama' => 'Memorandum'],
+            ['id' => 'tab-administrasi', 'nama' => 'Biaya Administrasi'],
+        ];
+    }
+
+    /**
+     * Kolom tahap 3 (Memorandum). Tampilan saja, belum tersambung ke penyimpanan.
+     * tipe: rupiah, persen, angka, teks, area, select.
+     */
+    private function memorandum(): array
+    {
+        return [
+            'kebutuhan' => [
+                ['name' => 'modal_kerja', 'label' => 'Modal Kerja'],
+                ['name' => 'investasi', 'label' => 'Investasi'],
+                ['name' => 'konsumtif', 'label' => 'Konsumtif'],
+                ['name' => 'pelunasan_kredit', 'label' => 'Pelunasan Kredit'],
+                ['name' => 'take_over', 'label' => 'Take Over'],
+            ],
+            'usulan' => [
+                'Plafon dan jangka waktu' => [
+                    ['name' => 'kebutuhan_dana', 'label' => 'Kebutuhan Dana', 'tipe' => 'rupiah', 'readonly' => true],
+                    ['name' => 'max_plafond', 'label' => 'Max Plafond', 'tipe' => 'rupiah', 'readonly' => true],
+                    ['name' => 'usulan_plafond', 'label' => 'Usulan Plafond', 'tipe' => 'rupiah'],
+                    ['name' => 'jangka_waktu', 'label' => 'Jangka Waktu', 'tipe' => 'angka', 'satuan' => 'bulan'],
+                    ['name' => 'repayment_capacity', 'label' => 'Repayment Capacity', 'tipe' => 'persen', 'readonly' => true],
+                    ['name' => 'taksasi_agunan', 'label' => 'Taksasi Agunan', 'tipe' => 'persen', 'readonly' => true],
+                ],
+                'Bunga dan biaya' => [
+                    ['name' => 'suku_bunga', 'label' => 'S.Bunga', 'tipe' => 'persen'],
+                    ['name' => 'biaya_admin', 'label' => 'Biaya Admin', 'tipe' => 'persen'],
+                    ['name' => 'biaya_provisi', 'label' => 'B.Provisi', 'tipe' => 'persen'],
+                    ['name' => 'biaya_penalti', 'label' => 'B.Penalti', 'tipe' => 'persen'],
+                    ['name' => 'pengikatan_asuransi', 'label' => 'Pengikatan Asuransi', 'tipe' => 'select',
+                        // BELUM LENGKAP: baru pilihan yang terlihat pada contoh layar; daftar lengkap dari sistem lama
+                        'opsi' => ['Tanpa Pengikatan']],
+                ],
+                'Syarat' => [
+                    ['name' => 'sebelum_realisasi', 'label' => 'Sebelum Realisasi', 'tipe' => 'area'],
+                    ['name' => 'syarat_tambahan', 'label' => 'Syarat Tambahan', 'tipe' => 'area'],
+                    ['name' => 'syarat_lainnya', 'label' => 'Syarat Lainnya', 'tipe' => 'area'],
+                ],
+            ],
+            // BELUM LENGKAP: baru pilihan yang terlihat pada contoh layar; daftar lengkap dari sistem lama
+            'sandi' => [
+                ['name' => 'sifat', 'label' => 'Sifat', 'tipe' => 'select', 'opsi' => ['3 - Langsung kepada Debitur BPR']],
+                ['name' => 'penggunaan_debitur', 'label' => 'Penggunaan Debitur', 'tipe' => 'select', 'opsi' => ['39 - Kredit konsumsi lainnya']],
+                ['name' => 'golongan_penjamin', 'label' => 'Golongan Penjamin', 'tipe' => 'select', 'opsi' => ['880 - Asuransi Jiwa']],
+                ['name' => 'sektor_ekonomi', 'label' => 'Sektor Ekonomi', 'tipe' => 'select', 'opsi' => ['1020 - Bukan Lapangan Usaha Lainnya']],
+                ['name' => 'sumber_dana_pelunasan', 'label' => 'Sumber Dana Pelunasan', 'tipe' => 'select', 'opsi' => ['10 - Gaji / Honor']],
+                ['name' => 'jenis_usaha', 'label' => 'Jenis Usaha', 'tipe' => 'select', 'opsi' => ['1 - Mikro']],
+                ['name' => 'sektor_ekonomi_slik', 'label' => 'Sektor Ekonomi (SLIK)', 'tipe' => 'select', 'opsi' => ['009000 - Bukan Lapangan Usaha Lain']],
+                ['name' => 'golongan_debitur', 'label' => 'Golongan Debitur', 'tipe' => 'select', 'opsi' => ['875 - Perorangan - Lainnya']],
+                ['name' => 'golongan_debitur_slik', 'label' => 'Golongan Debitur (SLIK)', 'tipe' => 'select', 'opsi' => ['9000 - Perseorangan (Penduduk)']],
+            ],
+        ];
+    }
+
+    /**
+     * Kolom tahap 4 (Biaya Administrasi). Nama kolom mengikuti tabel administrasi pada alur lama.
+     */
+    private function administrasi(): array
+    {
+        return [
+            'biaya' => [
+                ['name' => 'administrasi', 'label' => 'Administrasi'],
+                ['name' => 'provisi', 'label' => 'Provisi'],
+                ['name' => 'asuransi_jiwa', 'label' => 'Pertanggungan Asr. Jiwa'],
+                ['name' => 'asuransi_kendaraan_motor', 'label' => 'Asr. Kendaraan Bermotor'],
+                ['name' => 'materai', 'label' => 'Materai'],
+                ['name' => 'asuransi_jiwa_menurun1', 'label' => 'Asr. Jiwa Menurun 1'],
+                ['name' => 'transaksi_kredit', 'label' => 'Transaksi Kredit'],
+                ['name' => 'proses_shm', 'label' => 'Proses SHM'],
+                ['name' => 'asuransi_jiwa_menurun2', 'label' => 'Asr. Jiwa Menurun 2'],
+                ['name' => 'asuransi_jiwa_menurun3', 'label' => 'Asr. Jiwa Menurun 3'],
+                ['name' => 'polis_materai', 'label' => 'Polis dan Materai'],
+                ['name' => 'pajak_stnk', 'label' => 'Pajak STNK'],
+                ['name' => 'asuransi_jiwa_tetap1', 'label' => 'Asr. Jiwa Tetap 1'],
+                ['name' => 'asuransi_jiwa_tetap2', 'label' => 'Asr. Jiwa Tetap 2'],
+                ['name' => 'proses_apht', 'label' => 'Proses APHT', 'readonly' => true],
+                ['name' => 'biaya_fiducia', 'label' => 'Biaya Fiducia', 'readonly' => true],
+            ],
+        ];
+    }
+
+    /**
+     * Nilai awal kolom tahap 3 dan 4 dari data pengajuan. Biaya administrasi dan provisi dihitung
+     * dari plafon x persen, mengikuti pola contoh layar sistem lama (40 juta: 2,5% = 1.000.000; 1% = 400.000).
+     */
+    private function nilaiAwalTahap(DataPengajuan $pengajuan): array
+    {
+        $plafon = (float) $pengajuan->plafon;
+
+        return [
+            'usulan_plafond' => (int) $plafon,
+            'jangka_waktu'   => (int) $pengajuan->jangka_waktu,
+            'suku_bunga'     => (float) $pengajuan->suku_bunga,
+            'biaya_admin'    => (float) $pengajuan->b_admin,
+            'biaya_provisi'  => (float) $pengajuan->b_provisi,
+            'biaya_penalti'  => (float) $pengajuan->b_penalti,
+            'administrasi'   => (int) round($plafon * (float) $pengajuan->b_admin / 100),
+            'provisi'        => (int) round($plafon * (float) $pengajuan->b_provisi / 100),
+        ];
+    }
+
+    /**
+     * Dokumen pendukung yang diunggah analis.
+     * Format dan batas ukuran adalah angka awal, sesuaikan jika kebijakan berbeda.
+     */
+    private function dokumenPendukung(): array
+    {
+        return [
+            'jenis'  => ['pdf', 'jpg', 'jpeg', 'png'],
+            'maks_mb' => 5,
+            'daftar' => [
+                ['name' => 'ktp', 'label' => 'KTP'],
+                ['name' => 'surat_rekomendasi', 'label' => 'Surat Rekomendasi Amaterasu'],
+                ['name' => 'hasil_mcu', 'label' => 'Hasil MCU'],
+                ['name' => 'parameter_scoring_lendana', 'label' => 'Dokumen parameter scoring Lendana'],
+                ['name' => 'hasil_slik', 'label' => 'Hasil SLIK (CLIK)'],
+                ['name' => 'hasil_tes_psikologi', 'label' => 'Hasil tes psikologi'],
+                ['name' => 'scoring_interview', 'label' => 'Scoring interview'],
+            ],
+        ];
+    }
+
     private function syaratWajib(): array
     {
         return [
@@ -422,6 +701,14 @@ class AmaterasuController extends Controller
         ];
     }
 
+    private function totalBobot(array $konfigurasi): int
+    {
+        return collect($konfigurasi['syarat'])->sum('bobot')
+            + collect($konfigurasi['penilaian'])->sum('bobot')
+            + $konfigurasi['rc']['dsr']['bobot']
+            + $konfigurasi['rc']['stress']['bobot'];
+    }
+
     /**
      * Konfigurasi hitung yang dibaca JavaScript (bobot, syarat wajib, ambang nilai dan keputusan).
      */
@@ -435,23 +722,31 @@ class AmaterasuController extends Controller
             $syarat[] = $s + ['wajib' => false];
         }
 
+        $aturan = [
+            'gate_minimal'       => 3,
+            'nilai_maks'         => 5,
+            // [nilai, arti]; ditampilkan sebagai petunjuk pengisian nilai
+            'skala'              => [[0, 'data belum tersedia'], [3, 'cukup'], [5, 'sangat baik']],
+            'skor_layak'         => 80,
+            'skor_komite'        => 70,
+            'stress_penghasilan' => 0.7,
+            'stress_biaya'       => 1.1,
+            // [batas DSR maksimal, nilai]; di atas batas terakhir bernilai 1
+            'dsr'                => [[0.35, 5], [0.40, 4], [0.45, 3], [0.50, 2]],
+            'stress_rasio'       => ['nilai_5' => 0.20, 'nilai_4' => 0.10],
+        ];
+
+        // DSR tertinggi yang masih memenuhi syarat wajib, untuk teks syarat
+        $batasDsr = collect($aturan['dsr'])->firstWhere(1, $aturan['gate_minimal'])[0] * 100;
+
         return [
             'syarat'    => $syarat,
             'penilaian' => collect($penilaian)->flatten(1)->values()->all(),
             'rc' => [
-                'dsr'    => ['label' => 'DSR setelah kredit maksimal 45%', 'bobot' => 8],
+                'dsr'    => ['label' => 'DSR setelah kredit maksimal ' . round($batasDsr) . '%', 'bobot' => 8],
                 'stress' => ['label' => 'Sisa penghasilan saat keadaan memburuk harus positif', 'bobot' => 8],
             ],
-            'aturan' => [
-                'gate_minimal'      => 3,
-                'skor_layak'        => 80,
-                'skor_komite'       => 70,
-                'stress_penghasilan' => 0.7,
-                'stress_biaya'      => 1.1,
-                // [batas DSR maksimal, nilai]; di atas batas terakhir bernilai 1
-                'dsr'               => [[0.35, 5], [0.40, 4], [0.45, 3], [0.50, 2]],
-                'stress_rasio'      => ['nilai_5' => 0.20, 'nilai_4' => 0.10],
-            ],
+            'aturan' => $aturan,
         ];
     }
 }
