@@ -588,6 +588,21 @@ class AmaterasuController extends Controller
     }
 
     /**
+     * Data analisa kredit KPMI untuk halaman cetak analisa kredit alur lama (DataCetakController).
+     * Null bila analisa KPMI belum disimpan.
+     */
+    public function dataCetakAnalisa(string $kodePengajuan): ?array
+    {
+        $pengajuan = DataPengajuan::getPengajuan($kodePengajuan);
+
+        if (! $pengajuan || ! $pengajuan->analisa) {
+            return null;
+        }
+
+        return $this->dataCetak($pengajuan, $pengajuan->analisa);
+    }
+
+    /**
      * Data halaman cetak. Urutan kelompok mengikuti file Excel konsep.
      */
     private function dataCetak(DataPengajuan $pengajuan, DataAnalisa $analisa): array

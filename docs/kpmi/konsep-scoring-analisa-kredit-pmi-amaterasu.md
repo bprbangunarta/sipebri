@@ -644,3 +644,34 @@ Setelah pengajuan masuk ke Komite, persetujuan dilakukan lewat modal **Persetuju
 **File cadangan.** Sebelum diubah, JS lama disalin ke `public/assets/js/myscript/persetujuan_komite.backup.js`.
 Perubahan hanya satu blok yang diberi komentar "KPM (data_produk 15) resort LPK01" pada `persetujuan_komite.js`;
 untuk mengembalikan kondisi lama, salin isi file cadangan ke file aslinya.
+
+## 21. Analisa kredit KPMI pada cetak analisa kredit alur lama
+
+Halaman cetak analisa kredit pada alur lama (route `cetak.analisa_kredit`, `DataCetakController::cetak_analisa_kredit`)
+memakai tampilan khusus untuk resort LPK01: `resources/views/kpmi/amaterasu/cetak-analisa.blade.php`. Halaman itu punya
+satu bagian bernama **Analisa Kredit KPMI** yang kini terisi.
+
+**Aliran data.**
+
+- Pada cabang LPK01, `DataCetakController` meminta data analisa ke `AmaterasuController::dataCetakAnalisa(kode pengajuan)`
+  dan meneruskannya ke tampilan sebagai `$kpmi`. Logika bobot, label, dan urutan kelompok tetap satu sumber, yaitu
+  controller KPMI.
+- Bila analisa KPMI **belum disimpan**, pencetakan dialihkan kembali dengan pesan "Analisa Kredit KPMI belum disimpan",
+  sama seperti pengecekan memorandum dan kebutuhan dana pada cetak lama.
+- Resort lain tidak berubah dan tetap memakai cetak lama.
+
+**Isi bagian Analisa Kredit KPMI** (file `_cetak_analisa_kpmi.blade.php`, satu halaman A4, gaya tabel bergaris seperti
+halaman lain):
+
+| Bagian | Isi |
+|---|---|
+| A. Kemampuan Bayar Keluarga | Penghasilan, biaya hidup, angsuran berjalan, angsuran kredit ini, seluruh angsuran, DSR, sisa penghasilan, dan stress test |
+| B. Penilaian dan Skor | 23 kriteria per kelompok dengan keterangan, bobot, nilai, skor, dan status syarat wajib, ditutup baris total |
+| C. Hasil Analisa | Skor, syarat wajib terpenuhi, rekomendasi, dan daftar syarat yang belum terpenuhi |
+| D. Catatan Analis | Catatan yang diisi analis dan waktu analisa disimpan |
+
+Angka yang dicetak adalah **angka yang tersimpan pada analisa** (termasuk angsuran saat analisa dibuat). Jika
+usulan kredit kemudian mengubah plafon, bunga, atau tenor, halaman data pengajuan di awal cetakan menampilkan nilai
+terbaru sedangkan bagian ini tetap memakai nilai saat analisa disimpan; simpan ulang analisa agar keduanya sama.
+Bila daftar syarat yang belum terpenuhi atau catatan analis sangat panjang, bagian ini bisa melebihi satu halaman dan
+berlanjut ke halaman berikutnya.

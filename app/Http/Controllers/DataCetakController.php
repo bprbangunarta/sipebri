@@ -301,12 +301,24 @@ class DataCetakController extends Controller
                 //QRCode
                 $qr = Midle::get_qrcode($enc, 'Notifikasi Disetujui', $cek->code_user_notif);
 
-                return view('cetak-berkas.notifikasi-kredit.general', [
-                    'data' => $cek,
-                    'agunan' => $notifikasi_general,
-                    'jaminan' => $cek_jaminan,
-                    'qr' => $qr,
-                ]);
+                // LPK01
+                if($cek->resort_kode == "LPK01")
+                {
+                    return view('kpmi.amaterasu.cetak-notifikasi', [
+                        'data'    => $cek,
+                        'agunan'  => $notifikasi_general,
+                        'jaminan' => $cek_jaminan,
+                        'qr'      => $qr,
+                    ]);
+                } else 
+                {
+                    return view('cetak-berkas.notifikasi-kredit.general', [
+                        'data' => $cek,
+                        'agunan' => $notifikasi_general,
+                        'jaminan' => $cek_jaminan,
+                        'qr' => $qr,
+                    ]);
+                }
             }
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
@@ -1058,33 +1070,72 @@ class DataCetakController extends Controller
                 ];
             }
 
-            return view('cetak-berkas.analisa-kredit.index', [
-                'data' => $request->query('pengajuan'),
-                'cetak' => $data[0],
-                'perdagangan' => $perdagangan,
-                'pertanian' => $pertanian,
-                'jasa' => $jasa,
-                'lain' => $lain,
-                'bahan' => $bahan ?? null,
-                'bu' => $bu ?? null,
-                'du' => $du ?? null,
-                'keuangan' => $keuangan,
-                'total_usaha' => $total_usaha,
-                'bu_keuangan' => $bu_keuangan,
-                'jaminan' => $jaminan,
-                'character' => $character,
-                'capacity' => $capacity,
-                'collateral' => $collateral,
-                'kualitatif' => $kualitatif,
-                'kebutuhan_dana' => $kebutuhan_dana,
-                'condition' => $condition,
-                'biayaperdagangan' => $biaya_perdagangan,
-                'memorandum' => $memorandum,
-                'tambahan' => $tambahan,
-                'swot' => $swot,
-                'qr' => $qr,
-                'adm' => $adm,
-            ]);
+            // LPK01
+            if($data[0]->resort_kode == "LPK01")
+            {
+                // Analisa Kredit KPMI (skor, kemampuan bayar, penilaian)
+                $kpmi = app(\App\Http\Controllers\KPMI\AmaterasuController::class)->dataCetakAnalisa($enc);
+
+                if (is_null($kpmi)) {
+                    return redirect()->back()->with('error', 'Analisa Kredit KPMI belum disimpan');
+                }
+
+                return view('kpmi.amaterasu.cetak-analisa', [
+                    'kpmi' => $kpmi,
+                    'data' => $request->query('pengajuan'),
+                    'cetak' => $data[0],
+                    'perdagangan' => $perdagangan,
+                    'pertanian' => $pertanian,
+                    'jasa' => $jasa,
+                    'lain' => $lain,
+                    'bahan' => $bahan ?? null,
+                    'bu' => $bu ?? null,
+                    'du' => $du ?? null,
+                    'keuangan' => $keuangan,
+                    'total_usaha' => $total_usaha,
+                    'jaminan' => $jaminan,
+                    'character' => $character,
+                    'capacity' => $capacity,
+                    'collateral' => $collateral,
+                    'kualitatif' => $kualitatif,
+                    'kebutuhan_dana' => $kebutuhan_dana,
+                    'condition' => $condition,
+                    'memorandum' => $memorandum,
+                    'tambahan' => $tambahan,
+                    'swot' => $swot,
+                    'qr' => $qr,
+                    'adm' => $adm,
+                ]);
+            } else 
+            {
+                return view('cetak-berkas.analisa-kredit.index', [
+                    'data' => $request->query('pengajuan'),
+                    'cetak' => $data[0],
+                    'perdagangan' => $perdagangan,
+                    'pertanian' => $pertanian,
+                    'jasa' => $jasa,
+                    'lain' => $lain,
+                    'bahan' => $bahan ?? null,
+                    'bu' => $bu ?? null,
+                    'du' => $du ?? null,
+                    'keuangan' => $keuangan,
+                    'total_usaha' => $total_usaha,
+                    'bu_keuangan' => $bu_keuangan,
+                    'jaminan' => $jaminan,
+                    'character' => $character,
+                    'capacity' => $capacity,
+                    'collateral' => $collateral,
+                    'kualitatif' => $kualitatif,
+                    'kebutuhan_dana' => $kebutuhan_dana,
+                    'condition' => $condition,
+                    'biayaperdagangan' => $biaya_perdagangan,
+                    'memorandum' => $memorandum,
+                    'tambahan' => $tambahan,
+                    'swot' => $swot,
+                    'qr' => $qr,
+                    'adm' => $adm,
+                ]);
+            }
         } catch (DecryptException $e) {
             return abort(403, 'Permintaan anda di Tolak.');
         }
