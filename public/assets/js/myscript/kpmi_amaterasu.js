@@ -449,7 +449,6 @@ document.addEventListener('DOMContentLoaded', function () {
       });
    });
 
-   if (location.hash) bukaTab(location.hash.slice(1));
 
    // ---- Sub-tab pada tahap Memorandum dan Biaya Administrasi ----
    document.querySelectorAll('.kpmi-subtab').forEach(function (kotak) {
@@ -461,6 +460,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var id = a.getAttribute('href').slice(1);
 
             tautan.forEach(function (l) { l.parentNode.classList.toggle('active', l === a); });
+            if (window.history && history.replaceState) history.replaceState(null, '', '#' + id);
             kotak.querySelectorAll(':scope > .tab-content > .tab-pane').forEach(function (pane) {
                pane.classList.toggle('active', pane.id === id);
             });
@@ -563,4 +563,23 @@ document.addEventListener('DOMContentLoaded', function () {
          });
       });
    }
+
+   // pilihan panjang (sandi lapbul) dibuat bisa dicari bila select2 tersedia pada template
+   if (window.jQuery && jQuery.fn.select2) {
+      jQuery('.kpmi-select2').select2({ width: '100%' });
+   }
+
+   // buka tab atau sub-tab sesuai alamat (misalnya #tab-dokumen atau #mm-usulan)
+   (function () {
+      var id = location.hash.slice(1);
+      if (!id || bukaTab(id)) return;
+
+      var pane = document.getElementById(id);
+      var induk = pane && pane.closest('.kpmi-subtab') ? pane.closest('.kpmi-tahap > .tab-content > .tab-pane') : null;
+      if (!induk) return;
+
+      bukaTab(induk.id);
+      var tautanSub = document.querySelector('.kpmi-subtab a[data-subtab][href="#' + id + '"]');
+      if (tautanSub) tautanSub.click();
+   })();
 });

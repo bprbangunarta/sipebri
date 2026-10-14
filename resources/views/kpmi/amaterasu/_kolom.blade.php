@@ -36,8 +36,8 @@
    @elseif ($tipe === 'select')
       <select id="{{ $kunci }}" name="{{ $f['name'] }}" class="{{ $kelas }}">
          <option value="">- Pilih -</option>
-         @foreach ($f['opsi'] as $opsi)
-            <option value="{{ $opsi }}" @selected($nilai === $opsi)>{{ $opsi }}</option>
+         @foreach ($f['opsi'] as $kodeOpsi => $labelOpsi)
+            <option value="{{ $kodeOpsi }}" @selected((string) $nilai === (string) $kodeOpsi)>{{ $labelOpsi }}</option>
          @endforeach
       </select>
    @else

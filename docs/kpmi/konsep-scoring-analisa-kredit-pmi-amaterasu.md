@@ -454,7 +454,7 @@ yang tetap tampil di atas pada semua tahap.
 |---|---|---|
 | 1. Analisa Kredit | Penilaian kredit KPMI: kemampuan bayar keluarga, syarat, penilaian, hasil analisa, dan simpan | Sudah tersambung |
 | 2. Analisa Dokumen | Unggah dan pratinjau tujuh dokumen pendukung | Sudah tersambung |
-| 3. Memorandum | Kebutuhan dana, usulan kredit, dan sandi lapbul | Tampilan saja (lihat bagian 17) |
+| 3. Memorandum | Kebutuhan dana, usulan kredit, dan sandi lapbul | Sudah tersambung (lihat bagian 17) |
 | 4. Biaya Administrasi | Biaya kredit | Sudah tersambung (lihat bagian 17) |
 | 5. Pengajuan Komite | Resume status tahap 1 sampai 4 dan tombol Kirim ke Komite | Sudah tersambung (lihat bagian 18) |
 
@@ -474,34 +474,48 @@ Cara kerja tab:
 
 Tombol **Simpan** ada di panel Hasil Analisa pada tab 1. Tombol **Kirim ke Komite** ada di tab 5, bukan lagi di tab 1.
 
-## 17. Tahap 3 (tampilan) dan tahap 4 (tersambung)
+## 17. Tahap 3 dan tahap 4 (tersambung)
 
-Tahap 3 (Memorandum) baru berupa tampilan dan **belum tersambung ke penyimpanan**; tombol Simpan pada tiap sub-tab
-sengaja nonaktif. Tahap 4 (Biaya Administrasi) sudah tersambung ke penyimpanan. Daftar kolom diatur di controller.
+Kedua tahap sudah tersambung ke penyimpanan dan menyimpan ke **tabel alur lama**, karena persetujuan Komite sampai
+pencairan serta hasil cetak masih membacanya. Daftar kolom diatur di controller; pilihan sandi diambil dari database.
 
-### Tab 3. Memorandum (tiga sub-tab)
+### Tab 3. Memorandum (tiga sub-tab, masing-masing punya tombol Simpan sendiri)
 
-**Kebutuhan Dana.** Lima baris, masing-masing berisi nominal dan keterangan: Modal Kerja, Investasi, Konsumtif,
-Pelunasan Kredit, dan Take Over. **Jumlah Kebutuhan Dana** menjumlahkan kelima nominal secara otomatis dan hasilnya
-ikut tampil di kolom Kebutuhan Dana pada sub-tab Usulan Kredit.
+**Kebutuhan Dana** (tabel `a_kebutuhan_dana`, satu baris per pengajuan). Lima baris, masing-masing berisi nominal dan
+keterangan: Modal Kerja, Investasi, Konsumtif, Pelunasan Kredit, dan Take Over. **Jumlah Kebutuhan Dana** menjumlahkan
+kelima nominal; di layar dihitung langsung, dan saat disimpan dihitung ulang di server. Keterangan disimpan dengan huruf
+kapital. Kode analisa berawalan `AUT`.
 
-**Usulan Kredit.**
+**Usulan Kredit** (tabel `a_memorandum`, satu baris per pengajuan, kode berawalan `AMO`).
 
 | Kelompok | Kolom |
 |---|---|
-| Plafon dan jangka waktu | Kebutuhan Dana (otomatis), Max Plafond (otomatis), Usulan Plafond, Jangka Waktu (bulan), Repayment Capacity (otomatis), Taksasi Agunan (otomatis) |
-| Bunga dan biaya | S.Bunga, Biaya Admin, B.Provisi, B.Penalti (semua dalam %), Pengikatan Asuransi (pilihan) |
+| Plafon dan jangka waktu | Kebutuhan Dana (dari sub-tab sebelumnya), Max Plafond, Usulan Plafond, Jangka Waktu (bulan), Repayment Capacity, Taksasi Agunan |
+| Bunga dan biaya | S.Bunga, Biaya Admin, B.Provisi, B.Penalti (semua dalam %), Pengikatan Asuransi |
 | Syarat | Sebelum Realisasi, Syarat Tambahan, Syarat Lainnya |
 
-Usulan Plafond, Jangka Waktu, S.Bunga, Biaya Admin, B.Provisi, dan B.Penalti terisi awal dari data pengajuan dan
-masih bisa diubah. Kolom bertanda "otomatis" bersifat baca-saja dan menampilkan "-" karena aturan hitungnya belum
-ditentukan untuk KPMI.
+- Pengikatan Asuransi: 1 Tanpa Pengikatan, 2 APHT, 3 Fiducia, 4 APHT dan Fiducia (sama dengan sistem lama).
+- Aturan isian: usulan plafond minimal Rp500.000, jangka waktu 1 sampai 99 bulan, persen 0 sampai 99,99.
+- **Menyimpan usulan mengubah data pengajuan**, seperti pada alur lama: plafon, jangka waktu, bunga, dan persen biaya
+  admin, provisi, dan penalti diganti dengan isian usulan. Plafon awal dicatat sekali pada `temp_plafon`.
+- Max Plafond, Repayment Capacity, dan Taksasi Agunan **belum dihitung untuk KPMI** (tampil "-"): rumus pada sistem lama
+  bergantung pada data keuangan dan agunan usaha yang tidak dipakai KPMI. Aturan hitungnya perlu ditentukan.
 
-**Sandi Lapbul.** Sembilan pilihan: Sifat, Penggunaan Debitur, Golongan Penjamin, Sektor Ekonomi, Sumber Dana
-Pelunasan, Jenis Usaha, Sektor Ekonomi (SLIK), Golongan Debitur, dan Golongan Debitur (SLIK).
+**Sandi Lapbul** (kolom sandi pada baris `a_memorandum` yang sama). Sembilan pilihan: Sifat, Penggunaan Debitur,
+Golongan Penjamin, Sektor Ekonomi, Sumber Dana Pelunasan, Jenis Usaha, Sektor Ekonomi (SLIK), Golongan Debitur, dan
+Golongan Debitur (SLIK). Pilihan berbentuk "sandi - keterangan" dari sembilan tabel sandi pada sistem lama; pilihan yang
+panjang (misalnya 476 sektor SLIK) bisa dicari bila template menyediakan select2. Kode yang dikirim dicek harus ada pada
+tabel sandi.
 
-> **Daftar pilihan belum lengkap.** Pilihan Sandi Lapbul dan Pengikatan Asuransi baru berisi contoh dari tangkapan
-> layar sistem lama. Daftar lengkapnya perlu diambil dari sistem lama.
+> **Urutan simpan.** Sandi Lapbul hanya bisa disimpan setelah **Usulan Kredit** tersimpan, karena sandi disimpan pada
+> baris memorandum yang dibuat oleh usulan. Jika belum, muncul pesan "Lengkapi usulan kredit terlebih dahulu".
+
+**Dampak pada analisa kredit (tab 1).** Karena usulan mengubah plafon, tenor, dan bunga pengajuan, angsuran otomatis pada
+tab 1 ikut berubah. Jika analisa sudah disimpan dengan angsuran yang berbeda, tab 1 menampilkan peringatan kuning
+("Plafon, bunga, atau tenor pengajuan berubah sejak analisa disimpan"), dan resume tab 5 menandai tahap 1 sebagai
+**Perlu disimpan ulang** sampai analisa disimpan lagi.
+
+Setelah menyimpan, halaman kembali ke sub-tab yang sama (alamat `#mm-kebutuhan`, `#mm-usulan`, atau `#mm-sandi`).
 
 ### Tab 4. Biaya Administrasi (satu sub-tab: Biaya Kredit)
 
@@ -537,9 +551,9 @@ Tab ini berisi **resume** keempat tahap sebelum pengajuan dikirim ke Komite, dan
 
 | Tahap | Ringkasan yang tampil | Status |
 |---|---|---|
-| 1. Analisa Kredit | Skor, syarat wajib terpenuhi, rekomendasi, serta waktu dan penyimpan terakhir | Tersimpan (hijau) atau Belum disimpan (kuning) |
+| 1. Analisa Kredit | Skor, syarat wajib terpenuhi, rekomendasi, serta waktu dan penyimpan terakhir | Tersimpan (hijau), Belum disimpan, atau Perlu disimpan ulang (kuning) |
 | 2. Analisa Dokumen | Jumlah dokumen terunggah, diperbarui langsung saat unggah atau hapus | Lengkap atau Belum lengkap; hanya informasi tambahan |
-| 3. Memorandum | Penjelasan bahwa isian belum tersambung ke penyimpanan | Belum tersedia |
+| 3. Memorandum | Kelengkapan tiga sub-tab (kebutuhan dana, usulan kredit, sandi lapbul) dan ringkasan usulan | Lengkap (hijau) atau Belum lengkap (kuning) |
 | 4. Biaya Administrasi | Total biaya, administrasi, provisi, serta waktu dan penyimpan terakhir | Tersimpan (hijau) atau Belum disimpan (kuning) |
 
 Setiap baris punya tautan **Buka tahap** untuk berpindah ke tab terkait.
@@ -547,8 +561,7 @@ Setiap baris punya tautan **Buka tahap** untuk berpindah ke tab terkait.
 Tombol Kirim ke Komite berperilaku sama seperti sebelumnya (bagian 12): redup bila analisa kredit belum disimpan,
 berubah menjadi "Sudah dikirim ke Komite" bila sudah terkirim, dan memakai dialog konfirmasi yang menyebut rekomendasi
 serta memperingatkan bila ada isian tab 1 yang belum disimpan. Tombol itu hanya bergantung pada tahap 1; tahap 2, 3,
-dan 4 belum memengaruhi pengiriman. Aturan keterkaitan dengan tahap 3 dan 4 akan ditentukan setelah kedua tahap bisa
-disimpan.
+dan 4 belum memengaruhi pengiriman. Aturan keterkaitan dengan tahap 3 dan 4 masih perlu ditentukan.
 
 ## 19. Susunan file tampilan
 

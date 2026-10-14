@@ -36,6 +36,16 @@ class DataPengajuan extends Model
         return $this->hasOne(DataAnalisa::class, 'pengajuan_kode', 'kode_pengajuan');
     }
 
+    public function kebutuhanDana()
+    {
+        return $this->hasOne(DataKebutuhanDana::class, 'pengajuan_kode', 'kode_pengajuan');
+    }
+
+    public function memorandum()
+    {
+        return $this->hasOne(DataMemorandum::class, 'pengajuan_kode', 'kode_pengajuan');
+    }
+
     public function administrasi()
     {
         return $this->hasOne(DataAdministrasi::class, 'pengajuan_kode', 'kode_pengajuan');

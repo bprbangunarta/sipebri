@@ -16,6 +16,14 @@
    </div>
 </div>
 
+@if ($angsuranBerubah)
+   <div class="kpmi-peringatan">
+      <b>Plafon, bunga, atau tenor pengajuan berubah sejak analisa disimpan.</b>
+      Angsuran saat disimpan Rp {{ number_format($analisa->angsuran_kredit, 0, ',', '.') }}, sekarang Rp {{ number_format($angsuran, 0, ',', '.') }}.
+      Periksa hasil di bawah lalu tekan <b>SIMPAN</b> agar analisa sesuai dengan data terbaru.
+   </div>
+@endif
+
 <form id="form-analisa" method="POST" action="{{ route('kpmi.amaterasi.store', $kodeRoute) }}" autocomplete="off" data-config="{{ json_encode($konfigurasi) }}" data-angsuran="{{ $angsuran }}">
    @csrf
    <div class="row">

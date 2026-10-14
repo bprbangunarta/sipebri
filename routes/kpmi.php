@@ -10,6 +10,9 @@ Route::prefix('kpmi')->middleware('auth')->group(function () {
    Route::get('/analisa/{kode_pengajuan}/cetak', [AmaterasuController::class, 'cetak'])->name('kpmi.amaterasi.cetak');
    Route::post('/analisa/{kode_pengajuan}/komite', [AmaterasuController::class, 'komite'])->name('kpmi.amaterasi.komite');
    Route::post('/analisa/{kode_pengajuan}/administrasi', [AmaterasuController::class, 'administrasiSimpan'])->name('kpmi.amaterasi.administrasi.simpan');
+   Route::post('/analisa/{kode_pengajuan}/memorandum/kebutuhan', [AmaterasuController::class, 'memorandumKebutuhan'])->name('kpmi.amaterasi.memorandum.kebutuhan');
+   Route::post('/analisa/{kode_pengajuan}/memorandum/usulan', [AmaterasuController::class, 'memorandumUsulan'])->name('kpmi.amaterasi.memorandum.usulan');
+   Route::post('/analisa/{kode_pengajuan}/memorandum/sandi', [AmaterasuController::class, 'memorandumSandi'])->name('kpmi.amaterasi.memorandum.sandi');
    Route::get('/analisa/{kode_pengajuan}/dokumen/{jenis}', [AmaterasuController::class, 'dokumenLihat'])->name('kpmi.amaterasi.dokumen.lihat');
    Route::post('/analisa/{kode_pengajuan}/dokumen/{jenis}', [AmaterasuController::class, 'dokumenSimpan'])->name('kpmi.amaterasi.dokumen.simpan');
    Route::delete('/analisa/{kode_pengajuan}/dokumen/{jenis}', [AmaterasuController::class, 'dokumenHapus'])->name('kpmi.amaterasi.dokumen.hapus');

@@ -45,6 +45,11 @@
    .kpmi-grup { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: #777;
       border-bottom: 1px solid #eee; margin: 4px 0 12px; padding-bottom: 4px; }
    .kpmi-total { background: #0073b7 !important; color: #fff; font-weight: 600; }
+   .kpmi-padat .select2-container--default .select2-selection--single { height: 30px; border-radius: 0; border-color: #d2d6de; }
+   .kpmi-padat .select2-container--default .select2-selection--single .select2-selection__rendered { line-height: 28px; font-size: 13px; padding-left: 8px; }
+   .kpmi-padat .select2-container--default .select2-selection--single .select2-selection__arrow { height: 28px; }
+   .kpmi-peringatan { background: #fff8e6; border: 1px solid #f0dca6; border-left: 4px solid #f39c12; color: #333;
+   padding: 10px 15px; margin-bottom: 15px; border-radius: 3px; }
    .kpmi-resume { background: #fff; border: 1px solid #e6e9ed; margin-bottom: 0; }
    .kpmi-resume th { font-size: 12px; color: #555; background: #f6f6f6; }
    .kpmi-resume td { vertical-align: middle !important; padding: 10px 8px !important; }

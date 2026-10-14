@@ -15,7 +15,7 @@
 
       @if ($errors->any())
          <div class="alert alert-danger" style="margin-bottom: 15px;">
-            <b>Analisa belum tersimpan.</b> Lengkapi isian berikut:
+            <b>Data belum tersimpan.</b> Lengkapi isian berikut:
             <ul style="margin: 5px 0 0 18px; padding: 0;">
                @foreach ($errors->all() as $pesan)
                   <li>{{ $pesan }}</li>

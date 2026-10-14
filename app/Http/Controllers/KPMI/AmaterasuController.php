@@ -4,11 +4,15 @@ namespace App\Http\Controllers\KPMI;
 
 use App\Http\Controllers\Controller;
 use App\Models\Midle;
+use App\Models\Tambahan;
 use App\Models\KPMI\DataAdministrasi;
 use App\Models\KPMI\DataAnalisa;
 use App\Models\KPMI\DataDokumen;
+use App\Models\KPMI\DataKebutuhanDana;
+use App\Models\KPMI\DataMemorandum;
 use App\Models\KPMI\DataPengajuan;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +33,7 @@ class AmaterasuController extends Controller
         $syaratPendukung = $this->syaratPendukung();
         $penilaian       = $this->penilaian();
         $konfigurasi     = $this->konfigurasi($syaratWajib, $syaratPendukung, $penilaian);
+        $angsuran        = $this->hitungAngsuran($pengajuan);
 
         return view('kpmi.amaterasu.show', [
             'pengajuan'       => $pengajuan,
@@ -38,7 +43,9 @@ class AmaterasuController extends Controller
             'syaratPendukung' => $syaratPendukung,
             'penilaian'       => $penilaian,
             'totalIsian'      => 3 + count($syaratWajib) + count($syaratPendukung) + collect($penilaian)->flatten(1)->count(),
-            'angsuran'        => $this->hitungAngsuran($pengajuan),
+            'angsuran'        => $angsuran,
+            // plafon, bunga, atau tenor berubah (misalnya lewat usulan kredit) sejak analisa disimpan
+            'angsuranBerubah' => $analisa && (int) $analisa->angsuran_kredit !== $angsuran,
             'konfigurasi'     => $konfigurasi,
             'aturan'          => $konfigurasi['aturan'],
             'totalWajib'      => collect($konfigurasi['syarat'])->where('wajib', true)->count() + 2, // + DSR dan stress test
@@ -49,6 +56,9 @@ class AmaterasuController extends Controller
             'administrasi'    => $this->administrasi(),
             'awalTahap'       => $this->nilaiAwalTahap($pengajuan),
             'administrasiTersimpan' => $pengajuan->administrasi,
+            'statusMemorandum' => $this->statusMemorandum($pengajuan),
+            'memorandumTersimpan' => $pengajuan->memorandum,
+            'kebutuhanTersimpan' => $pengajuan->kebutuhanDana,
             'dokumenTersimpan' => $pengajuan->dokumen->keyBy('jenis')->map(fn($d) => [
                 'nama'   => $d->nama_asli,
                 'ukuran' => $d->ukuran,
@@ -299,6 +309,9 @@ class AmaterasuController extends Controller
                 ]);
             }
 
+            // alur lama ikut menyimpan biaya fiducia pada memorandum; KPMI tanpa agunan sehingga 0
+            DataMemorandum::where('pengajuan_kode', $kode)->update(['by_fiducia' => 0]);
+
             $plafon = (float) $pengajuan->plafon;
             if ($plafon > 0) {
                 DataPengajuan::where('kode_pengajuan', $kode)->update([
@@ -311,6 +324,212 @@ class AmaterasuController extends Controller
         return redirect()
             ->to(route('kpmi.amaterasi.show', $kode_pengajuan) . '#tab-administrasi')
             ->with('success', 'Biaya administrasi berhasil disimpan.');
+    }
+
+    /**
+     * Kode pengguna 3 huruf (users.code_user) untuk kolom input_user pada tabel alur lama.
+     */
+    private function kodeUser(): ?string
+    {
+        $kode = Auth::user()->code_user;
+
+        return empty($kode) ? null : $kode;
+    }
+
+    private function kembaliKeMemorandum(string $kode_pengajuan, string $subtab, string $pesan, bool $galat = false)
+    {
+        $alihan = redirect()->to(route('kpmi.amaterasi.show', $kode_pengajuan) . '#' . $subtab);
+
+        return $galat ? $alihan->withErrors(['memorandum' => $pesan]) : $alihan->with('success', $pesan);
+    }
+
+    /**
+     * Memorandum - kebutuhan dana. Disimpan ke tabel kebutuhan dana alur lama (satu baris per pengajuan);
+     * jumlah kebutuhan dana dihitung di server dari lima kebutuhan.
+     */
+    public function memorandumKebutuhan(Request $request, string $kode_pengajuan)
+    {
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $kode = $pengajuan->kode_pengajuan;
+        $kodeUser = $this->kodeUser();
+
+        if (! $kodeUser) {
+            return $this->kembaliKeMemorandum($kode_pengajuan, 'mm-kebutuhan', 'Kode pengguna tidak ditemukan, kebutuhan dana tidak dapat disimpan.', true);
+        }
+
+        $kolom = collect($this->memorandum()['kebutuhan']);
+        $nama = $kolom->pluck('label', 'name')->all();
+
+        $angka = [];
+        foreach ($kolom->pluck('name') as $n) {
+            $digit = preg_replace('/\D/', '', (string) $request->input($n));
+            $angka[$n] = $digit === '' ? '0' : $digit;
+        }
+        $request->merge($angka);
+
+        $aturan = [];
+        foreach ($kolom->pluck('name') as $n) {
+            $aturan[$n] = ['required', 'integer', 'min:0', 'max:99999999999'];
+            $aturan['ket_' . $n] = ['nullable', 'string', 'max:255'];
+            $nama['ket_' . $n] = 'Keterangan ' . strtolower($nama[$n]);
+        }
+
+        $input = $request->validate($aturan, [
+            'integer' => ':attribute harus berupa angka.',
+            'max'     => ':attribute terlalu besar atau terlalu panjang.',
+        ], $nama);
+
+        $data = ['kebutuhan_dana' => 0];
+        foreach ($kolom->pluck('name') as $n) {
+            $data[$n] = (int) $input[$n];
+            $data['ket_' . $n] = strtoupper((string) ($input['ket_' . $n] ?? ''));
+            $data['kebutuhan_dana'] += $data[$n];
+        }
+
+        DB::transaction(function () use ($kode, $data, $kodeUser) {
+            $ada = DataKebutuhanDana::where('pengajuan_kode', $kode)->first();
+
+            if ($ada) {
+                $ada->update($data + ['input_user' => $kodeUser]);
+            } else {
+                DataKebutuhanDana::create($data + [
+                    'kode_analisa'   => Tambahan::kodeacak('AUT', 5),
+                    'pengajuan_kode' => $kode,
+                    'input_user'     => $kodeUser,
+                ]);
+            }
+        });
+
+        return $this->kembaliKeMemorandum($kode_pengajuan, 'mm-kebutuhan', 'Kebutuhan dana berhasil disimpan.');
+    }
+
+    /**
+     * Memorandum - usulan kredit. Seperti alur lama, usulan mengubah plafon, tenor, bunga, dan biaya pada data
+     * pengajuan (plafon awal dicatat sekali di temp_plafon) dan disimpan di tabel memorandum alur lama.
+     * Max plafond, repayment capacity, dan taksasi agunan belum dihitung untuk KPMI.
+     */
+    public function memorandumUsulan(Request $request, string $kode_pengajuan)
+    {
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $kode = $pengajuan->kode_pengajuan;
+        $kodeUser = $this->kodeUser();
+
+        if (! $kodeUser) {
+            return $this->kembaliKeMemorandum($kode_pengajuan, 'mm-usulan', 'Kode pengguna tidak ditemukan, usulan kredit tidak dapat disimpan.', true);
+        }
+
+        $digit = preg_replace('/\D/', '', (string) $request->input('usulan_plafond'));
+        $persen = [];
+        foreach (['suku_bunga', 'biaya_admin', 'biaya_provisi', 'biaya_penalti'] as $n) {
+            $persen[$n] = str_replace(',', '.', trim((string) $request->input($n)));
+        }
+        $request->merge(['usulan_plafond' => $digit === '' ? null : $digit] + $persen);
+
+        $input = $request->validate([
+            'usulan_plafond'    => ['required', 'integer', 'min:500000', 'max:99999999999'],
+            'jangka_waktu'      => ['required', 'integer', 'between:1,99'],
+            'suku_bunga'        => ['required', 'numeric', 'between:0,99.99'],
+            'biaya_admin'       => ['required', 'numeric', 'between:0,99.99'],
+            'biaya_provisi'     => ['required', 'numeric', 'between:0,99.99'],
+            'biaya_penalti'     => ['required', 'numeric', 'between:0,99.99'],
+            'pengikatan'        => ['required', Rule::in(array_keys($this->opsiPengikatan()))],
+            'sebelum_realisasi' => ['nullable', 'string', 'max:512'],
+            'syarat_tambahan'   => ['nullable', 'string', 'max:512'],
+            'syarat_lainnya'    => ['nullable', 'string', 'max:512'],
+        ], [
+            'required'            => ':attribute belum diisi.',
+            'integer'             => ':attribute harus berupa angka.',
+            'numeric'             => ':attribute harus berupa angka.',
+            'usulan_plafond.min'  => 'Usulan plafond tidak boleh kurang dari Rp 500.000.',
+            'between'             => ':attribute harus antara :min dan :max.',
+            'in'                  => ':attribute tidak valid.',
+            'max'                 => ':attribute terlalu besar atau terlalu panjang.',
+        ], [
+            'usulan_plafond' => 'Usulan plafond', 'jangka_waktu' => 'Jangka waktu', 'suku_bunga' => 'S.Bunga',
+            'biaya_admin' => 'Biaya admin', 'biaya_provisi' => 'B.Provisi', 'biaya_penalti' => 'B.Penalti',
+            'pengikatan' => 'Pengikatan asuransi', 'sebelum_realisasi' => 'Sebelum realisasi',
+            'syarat_tambahan' => 'Syarat tambahan', 'syarat_lainnya' => 'Syarat lainnya',
+        ]);
+
+        $dua = fn($v) => number_format((float) $v, 2, '.', '');
+
+        DB::transaction(function () use ($kode, $input, $kodeUser, $pengajuan, $dua) {
+            $dataPengajuan = [
+                'plafon'       => (string) (int) $input['usulan_plafond'],
+                'jangka_waktu' => (string) (int) $input['jangka_waktu'],
+                'suku_bunga'   => rtrim(rtrim($dua($input['suku_bunga']), '0'), '.'),
+                'b_admin'      => $dua($input['biaya_admin']),
+                'b_provisi'    => $dua($input['biaya_provisi']),
+                'b_penalti'    => $dua($input['biaya_penalti']),
+            ];
+
+            if (empty($pengajuan->temp_plafon)) {
+                $dataPengajuan['temp_plafon'] = (string) (int) $pengajuan->plafon;
+            }
+
+            DataPengajuan::where('kode_pengajuan', $kode)->update($dataPengajuan);
+
+            $data = [
+                'usulan_plafond'    => (int) $input['usulan_plafond'],
+                'jangka_waktu'      => (string) (int) $input['jangka_waktu'],
+                'pengikatan'        => (string) $input['pengikatan'],
+                'sebelum_realisasi' => $input['sebelum_realisasi'] ?? null,
+                'syarat_tambahan'   => $input['syarat_tambahan'] ?? null,
+                'syarat_lainnya'    => $input['syarat_lainnya'] ?? null,
+            ];
+
+            $ada = DataMemorandum::where('pengajuan_kode', $kode)->first();
+
+            if ($ada) {
+                $ada->update($data + ['input_user' => $kodeUser]);
+            } else {
+                DataMemorandum::create($data + [
+                    'kode_analisa'   => Midle::kodeacak_memorandum('AMO', 5),
+                    'pengajuan_kode' => $kode,
+                    'by_fiducia'     => 0,
+                    'input_user'     => $kodeUser,
+                ]);
+            }
+        });
+
+        return $this->kembaliKeMemorandum($kode_pengajuan, 'mm-usulan', 'Usulan kredit berhasil disimpan.');
+    }
+
+    /**
+     * Memorandum - sandi lapbul. Seperti alur lama, usulan kredit harus tersimpan lebih dulu karena sandi
+     * disimpan pada baris memorandum yang sama.
+     */
+    public function memorandumSandi(Request $request, string $kode_pengajuan)
+    {
+        $pengajuan = $this->ambilPengajuan($kode_pengajuan);
+        $kode = $pengajuan->kode_pengajuan;
+        $kodeUser = $this->kodeUser();
+
+        if (! $kodeUser) {
+            return $this->kembaliKeMemorandum($kode_pengajuan, 'mm-sandi', 'Kode pengguna tidak ditemukan, sandi lapbul tidak dapat disimpan.', true);
+        }
+
+        $memorandum = DataMemorandum::where('pengajuan_kode', $kode)->first();
+
+        if (! $memorandum) {
+            return $this->kembaliKeMemorandum($kode_pengajuan, 'mm-sandi', 'Lengkapi usulan kredit terlebih dahulu.', true);
+        }
+
+        $sandi = collect($this->sandiLapbul());
+        $input = $request->validate(
+            $sandi->mapWithKeys(fn($s) => [$s['name'] => ['required', Rule::exists($s['tabel'], 'sandi')]])->all(),
+            ['required' => ':attribute belum dipilih.', 'exists' => ':attribute tidak valid.'],
+            $sandi->pluck('label', 'name')->all()
+        );
+
+        $data = [];
+        foreach ($sandi as $s) {
+            $data[$s['kolom']] = (string) $input[$s['name']];
+        }
+
+        $memorandum->update($data + ['input_user' => $kodeUser]);
+
+        return $this->kembaliKeMemorandum($kode_pengajuan, 'mm-sandi', 'Sandi lapbul berhasil disimpan.');
     }
 
     public function cetak(string $kode_pengajuan)
@@ -607,7 +826,7 @@ class AmaterasuController extends Controller
     }
 
     /**
-     * Kolom tahap 3 (Memorandum). Tampilan saja, belum tersambung ke penyimpanan.
+     * Kolom tahap 3 (Memorandum). Pilihan sandi lapbul diambil dari tabel sandi bank Indonesia pada sistem lama.
      * tipe: rupiah, persen, angka, teks, area, select.
      */
     private function memorandum(): array
@@ -634,29 +853,56 @@ class AmaterasuController extends Controller
                     ['name' => 'biaya_admin', 'label' => 'Biaya Admin', 'tipe' => 'persen'],
                     ['name' => 'biaya_provisi', 'label' => 'B.Provisi', 'tipe' => 'persen'],
                     ['name' => 'biaya_penalti', 'label' => 'B.Penalti', 'tipe' => 'persen'],
-                    ['name' => 'pengikatan_asuransi', 'label' => 'Pengikatan Asuransi', 'tipe' => 'select',
-                        // BELUM LENGKAP: baru pilihan yang terlihat pada contoh layar; daftar lengkap dari sistem lama
-                        'opsi' => ['Tanpa Pengikatan']],
+                    ['name' => 'pengikatan', 'label' => 'Pengikatan Asuransi', 'tipe' => 'select', 'opsi' => $this->opsiPengikatan()],
                 ],
                 'Syarat' => [
-                    ['name' => 'sebelum_realisasi', 'label' => 'Sebelum Realisasi', 'tipe' => 'area'],
-                    ['name' => 'syarat_tambahan', 'label' => 'Syarat Tambahan', 'tipe' => 'area'],
-                    ['name' => 'syarat_lainnya', 'label' => 'Syarat Lainnya', 'tipe' => 'area'],
+                    ['name' => 'sebelum_realisasi', 'label' => 'Sebelum Realisasi', 'tipe' => 'area', 'kelas' => 'text-uppercase'],
+                    ['name' => 'syarat_tambahan', 'label' => 'Syarat Tambahan', 'tipe' => 'area', 'kelas' => 'text-uppercase'],
+                    ['name' => 'syarat_lainnya', 'label' => 'Syarat Lainnya', 'tipe' => 'area', 'kelas' => 'text-uppercase'],
                 ],
             ],
-            // BELUM LENGKAP: baru pilihan yang terlihat pada contoh layar; daftar lengkap dari sistem lama
-            'sandi' => [
-                ['name' => 'sifat', 'label' => 'Sifat', 'tipe' => 'select', 'opsi' => ['3 - Langsung kepada Debitur BPR']],
-                ['name' => 'penggunaan_debitur', 'label' => 'Penggunaan Debitur', 'tipe' => 'select', 'opsi' => ['39 - Kredit konsumsi lainnya']],
-                ['name' => 'golongan_penjamin', 'label' => 'Golongan Penjamin', 'tipe' => 'select', 'opsi' => ['880 - Asuransi Jiwa']],
-                ['name' => 'sektor_ekonomi', 'label' => 'Sektor Ekonomi', 'tipe' => 'select', 'opsi' => ['1020 - Bukan Lapangan Usaha Lainnya']],
-                ['name' => 'sumber_dana_pelunasan', 'label' => 'Sumber Dana Pelunasan', 'tipe' => 'select', 'opsi' => ['10 - Gaji / Honor']],
-                ['name' => 'jenis_usaha', 'label' => 'Jenis Usaha', 'tipe' => 'select', 'opsi' => ['1 - Mikro']],
-                ['name' => 'sektor_ekonomi_slik', 'label' => 'Sektor Ekonomi (SLIK)', 'tipe' => 'select', 'opsi' => ['009000 - Bukan Lapangan Usaha Lain']],
-                ['name' => 'golongan_debitur', 'label' => 'Golongan Debitur', 'tipe' => 'select', 'opsi' => ['875 - Perorangan - Lainnya']],
-                ['name' => 'golongan_debitur_slik', 'label' => 'Golongan Debitur (SLIK)', 'tipe' => 'select', 'opsi' => ['9000 - Perseorangan (Penduduk)']],
-            ],
+            'sandi' => array_map(fn($s) => [
+                'name'  => $s['name'],
+                'label' => $s['label'],
+                'tipe'  => 'select',
+                'kelas' => 'kpmi-select2',
+                'opsi'  => $this->opsiSandi($s['tabel']),
+            ], $this->sandiLapbul()),
         ];
+    }
+
+    /**
+     * Sembilan sandi lapbul: nama isian, tabel sandi, dan kolom tujuan pada tabel memorandum lama.
+     */
+    private function sandiLapbul(): array
+    {
+        return [
+            ['name' => 'sifat', 'label' => 'Sifat', 'tabel' => 'bi_sifat', 'kolom' => 'bi_sifat_kode'],
+            ['name' => 'penggunaan_debitur', 'label' => 'Penggunaan Debitur', 'tabel' => 'bi_penggunaan_debitur', 'kolom' => 'bi_penggunaan_kode'],
+            ['name' => 'golongan_penjamin', 'label' => 'Golongan Penjamin', 'tabel' => 'bi_golongan_penjamin', 'kolom' => 'bi_gol_penjamin_kode'],
+            ['name' => 'sektor_ekonomi', 'label' => 'Sektor Ekonomi', 'tabel' => 'bi_sektor_ekonomi', 'kolom' => 'bi_sek_ekonomi_kode'],
+            ['name' => 'sumber_dana_pelunasan', 'label' => 'Sumber Dana Pelunasan', 'tabel' => 'bi_sumber_dana_pelunasan', 'kolom' => 'bi_sumber_pelunasan_kode'],
+            ['name' => 'jenis_usaha', 'label' => 'Jenis Usaha', 'tabel' => 'bi_jenis_usaha', 'kolom' => 'bi_jenis_usaha_kode'],
+            ['name' => 'sektor_ekonomi_slik', 'label' => 'Sektor Ekonomi (SLIK)', 'tabel' => 'bi_sektor_ekonomi_slik', 'kolom' => 'bi_sek_ekonomi_slik'],
+            ['name' => 'golongan_debitur', 'label' => 'Golongan Debitur', 'tabel' => 'bi_golongan_debitur', 'kolom' => 'bi_gol_debitur_kode'],
+            ['name' => 'golongan_debitur_slik', 'label' => 'Golongan Debitur (SLIK)', 'tabel' => 'bi_golongan_debitur_slik', 'kolom' => 'bi_gol_debitur_slik'],
+        ];
+    }
+
+    /** Pilihan "sandi - keterangan" dari tabel sandi sistem lama; kunci berupa teks sandi. */
+    private function opsiSandi(string $tabel): array
+    {
+        $opsi = [];
+        foreach (DB::table($tabel)->orderBy('sandi')->get(['sandi', 'keterangan']) as $baris) {
+            $opsi[(string) $baris->sandi] = $baris->sandi . ' - ' . $baris->keterangan;
+        }
+
+        return $opsi;
+    }
+
+    private function opsiPengikatan(): array
+    {
+        return [1 => 'Tanpa Pengikatan', 2 => 'APHT', 3 => 'Fiducia', 4 => 'APHT dan Fiducia'];
     }
 
     /**
@@ -714,7 +960,44 @@ class AmaterasuController extends Controller
             }
         }
 
+        // kebutuhan dana yang sudah disimpan
+        if ($pengajuan->kebutuhanDana) {
+            $dana = $pengajuan->kebutuhanDana;
+            foreach ($this->memorandum()['kebutuhan'] as $f) {
+                $awal[$f['name']] = (int) $dana->{$f['name']};
+                $awal['ket_' . $f['name']] = (string) $dana->{'ket_' . $f['name']};
+            }
+            $awal['kebutuhan_dana'] = (int) $dana->kebutuhan_dana;
+            $awal['jumlah_kebutuhan_dana'] = (int) $dana->kebutuhan_dana;
+        }
+
+        // usulan kredit dan sandi lapbul yang sudah disimpan
+        $awal['pengikatan'] = '1';
+        if ($pengajuan->memorandum) {
+            $memo = $pengajuan->memorandum;
+            $awal['usulan_plafond'] = (int) $memo->usulan_plafond;
+            $awal['pengikatan'] = (string) ($memo->pengikatan ?: '1');
+            foreach (['sebelum_realisasi', 'syarat_tambahan', 'syarat_lainnya'] as $nama) {
+                $awal[$nama] = (string) $memo->{$nama};
+            }
+            foreach ($this->sandiLapbul() as $s) {
+                $awal[$s['name']] = (string) $memo->{$s['kolom']};
+            }
+        }
+
         return $awal;
+    }
+
+    /** Kelengkapan tiga bagian memorandum untuk resume tab Pengajuan Komite. */
+    private function statusMemorandum(DataPengajuan $pengajuan): array
+    {
+        $memo = $pengajuan->memorandum;
+
+        return [
+            'kebutuhan' => (bool) $pengajuan->kebutuhanDana,
+            'usulan'    => (bool) $memo,
+            'sandi'     => $memo && $memo->bi_sifat_kode !== null && $memo->bi_sifat_kode !== '',
+        ];
     }
 
     /**
