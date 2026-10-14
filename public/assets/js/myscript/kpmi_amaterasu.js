@@ -544,6 +544,18 @@ document.addEventListener('DOMContentLoaded', function () {
       }
    });
 
+   // persen biaya ditulis lengkap dua desimal (1 menjadi 1.00) saat petugas pindah kolom
+   document.addEventListener('focusout', function (e) {
+      var el = e.target;
+      if (!el.classList || !el.classList.contains('kpmi-desimal2') || el.value.trim() === '') return;
+
+      var nilai = parseFloat(el.value.replace(',', '.'));
+      if (!isNaN(nilai)) {
+         el.value = nilai.toFixed(2);
+         hitungUsulan();
+      }
+   });
+
    document.querySelectorAll('.kpmi-uang').forEach(function (el) { if (el.value !== '') formatUang(el); });
    hitungKebutuhan();
    hitungUsulan();

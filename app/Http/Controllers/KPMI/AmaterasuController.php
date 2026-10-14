@@ -868,9 +868,9 @@ class AmaterasuController extends Controller
                 ],
                 'Bunga dan biaya' => [
                     ['name' => 'suku_bunga', 'label' => 'S.Bunga', 'tipe' => 'persen'],
-                    ['name' => 'biaya_admin', 'label' => 'Biaya Admin', 'tipe' => 'persen'],
-                    ['name' => 'biaya_provisi', 'label' => 'B.Provisi', 'tipe' => 'persen'],
-                    ['name' => 'biaya_penalti', 'label' => 'B.Penalti', 'tipe' => 'persen'],
+                    ['name' => 'biaya_admin', 'label' => 'Biaya Admin', 'tipe' => 'persen', 'kelas' => 'kpmi-desimal2'],
+                    ['name' => 'biaya_provisi', 'label' => 'B.Provisi', 'tipe' => 'persen', 'kelas' => 'kpmi-desimal2'],
+                    ['name' => 'biaya_penalti', 'label' => 'B.Penalti', 'tipe' => 'persen', 'kelas' => 'kpmi-desimal2'],
                     ['name' => 'pengikatan', 'label' => 'Pengikatan Asuransi', 'tipe' => 'select', 'opsi' => $this->opsiPengikatan()],
                 ],
                 'Syarat' => [
@@ -961,10 +961,11 @@ class AmaterasuController extends Controller
         $awal = [
             'usulan_plafond' => (int) $plafon,
             'jangka_waktu'   => (int) $pengajuan->jangka_waktu,
-            'suku_bunga'     => (float) $pengajuan->suku_bunga,
-            'biaya_admin'    => (float) $pengajuan->b_admin,
-            'biaya_provisi'  => (float) $pengajuan->b_provisi,
-            'biaya_penalti'  => (float) $pengajuan->b_penalti,
+            'suku_bunga'     => (string) $pengajuan->suku_bunga,
+            // persen biaya selalu dua desimal (1.00, 3.50) seperti pada analisa lainnya
+            'biaya_admin'    => number_format((float) $pengajuan->b_admin, 2, '.', ''),
+            'biaya_provisi'  => number_format((float) $pengajuan->b_provisi, 2, '.', ''),
+            'biaya_penalti'  => number_format((float) $pengajuan->b_penalti, 2, '.', ''),
             'administrasi'   => (int) round($plafon * (float) $pengajuan->b_admin / 100),
             'provisi'        => (int) round($plafon * (float) $pengajuan->b_provisi / 100),
         ];

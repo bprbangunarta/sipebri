@@ -494,6 +494,9 @@ kapital. Kode analisa berawalan `AUT`.
 | Bunga dan biaya | S.Bunga, Biaya Admin, B.Provisi, B.Penalti (semua dalam %), Pengikatan Asuransi |
 | Syarat | Sebelum Realisasi, Syarat Tambahan, Syarat Lainnya |
 
+- **Penulisan persen.** Biaya Admin, B.Provisi, dan B.Penalti selalu tampil **dua desimal** seperti pada analisa lainnya
+  (misalnya `1.00`, `3.50`). Bila petugas mengetik `1` atau `2,5` lalu pindah kolom, isinya otomatis menjadi `1.00`
+  dan `2.50`; huruf dibuang dan kolom kosong tetap kosong. S.Bunga ditampilkan apa adanya seperti pada data pengajuan.
 - Pengikatan Asuransi: 1 Tanpa Pengikatan, 2 APHT, 3 Fiducia, 4 APHT dan Fiducia (sama dengan sistem lama).
 - Aturan isian: usulan plafond minimal Rp500.000, jangka waktu 1 sampai 99 bulan, persen 0 sampai 99,99.
 - **Menyimpan usulan mengubah data pengajuan**, seperti pada alur lama: plafon, jangka waktu, bunga, dan persen biaya
