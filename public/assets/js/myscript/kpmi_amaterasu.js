@@ -492,8 +492,38 @@ document.addEventListener('DOMContentLoaded', function () {
       el.value = digit === '' ? '' : angka(parseInt(digit, 10), 0);
    }
 
+   // Max Plafond dan Repayment Capacity (metode efektif anuitas, dari kemampuan angsuran pada analisa kredit)
+   function hitungUsulan() {
+      var formUsulan = $('form-usulan');
+      var kemampuan = formUsulan ? parseFloat(formUsulan.dataset.kemampuan) : NaN;
+      var maks = $('f-max_plafond');
+      var rc = $('f-repayment_capacity');
+      if (!maks || !rc || !(kemampuan > 0)) return;
+
+      var bunga = parseFloat(($('f-suku_bunga').value || '').replace(',', '.')) / 100 / 12;
+      var tenor = parseInt($('f-jangka_waktu').value, 10);
+      var plafond = angkaDigit($('f-usulan_plafond'));
+
+      if (!(tenor > 0) || isNaN(bunga)) {
+         maks.value = '';
+         rc.value = '';
+         return;
+      }
+
+      var faktor = bunga === 0 ? tenor : (1 - Math.pow(1 + bunga, -tenor)) / bunga;
+      maks.value = angka(Math.round(kemampuan * faktor), 0);
+      rc.value = (plafond / faktor / kemampuan * 100).toFixed(2);
+   }
+
    document.addEventListener('input', function (e) {
       var el = e.target;
+      if (['f-usulan_plafond', 'f-jangka_waktu', 'f-suku_bunga'].indexOf(el.id) !== -1) {
+         if (el.classList.contains('kpmi-uang')) formatUang(el);
+         else if (el.classList.contains('kpmi-persen')) el.value = el.value.replace(',', '.').replace(/[^0-9.]/g, '');
+         hitungUsulan();
+         return;
+      }
+
       if (el.classList.contains('kpmi-uang')) {
          formatUang(el);
          if (el.classList.contains('kpmi-kebutuhan')) hitungKebutuhan();

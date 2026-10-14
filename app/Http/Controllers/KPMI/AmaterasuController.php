@@ -54,7 +54,8 @@ class AmaterasuController extends Controller
             'tahap'           => $this->tahapAnalisa(),
             'memorandum'      => $this->memorandum(),
             'administrasi'    => $this->administrasi(),
-            'awalTahap'       => $this->nilaiAwalTahap($pengajuan),
+            'awalTahap'       => $this->nilaiAwalTahap($pengajuan, $analisa, $angsuran),
+            'kemampuanAngsuran' => $this->kemampuanAngsuran($analisa),
             'administrasiTersimpan' => $pengajuan->administrasi,
             'statusMemorandum' => $this->statusMemorandum($pengajuan),
             'memorandumTersimpan' => $pengajuan->memorandum,
@@ -406,7 +407,8 @@ class AmaterasuController extends Controller
     /**
      * Memorandum - usulan kredit. Seperti alur lama, usulan mengubah plafon, tenor, bunga, dan biaya pada data
      * pengajuan (plafon awal dicatat sekali di temp_plafon) dan disimpan di tabel memorandum alur lama.
-     * Max plafond, repayment capacity, dan taksasi agunan belum dihitung untuk KPMI.
+     * Max plafond dihitung dari kemampuan angsuran pada analisa kredit (lihat kemampuanAngsuran); repayment capacity
+     * hanya ditampilkan. Taksasi agunan tidak dipakai karena KPMI tanpa agunan.
      */
     public function memorandumUsulan(Request $request, string $kode_pengajuan)
     {
@@ -469,7 +471,12 @@ class AmaterasuController extends Controller
 
             DataPengajuan::where('kode_pengajuan', $kode)->update($dataPengajuan);
 
+            $kemampuan = $this->kemampuanAngsuran($pengajuan->analisa);
+
             $data = [
+                'max_plafond'       => $kemampuan !== null && $kemampuan > 0
+                    ? $this->maxPlafond($kemampuan, (float) $input['suku_bunga'], (int) $input['jangka_waktu'])
+                    : null,
                 'usulan_plafond'    => (int) $input['usulan_plafond'],
                 'jangka_waktu'      => (string) (int) $input['jangka_waktu'],
                 'pengikatan'        => (string) $input['pengikatan'],
@@ -846,7 +853,6 @@ class AmaterasuController extends Controller
                     ['name' => 'usulan_plafond', 'label' => 'Usulan Plafond', 'tipe' => 'rupiah'],
                     ['name' => 'jangka_waktu', 'label' => 'Jangka Waktu', 'tipe' => 'angka', 'satuan' => 'bulan'],
                     ['name' => 'repayment_capacity', 'label' => 'Repayment Capacity', 'tipe' => 'persen', 'readonly' => true],
-                    ['name' => 'taksasi_agunan', 'label' => 'Taksasi Agunan', 'tipe' => 'persen', 'readonly' => true],
                 ],
                 'Bunga dan biaya' => [
                     ['name' => 'suku_bunga', 'label' => 'S.Bunga', 'tipe' => 'persen'],
@@ -936,7 +942,7 @@ class AmaterasuController extends Controller
      * Nilai awal kolom tahap 3 dan 4 dari data pengajuan. Biaya administrasi dan provisi dihitung
      * dari plafon x persen, mengikuti pola contoh layar sistem lama (40 juta: 2,5% = 1.000.000; 1% = 400.000).
      */
-    private function nilaiAwalTahap(DataPengajuan $pengajuan): array
+    private function nilaiAwalTahap(DataPengajuan $pengajuan, ?DataAnalisa $analisa, int $angsuran): array
     {
         $plafon = (float) $pengajuan->plafon;
 
@@ -950,6 +956,13 @@ class AmaterasuController extends Controller
             'administrasi'   => (int) round($plafon * (float) $pengajuan->b_admin / 100),
             'provisi'        => (int) round($plafon * (float) $pengajuan->b_provisi / 100),
         ];
+
+        // max plafond dan repayment capacity dari kemampuan angsuran pada analisa kredit
+        $kemampuan = $this->kemampuanAngsuran($analisa);
+        if ($kemampuan !== null && $kemampuan > 0) {
+            $awal['max_plafond'] = $this->maxPlafond($kemampuan, (float) $pengajuan->suku_bunga, (int) $pengajuan->jangka_waktu);
+            $awal['repayment_capacity'] = number_format($angsuran / $kemampuan * 100, 2, '.', '');
+        }
 
         // biaya administrasi yang sudah disimpan menggantikan nilai awal
         if ($pengajuan->administrasi) {
@@ -986,6 +999,37 @@ class AmaterasuController extends Controller
         }
 
         return $awal;
+    }
+
+    /**
+     * Kemampuan angsuran per bulan untuk KPMI: penghasilan dikurangi biaya hidup dan angsuran kredit berjalan,
+     * dari analisa kredit yang tersimpan. Ini pengganti "keuangan per bulan" pada alur lama. Null jika analisa belum ada.
+     */
+    private function kemampuanAngsuran(?DataAnalisa $analisa): ?int
+    {
+        if (! $analisa) {
+            return null;
+        }
+
+        return (int) $analisa->penghasilan - (int) $analisa->biaya_hidup - (int) $analisa->angsuran_berjalan;
+    }
+
+    /**
+     * Max plafond metode efektif anuitas, sama dengan alur lama: kemampuan angsuran dibagi faktor anuitas.
+     */
+    private function maxPlafond(int $kemampuan, float $bungaTahun, int $tenor): int
+    {
+        $bunga = $bungaTahun / 100 / 12;
+
+        if ($tenor <= 0) {
+            return 0;
+        }
+
+        if ($bunga == 0) {
+            return (int) round($kemampuan * $tenor);
+        }
+
+        return (int) round($kemampuan * (1 - pow(1 + $bunga, -$tenor)) / $bunga);
     }
 
     /** Kelengkapan tiga bagian memorandum untuk resume tab Pengajuan Komite. */

@@ -1,4 +1,4 @@
-{{-- Tab 3. Memorandum: kebutuhan dana, usulan kredit, sandi lapbul. Variabel: $memorandum, $awalTahap, $kebutuhanTersimpan, $memorandumTersimpan, $kodeRoute. Kolom lewat _kolom.blade.php. --}}
+{{-- Tab 3. Memorandum: kebutuhan dana, usulan kredit, sandi lapbul. Variabel: $memorandum, $awalTahap, $kemampuanAngsuran, $statusMemorandum, $kebutuhanTersimpan, $memorandumTersimpan, $kodeRoute. Kolom lewat _kolom.blade.php. --}}
 @php
    $waktu = fn($m) => $m ? ($m->updated_at ?? $m->created_at)?->format('d-m-Y H:i') . ' oleh ' . $m->input_user : null;
 @endphp
@@ -46,7 +46,8 @@
 
       {{-- USULAN KREDIT --}}
       <div class="tab-pane" id="mm-usulan">
-         <form method="POST" action="{{ route('kpmi.amaterasi.memorandum.usulan', $kodeRoute) }}" autocomplete="off">
+         <form method="POST" action="{{ route('kpmi.amaterasi.memorandum.usulan', $kodeRoute) }}" autocomplete="off"
+            id="form-usulan" data-kemampuan="{{ $kemampuanAngsuran }}">
             @csrf
             @if ($memorandumTersimpan)
                <p class="kpmi-hint" style="margin: 0 0 8px;"><i class="fa fa-check-circle text-green"></i> Tersimpan {{ $waktu($memorandumTersimpan) }}.</p>
@@ -64,6 +65,16 @@
             @endforeach
 
             <button type="submit" class="btn btn-primary btn-block">SIMPAN</button>
+            @if ($kemampuanAngsuran === null)
+               <p class="text-yellow" style="margin: 12px 0 0;"><i class="fa fa-exclamation-circle"></i> Simpan analisa kredit (tab 1) agar Max Plafond dan Repayment Capacity terisi.</p>
+            @elseif ($kemampuanAngsuran <= 0)
+               <p class="text-yellow" style="margin: 12px 0 0;"><i class="fa fa-exclamation-circle"></i> Kemampuan angsuran pada analisa kredit nol atau negatif, sehingga Max Plafond dan Repayment Capacity tidak dapat dihitung.</p>
+            @else
+               <p class="text-muted" style="margin: 12px 0 0; font-size: 12px;">
+                  Max Plafond dan Repayment Capacity dihitung dari kemampuan angsuran Rp {{ number_format($kemampuanAngsuran, 0, ',', '.') }} per bulan
+                  (penghasilan dikurangi biaya hidup dan angsuran berjalan pada analisa kredit).
+               </p>
+            @endif
             <p class="text-red" style="margin: 12px 0 0;">*Pengisian Sektor Ekonomi ada di tab <b>Sandi Lapbul</b>.</p>
             <p class="text-muted" style="margin: 4px 0 0; font-size: 12px;">
                Menyimpan usulan juga mengubah plafon, jangka waktu, bunga, dan biaya pada data pengajuan, seperti pada alur lama.

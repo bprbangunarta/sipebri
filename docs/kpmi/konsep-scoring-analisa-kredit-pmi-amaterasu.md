@@ -490,7 +490,7 @@ kapital. Kode analisa berawalan `AUT`.
 
 | Kelompok | Kolom |
 |---|---|
-| Plafon dan jangka waktu | Kebutuhan Dana (dari sub-tab sebelumnya), Max Plafond, Usulan Plafond, Jangka Waktu (bulan), Repayment Capacity, Taksasi Agunan |
+| Plafon dan jangka waktu | Kebutuhan Dana (dari sub-tab sebelumnya), Max Plafond, Usulan Plafond, Jangka Waktu (bulan), Repayment Capacity |
 | Bunga dan biaya | S.Bunga, Biaya Admin, B.Provisi, B.Penalti (semua dalam %), Pengikatan Asuransi |
 | Syarat | Sebelum Realisasi, Syarat Tambahan, Syarat Lainnya |
 
@@ -498,8 +498,23 @@ kapital. Kode analisa berawalan `AUT`.
 - Aturan isian: usulan plafond minimal Rp500.000, jangka waktu 1 sampai 99 bulan, persen 0 sampai 99,99.
 - **Menyimpan usulan mengubah data pengajuan**, seperti pada alur lama: plafon, jangka waktu, bunga, dan persen biaya
   admin, provisi, dan penalti diganti dengan isian usulan. Plafon awal dicatat sekali pada `temp_plafon`.
-- Max Plafond, Repayment Capacity, dan Taksasi Agunan **belum dihitung untuk KPMI** (tampil "-"): rumus pada sistem lama
-  bergantung pada data keuangan dan agunan usaha yang tidak dipakai KPMI. Aturan hitungnya perlu ditentukan.
+- **Max Plafond dan Repayment Capacity** (baca-saja) dihitung dengan rumus metode efektif anuitas yang sama seperti
+  sistem lama, tetapi "keuangan per bulan" diganti **kemampuan angsuran** dari analisa kredit (tab 1):
+
+  ```
+  kemampuan angsuran = penghasilan − biaya hidup − angsuran kredit berjalan
+  faktor anuitas     = (1 − (1 + r) ^ −n) / r         r = bunga per tahun / 12,  n = jangka waktu (bulan)
+  Max Plafond        = kemampuan angsuran × faktor anuitas
+  Repayment Capacity = angsuran usulan / kemampuan angsuran × 100%,  angsuran usulan = usulan plafond / faktor anuitas
+  ```
+
+  Keduanya berubah langsung saat usulan plafond, jangka waktu, atau bunga diubah di layar; Max Plafond yang disimpan
+  dihitung ulang di server dan masuk ke kolom max plafond memorandum. Jika bunga 0%, faktor anuitas sama dengan n.
+  Contoh pengajuan dengan kemampuan angsuran Rp4.630.000, tenor 18 bulan, bunga 32%: Max Plafond Rp65.510.997; usulan
+  plafond Rp50.000.000 menghasilkan Repayment Capacity 76,32%.
+- Jika analisa kredit belum disimpan, atau kemampuan angsurannya nol atau negatif, kedua kolom kosong dan halaman
+  menjelaskan alasannya. Repayment Capacity hanya ditampilkan; tabel memorandum lama tidak punya kolom untuknya.
+- **Taksasi Agunan tidak ada** pada KPMI karena tidak memakai agunan.
 
 **Sandi Lapbul** (kolom sandi pada baris `a_memorandum` yang sama). Sembilan pilihan: Sifat, Penggunaan Debitur,
 Golongan Penjamin, Sektor Ekonomi, Sumber Dana Pelunasan, Jenis Usaha, Sektor Ekonomi (SLIK), Golongan Debitur, dan
