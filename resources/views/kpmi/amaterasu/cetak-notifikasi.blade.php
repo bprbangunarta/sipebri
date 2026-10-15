@@ -367,6 +367,7 @@
          </tr>
          <tr>
             <td class="text-center" width="2%"></td>
+            <td width="27%">b. Jiwa</td>
             <td class="text-center" width="3%"> : </td>
             <td style="text-align: justify;">
                {{ 'Rp. ' . '' . number_format($data->asuransi_jiwa_menurun2, 0, ',', '.') }}
