@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Card, EmptyState, ErrorState, Skeleton } from '@/components/ui/misc';
 import { Pagination } from '@/components/ui/pagination';
@@ -12,8 +13,6 @@ export type Column<T> = {
     /** Server-side sort field; gives the header a sort button. */
     sort?: string;
     align?: 'left' | 'right';
-    /** Hide the column below this breakpoint. */
-    hideBelow?: 'sm' | 'md' | 'lg';
     /** Extra classes for the body cells. */
     className?: string;
     /** Hide the label visually (e.g. a column of row actions), keeping it for screen readers. */
@@ -22,11 +21,7 @@ export type Column<T> = {
     narrow?: boolean;
 };
 
-const HIDE = {
-    sm: 'hidden sm:table-cell',
-    md: 'hidden md:table-cell',
-    lg: 'hidden lg:table-cell',
-};
+// A column is never hidden on a narrow screen: a wide table scrolls sideways inside its card (`overflow-x-auto`, cells do not wrap).
 
 type Props<T> = {
     columns: Column<T>[];
@@ -87,20 +82,34 @@ export function DataTable<T>({
     dense = false,
     className,
 }: Props<T>) {
-    const th = (c: Column<T>) =>
-        cn(
-            'px-3 py-2 font-medium',
-            c.align === 'right' ? 'text-right' : 'text-left',
-            c.hideBelow && HIDE[c.hideBelow],
-            c.narrow && 'w-10',
-        );
+    // Sorting is all or nothing while developing: a column with `sort` needs the table's `sort` prop (or its header silently stays plain),
+    // and in a table that sorts every column with data has a `sort` key (only a column of row actions, `srOnly`, may go without).
+    const sortable = columns.some((c) => c.sort);
+    const unsortable = columns
+        .filter((c) => !c.sort && !c.srOnly)
+        .map((c) => c.key)
+        .join(', ');
+
+    useEffect(() => {
+        if (!import.meta.env.DEV || !sortable) {
+            return;
+        }
+
+        if (!sort) {
+            console.error('DataTable: a column has "sort" but the table got no "sort" prop, so its header is not clickable.');
+        } else if (unsortable !== '') {
+            console.error(`DataTable: every column with data should sort; no "sort" key on: ${unsortable}.`);
+        }
+    }, [sortable, sort, unsortable]);
+
+    const th = (c: Column<T>) => cn('px-3 py-2 font-medium whitespace-nowrap', c.align === 'right' ? 'text-right' : 'text-left', c.narrow && 'w-10');
 
     const body = error ? (
         <ErrorState message={error} onRetry={onRetry} />
     ) : (
         <div className="relative overflow-x-auto">
             <table className={cn('w-full', dense ? 'text-xs' : 'text-sm')}>
-                <thead className="border-b border-line bg-canvas text-xs text-muted">
+                <thead className="border-b border-line bg-canvas text-2xs tracking-wide text-muted uppercase">
                     <tr>
                         {columns.map((c) =>
                             c.sort && sort ? (
@@ -110,41 +119,23 @@ export function DataTable<T>({
                                     sort={sort.sort}
                                     direction={sort.direction}
                                     onSort={sort.onSort}
-                                    className={cn(
-                                        c.align === 'right' &&
-                                            'text-right [&_button]:ml-auto',
-                                        c.hideBelow && HIDE[c.hideBelow],
-                                    )}
+                                    className={cn(c.align === 'right' && 'text-right [&_button]:ml-auto')}
                                 >
-                                    {String(c.header)}
+                                    {typeof c.header === 'string' ? c.header : c.key}
                                 </SortHead>
                             ) : (
                                 <th key={c.key} scope="col" className={th(c)}>
-                                    {c.srOnly ? (
-                                        <span className="sr-only">
-                                            {c.header}
-                                        </span>
-                                    ) : (
-                                        c.header
-                                    )}
+                                    {c.srOnly ? <span className="sr-only">{c.header}</span> : c.header}
                                 </th>
                             ),
                         )}
                     </tr>
                 </thead>
-                <tbody
-                    className={cn(
-                        'divide-y divide-line',
-                        loading && rows.length > 0 && 'opacity-50',
-                    )}
-                >
+                <tbody className={cn('divide-y divide-line', loading && rows.length > 0 && 'opacity-50')}>
                     {loading && rows.length === 0
                         ? Array.from({ length: 5 }).map((_, i) => (
                               <tr key={i}>
-                                  <td
-                                      colSpan={columns.length}
-                                      className="px-3 py-2.5"
-                                  >
+                                  <td colSpan={columns.length} className="px-3 py-2.5">
                                       <Skeleton className="h-4 w-full" />
                                   </td>
                               </tr>
@@ -152,31 +143,19 @@ export function DataTable<T>({
                         : rows.map((row, index) => (
                               <tr
                                   key={rowKey(row)}
-                                  className={cn(
-                                      'hover:bg-canvas/60',
-                                      onRowClick && 'cursor-pointer',
-                                      rowClassName?.(row),
-                                  )}
-                                  onClick={
-                                      onRowClick
-                                          ? () => onRowClick(row)
-                                          : undefined
-                                  }
+                                  className={cn('hover:bg-canvas/60', onRowClick && 'cursor-pointer', rowClassName?.(row))}
+                                  onClick={onRowClick ? () => onRowClick(row) : undefined}
                               >
                                   {columns.map((c) => (
                                       <td
                                           key={c.key}
                                           // Row actions must not trigger the row click.
-                                          onClick={
-                                              c.srOnly
-                                                  ? (e) => e.stopPropagation()
-                                                  : undefined
-                                          }
+                                          onClick={c.srOnly ? (e) => e.stopPropagation() : undefined}
+                                          // Tight rows: the icon button of a row's actions (26px) sets the row height, so its cell gets the least padding.
                                           className={cn(
-                                              'px-3 py-1.5',
-                                              c.align === 'right' &&
-                                                  'text-right',
-                                              c.hideBelow && HIDE[c.hideBelow],
+                                              'px-3 whitespace-nowrap',
+                                              c.srOnly ? 'py-0.5' : 'py-1',
+                                              c.align === 'right' && 'text-right',
                                               c.className,
                                           )}
                                       >
@@ -187,14 +166,7 @@ export function DataTable<T>({
                           ))}
                 </tbody>
             </table>
-            {!loading && rows.length === 0 && (
-                <EmptyState
-                    icon={empty.icon}
-                    title={empty.title}
-                    description={empty.description}
-                    action={empty.action}
-                />
-            )}
+            {!loading && rows.length === 0 && <EmptyState icon={empty.icon} title={empty.title} description={empty.description} action={empty.action} />}
         </div>
     );
 

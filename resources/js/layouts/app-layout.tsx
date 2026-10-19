@@ -1,62 +1,39 @@
 import { Link, router, usePage } from '@inertiajs/react';
-import {
-    ChevronDown,
-    LogOut,
-    Menu,
-    ShieldAlert,
-    UserRound,
-    X,
-} from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { Dialog } from 'radix-ui';
+import { ChevronDown, LogOut, Menu, ShieldAlert, UserRound, X } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { Toaster, toast } from 'sonner';
+import { Avatar } from '@/components/avatar';
 import { NetworkStatus } from '@/components/network-status';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownContent,
-    DropdownItem,
-    DropdownLabel,
-    DropdownMenu,
-    DropdownSeparator,
-    DropdownTrigger,
-} from '@/components/ui/dropdown';
+import { DropdownContent, DropdownItem, DropdownLabel, DropdownMenu, DropdownSeparator, DropdownTrigger } from '@/components/ui/dropdown';
 import { navIcon } from '@/components/nav-icons';
 import { NotificationBell } from '@/components/notification-bell';
+import { overlayClass, useRestoreFocus } from '@/components/ui/dialog';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import type { NavLinkItem } from '@/types/auth';
 import { cn } from '@/lib/utils';
 import { dashboard, logout } from '@/routes';
 
-function NavLink({
-    href,
-    icon: Icon,
-    children,
-    nested,
-    onNavigate,
-}: {
-    href: string;
-    icon: LucideIcon;
-    children: ReactNode;
-    nested?: boolean;
-    onNavigate: () => void;
-}) {
-    const active = useIsActive()(href);
+const rowClass =
+    'flex h-8 w-full items-center gap-2 rounded-md px-2.5 text-sm font-medium text-muted transition-colors hover:bg-canvas hover:text-ink [&_svg]:size-4';
+
+/** A menu link. Submenu entries (icon `dot`) get a plain dot instead of an icon, as in codex. */
+function NavLink({ item, onNavigate }: { item: NavLinkItem; onNavigate: () => void }) {
+    const active = useIsActive()(item.href);
+    const plain = !item.icon || item.icon === 'dot';
+    const Icon = navIcon(item.icon);
 
     return (
         <Link
-            href={href}
+            href={item.href}
             onClick={onNavigate}
             aria-current={active ? 'page' : undefined}
-            className={cn(
-                'flex h-8 items-center gap-2 rounded-md px-2.5 text-sm font-medium text-muted transition-colors hover:bg-canvas hover:text-ink [&_svg]:size-4',
-                nested && 'ml-5 h-7',
-                active &&
-                    'bg-primary-soft text-primary hover:bg-primary-soft hover:text-primary',
-            )}
+            className={cn(rowClass, plain && 'px-3', active && 'bg-primary-soft text-primary hover:bg-primary-soft hover:text-primary')}
         >
-            <Icon />
-            {children}
+            {plain ? <span aria-hidden className="size-1 shrink-0 rounded-full bg-current opacity-60" /> : <Icon />}
+            {item.label}
         </Link>
     );
 }
@@ -69,80 +46,48 @@ function useIsActive() {
     const { url, props } = usePage();
     const path = url.split('?')[0];
     const hrefs = props.navigation.flatMap((section) =>
-        section.items.flatMap((item) =>
-            'children' in item
-                ? item.children.map((child) => child.href)
-                : [item.href],
-        ),
+        section.items.flatMap((item) => ('children' in item ? item.children.map((child) => child.href) : [item.href])),
     );
-    const matches = (href: string) =>
-        path === href || path.startsWith(`${href}/`);
+    const matches = (href: string) => path === href || path.startsWith(`${href}/`);
 
-    return (href: string) =>
-        matches(href) &&
-        !hrefs.some((other) => other.length > href.length && matches(other));
+    return (href: string) => matches(href) && !hrefs.some((other) => other.length > href.length && matches(other));
 }
 
-function NavGroup({
-    label,
-    icon,
-    children,
-    onNavigate,
-}: {
-    label: string;
-    icon: string;
-    children: NavLinkItem[];
-    onNavigate: () => void;
-}) {
+/** A parent entry with its submenu (codex pattern). It is open while one of its pages is shown, until the person closes it; otherwise closed until opened. */
+function SubMenu({ label, icon, children, onNavigate }: { label: string; icon: string; children: NavLinkItem[]; onNavigate: () => void }) {
     const isActive = useIsActive();
-    const active = children.some((item) => isActive(item.href));
-    const [open, setOpen] = useState(active);
-    const expanded = open || active;
+    const id = useId();
+    const holdsCurrentPage = children.some((item) => isActive(item.href));
+    const [toggled, setToggled] = useState<boolean | null>(null);
+    const open = toggled ?? holdsCurrentPage;
     const Icon = navIcon(icon);
 
     return (
-        <>
+        <div className="flex flex-col gap-0.5">
             <button
                 type="button"
-                aria-expanded={expanded}
-                onClick={() => setOpen((value) => !value)}
-                className={cn(
-                    'flex h-8 cursor-pointer items-center gap-2 rounded-md px-2.5 text-sm font-medium text-muted transition-colors hover:bg-canvas hover:text-ink',
-                    active && 'text-ink',
-                )}
+                aria-expanded={open}
+                aria-controls={id}
+                onClick={() => setToggled(!open)}
+                className={cn(rowClass, 'cursor-pointer', holdsCurrentPage && 'text-ink')}
             >
-                <Icon className="size-4" />
-                <span className="flex-1 text-left">{label}</span>
-                <ChevronDown
-                    className={cn(
-                        'size-3.5 transition-transform',
-                        expanded && 'rotate-180',
-                    )}
-                />
+                <Icon />
+                {label}
+                <ChevronDown className={cn('ml-auto transition-transform', open && 'rotate-180')} />
             </button>
-            {expanded && (
-                <div className="flex flex-col gap-0.5">
+            {open && (
+                <div id={id} className="ml-[1.125rem] flex flex-col gap-0.5 border-l border-line">
                     {children.map((item, index) => (
                         <div key={item.href} className="contents">
-                            {item.group &&
-                                item.group !== children[index - 1]?.group && (
-                                    <p className="mt-1 ml-5 px-2.5 text-[11px] font-medium tracking-wide text-muted/80 uppercase">
-                                        {item.group}
-                                    </p>
-                                )}
-                            <NavLink
-                                href={item.href}
-                                icon={navIcon(item.icon)}
-                                nested
-                                onNavigate={onNavigate}
-                            >
-                                {item.label}
-                            </NavLink>
+                            {item.group && item.group !== children[index - 1]?.group && (
+                                <p className="mt-1 px-3 text-2xs font-medium tracking-wide text-muted/80 uppercase">{item.group}</p>
+                            )}
+                            <NavLink item={item} onNavigate={onNavigate} />
                         </div>
                     ))}
                 </div>
             )}
-        </>
+        </div>
     );
 }
 
@@ -150,39 +95,17 @@ function Sidebar({ onNavigate }: { onNavigate: () => void }) {
     const { navigation } = usePage().props;
 
     return (
-        <nav
-            className="flex flex-col gap-0.5 overflow-y-auto p-2"
-            aria-label="Menu utama"
-        >
+        <nav className="flex flex-col gap-0.5 overflow-y-auto p-2" aria-label="Menu utama">
             {navigation.map((section, index) => (
-                <div
-                    key={section.label ?? index}
-                    className="flex flex-col gap-0.5"
-                >
-                    {section.label && (
-                        <p className="mt-2 px-2.5 pb-0.5 text-[11px] font-semibold tracking-wide text-muted/80 uppercase">
-                            {section.label}
-                        </p>
-                    )}
+                <div key={section.label ?? index} className="flex flex-col gap-0.5">
+                    {section.label && <p className="mt-2 px-2.5 pb-0.5 text-2xs font-semibold tracking-wide text-muted/80 uppercase">{section.label}</p>}
                     {section.items.map((item) =>
                         'children' in item ? (
-                            <NavGroup
-                                key={item.label}
-                                label={item.label}
-                                icon={item.icon}
-                                onNavigate={onNavigate}
-                            >
+                            <SubMenu key={item.label} label={item.label} icon={item.icon} onNavigate={onNavigate}>
                                 {item.children}
-                            </NavGroup>
+                            </SubMenu>
                         ) : (
-                            <NavLink
-                                key={item.href}
-                                href={item.href}
-                                icon={navIcon(item.icon)}
-                                onNavigate={onNavigate}
-                            >
-                                {item.label}
-                            </NavLink>
+                            <NavLink key={item.href} item={item} onNavigate={onNavigate} />
                         ),
                     )}
                 </div>
@@ -193,13 +116,8 @@ function Sidebar({ onNavigate }: { onNavigate: () => void }) {
 
 function Brand() {
     return (
-        <Link
-            href={dashboard().url}
-            className="flex items-center gap-2 text-sm font-semibold"
-        >
-            <span className="flex size-6 items-center justify-center rounded bg-primary text-xs font-bold text-white">
-                S
-            </span>
+        <Link href={dashboard().url} className="flex items-center gap-2 text-sm font-semibold">
+            <span className="flex size-6 items-center justify-center rounded bg-primary text-xs font-bold text-white">S</span>
             SIPEBRI
         </Link>
     );
@@ -208,6 +126,16 @@ function Brand() {
 export default function AppLayout({ children }: { children: ReactNode }) {
     const { auth, flash, security } = usePage().props;
     const [mobileOpen, setMobileOpen] = useState(false);
+    const restoreFocus = useRestoreFocus(mobileOpen);
+
+    // The drawer is for small screens: close it when the window grows past the desktop breakpoint, so its scroll lock does not linger.
+    useEffect(() => {
+        const desktop = window.matchMedia('(min-width: 1024px)');
+        const close = () => desktop.matches && setMobileOpen(false);
+        desktop.addEventListener('change', close);
+
+        return () => desktop.removeEventListener('change', close);
+    }, []);
 
     useEffect(() => {
         if (flash?.success) {
@@ -220,6 +148,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
     return (
         <TooltipProvider delayDuration={200}>
+            <a
+                href="#content"
+                className="sr-only z-50 rounded-md bg-surface px-3 py-2 text-sm font-medium text-primary shadow-md focus:not-sr-only focus:fixed focus:top-2 focus:left-2"
+            >
+                Lewati ke konten
+            </a>
             <div className="flex min-h-screen">
                 <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-line bg-surface lg:flex">
                     <div className="flex h-12 items-center border-b border-line px-4">
@@ -228,38 +162,31 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     <Sidebar onNavigate={() => undefined} />
                 </aside>
 
-                {mobileOpen && (
-                    <div className="fixed inset-0 z-40 lg:hidden">
-                        <div
-                            className="absolute inset-0 bg-ink/40"
-                            onClick={() => setMobileOpen(false)}
-                        />
-                        <aside className="relative h-full w-64 bg-surface shadow-xl">
+                <Dialog.Root open={mobileOpen} onOpenChange={setMobileOpen}>
+                    <Dialog.Portal>
+                        <Dialog.Overlay className={cn(overlayClass, 'z-40 lg:hidden')} />
+                        <Dialog.Content
+                            aria-describedby={undefined}
+                            {...restoreFocus}
+                            className="overlay-fade fixed inset-y-0 left-0 z-40 flex w-64 flex-col bg-surface shadow-xl focus:outline-none lg:hidden"
+                        >
                             <div className="flex h-12 items-center justify-between border-b border-line px-4">
+                                <Dialog.Title className="sr-only">Menu navigasi</Dialog.Title>
                                 <Brand />
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    aria-label="Tutup menu"
-                                    onClick={() => setMobileOpen(false)}
-                                >
-                                    <X />
-                                </Button>
+                                <Dialog.Close asChild>
+                                    <Button variant="ghost" size="icon" aria-label="Tutup menu">
+                                        <X />
+                                    </Button>
+                                </Dialog.Close>
                             </div>
                             <Sidebar onNavigate={() => setMobileOpen(false)} />
-                        </aside>
-                    </div>
-                )}
+                        </Dialog.Content>
+                    </Dialog.Portal>
+                </Dialog.Root>
 
                 <div className="flex min-w-0 flex-1 flex-col">
                     <header className="sticky top-0 z-30 flex h-12 items-center justify-between border-b border-line bg-surface px-3 sm:px-5">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="lg:hidden"
-                            aria-label="Buka menu"
-                            onClick={() => setMobileOpen(true)}
-                        >
+                        <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Buka menu" onClick={() => setMobileOpen(true)}>
                             <Menu />
                         </Button>
                         <div className="hidden lg:block" />
@@ -267,45 +194,22 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                             <NotificationBell />
                             <DropdownMenu>
                                 <DropdownTrigger asChild>
-                                    <button
-                                        type="button"
-                                        className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 hover:bg-canvas"
-                                    >
-                                        <span className="flex size-6 items-center justify-center rounded-full bg-primary-soft text-xs font-semibold text-primary">
-                                            {auth.user.name
-                                                .charAt(0)
-                                                .toUpperCase()}
-                                        </span>
-                                        <span className="hidden text-sm font-medium sm:block">
-                                            {auth.user.name}
-                                        </span>
+                                    <button type="button" className="flex cursor-pointer items-center gap-2 rounded-md px-1.5 py-1 hover:bg-canvas">
+                                        <Avatar name={auth.user.name} src={null} className="size-6 text-xs" />
+                                        <span className="hidden text-sm font-medium sm:block">{auth.user.name}</span>
                                         <ChevronDown className="size-3.5 text-muted" />
                                     </button>
                                 </DropdownTrigger>
                                 <DropdownContent>
                                     <DropdownLabel className="px-2 py-1.5 text-xs text-muted">
                                         {auth.user.email}
-                                        {auth.user.role && (
-                                            <span className="block text-[11px]">
-                                                {auth.user.role}
-                                            </span>
-                                        )}
+                                        {auth.user.role && <span className="block text-2xs">{auth.user.role}</span>}
                                     </DropdownLabel>
                                     <DropdownSeparator />
-                                    <DropdownItem
-                                        icon={<UserRound />}
-                                        onSelect={() =>
-                                            router.visit('/profile')
-                                        }
-                                    >
+                                    <DropdownItem icon={<UserRound />} onSelect={() => router.visit('/profile')}>
                                         Profil
                                     </DropdownItem>
-                                    <DropdownItem
-                                        icon={<LogOut />}
-                                        onSelect={() =>
-                                            router.post(logout().url)
-                                        }
-                                    >
+                                    <DropdownItem icon={<LogOut />} onSelect={() => router.post(logout().url)}>
                                         Keluar
                                     </DropdownItem>
                                 </DropdownContent>
@@ -315,31 +219,22 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                     {security?.enabled && security.method === null && (
                         <div
                             role="status"
-                            className="flex items-center gap-2 border-b border-amber-200 bg-amber-50 px-3 py-1.5 text-xs text-amber-800 sm:px-5"
+                            className="flex items-center gap-2 border-b border-warning-line bg-warning-soft px-3 py-1.5 text-xs text-warning-ink sm:px-5"
                         >
                             <ShieldAlert className="size-3.5 shrink-0" />
-                            <span className="min-w-0 flex-1 truncate">
-                                Akun Anda belum dilindungi verifikasi dua
-                                langkah.
-                            </span>
-                            <Link
-                                href="/profile"
-                                className="shrink-0 font-medium underline underline-offset-2 hover:no-underline"
-                            >
+                            <span className="min-w-0 flex-1 truncate">Akun Anda belum dilindungi verifikasi dua langkah.</span>
+                            <Link href="/profile" className="shrink-0 font-medium underline underline-offset-2 hover:no-underline">
                                 Aktifkan
                             </Link>
                         </div>
                     )}
-                    <main className="flex-1 p-3 sm:p-5">{children}</main>
+                    <main id="content" tabIndex={-1} className="flex-1 p-3 outline-none sm:p-5">
+                        {children}
+                    </main>
                 </div>
             </div>
             <NetworkStatus />
-            <Toaster
-                position="top-right"
-                richColors
-                closeButton
-                toastOptions={{ style: { fontSize: '0.8125rem' } }}
-            />
+            <Toaster position="top-right" richColors closeButton toastOptions={{ style: { fontSize: '0.8125rem' } }} />
         </TooltipProvider>
     );
 }

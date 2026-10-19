@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/style.css';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { controlClass } from '@/components/ui/input';
+import { formatDate } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
 type Props = {
@@ -17,6 +18,8 @@ type Props = {
     invalid?: boolean;
     id?: string;
     placeholder?: string;
+    /** Accessible name when there is no visible `Field` label (e.g. a toolbar filter). */
+    'aria-label'?: string;
 };
 
 /**
@@ -39,6 +42,7 @@ export function DatePicker({
     invalid,
     id,
     placeholder = 'Pilih tanggal',
+    'aria-label': ariaLabel,
 }: Props) {
     const [open, setOpen] = useState(false);
     const selected = value ? parseISO(value) : undefined;
@@ -49,16 +53,15 @@ export function DatePicker({
                 <button
                     id={id}
                     type="button"
-                    aria-invalid={invalid || undefined}
-                    className={cn(controlClass, 'flex items-center justify-between text-left')}
+                    data-invalid={invalid || undefined}
+                    aria-label={ariaLabel}
+                    className={cn(controlClass, 'flex items-center justify-between text-left data-[invalid]:border-danger data-[invalid]:ring-danger/20')}
                 >
-                    <span className={cn(!selected && 'text-muted/70')}>
-                        {selected ? format(selected, 'dd MMM yyyy', { locale: idLocale }) : placeholder}
-                    </span>
+                    <span className={cn(!selected && 'text-muted/70')}>{selected ? formatDate(selected) : placeholder}</span>
                     <CalendarDays className="size-3.5 text-muted" />
                 </button>
             </PopoverTrigger>
-            <PopoverContent className="w-fit p-1.5">
+            <PopoverContent aria-label={ariaLabel ?? placeholder} className="w-fit p-1.5">
                 <DayPicker
                     mode="single"
                     locale={idLocale}

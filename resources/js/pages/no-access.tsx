@@ -9,20 +9,14 @@ export default function NoAccess() {
     return (
         <>
             <Head title="Belum ada akses" />
-            <PageHeader
-                title={`Selamat datang${user ? `, ${user.name}` : ''}`}
-                description={user?.role ? `Peran: ${user.role}` : undefined}
-            />
+            <PageHeader title={`Selamat datang${user ? `, ${user.name}` : ''}`} description={user?.role ? `Peran: ${user.role}` : undefined} />
             <Card>
                 <EmptyState
                     icon={<Lock />}
                     title="Peran Anda belum punya akses ke halaman mana pun"
                     description="Minta administrator memberikan izin untuk peran Anda lewat Data Peranan. Setelah diberikan, muat ulang halaman ini."
                     action={
-                        <Link
-                            href="/profile"
-                            className="text-sm text-primary hover:underline"
-                        >
+                        <Link href="/profile" className="text-sm text-primary hover:underline">
                             Buka profil
                         </Link>
                     }

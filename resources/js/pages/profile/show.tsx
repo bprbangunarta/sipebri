@@ -1,22 +1,14 @@
 import { Head, router, useForm } from '@inertiajs/react';
 import { QRCodeSVG } from 'qrcode.react';
-import {
-    Copy,
-    KeyRound,
-    Mail,
-    Save,
-    ShieldCheck,
-    ShieldOff,
-    Smartphone,
-} from 'lucide-react';
+import { KeyRound, Mail, ShieldCheck, ShieldOff, Smartphone } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { CodeInput } from '@/components/ui/code-input';
-import { DialogFooter, Modal } from '@/components/ui/dialog';
+import { DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
-import { Badge, Card, PageHeader } from '@/components/ui/misc';
+import { Badge, Card, CardBody, CardFooter, CardHeader, PageHeader } from '@/components/ui/misc';
 import { PasswordInput } from '@/components/ui/password-input';
 
 type Props = {
@@ -80,37 +72,23 @@ function CodeForm({
                 });
             }}
         >
-            <div className="flex flex-col gap-3 p-4">
+            <DialogBody className="flex flex-col gap-3">
                 {children}
-                <Field
-                    label={
-                        recovery
-                            ? 'Kode atau kode pemulihan'
-                            : 'Kode verifikasi'
-                    }
-                    error={form.errors.code}
-                >
+                <Field label={recovery ? 'Kode atau kode pemulihan' : 'Kode verifikasi'} error={form.errors.code}>
                     <CodeInput
                         recovery={recovery}
                         value={form.data.code}
                         onValueChange={(value) => form.setData('code', value)}
                         aria-invalid={!!form.errors.code}
-                        placeholder={
-                            recovery ? 'kode atau xxxxx-xxxxx' : '••••••'
-                        }
+                        placeholder={recovery ? 'kode atau xxxxx-xxxxx' : '••••••'}
                     />
                 </Field>
-            </div>
+            </DialogBody>
             <DialogFooter>
                 <Button variant="outline" onClick={onDone}>
                     Batal
                 </Button>
-                <Button
-                    type="submit"
-                    loading={form.processing}
-                    variant={method === 'delete' ? 'danger' : 'primary'}
-                    disabled={form.data.code.length < 6}
-                >
+                <Button type="submit" loading={form.processing} variant={method === 'delete' ? 'danger' : 'primary'} disabled={form.data.code.length < 6}>
                     {submitLabel}
                 </Button>
             </DialogFooter>
@@ -125,57 +103,35 @@ function SendCode({ resendIn, sent }: { resendIn: number; sent: boolean }) {
                 variant="outline"
                 size="sm"
                 disabled={resendIn > 0}
-                onClick={() =>
-                    router.post(
-                        '/profile/two-factor/email/send',
-                        {},
-                        { preserveScroll: true },
-                    )
-                }
+                onClick={() => router.post('/profile/two-factor/email/send', {}, { preserveScroll: true })}
             >
                 <Mail /> {sent ? 'Kirim kode baru' : 'Kirim kode'}
             </Button>
-            {resendIn > 0 && (
-                <span className="text-xs text-muted">
-                    Bisa lagi dalam {resendIn} dtk
-                </span>
-            )}
+            {resendIn > 0 && <span className="text-xs text-muted">Bisa lagi dalam {resendIn} dtk</span>}
         </div>
     );
 }
 
-function RecoveryCodes({
-    codes,
-    onClose,
-}: {
-    codes: string[] | null;
-    onClose: () => void;
-}) {
+function RecoveryCodes({ codes, onClose }: { codes: string[] | null; onClose: () => void }) {
     return (
-        <Modal
-            open={codes !== null}
-            onOpenChange={(open) => !open && onClose()}
-            title="Simpan kode pemulihan Anda"
-            description="Tiap kode hanya berlaku sekali bila ponsel Anda hilang. Kode ini hanya ditampilkan sekarang."
-        >
-            <div className="p-4">
+        <Modal open={codes !== null} onOpenChange={(open) => !open && onClose()} title="Simpan kode pemulihan Anda">
+            <DialogBody className="flex flex-col gap-2">
+                <p className="text-sm">Tiap kode hanya berlaku sekali bila ponsel Anda hilang. Kode ini hanya ditampilkan sekarang.</p>
                 <ul className="grid grid-cols-2 gap-1.5 rounded-md border border-line bg-canvas p-3 font-mono text-sm">
                     {codes?.map((code) => (
                         <li key={code}>{code}</li>
                     ))}
                 </ul>
-            </div>
+            </DialogBody>
             <DialogFooter>
                 <Button
                     variant="outline"
                     onClick={() => {
-                        void navigator.clipboard.writeText(
-                            (codes ?? []).join('\n'),
-                        );
+                        void navigator.clipboard.writeText((codes ?? []).join('\n'));
                         toast.success('Kode pemulihan disalin.');
                     }}
                 >
-                    <Copy /> Salin
+                    Salin
                 </Button>
                 <Button onClick={onClose}>Sudah saya simpan</Button>
             </DialogFooter>
@@ -192,12 +148,10 @@ function PasswordCard() {
 
     return (
         <Card>
-            <h2 className="border-b border-line px-3 py-2 text-sm font-semibold">
-                Kata sandi
-            </h2>
+            <CardHeader title="Kata sandi" description="Kata sandi Anda disimpan di Codex dan berlaku untuk semua sistem yang memakainya." />
             <form
                 noValidate
-                className="flex flex-col gap-3 p-3"
+                className="contents"
                 onSubmit={(e) => {
                     e.preventDefault();
                     form.put('/profile/password', {
@@ -206,69 +160,39 @@ function PasswordCard() {
                     });
                 }}
             >
-                <Field
-                    label="Kata sandi saat ini"
-                    required
-                    error={form.errors.current_password}
-                >
-                    <PasswordInput
-                        autoComplete="current-password"
-                        value={form.data.current_password}
-                        onChange={(e) =>
-                            form.setData('current_password', e.target.value)
-                        }
-                        aria-invalid={!!form.errors.current_password}
-                    />
-                </Field>
-                <div className="grid gap-3 sm:grid-cols-2">
-                    <Field
-                        label="Kata sandi baru"
-                        required
-                        error={form.errors.password}
-                        hint="Minimal 8 karakter"
-                    >
+                <CardBody className="flex flex-col gap-3">
+                    <Field label="Kata sandi saat ini" required error={form.errors.current_password}>
                         <PasswordInput
-                            autoComplete="new-password"
-                            value={form.data.password}
-                            onChange={(e) =>
-                                form.setData('password', e.target.value)
-                            }
-                            aria-invalid={!!form.errors.password}
+                            autoComplete="current-password"
+                            value={form.data.current_password}
+                            onChange={(e) => form.setData('current_password', e.target.value)}
+                            aria-invalid={!!form.errors.current_password}
                         />
                     </Field>
-                    <Field
-                        label="Konfirmasi kata sandi baru"
-                        required
-                        error={form.errors.password_confirmation}
-                    >
-                        <PasswordInput
-                            autoComplete="new-password"
-                            value={form.data.password_confirmation}
-                            onChange={(e) =>
-                                form.setData(
-                                    'password_confirmation',
-                                    e.target.value,
-                                )
-                            }
-                            aria-invalid={!!form.errors.password_confirmation}
-                        />
-                    </Field>
-                </div>
-                <div className="flex items-center justify-between gap-2">
-                    <p className="text-xs text-muted">
-                        Kata sandi Anda disimpan di Codex dan berlaku untuk
-                        semua sistem yang memakainya.
-                    </p>
-                    <Button
-                        type="submit"
-                        loading={form.processing}
-                        disabled={
-                            !form.data.current_password || !form.data.password
-                        }
-                    >
-                        <Save /> Ubah kata sandi
+                    <div className="grid gap-3 sm:grid-cols-2">
+                        <Field label="Kata sandi baru" required error={form.errors.password} hint="Minimal 8 karakter">
+                            <PasswordInput
+                                autoComplete="new-password"
+                                value={form.data.password}
+                                onChange={(e) => form.setData('password', e.target.value)}
+                                aria-invalid={!!form.errors.password}
+                            />
+                        </Field>
+                        <Field label="Konfirmasi kata sandi baru" required error={form.errors.password_confirmation}>
+                            <PasswordInput
+                                autoComplete="new-password"
+                                value={form.data.password_confirmation}
+                                onChange={(e) => form.setData('password_confirmation', e.target.value)}
+                                aria-invalid={!!form.errors.password_confirmation}
+                            />
+                        </Field>
+                    </div>
+                </CardBody>
+                <CardFooter className="justify-end">
+                    <Button type="submit" loading={form.processing} disabled={!form.data.current_password || !form.data.password}>
+                        Ubah kata sandi
                     </Button>
-                </div>
+                </CardFooter>
             </form>
         </Card>
     );
@@ -277,102 +201,57 @@ function PasswordCard() {
 export default function ProfileShow({ account, twoFactor }: Props) {
     const [emailOpen, setEmailOpen] = useState(false);
     const [disableOpen, setDisableOpen] = useState(false);
-    const [codesOpen, setCodesOpen] = useState(
-        twoFactor.recoveryCodes !== null,
-    );
+    const [codesOpen, setCodesOpen] = useState(twoFactor.recoveryCodes !== null);
     const { method, enabled } = twoFactor;
-    const startTotp = () =>
-        router.post(
-            '/profile/two-factor/totp/start',
-            {},
-            { preserveScroll: true },
-        );
-    const cancelTotp = () =>
-        router.post(
-            '/profile/two-factor/totp/cancel',
-            {},
-            { preserveScroll: true },
-        );
+    const startTotp = () => router.post('/profile/two-factor/totp/start', {}, { preserveScroll: true });
+    const cancelTotp = () => router.post('/profile/two-factor/totp/cancel', {}, { preserveScroll: true });
 
     return (
         <>
             <Head title="Profil" />
-            <PageHeader
-                title="Profil"
-                description="Akun Anda dan cara Anda masuk"
-            />
+            <PageHeader title="Profil" description="Akun Anda dan cara Anda masuk" />
 
             <div className="grid gap-3 lg:grid-cols-2">
                 <div className="flex flex-col gap-3">
                     <Card>
-                        <h2 className="border-b border-line px-3 py-2 text-sm font-semibold">
-                            Akun
-                        </h2>
+                        <CardHeader title="Akun" description="Data ini berasal dari Codex dan diperbarui setiap kali Anda masuk." />
                         <dl className="grid gap-3 p-3 sm:grid-cols-2">
                             <Detail label="Nama">{account.name}</Detail>
-                            <Detail label="Nama pengguna">
-                                {account.username}
-                            </Detail>
+                            <Detail label="Nama pengguna">{account.username}</Detail>
                             <Detail label="Email">{account.email}</Detail>
                             <Detail label="Kantor">{account.office}</Detail>
                             <Detail label="Peran">{account.role}</Detail>
                         </dl>
-                        <p className="border-t border-line px-3 py-2 text-xs text-muted">
-                            Data ini berasal dari Codex dan diperbarui setiap
-                            kali Anda masuk.
-                        </p>
                     </Card>
                     <PasswordCard />
                 </div>
 
                 <Card className="self-start">
-                    <div className="flex items-center justify-between border-b border-line px-3 py-2">
-                        <h2 className="text-sm font-semibold">
-                            Verifikasi dua langkah
-                        </h2>
-                        {enabled && (
-                            <Badge tone={method ? 'success' : 'warning'}>
-                                {method ? 'Aktif' : 'Mati'}
-                            </Badge>
-                        )}
-                    </div>
+                    <CardHeader
+                        title="Verifikasi dua langkah"
+                        actions={enabled && <Badge tone={method ? 'success' : 'warning'}>{method ? 'Aktif' : 'Mati'}</Badge>}
+                    />
 
                     {!enabled ? (
-                        <p className="p-3 text-sm text-muted">
-                            Verifikasi dua langkah dimatikan oleh administrator.
-                        </p>
+                        <p className="p-3 text-sm text-muted">Verifikasi dua langkah dimatikan oleh administrator.</p>
                     ) : (
                         <div className="flex flex-col divide-y divide-line">
                             <div className="flex items-center justify-between gap-3 p-3">
                                 <div className="flex gap-2.5">
                                     <Smartphone className="mt-0.5 size-4 shrink-0 text-muted" />
                                     <div>
-                                        <p className="text-sm font-medium">
-                                            Aplikasi authenticator
-                                        </p>
+                                        <p className="text-sm font-medium">Aplikasi authenticator</p>
                                         <p className="text-xs text-muted">
-                                            Kode dari aplikasi seperti Google
-                                            Authenticator atau Microsoft
-                                            Authenticator. Disarankan.
+                                            Kode dari aplikasi seperti Google Authenticator atau Microsoft Authenticator. Disarankan.
                                         </p>
-                                        {method === 'totp' && (
-                                            <p className="mt-1 text-xs text-muted">
-                                                {twoFactor.recoveryRemaining}{' '}
-                                                kode pemulihan tersisa
-                                            </p>
-                                        )}
+                                        {method === 'totp' && <p className="mt-1 text-xs text-muted">{twoFactor.recoveryRemaining} kode pemulihan tersisa</p>}
                                     </div>
                                 </div>
                                 {method === 'totp' ? (
                                     <Badge tone="success">Dipakai</Badge>
                                 ) : (
-                                    <Button
-                                        size="sm"
-                                        variant={method ? 'outline' : 'primary'}
-                                        onClick={startTotp}
-                                    >
-                                        <ShieldCheck />{' '}
-                                        {method ? 'Ganti' : 'Atur'}
+                                    <Button size="sm" variant={method ? 'outline' : 'primary'} onClick={startTotp}>
+                                        <ShieldCheck /> {method ? 'Ganti' : 'Atur'}
                                     </Button>
                                 )}
                             </div>
@@ -380,9 +259,7 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                                 <div className="flex gap-2.5">
                                     <Mail className="mt-0.5 size-4 shrink-0 text-muted" />
                                     <div>
-                                        <p className="text-sm font-medium">
-                                            Kode email
-                                        </p>
+                                        <p className="text-sm font-medium">Kode email</p>
                                         <p className="text-xs text-muted">
                                             {twoFactor.emailAvailable
                                                 ? `Kode dikirim ke ${account.email} setiap kali Anda masuk.`
@@ -405,11 +282,7 @@ export default function ProfileShow({ account, twoFactor }: Props) {
                             </div>
                             {method && (
                                 <div className="flex justify-end p-3">
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        onClick={() => setDisableOpen(true)}
-                                    >
+                                    <Button size="sm" variant="outline" onClick={() => setDisableOpen(true)}>
                                         <ShieldOff /> Matikan
                                     </Button>
                                 </div>
@@ -420,80 +293,50 @@ export default function ProfileShow({ account, twoFactor }: Props) {
             </div>
 
             <Modal
+                persistent
                 open={twoFactor.setup !== null}
                 onOpenChange={(open) => !open && cancelTotp()}
                 title="Atur aplikasi authenticator"
                 description="Pindai kode QR, lalu masukkan kode 6 digit yang tampil di aplikasi."
             >
                 {twoFactor.setup && (
-                    <CodeForm
-                        url="/profile/two-factor/totp"
-                        submitLabel="Aktifkan"
-                        onDone={cancelTotp}
-                    >
+                    <CodeForm url="/profile/two-factor/totp" submitLabel="Aktifkan" onDone={cancelTotp}>
                         <div className="flex flex-col items-center gap-2">
-                            <div className="rounded-md border border-line bg-white p-2">
-                                <QRCodeSVG
-                                    value={twoFactor.setup.uri}
-                                    size={148}
-                                />
+                            <div className="rounded-md border border-line bg-surface p-2">
+                                <QRCodeSVG value={twoFactor.setup.uri} size={148} />
                             </div>
-                            <p className="text-xs text-muted">
-                                Tidak bisa memindai? Masukkan kunci ini di
-                                aplikasi:
-                            </p>
-                            <code className="rounded bg-canvas px-2 py-1 font-mono text-xs break-all select-all">
-                                {twoFactor.setup.secret}
-                            </code>
+                            <p className="text-xs text-muted">Tidak bisa memindai? Masukkan kunci ini di aplikasi:</p>
+                            <code className="rounded bg-canvas px-2 py-1 font-mono text-xs break-all select-all">{twoFactor.setup.secret}</code>
                         </div>
                     </CodeForm>
                 )}
             </Modal>
 
             <Modal
+                persistent
                 open={emailOpen}
                 onOpenChange={setEmailOpen}
                 title="Atur kode email"
                 description={`Kami akan mengirim kode ke ${account.email} untuk memastikan berfungsi.`}
             >
-                <CodeForm
-                    url="/profile/two-factor/email"
-                    submitLabel="Aktifkan"
-                    onDone={() => setEmailOpen(false)}
-                >
-                    <SendCode
-                        resendIn={twoFactor.resendIn}
-                        sent={twoFactor.emailCodeSent}
-                    />
+                <CodeForm url="/profile/two-factor/email" submitLabel="Aktifkan" onDone={() => setEmailOpen(false)}>
+                    <SendCode resendIn={twoFactor.resendIn} sent={twoFactor.emailCodeSent} />
                 </CodeForm>
             </Modal>
 
             <Modal
+                persistent
                 open={disableOpen}
                 onOpenChange={setDisableOpen}
                 title="Matikan verifikasi dua langkah"
                 description="Masukkan kode untuk memastikan ini Anda."
             >
-                <CodeForm
-                    url="/profile/two-factor"
-                    method="delete"
-                    submitLabel="Matikan"
-                    recovery={method === 'totp'}
-                    onDone={() => setDisableOpen(false)}
-                >
-                    {method === 'email' && (
-                        <SendCode
-                            resendIn={twoFactor.resendIn}
-                            sent={twoFactor.emailCodeSent}
-                        />
-                    )}
+                <CodeForm url="/profile/two-factor" method="delete" submitLabel="Matikan" recovery={method === 'totp'} onDone={() => setDisableOpen(false)}>
+                    {method === 'email' && <SendCode resendIn={twoFactor.resendIn} sent={twoFactor.emailCodeSent} />}
                 </CodeForm>
             </Modal>
 
-            <RecoveryCodes
-                codes={codesOpen ? twoFactor.recoveryCodes : null}
-                onClose={() => setCodesOpen(false)}
-            />
+            <RecoveryCodes codes={codesOpen ? twoFactor.recoveryCodes : null} onClose={() => setCodesOpen(false)} />
         </>
     );
 }

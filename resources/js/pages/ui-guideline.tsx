@@ -1,0 +1,805 @@
+import { Head } from '@inertiajs/react';
+import { Copy, Dices, Download, Inbox, Info, MoreHorizontal, Pencil, Plus, Save, Search, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import type { ReactNode } from 'react';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { CodeInput } from '@/components/ui/code-input';
+import { BarChart, ColumnChart, DonutChart } from '@/components/ui/chart';
+import { Checkbox, RadioGroup, Switch } from '@/components/ui/choice';
+import { ColorInput } from '@/components/ui/color-input';
+import { Combobox } from '@/components/ui/combobox';
+import { CurrencyInput } from '@/components/ui/currency-input';
+import { DataTable } from '@/components/ui/data-table';
+import type { Column } from '@/components/ui/data-table';
+import { DatePicker } from '@/components/ui/date-picker';
+import { DropdownContent, DropdownItem, DropdownLabel, DropdownMenu, DropdownSeparator, DropdownTrigger } from '@/components/ui/dropdown';
+import { ConfirmDialog, DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
+import { Field } from '@/components/ui/field';
+import { FileInput } from '@/components/ui/file-input';
+import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
+import { CODE_CHARACTER, FilteredInput, NAME_CHARACTER } from '@/components/ui/filtered-input';
+import { Input, InputGroup } from '@/components/ui/input';
+import { MaskedInput } from '@/components/ui/masked-input';
+import { Alert, Badge, Card, CardBody, CardFooter, CardHeader, EmptyState, ErrorState, PageHeader, Skeleton } from '@/components/ui/misc';
+import type { BadgeTone } from '@/components/ui/misc';
+import { PasswordInput } from '@/components/ui/password-input';
+import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tip } from '@/components/ui/tooltip';
+import { rupiah } from '@/lib/format';
+import { MASKS } from '@/lib/mask';
+
+/** Every `--color-*` token of resources/css/app.css (a test keeps this list complete). Class names are written out so Tailwind can see them. */
+const TOKENS = [
+    ['primary', 'bg-primary', 'Warna utama: tombol, tautan, item menu aktif, fokus'],
+    ['primary-hover', 'bg-primary-hover', 'Tombol utama saat disorot'],
+    ['primary-soft', 'bg-primary-soft', 'Latar lembut warna utama (item menu aktif, area tarik berkas)'],
+    ['surface', 'bg-surface', 'Kartu, sidebar, header, dialog'],
+    ['canvas', 'bg-canvas', 'Latar halaman, header tabel, hover'],
+    ['line', 'bg-line', 'Garis pemisah dan batas'],
+    ['ink', 'bg-ink', 'Teks utama'],
+    ['muted', 'bg-muted', 'Teks pendukung (label, hint, header tabel)'],
+    ['danger', 'bg-danger', 'Galat, tombol hapus'],
+    ['success', 'bg-success', 'Berhasil: ikon dan elemen solid'],
+    ['success-soft', 'bg-success-soft', 'Berhasil: latar badge, alert, toast'],
+    ['success-line', 'bg-success-line', 'Berhasil: garis tepi'],
+    ['success-ink', 'bg-success-ink', 'Berhasil: teks di atas latar soft'],
+    ['warning', 'bg-warning', 'Peringatan: ikon dan elemen solid'],
+    ['warning-soft', 'bg-warning-soft', 'Peringatan: latar badge, alert, toast'],
+    ['warning-line', 'bg-warning-line', 'Peringatan: garis tepi'],
+    ['warning-ink', 'bg-warning-ink', 'Peringatan: teks di atas latar soft'],
+    ['info', 'bg-info', 'Informasi: ikon dan elemen solid'],
+    ['info-soft', 'bg-info-soft', 'Informasi: latar badge, alert, toast'],
+    ['info-line', 'bg-info-line', 'Informasi: garis tepi'],
+    ['info-ink', 'bg-info-ink', 'Informasi: teks di atas latar soft'],
+    ['danger-soft', 'bg-danger-soft', 'Galat: latar badge, alert, toast'],
+    ['danger-line', 'bg-danger-line', 'Galat: garis tepi'],
+    ['danger-ink', 'bg-danger-ink', 'Galat: teks di atas latar soft'],
+    ['chart-1', 'bg-chart-1', 'Grafik: warna seri 1 (tanpa arti status)'],
+    ['chart-2', 'bg-chart-2', 'Grafik: warna seri 2 (tanpa arti status)'],
+    ['chart-3', 'bg-chart-3', 'Grafik: warna seri 3 (tanpa arti status)'],
+    ['chart-4', 'bg-chart-4', 'Grafik: warna seri 4 (tanpa arti status)'],
+    ['chart-5', 'bg-chart-5', 'Grafik: warna seri 5 (tanpa arti status)'],
+];
+
+/** The static error pages (error-pages/*.html, made by `npm run error-pages`), keyed by status code. */
+const STATUS = [
+    {
+        tone: 'success',
+        label: 'Berhasil',
+        swatches: ['bg-success', 'bg-success-soft', 'bg-success-line', 'bg-success-ink'],
+        notify: () => toast.success('Data tersimpan'),
+    },
+    { tone: 'info', label: 'Informasi', swatches: ['bg-info', 'bg-info-soft', 'bg-info-line', 'bg-info-ink'], notify: () => toast.info('Ada pembaruan data') },
+    {
+        tone: 'warning',
+        label: 'Peringatan',
+        swatches: ['bg-warning', 'bg-warning-soft', 'bg-warning-line', 'bg-warning-ink'],
+        notify: () => toast.warning('Sesi hampir berakhir'),
+    },
+    {
+        tone: 'danger',
+        label: 'Galat',
+        swatches: ['bg-danger', 'bg-danger-soft', 'bg-danger-line', 'bg-danger-ink'],
+        notify: () => toast.error('Gagal menyimpan data'),
+    },
+] as const;
+
+const CHART_DONUT = [
+    { label: 'Tetap', count: 42 },
+    { label: 'Kontrak', count: 18 },
+    { label: 'Trainee', count: 6 },
+];
+const CHART_COLUMNS = [
+    { label: '< 1', count: 6 },
+    { label: '1-3', count: 14 },
+    { label: '3-5', count: 20 },
+    { label: '5-10', count: 17 },
+    { label: '> 10', count: 9 },
+];
+const CHART_BARS = [
+    { label: 'Kantor Pusat', count: 31 },
+    { label: 'Kantor Cabang Utara', count: 19 },
+    { label: 'Kantor Kas Selatan', count: 11 },
+    { label: 'Belum diisi', count: 5 },
+];
+
+const TONES: BadgeTone[] = ['neutral', 'info', 'success', 'warning', 'danger'];
+
+type Row = { id: number; name: string; status: BadgeTone; amount: number };
+type Draft = { id: number | null; name: string; status: BadgeTone; amount: string };
+const EMPTY_DRAFT: Draft = { id: null, name: '', status: 'success', amount: '' };
+const NAMES = ['Alfa', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Sigma'];
+const STATUSES: BadgeTone[] = ['success', 'warning', 'danger', 'info', 'neutral'];
+const INITIAL_ROWS: Row[] = NAMES.map((name, index) => ({
+    id: index + 1,
+    name: `Proyek ${name}`,
+    status: STATUSES[index % STATUSES.length] ?? 'neutral',
+    amount: 870_000 + ((index * 3_730_000) % 12_000_000),
+}));
+
+/** A demo value for the generate button; real passwords are issued by Codex, never here. */
+function randomSecret(): string {
+    const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+    const bytes = crypto.getRandomValues(new Uint8Array(16));
+
+    return Array.from(bytes, (byte) => alphabet[byte % alphabet.length]).join('');
+}
+
+function Section({ title, description, children }: { title: string; description?: string; children: ReactNode }) {
+    return (
+        <Card>
+            <CardHeader title={title} description={description} />
+            <CardBody className="flex flex-col gap-3">{children}</CardBody>
+        </Card>
+    );
+}
+
+function SubTitle({ children }: { children: ReactNode }) {
+    return <h3 className="text-xs font-semibold tracking-wide text-muted uppercase">{children}</h3>;
+}
+
+/** Every kind of input the app uses, each with its own state. Money, phone, and other formatted fields send the raw value to the API. */
+function InputExamples() {
+    const [select, setSelect] = useState<string | null>('b');
+    const [date, setDate] = useState('');
+    const [code, setCode] = useState('');
+    const [amount, setAmount] = useState<number | null>(1_500_000);
+    const [quantity, setQuantity] = useState<number | null>(12_500);
+    const [small, setSmall] = useState('42');
+    const [person, setPerson] = useState('');
+    const [codeText, setCodeText] = useState('');
+    const [secret, setSecret] = useState('');
+    const [phone, setPhone] = useState('081234567890');
+    const [nik, setNik] = useState('');
+    const [npwp, setNpwp] = useState('');
+    const [color, setColor] = useState('');
+    const [note, setNote] = useState('');
+    const [agree, setAgree] = useState(true);
+    const [notify, setNotify] = useState(true);
+    const [channel, setChannel] = useState('email');
+    const [files, setFiles] = useState<File[]>([]);
+
+    return (
+        <Section
+            title="Isian"
+            description="Field: label text-xs, tanda * merah untuk wajib, hanya galat yang tampil di bawah isian. Keterangan isian (hint) tampil sebagai tooltip pada ikon info di samping label, dan tetap terbaca oleh pembaca layar."
+        >
+            <SubTitle>Teks dan sandi</SubTitle>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <Field label="Teks" required hint="Contoh hint">
+                    <Input maxLength={100} placeholder="Ketik sesuatu" />
+                </Field>
+                <Field label="Dengan galat" error="Kolom ini wajib diisi.">
+                    <Input />
+                </Field>
+                <Field label="Kata sandi">
+                    <PasswordInput placeholder="********" />
+                </Field>
+                <Field label="Kode verifikasi">
+                    <CodeInput value={code} onValueChange={setCode} placeholder="••••••" />
+                </Field>
+            </div>
+
+            <SubTitle>Angka dan mata uang (format otomatis)</SubTitle>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <Field label="Nominal (Rp)" hint="Nilai yang dikirim ke API berupa angka tanpa format">
+                    <CurrencyInput value={amount} onValueChange={setAmount} placeholder="0" />
+                </Field>
+                <Field label="Angka dengan pemisah ribuan" hint="Angka bulat dengan pemisah ribuan">
+                    <CurrencyInput prefix={null} value={quantity} onValueChange={setQuantity} placeholder="0" />
+                </Field>
+                <Field label="Angka kecil (4 digit)" hint="Angka tanpa format memakai MaskedInput, bukan input angka bawaan peramban">
+                    <MaskedInput mask="9999" value={small} onValueChange={setSmall} placeholder="0000" className="text-right tabular-nums" />
+                </Field>
+            </div>
+            <p className="text-xs text-muted tabular-nums">
+                Dikirim ke API: nominal = {amount ?? 'kosong'}, angka = {quantity ?? 'kosong'}, angka kecil = {small || 'kosong'}
+            </p>
+
+            <SubTitle>Masking (format saat mengetik)</SubTitle>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <Field label="No. telepon" hint="Mask 0812-3456-7890; yang dikirim hanya angkanya">
+                    <MaskedInput mask={MASKS.phone} value={phone} onValueChange={setPhone} placeholder="0812-3456-7890" />
+                </Field>
+                <Field label="NIK (16 digit)" hint="16 digit">
+                    <MaskedInput mask={MASKS.nik} value={nik} onValueChange={setNik} placeholder="3171 0123 4567 8901" />
+                </Field>
+                <Field label="NPWP (15 digit)" hint="15 digit">
+                    <MaskedInput mask={MASKS.npwp} value={npwp} onValueChange={setNpwp} placeholder="01.234.567.8-901.234" />
+                </Field>
+            </div>
+            <p className="text-xs text-muted tabular-nums">
+                Dikirim ke API: telepon = {phone || 'kosong'}, NIK = {nik || 'kosong'} ({nik.length}/16), NPWP = {npwp || 'kosong'} ({npwp.length}/15)
+            </p>
+
+            <SubTitle>Karakter dibatasi dan tombol di samping isian</SubTitle>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <Field label="Nama (hanya huruf)" hint="Karakter lain tidak pernah masuk, diketik maupun ditempel">
+                    <FilteredInput allowed={NAME_CHARACTER} maxLength={60} value={person} onValueChange={setPerson} placeholder="Rina Wulandari" />
+                </Field>
+                <Field label="Kode (huruf, angka, strip)" hint="Aturan yang sama dengan server, diperiksa lagi di sana">
+                    <FilteredInput allowed={CODE_CHARACTER} maxLength={10} value={codeText} onValueChange={setCodeText} placeholder="KC-01" />
+                </Field>
+                <Field label="Kata sandi acak" className="sm:col-span-2" hint="Tombol di samping isian memakai size=fieldIcon: setinggi isian">
+                    <InputGroup>
+                        <Input
+                            maxLength={64}
+                            value={secret}
+                            autoComplete="off"
+                            spellCheck={false}
+                            className="font-mono"
+                            placeholder="Ketik atau buat acak"
+                            onChange={(e) => setSecret(e.target.value)}
+                        />
+                        <Tip label="Buat kata sandi acak">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="fieldIcon"
+                                aria-label="Buat kata sandi acak"
+                                onClick={() => setSecret(randomSecret())}
+                            >
+                                <Dices />
+                            </Button>
+                        </Tip>
+                        <Tip label="Salin kata sandi">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="fieldIcon"
+                                aria-label="Salin kata sandi"
+                                disabled={secret === ''}
+                                onClick={() => {
+                                    void navigator.clipboard.writeText(secret);
+                                    toast.success('Kata sandi disalin.');
+                                }}
+                            >
+                                <Copy />
+                            </Button>
+                        </Tip>
+                    </InputGroup>
+                </Field>
+            </div>
+
+            <SubTitle>Pilihan dan tanggal</SubTitle>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <Field label="Pilihan (Combobox)">
+                    <Combobox
+                        options={[
+                            { value: 'a', label: 'Opsi A' },
+                            { value: 'b', label: 'Opsi B', description: 'Pembeda pilihan yang mirip' },
+                            { value: 'c', label: 'Opsi C' },
+                        ]}
+                        value={select}
+                        onChange={setSelect}
+                        clearable
+                    />
+                </Field>
+                <Field label="Tanggal">
+                    <DatePicker value={date} onChange={setDate} placeholder="Pilih tanggal" />
+                </Field>
+                <Field label="Warna" hint="Pemilih warna, kode hex, dan warna siap pakai" className="sm:col-span-2">
+                    <ColorInput value={color} onValueChange={setColor} />
+                </Field>
+            </div>
+
+            <SubTitle>Teks panjang, centang, sakelar, dan radio</SubTitle>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <Field label="Catatan" hint="Penghitung muncul bila ada maxLength" className="sm:col-span-2">
+                    <Textarea value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} placeholder="Tulis catatan…" />
+                </Field>
+                <div className="flex flex-col gap-3">
+                    <Checkbox
+                        checked={agree}
+                        onCheckedChange={(v) => setAgree(v === true)}
+                        label="Saya setuju dengan ketentuan"
+                        description="Pilihan yang menunggu tombol Simpan."
+                    />
+                    <Switch checked={notify} onCheckedChange={setNotify} label="Notifikasi email" description="Berlaku seketika." />
+                </div>
+                <Field label="Kirim kode lewat">
+                    <RadioGroup
+                        aria-label="Kirim kode lewat"
+                        value={channel}
+                        onValueChange={setChannel}
+                        options={[
+                            { value: 'email', label: 'Email' },
+                            { value: 'sms', label: 'SMS', description: 'Tarif operator berlaku' },
+                            { value: 'wa', label: 'WhatsApp', disabled: true },
+                        ]}
+                    />
+                </Field>
+            </div>
+
+            <SubTitle>Berkas</SubTitle>
+            <Field label="Lampiran" hint="PDF atau gambar, maksimal 2 MB" className="max-w-md">
+                <FileInput value={files} onValueChange={setFiles} multiple accept=".pdf,image/*" maxBytes={2 * 1024 * 1024} onReject={(m) => toast.error(m)} />
+            </Field>
+        </Section>
+    );
+}
+
+/** A living reference of every shared component and token. Compare any new screen against it. */
+export default function UiGuideline() {
+    const [modal, setModal] = useState(false);
+    const [confirm, setConfirm] = useState(false);
+    const [search, setSearch] = useState('');
+    const [status, setStatus] = useState<string | null>(null);
+    const [rows, setRows] = useState<Row[]>(INITIAL_ROWS);
+    const [draft, setDraft] = useState<Draft | null>(null);
+    const [nameError, setNameError] = useState<string | undefined>();
+    const [removing, setRemoving] = useState<Row | null>(null);
+
+    const [page, setPage] = useState(1);
+    const [perPage, setPerPage] = useState(5);
+    // Sorting: clicking a header sorts by it (ascending first); clicking the active one flips the direction. Here it runs on the rows in
+    // memory; in a list paged by the server it is the server that sorts, with the same keys in a whitelist (see .ai/rules/js.md).
+    const [order, setOrder] = useState<{ sort: string; direction: 'asc' | 'desc' }>({ sort: 'name', direction: 'asc' });
+    const compare: Record<string, (a: Row, b: Row) => number> = {
+        name: (a, b) => a.name.localeCompare(b.name, 'id'),
+        status: (a, b) => TONES.indexOf(a.status) - TONES.indexOf(b.status),
+        amount: (a, b) => a.amount - b.amount,
+    };
+    const matching = rows
+        .filter((r) => r.name.toLowerCase().includes(search.trim().toLowerCase()) && (status === null || r.status === status))
+        .sort((a, b) => (compare[order.sort]?.(a, b) ?? 0) * (order.direction === 'asc' ? 1 : -1));
+    const lastPage = Math.max(1, Math.ceil(matching.length / perPage));
+    const current = Math.min(page, lastPage);
+    const visible = matching.slice((current - 1) * perPage, current * perPage);
+
+    const openDraft = (next: Draft) => {
+        setNameError(undefined);
+        setDraft(next);
+    };
+
+    const save = () => {
+        if (!draft) {
+            return;
+        }
+
+        if (draft.name.trim() === '') {
+            setNameError('Nama wajib diisi.');
+
+            return;
+        }
+
+        const next = { name: draft.name.trim(), status: draft.status, amount: Number(draft.amount) || 0 };
+        setRows((all) =>
+            draft.id === null
+                ? [...all, { id: Math.max(0, ...all.map((r) => r.id)) + 1, ...next }]
+                : all.map((r) => (r.id === draft.id ? { ...r, ...next } : r)),
+        );
+        toast.success(draft.id === null ? 'Data ditambahkan' : 'Perubahan tersimpan');
+        setDraft(null);
+    };
+
+    const columns: Column<Row>[] = [
+        { key: 'name', header: 'Nama', className: 'font-medium', cell: (r) => r.name, sort: 'name' },
+        { key: 'status', header: 'Status', cell: (r) => <Badge tone={r.status}>{r.status}</Badge>, sort: 'status' },
+        { key: 'amount', header: 'Nilai', align: 'right', className: 'tabular-nums', cell: (r) => rupiah(r.amount), sort: 'amount' },
+        {
+            key: 'actions',
+            header: 'Aksi',
+            srOnly: true,
+            narrow: true,
+            align: 'right',
+            cell: (r) => (
+                <div className="flex justify-end gap-1">
+                    <Tip label="Ubah">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={`Ubah ${r.name}`}
+                            onClick={() => openDraft({ id: r.id, name: r.name, status: r.status, amount: String(r.amount) })}
+                        >
+                            <Pencil />
+                        </Button>
+                    </Tip>
+                    <Tip label="Hapus">
+                        <Button variant="ghost" size="icon" aria-label={`Hapus ${r.name}`} onClick={() => setRemoving(r)}>
+                            <Trash2 />
+                        </Button>
+                    </Tip>
+                </div>
+            ),
+        },
+    ];
+
+    return (
+        <>
+            <Head title="UI Guideline" />
+            <PageHeader
+                title="UI Guideline"
+                description="Acuan komponen dan token. Tampilan baru harus terlihat sama dengan ini"
+                actions={
+                    <Button variant="outline" onClick={() => toast.success('Contoh toast sukses')}>
+                        Coba toast
+                    </Button>
+                }
+            />
+
+            <div className="flex flex-col gap-3">
+                <Section
+                    title="Warna (token tema)"
+                    description="Semua token warna di resources/css/app.css, termasuk keluarga status (success, warning, info, danger). Hanya lewat token; jangan menulis warna sendiri."
+                >
+                    <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                        {TOKENS.map(([name, swatch, use]) => (
+                            <div key={name} className="flex min-w-0 items-center gap-2.5">
+                                <span className={`size-8 shrink-0 rounded-md border border-line ${swatch}`} />
+                                <div className="min-w-0">
+                                    <p className="font-mono text-xs">{name}</p>
+                                    <p className="truncate text-xs text-muted">{use}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Section>
+
+                <Section
+                    title="Tipografi dan ukuran"
+                    description="Font Instrument Sans. Isi text-sm (0.8125rem), label dan hint text-xs, keterangan sangat kecil text-2xs, kontrol h-8, radius rounded-md, kartu rounded-lg border border-line."
+                >
+                    <p className="text-base font-semibold">Judul halaman (text-base font-semibold)</p>
+                    <p className="text-sm">Isi dan sel tabel (text-sm)</p>
+                    <p className="text-xs text-muted">Label, keterangan, dan hint (text-xs text-muted)</p>
+                    <p className="text-2xs text-muted">Keterangan sangat kecil: badge, waktu notifikasi, label seksi sidebar, penghitung (text-2xs)</p>
+                    <p className="text-xs text-muted">
+                        Bayangan: <code>shadow-sm</code> bidang kecil (jempol sakelar), <code>shadow-md</code> penanda mengambang, <code>shadow-lg</code>{' '}
+                        dropdown dan popover, <code>shadow-xl</code> dialog dan laci. Lapisan: header <code>z-30</code>, laci <code>z-40</code>, dialog dan
+                        penanda jaringan <code>z-50</code>, tooltip <code>z-60</code>, popover <code>z-70</code>.
+                    </p>
+                </Section>
+
+                <Section
+                    title="Grafik"
+                    description="Donat untuk sedikit bagian dari satu keseluruhan, kolom untuk rentang yang berurutan, batang mendatar untuk nama panjang. Angka selalu tertulis di samping bagiannya; warna hanya pelengkap."
+                >
+                    <div className="grid gap-4 md:grid-cols-3">
+                        <div className="flex flex-col gap-2">
+                            <SubTitle>DonutChart</SubTitle>
+                            <DonutChart label="Contoh donat" items={CHART_DONUT} centerLabel="contoh" />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <SubTitle>ColumnChart</SubTitle>
+                            <ColumnChart label="Contoh kolom" items={CHART_COLUMNS} />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <SubTitle>BarChart</SubTitle>
+                            <BarChart label="Contoh batang" items={CHART_BARS} />
+                        </div>
+                    </div>
+                </Section>
+
+                <Section title="Tombol" description="Aksi level halaman: ikon + label. Footer dialog: hanya teks. Aksi baris tabel: ikon saja dengan Tip.">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <Button>
+                            <Plus /> Tambah
+                        </Button>
+                        <Button variant="outline">
+                            <Download /> Ekspor
+                        </Button>
+                        <Button variant="ghost">Ghost</Button>
+                        <Button variant="danger">
+                            <Trash2 /> Hapus
+                        </Button>
+                        <Button size="sm">Kecil</Button>
+                        <Button loading>
+                            <Save /> Menyimpan
+                        </Button>
+                        <Button disabled>Nonaktif</Button>
+                        <Button variant="ghost" size="icon" aria-label="Cari">
+                            <Search />
+                        </Button>
+                    </div>
+                </Section>
+
+                <InputExamples />
+
+                <Section
+                    title="Warna status (badge, alert, toast)"
+                    description="Satu keluarga warna: tiap nada punya base (ikon), soft (latar), line (garis), dan ink (teks). Toast, badge, alert, dan indikator jaringan memakai token yang sama."
+                >
+                    <div className="grid gap-2.5">
+                        {STATUS.map((s) => (
+                            <div key={s.tone} className="grid items-center gap-2 md:grid-cols-[9rem_8rem_auto_1fr_auto]">
+                                <p className="text-xs font-medium">{s.label}</p>
+                                <div className="flex gap-1">
+                                    {s.swatches.map((c) => (
+                                        <span key={c} title={c} className={`size-6 rounded border border-line ${c}`} />
+                                    ))}
+                                </div>
+                                <Badge tone={s.tone} className="justify-self-start">
+                                    {s.tone}
+                                </Badge>
+                                <Alert tone={s.tone} className="py-1.5 text-xs">
+                                    Contoh pesan {s.label.toLowerCase()} di dalam halaman.
+                                </Alert>
+                                <Button variant="outline" size="sm" className="justify-self-start" onClick={s.notify}>
+                                    Coba toast
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+                </Section>
+
+                <Section
+                    title="Tab"
+                    description="Untuk beberapa bagian dari satu halaman (mis. Data Komite). Tiap tab satu isi; jangan menumpuk tab di dalam tab."
+                >
+                    <Tabs defaultValue="levels">
+                        <TabsList>
+                            <TabsTrigger value="levels">Jenjang</TabsTrigger>
+                            <TabsTrigger value="rules">Aturan khusus</TabsTrigger>
+                            <TabsTrigger value="members">Anggota</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="levels" className="pt-3 text-sm text-muted">
+                            Isi tab Jenjang.
+                        </TabsContent>
+                        <TabsContent value="rules" className="pt-3 text-sm text-muted">
+                            Isi tab Aturan khusus.
+                        </TabsContent>
+                        <TabsContent value="members" className="pt-3 text-sm text-muted">
+                            Isi tab Anggota.
+                        </TabsContent>
+                    </Tabs>
+                </Section>
+
+                <Section title="Badge, kosong, galat, dan memuat">
+                    <div className="flex flex-wrap gap-2">
+                        {TONES.map((t) => (
+                            <Badge key={t} tone={t}>
+                                {t}
+                            </Badge>
+                        ))}
+                    </div>
+                    <div className="grid gap-3 md:grid-cols-3">
+                        <Card>
+                            <EmptyState
+                                icon={<Inbox />}
+                                title="Belum ada data"
+                                description="Keadaan kosong dengan tombol aksi."
+                                action={
+                                    <Button size="sm">
+                                        <Plus /> Tambah
+                                    </Button>
+                                }
+                            />
+                        </Card>
+                        <Card>
+                            <ErrorState message="Server tidak dapat dihubungi." onRetry={() => toast.info('Mencoba lagi…')} />
+                        </Card>
+                        <Card className="flex flex-col gap-2 p-3">
+                            <Skeleton className="h-4 w-2/3" />
+                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-1/2" />
+                        </Card>
+                    </div>
+                </Section>
+
+                <div>
+                    <div className="mb-2 flex items-center justify-between gap-2">
+                        <div>
+                            <h2 className="text-sm font-semibold">Tabel (DataTable) dan contoh CRUD</h2>
+                            <p className="text-xs text-muted">
+                                Data statis di memori: Tambah, Ubah, dan Hapus membuka dialog lalu mengubah tabel. Muat ulang halaman untuk mengembalikan.
+                            </p>
+                        </div>
+                        <Button size="sm" onClick={() => openDraft(EMPTY_DRAFT)}>
+                            <Plus />
+                            Tambah
+                        </Button>
+                    </div>
+                    <DataTable
+                        rows={visible}
+                        rowKey={(r) => r.id}
+                        columns={columns}
+                        onRowClick={(r) => openDraft({ id: r.id, name: r.name, status: r.status, amount: String(r.amount) })}
+                        toolbar={
+                            <FilterBar search={<SearchInput value={search} onChange={setSearch} placeholder="Cari…" label="Cari contoh" />}>
+                                <Combobox
+                                    className="w-full sm:w-36"
+                                    clearable
+                                    searchable={false}
+                                    placeholder="Status"
+                                    options={TONES.map((t) => ({ value: t, label: t }))}
+                                    value={status}
+                                    onChange={setStatus}
+                                />
+                            </FilterBar>
+                        }
+                        sort={{
+                            ...order,
+                            onSort: (column) => setOrder((o) => ({ sort: column, direction: o.sort === column && o.direction === 'asc' ? 'desc' : 'asc' })),
+                        }}
+                        pagination={{
+                            meta: {
+                                current_page: current,
+                                last_page: lastPage,
+                                from: matching.length === 0 ? 0 : (current - 1) * perPage + 1,
+                                to: Math.min(matching.length, current * perPage),
+                                total: matching.length,
+                            },
+                            perPage,
+                            options: [5, 10],
+                            onPage: setPage,
+                            onPerPage: (value) => {
+                                setPerPage(value);
+                                setPage(1);
+                            },
+                        }}
+                        empty={{ icon: <Inbox />, title: 'Tidak ada data' }}
+                    />
+                </div>
+
+                <Section
+                    title="Kartu: header, body, footer"
+                    description="Disusun seperti dialog. Footer (garis atas) hanya ada bila kartu punya tombol; tombol batal di kiri, konfirmasi di kanan, hanya teks. Kartu tanpa tombol tidak punya footer."
+                >
+                    <div className="grid gap-3 md:grid-cols-2">
+                        <Card>
+                            <CardHeader title="Kartu form" description="Ada tombol, jadi ada footer" />
+                            <CardBody className="flex flex-col gap-3">
+                                <Field label="Nama" required>
+                                    <Input maxLength={100} placeholder="Ketik sesuatu" />
+                                </Field>
+                            </CardBody>
+                            <CardFooter>
+                                <p className="text-xs text-muted">Hint boleh di kiri footer.</p>
+                                <Button onClick={() => toast.success('Tersimpan')}>Simpan</Button>
+                            </CardFooter>
+                        </Card>
+                        <Card>
+                            <CardHeader title="Kartu informasi" description="Tanpa tombol, jadi tanpa footer" actions={<Badge tone="success">Aktif</Badge>} />
+                            <CardBody>
+                                <p className="text-sm">Isi kartu. Aksi di header (badge atau tombol ikon + label) boleh ada tanpa footer.</p>
+                            </CardBody>
+                        </Card>
+                    </div>
+                </Section>
+
+                <Section
+                    title="Menu dropdown dan tooltip"
+                    description="Dropdown untuk beberapa aksi di satu tempat (menu akun, aksi baris yang banyak): item berikon, pemisah, dan item berbahaya di bawah. Tip memberi nama pada tombol ikon."
+                >
+                    <div className="flex flex-wrap items-center gap-2">
+                        <DropdownMenu>
+                            <DropdownTrigger asChild>
+                                <Button variant="outline">
+                                    <MoreHorizontal /> Aksi
+                                </Button>
+                            </DropdownTrigger>
+                            <DropdownContent>
+                                <DropdownLabel>Proyek Alfa</DropdownLabel>
+                                <DropdownItem icon={<Pencil />} onSelect={() => toast.info('Ubah')}>
+                                    Ubah
+                                </DropdownItem>
+                                <DropdownItem icon={<Copy />} onSelect={() => toast.info('Duplikat')}>
+                                    Duplikat
+                                </DropdownItem>
+                                <DropdownSeparator />
+                                <DropdownItem danger icon={<Trash2 />} onSelect={() => toast.error('Hapus')}>
+                                    Hapus
+                                </DropdownItem>
+                            </DropdownContent>
+                        </DropdownMenu>
+                        <Tip label="Contoh tooltip">
+                            <Button variant="ghost" size="icon" aria-label="Info">
+                                <Info />
+                            </Button>
+                        </Tip>
+                    </div>
+                </Section>
+
+                <Section
+                    title="Dialog"
+                    description="Header (judul), body (isi atau pesan konfirmasi), footer (tombol teks: batal paling kiri, konfirmasi paling kanan). Dialog berisi isian tidak menutup saat klik di luar (persistent); Esc dan tombol tutup tetap bisa; fokus kembali ke tombol pembuka."
+                >
+                    <div className="flex gap-2">
+                        <Button variant="outline" onClick={() => setModal(true)}>
+                            Buka dialog
+                        </Button>
+                        <Button variant="outline" onClick={() => setConfirm(true)}>
+                            Buka konfirmasi
+                        </Button>
+                    </div>
+                </Section>
+            </div>
+
+            <Modal
+                persistent
+                open={draft !== null}
+                onOpenChange={(next) => !next && setDraft(null)}
+                title={draft?.id === null ? 'Tambah data' : 'Ubah data'}
+                description="Isi lalu simpan. Galat validasi tampil di bawah kolom."
+            >
+                {draft && (
+                    <form
+                        noValidate
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            save();
+                        }}
+                    >
+                        <DialogBody className="grid gap-3">
+                            <Field label="Nama" required error={nameError}>
+                                <Input
+                                    autoFocus
+                                    maxLength={60}
+                                    value={draft.name}
+                                    onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+                                    aria-invalid={!!nameError}
+                                />
+                            </Field>
+                            <Field label="Status">
+                                <Combobox
+                                    searchable={false}
+                                    options={TONES.map((t) => ({ value: t, label: t }))}
+                                    value={draft.status}
+                                    onChange={(v) => setDraft({ ...draft, status: (v ?? 'neutral') as BadgeTone })}
+                                />
+                            </Field>
+                            <Field label="Nilai (Rp)">
+                                <Input
+                                    inputMode="numeric"
+                                    value={draft.amount}
+                                    onChange={(e) => setDraft({ ...draft, amount: e.target.value.replace(/\D/g, '') })}
+                                />
+                            </Field>
+                        </DialogBody>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setDraft(null)}>
+                                Batal
+                            </Button>
+                            <Button type="submit">Simpan</Button>
+                        </DialogFooter>
+                    </form>
+                )}
+            </Modal>
+            <ConfirmDialog
+                open={removing !== null}
+                onOpenChange={(next) => !next && setRemoving(null)}
+                title="Hapus data?"
+                description={`"${removing?.name ?? ''}" akan dihapus dari contoh ini.`}
+                onConfirm={() => {
+                    setRows((all) => all.filter((r) => r.id !== removing?.id));
+                    setRemoving(null);
+                    toast.success('Dihapus');
+                }}
+            />
+
+            <Modal persistent open={modal} onOpenChange={setModal} title="Contoh dialog" description="Dialog kecil untuk tambah atau ubah data.">
+                <DialogBody>
+                    <Field label="Nama" required>
+                        <Input autoFocus maxLength={60} />
+                    </Field>
+                </DialogBody>
+                <DialogFooter>
+                    <Button variant="outline" onClick={() => setModal(false)}>
+                        Batal
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            setModal(false);
+                            toast.success('Tersimpan');
+                        }}
+                    >
+                        Simpan
+                    </Button>
+                </DialogFooter>
+            </Modal>
+            <ConfirmDialog
+                open={confirm}
+                onOpenChange={setConfirm}
+                title="Hapus data?"
+                description="Ini akan menghapus data secara permanen."
+                onConfirm={() => {
+                    setConfirm(false);
+                    toast.success('Dihapus');
+                }}
+            />
+        </>
+    );
+}

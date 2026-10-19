@@ -4,26 +4,39 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export function Card({ className, ...props }: React.ComponentProps<'div'>) {
+    return <div className={cn('rounded-lg border border-line bg-surface', className)} {...props} />;
+}
+
+/**
+ * A card is built like a dialog: `CardHeader` (title, optional description and actions, bottom line), `CardBody` (content),
+ * and `CardFooter` (top line) only when the card has buttons to submit or cancel. A card without buttons has no footer.
+ */
+export function CardHeader({ title, description, actions }: { title: string; description?: string; actions?: ReactNode }) {
     return (
-        <div className={cn('rounded-lg border border-line bg-surface', className)} {...props} />
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2">
+            <div className="min-w-0">
+                <h2 className="text-sm font-semibold">{title}</h2>
+                {description && <p className="text-xs text-muted">{description}</p>}
+            </div>
+            {actions && <div className="flex items-center gap-2">{actions}</div>}
+        </div>
     );
+}
+
+export function CardBody({ className, ...props }: React.ComponentProps<'div'>) {
+    return <div className={cn('p-3', className)} {...props} />;
+}
+
+/** Buttons of a card form: the dismissing one first (left), the confirming one last (right); a hint may take the left. Text only on form buttons, like DialogFooter. */
+export function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
+    return <div className={cn('flex items-center justify-between gap-2 border-t border-line px-3 py-2', className)} {...props} />;
 }
 
 export function Skeleton({ className }: { className?: string }) {
     return <div className={cn('animate-pulse rounded bg-line', className)} />;
 }
 
-export function EmptyState({
-    icon,
-    title,
-    description,
-    action,
-}: {
-    icon: ReactNode;
-    title: string;
-    description?: string;
-    action?: ReactNode;
-}) {
+export function EmptyState({ icon, title, description, action }: { icon: ReactNode; title: string; description?: string; action?: ReactNode }) {
     return (
         <div className="flex flex-col items-center gap-1 px-4 py-10 text-center [&>svg]:size-8 [&>svg]:text-muted/50">
             {icon}
@@ -56,25 +69,58 @@ export function PageHeader({ title, description, actions }: { title: string; des
                 <h1 className="text-base font-semibold">{title}</h1>
                 {description && <p className="text-xs text-muted">{description}</p>}
             </div>
-            {actions && <div className="flex items-center gap-2">{actions}</div>}
+            {/* One width for the buttons of the row. On a phone they fill the width in two equal columns, like the filters (a lone last button
+                spans both); from `sm` they sit at the right, each as wide as the longest label. */}
+            {actions && (
+                <div className="grid w-full grid-cols-2 items-center gap-2 sm:w-auto sm:auto-cols-fr sm:grid-flow-col sm:grid-cols-none [&>:last-child:nth-child(odd)]:col-span-2 sm:[&>:last-child:nth-child(odd)]:col-span-1">
+                    {actions}
+                </div>
+            )}
         </div>
     );
 }
 
+/** Status tones: soft surface, line, and ink from the shared ladder in src/index.css. Badge, Alert, and toasts use the same family. */
 const badgeTones = {
     neutral: 'bg-canvas text-muted ring-line',
-    info: 'bg-primary-soft text-primary ring-primary/20',
-    success: 'bg-emerald-50 text-emerald-700 ring-emerald-600/20',
-    warning: 'bg-amber-50 text-amber-700 ring-amber-600/20',
-    danger: 'bg-red-50 text-danger ring-danger/20',
+    info: 'bg-info-soft text-info-ink ring-info-line',
+    success: 'bg-success-soft text-success-ink ring-success-line',
+    warning: 'bg-warning-soft text-warning-ink ring-warning-line',
+    danger: 'bg-danger-soft text-danger-ink ring-danger-line',
+} as const;
+
+const alertTones = {
+    neutral: 'border-line bg-canvas text-muted',
+    info: 'border-info-line bg-info-soft text-info-ink [&>svg]:text-info',
+    success: 'border-success-line bg-success-soft text-success-ink [&>svg]:text-success',
+    warning: 'border-warning-line bg-warning-soft text-warning-ink [&>svg]:text-warning',
+    danger: 'border-danger-line bg-danger-soft text-danger-ink [&>svg]:text-danger',
 } as const;
 
 export type BadgeTone = keyof typeof badgeTones;
 
+/** An inline message (result of an action, notice). Icon optional; `danger` is announced as an alert, the rest as status. */
+export function Alert({ tone = 'info', icon, className, children, ...props }: React.ComponentProps<'div'> & { tone?: BadgeTone; icon?: ReactNode }) {
+    return (
+        <div
+            role={tone === 'danger' ? 'alert' : 'status'}
+            className={cn(
+                'flex items-start gap-2 rounded-md border px-3 py-2 text-sm [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:shrink-0',
+                alertTones[tone],
+                className,
+            )}
+            {...props}
+        >
+            {icon}
+            <div className="min-w-0 flex-1">{children}</div>
+        </div>
+    );
+}
+
 export function Badge({ tone = 'neutral', className, ...props }: React.ComponentProps<'span'> & { tone?: BadgeTone }) {
     return (
         <span
-            className={cn('inline-flex items-center rounded px-1.5 py-0.5 text-[11px] leading-4 font-medium ring-1 ring-inset', badgeTones[tone], className)}
+            className={cn('inline-flex items-center rounded px-1.5 py-0.5 text-2xs leading-4 font-medium ring-1 ring-inset', badgeTones[tone], className)}
             {...props}
         />
     );

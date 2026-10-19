@@ -17,9 +17,7 @@ export type NavLinkItem = {
     group: string | null;
 };
 
-export type NavItem =
-    | NavLinkItem
-    | { label: string; icon: string; children: NavLinkItem[] };
+export type NavItem = NavLinkItem | { label: string; icon: string; children: NavLinkItem[] };
 
 export type NavSection = { label: string | null; items: NavItem[] };
 

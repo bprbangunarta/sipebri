@@ -28,6 +28,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\SurveyLocationController;
+use App\Http\Controllers\UiGuidelineController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -181,5 +182,7 @@ Route::middleware('auth')->group(function () {
             Route::get('export', [AuditLogController::class, 'export'])->name('export');
             Route::post('verify', [AuditLogController::class, 'verify'])->name('verify');
         });
+
+        Route::get('ui-guideline', UiGuidelineController::class)->name('ui-guideline');
     });
 });

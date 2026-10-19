@@ -1,9 +1,4 @@
-import type {
-    Auth,
-    NavSection,
-    NotificationItem,
-    SecuritySummary,
-} from '@/types/auth';
+import type { Auth, NavSection, NotificationItem, SecuritySummary } from '@/types/auth';
 
 declare module 'react' {
     interface InputHTMLAttributes<T> {

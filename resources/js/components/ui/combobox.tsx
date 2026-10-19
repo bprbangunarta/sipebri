@@ -1,5 +1,5 @@
 import { Check, ChevronsUpDown, X } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { controlClass } from '@/components/ui/input';
@@ -16,6 +16,8 @@ type Props = {
     value: string | number | null | undefined;
     onChange: (value: string | null) => void;
     placeholder?: string;
+    /** Accessible name when there is no visible `Field` label (e.g. a toolbar filter). */
+    'aria-label'?: string;
     searchable?: boolean;
     clearable?: boolean;
     invalid?: boolean;
@@ -31,6 +33,7 @@ export function Combobox({
     value,
     onChange,
     placeholder = 'Pilih…',
+    'aria-label': ariaLabel,
     searchable = true,
     clearable = false,
     invalid,
@@ -41,15 +44,11 @@ export function Combobox({
     const [query, setQuery] = useState('');
     const [active, setActive] = useState(0);
     const list = useRef<HTMLUListElement>(null);
+    const listId = useId();
 
     const selected = options.find((o) => String(o.value) === String(value ?? ''));
     const filtered = useMemo(
-        () =>
-            options.filter((o) =>
-                `${o.label} ${o.description ?? ''}`
-                    .toLowerCase()
-                    .includes(query.trim().toLowerCase()),
-            ),
+        () => options.filter((o) => `${o.label} ${o.description ?? ''}`.toLowerCase().includes(query.trim().toLowerCase())),
         [options, query],
     );
 
@@ -84,7 +83,12 @@ export function Combobox({
             onOpenChange={(next) => {
                 setOpen(next);
                 setQuery('');
-                setActive(Math.max(0, options.findIndex((o) => String(o.value) === String(value ?? ''))));
+                setActive(
+                    Math.max(
+                        0,
+                        options.findIndex((o) => String(o.value) === String(value ?? '')),
+                    ),
+                );
             }}
         >
             <div className={cn('relative', className)}>
@@ -94,13 +98,13 @@ export function Combobox({
                         type="button"
                         role="combobox"
                         aria-expanded={open}
+                        aria-controls={listId}
+                        aria-label={ariaLabel}
                         aria-invalid={invalid || undefined}
                         title={selected?.label}
                         className={cn(controlClass, 'flex items-center justify-between gap-1 text-left', clearable && selected && 'pr-12')}
                     >
-                        <span className={cn('truncate', !selected && 'text-muted/70')}>
-                            {selected?.label ?? placeholder}
-                        </span>
+                        <span className={cn('truncate', !selected && 'text-muted/70')}>{selected?.label ?? placeholder}</span>
                         <ChevronsUpDown className="size-3.5 shrink-0 text-muted" />
                     </button>
                 </PopoverTrigger>
@@ -116,6 +120,7 @@ export function Combobox({
                 )}
             </div>
             <PopoverContent
+                aria-label={ariaLabel ?? placeholder}
                 className="w-max max-w-[min(36rem,calc(100vw-2rem))] min-w-(--radix-popover-trigger-width) p-1"
                 // Inside a dialog the page scroll lock swallows wheel/touch scrolling of portaled content; keep it for the list.
                 onWheel={(e) => e.stopPropagation()}
@@ -140,16 +145,14 @@ export function Combobox({
                         className="mb-1 h-7 w-full rounded border border-line px-2 text-sm focus:border-primary focus:outline-none"
                     />
                 )}
-                <ul ref={list} role="listbox" className="max-h-56 overflow-auto overscroll-contain" onKeyDown={onKeyDown} tabIndex={-1}>
-                    {filtered.length === 0 && (
-                        <li className="px-2 py-2 text-center text-xs text-muted">
-                            Tidak ada hasil
-                        </li>
-                    )}
+                <ul ref={list} id={listId} role="listbox" className="max-h-56 overflow-auto overscroll-contain" onKeyDown={onKeyDown} tabIndex={-1}>
+                    {filtered.length === 0 && <li className="px-2 py-2 text-center text-xs text-muted">Tidak ada hasil</li>}
                     {filtered.map((option, index) => {
                         const isSelected = String(option.value) === String(value ?? '');
 
                         return (
+                            // Keyboard selection is handled on the list (Arrow/Enter); this handler is the pointer path.
+                            // eslint-disable-next-line jsx-a11y/click-events-have-key-events -- weakening-allowed: keyboard selection is handled on the list itself
                             <li
                                 key={option.value}
                                 role="option"
@@ -163,9 +166,7 @@ export function Combobox({
                             >
                                 <span className="min-w-0 break-words">
                                     {option.label}
-                                    {option.description && (
-                                        <span className="block text-xs text-muted">{option.description}</span>
-                                    )}
+                                    {option.description && <span className="block text-xs text-muted">{option.description}</span>}
                                 </span>
                                 {isSelected && <Check className="mt-0.5 size-3.5 shrink-0 text-primary" />}
                             </li>

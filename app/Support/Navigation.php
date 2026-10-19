@@ -120,7 +120,8 @@ class Navigation
                 ['label' => 'Data Perizinan', 'icon' => 'key-round', 'route' => 'permissions.index', 'role' => RoleName::SuperAdmin->value],
                 ['label' => 'Data Peranan', 'icon' => 'shield', 'route' => 'roles.index', 'role' => RoleName::SuperAdmin->value],
                 ['label' => 'Data Pengguna', 'icon' => 'user-cog', 'route' => 'users.index', 'role' => RoleName::SuperAdmin->value],
-                ['label' => 'Data Audit Log', 'icon' => 'scroll-text', 'route' => 'audit-logs.index', 'role' => RoleName::SuperAdmin->value],
+                ['label' => 'Audit Log', 'icon' => 'scroll-text', 'route' => 'audit-logs.index', 'role' => RoleName::SuperAdmin->value],
+                ['label' => 'UI Guideline', 'icon' => 'palette', 'route' => 'ui-guideline', 'role' => RoleName::SuperAdmin->value],
             ]],
         ];
     }

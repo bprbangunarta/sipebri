@@ -9,42 +9,30 @@ export const buttonVariants = cva(
     {
         variants: {
             variant: {
-                primary: 'bg-primary text-white hover:bg-primary-hover',
-                outline:
-                    'border border-line bg-surface text-ink hover:bg-canvas',
-                ghost: 'text-muted hover:bg-canvas hover:text-ink',
-                danger: 'bg-danger text-white hover:bg-danger/90',
+                // Every variant has the same 1px border box (transparent when it has no visible border), so two buttons side by side
+                // are the same size to the pixel, also when a tool scales the screen and a lone border would make one look taller.
+                primary: 'border border-transparent bg-primary text-white hover:bg-primary-hover',
+                outline: 'border border-line bg-surface text-ink hover:bg-canvas',
+                ghost: 'border border-transparent text-muted hover:bg-canvas hover:text-ink',
+                danger: 'border border-transparent bg-danger text-white hover:bg-danger/90',
             },
             size: {
                 default: 'h-8 px-3',
                 sm: 'h-7 px-2.5 text-xs',
                 icon: 'size-7',
+                // An icon button beside an input (copy, generate): as tall as the input (h-8), so both line up top and bottom.
+                fieldIcon: 'size-8',
             },
         },
         defaultVariants: { variant: 'primary', size: 'default' },
     },
 );
 
-type ButtonProps = React.ComponentProps<'button'> &
-    VariantProps<typeof buttonVariants> & { loading?: boolean };
+type ButtonProps = React.ComponentProps<'button'> & VariantProps<typeof buttonVariants> & { loading?: boolean };
 
-export function Button({
-    className,
-    variant,
-    size,
-    loading,
-    children,
-    disabled,
-    type = 'button',
-    ...props
-}: ButtonProps) {
+export function Button({ className, variant, size, loading, children, disabled, type = 'button', ...props }: ButtonProps) {
     return (
-        <button
-            type={type}
-            className={cn(buttonVariants({ variant, size }), className)}
-            disabled={disabled || loading}
-            {...props}
-        >
+        <button type={type} className={cn(buttonVariants({ variant, size }), className)} disabled={disabled || loading} {...props}>
             {loading && <Loader2 className="animate-spin" />}
             {children}
         </button>

@@ -49,10 +49,7 @@ export function useNetworkStatus(): NetworkStatus {
             if (offline.current) {
                 offline.current = false;
                 setStatus('restored');
-                restoredTimer.current = setTimeout(
-                    () => setStatus('online'),
-                    RESTORED_SHOWN_MS,
-                );
+                restoredTimer.current = setTimeout(() => setStatus('online'), RESTORED_SHOWN_MS);
             }
         } else {
             goOffline();
