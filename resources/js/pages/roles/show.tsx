@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/choice';
 import { ConfirmDialog } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Card, CardBody, CardFooter, CardHeader, PageHeader } from '@/components/ui/misc';
+import { Alert, Card, CardBody, CardFooter, CardHeader, PageHeader } from '@/components/ui/misc';
 
 type Matrix = {
     group: string;
@@ -18,7 +18,7 @@ type Matrix = {
 }[];
 
 type Props = {
-    role: { id: number; name: string; locked: boolean };
+    role: { id: number; name: string; locked: boolean; named_by_code: boolean; holders: number };
     matrix: Matrix;
     granted: string[];
     canManage: boolean;
@@ -29,6 +29,9 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
     const form = useForm({ permissions: granted });
     const rename = useForm({ name: role.name });
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [deleting, setDeleting] = useState(false);
+    // The name is the key Codex and the code use: it stays while the code refers to it or people hold it, and the role cannot be deleted then either.
+    const fixed = role.named_by_code || role.holders > 0;
 
     const toggle = (name: string, checked: boolean) => {
         let next = checked ? [...form.data.permissions, name] : form.data.permissions.filter((p) => p !== name);
@@ -57,9 +60,11 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                         </Button>
                         {editable && (
                             <>
-                                <Button variant="outline" onClick={() => setConfirmDelete(true)}>
-                                    <Trash2 /> Hapus
-                                </Button>
+                                {!fixed && (
+                                    <Button variant="outline" onClick={() => setConfirmDelete(true)}>
+                                        <Trash2 /> Hapus
+                                    </Button>
+                                )}
                                 <Button loading={form.processing} onClick={() => form.put(`/roles/${role.id}/permissions`, { preserveScroll: true })}>
                                     <Save /> Simpan izin
                                 </Button>
@@ -81,16 +86,31 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                         }}
                     >
                         <CardHeader title="Nama peran" />
-                        <CardBody>
+                        <CardBody className="flex flex-col gap-3">
+                            {fixed && (
+                                <Alert tone="neutral">
+                                    {role.named_by_code
+                                        ? 'Kode aplikasi memakai nama peran ini, jadi namanya tidak bisa diubah dan perannya tidak bisa dihapus.'
+                                        : `${role.holders} pengguna (termasuk yang nonaktif) memegang peran ini. Codex mencocokkan peran lewat nama, jadi namanya tidak bisa diubah dan perannya tidak bisa dihapus selagi dipegang.`}
+                                </Alert>
+                            )}
                             <Field label="Nama" required error={rename.errors.name}>
-                                <Input id="role-name" maxLength={100} value={rename.data.name} onChange={(e) => rename.setData('name', e.target.value)} />
+                                <Input
+                                    id="role-name"
+                                    maxLength={100}
+                                    disabled={fixed}
+                                    value={rename.data.name}
+                                    onChange={(e) => rename.setData('name', e.target.value)}
+                                />
                             </Field>
                         </CardBody>
-                        <CardFooter className="justify-end">
-                            <Button type="submit" loading={rename.processing}>
-                                Ubah nama
-                            </Button>
-                        </CardFooter>
+                        {!fixed && (
+                            <CardFooter className="justify-end">
+                                <Button type="submit" loading={rename.processing}>
+                                    Ubah nama
+                                </Button>
+                            </CardFooter>
+                        )}
                     </form>
                 </Card>
             )}
@@ -123,14 +143,23 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
 
             <ConfirmDialog
                 open={confirmDelete}
-                onOpenChange={setConfirmDelete}
+                onOpenChange={(open) => !open && !deleting && setConfirmDelete(false)}
+                loading={deleting}
                 title="Hapus peran?"
                 description={
                     <>
                         Peran <strong>{role.name}</strong> akan dihapus permanen. Peran yang masih dipakai pengguna tidak bisa dihapus.
                     </>
                 }
-                onConfirm={() => router.delete(`/roles/${role.id}`)}
+                onConfirm={() =>
+                    router.delete(`/roles/${role.id}`, {
+                        onStart: () => setDeleting(true),
+                        onFinish: () => {
+                            setDeleting(false);
+                            setConfirmDelete(false);
+                        },
+                    })
+                }
             />
         </>
     );

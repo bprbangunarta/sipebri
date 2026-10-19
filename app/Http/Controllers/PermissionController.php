@@ -6,8 +6,10 @@ use App\Audit\Audit;
 use App\Enums\RoleName;
 use App\Models\Permission;
 use App\Support\Modules;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -29,16 +31,21 @@ class PermissionController extends Controller
             'entity' => ['nullable', 'string', 'max:50'],
             'type' => ['nullable', 'in:system,custom'],
             'per_page' => ['nullable', 'integer'],
+            'sort' => ['nullable', 'in:name,module,type,roles'],
+            'direction' => ['nullable', 'in:asc,desc'],
         ]);
+        $sort = $filters['sort'] ?? 'name';
+        $direction = ($filters['direction'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
+        $perPage = in_array((int) ($filters['per_page'] ?? 0), [10, 25, 50], true) ? (int) $filters['per_page'] : 25;
 
-        $permissions = Permission::query()->withCount('roles')
+        $query = Permission::query()->withCount('roles')
             ->when($filters['search'] ?? null, fn ($q, string $term) => $q->where('name', 'like', '%'.addcslashes($term, '%_\\').'%'))
             ->when($filters['entity'] ?? null, fn ($q, string $entity) => $q->where('name', 'like', addcslashes($entity, '%_\\').'.%'))
             ->when(($filters['type'] ?? null) === 'system', fn ($q) => $q->where('is_custom', false))
             ->when(($filters['type'] ?? null) === 'custom', fn ($q) => $q->where('is_custom', true))
-            ->orderBy('name')
-            ->paginate(in_array((int) ($filters['per_page'] ?? 0), [10, 25, 50], true) ? (int) $filters['per_page'] : 25)
-            ->withQueryString();
+            ->when($sort !== 'module', fn ($q) => $q->orderBy(['name' => 'name', 'type' => 'is_custom', 'roles' => 'roles_count'][$sort], $direction))
+            ->orderBy('name');
+        $permissions = $sort === 'module' ? $this->byModule($query, $direction, $perPage, $request) : $query->paginate($perPage)->withQueryString();
 
         return Inertia::render('permissions/index', [
             'permissions' => $permissions->through(function (Permission $p): array {
@@ -51,17 +58,35 @@ class PermissionController extends Controller
             }),
             'filters' => [
                 'search' => $filters['search'] ?? '', 'entity' => $filters['entity'] ?? null, 'type' => $filters['type'] ?? null,
-                'per_page' => $permissions->perPage(),
+                'sort' => $sort, 'direction' => $direction, 'per_page' => $permissions->perPage(),
             ],
             'entities' => Permission::query()->pluck('name')->map(fn (string $n): string => explode('.', $n, 2)[0])->unique()->sort()->values(),
             'actions' => Modules::STANDARD_ACTIONS,
         ]);
     }
 
+    /**
+     * The module is a label that the code knows (`Modules::map()`), not a column, so this one order is done on the rows in memory; a table
+     * of permissions is small by nature.
+     *
+     * @param  Builder<Permission>  $query
+     * @return LengthAwarePaginator<int, Permission>
+     */
+    private function byModule(Builder $query, string $direction, int $perPage, Request $request): LengthAwarePaginator
+    {
+        $label = fn (Permission $p): string => (string) (Modules::map()[explode('.', $p->name, 2)[0]]['label'] ?? '');
+        $rows = $query->get()->sort(fn (Permission $a, Permission $b): int => ($direction === 'asc' ? $label($a) <=> $label($b) : $label($b) <=> $label($a)) ?: strcmp($a->name, $b->name))->values();
+        $page = LengthAwarePaginator::resolveCurrentPage();
+
+        return new LengthAwarePaginator($rows->forPage($page, $perPage)->values(), $rows->count(), $perPage, $page, ['path' => $request->url(), 'query' => $request->query()]);
+    }
+
     /** Create `entity.action` permissions for the chosen standard actions; the ones that already exist are skipped. */
     public function generate(Request $request): RedirectResponse
     {
-        $request->merge(['entity' => preg_replace('/[\s_]+/', '-', mb_strtolower(trim($request->string('entity')->toString())))]);
+        if (is_string($request->input('entity'))) {
+            $request->merge(['entity' => preg_replace('/[\s_]+/', '-', mb_strtolower(trim($request->input('entity'))))]);
+        }
 
         $data = $request->validate([
             'entity' => ['required', 'string', 'max:50', 'regex:/^[a-z0-9]+(-[a-z0-9]+)*$/'],
@@ -91,7 +116,10 @@ class PermissionController extends Controller
             app(PermissionRegistrar::class)->forgetCachedPermissions();
         }
 
-        Audit::record('permissions.generated', 'permissions', 'generated', new: ['created' => $created], context: ['entity' => $data['entity'], 'skipped' => $skipped], label: $data['entity']);
+        // Nothing new means nothing to record.
+        if ($created !== []) {
+            Audit::record('permissions.generated', 'permissions', 'generated', new: ['created' => $created], context: ['entity' => $data['entity'], 'skipped' => $skipped], label: $data['entity']);
+        }
 
         return back()->with('success', count($created).' izin berhasil dibuat'.($skipped === [] ? '.' : ', '.count($skipped).' sudah ada sebelumnya.'));
     }
@@ -100,7 +128,8 @@ class PermissionController extends Controller
     {
         abort_unless($permission->is_custom, 403, 'Izin sistem tidak bisa dihapus.');
 
-        if (($count = $permission->roles()->count()) > 0) {
+        // Super Admin holds every permission by itself, so it does not count as a holder; deleting the permission takes it from Super Admin too.
+        if (($count = $permission->roles()->where('name', '!=', RoleName::SuperAdmin->value)->count()) > 0) {
             return back()->with('error', "\"{$permission->name}\" dipegang {$count} peran sehingga tidak bisa dihapus. Lepas dulu dari peran itu.");
         }
 

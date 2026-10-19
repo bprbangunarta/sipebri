@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Audit\Audit;
 use App\Enums\RoleName;
 use App\Models\CommitteeTier;
+use App\Models\User;
 use App\Support\Modules;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -42,7 +43,11 @@ class RoleController extends Controller
     public function show(Request $request, Role $role): Response
     {
         return Inertia::render('roles/show', [
-            'role' => ['id' => $role->id, 'name' => $role->name, 'locked' => $role->name === RoleName::SuperAdmin->value],
+            'role' => [
+                'id' => $role->id, 'name' => $role->name, 'locked' => $role->name === RoleName::SuperAdmin->value,
+                // Named by the code, or held by people: the name stays and the role cannot be deleted (Codex matches roles by name).
+                'named_by_code' => $this->namedByCode($role), 'holders' => $this->holders($role),
+            ],
             'matrix' => Modules::matrix(),
             'granted' => $role->permissions()->pluck('name'),
             'canManage' => true,
@@ -62,12 +67,27 @@ class RoleController extends Controller
     {
         abort_if($role->name === RoleName::SuperAdmin->value, 403, 'Peran Super Admin tidak bisa diubah.');
         $data = $request->validate(['name' => ['required', 'string', 'max:100', Rule::unique('roles', 'name')->ignore($role)]]);
-        if ($role->name !== trim($data['name']) && ($count = CommitteeTier::query()->where('role', $role->name)->count()) > 0) {
-            return back()->withErrors(['name' => "\"{$role->name}\" decides in {$count} committee ".str('tier')->plural($count).' and cannot be renamed. Change those tiers first.']);
+        $new = trim($data['name']);
+
+        if ($role->name === $new) {
+            return back()->with('success', 'Nama peran tidak berubah.');
+        }
+
+        // Codex names a person's role and the code refers to some roles by name, so the name is the key: it only changes while nothing depends on it.
+        if ($this->namedByCode($role)) {
+            return back()->withErrors(['name' => "\"{$role->name}\" dipakai kode aplikasi lewat namanya sehingga namanya tidak bisa diubah."]);
+        }
+
+        if (($count = $this->holders($role)) > 0) {
+            return back()->withErrors(['name' => "\"{$role->name}\" dipegang {$count} pengguna (termasuk yang nonaktif) sehingga namanya tidak bisa diubah: Codex mencocokkan peran lewat nama."]);
+        }
+
+        if (($count = CommitteeTier::query()->where('role', $role->name)->count()) > 0) {
+            return back()->withErrors(['name' => "\"{$role->name}\" memutus di {$count} jenjang komite sehingga namanya tidak bisa diubah. Ubah jenjang itu terlebih dahulu."]);
         }
 
         $old = $role->name;
-        $role->update(['name' => trim($data['name'])]);
+        $role->update(['name' => $new]);
         Audit::record('roles.renamed', 'roles', 'updated', $role, ['name' => $old], ['name' => $role->name], label: $role->name);
 
         return back()->with('success', 'Nama peran berhasil diubah.');
@@ -93,6 +113,10 @@ class RoleController extends Controller
         $role->syncPermissions(array_values(array_unique($names)));
         $after = $role->permissions()->pluck('name')->sort()->values()->all();
 
+        if ($before === $after) {
+            return back()->with('success', 'Izin tidak berubah.');
+        }
+
         Audit::record('roles.permissions_changed', 'roles', 'permissions_changed', $role, ['added' => [], 'removed' => array_values(array_diff($before, $after))], ['added' => array_values(array_diff($after, $before)), 'removed' => []], label: $role->name);
 
         return back()->with('success', 'Izin berhasil diperbarui.');
@@ -102,8 +126,13 @@ class RoleController extends Controller
     {
         abort_if($role->name === RoleName::SuperAdmin->value, 403, 'Peran Super Admin tidak bisa dihapus.');
 
-        if ($role->users()->exists()) {
-            return back()->with('error', "\"{$role->name}\" dipakai pengguna sehingga tidak bisa dihapus.");
+        if ($this->namedByCode($role)) {
+            return back()->with('error', "\"{$role->name}\" dipakai kode aplikasi lewat namanya sehingga tidak bisa dihapus.");
+        }
+
+        // A deactivated person still holds the role; deleting it would strip it from them without a word.
+        if (($count = $this->holders($role)) > 0) {
+            return back()->with('error', "\"{$role->name}\" dipegang {$count} pengguna (termasuk yang nonaktif) sehingga tidak bisa dihapus.");
         }
 
         if (($count = CommitteeTier::query()->where('role', $role->name)->count()) > 0) {
@@ -114,5 +143,17 @@ class RoleController extends Controller
         $role->delete();
 
         return to_route('roles.index')->with('success', 'Peran berhasil dihapus.');
+    }
+
+    /** The role is one of those the code refers to by name (`RoleName`). */
+    private function namedByCode(Role $role): bool
+    {
+        return RoleName::tryFrom($role->name) !== null;
+    }
+
+    /** How many people hold the role, those who are deactivated included. */
+    private function holders(Role $role): int
+    {
+        return User::withTrashed()->role($role->name)->count();
     }
 }

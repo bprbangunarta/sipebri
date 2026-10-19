@@ -11,6 +11,7 @@ import { FilteredInput } from '@/components/ui/filtered-input';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Badge, PageHeader } from '@/components/ui/misc';
+import { nextSort } from '@/components/ui/sort-head';
 import type { PageMeta } from '@/components/ui/pagination';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
@@ -28,6 +29,8 @@ type Filters = {
     search: string;
     entity: string | null;
     type: 'system' | 'custom' | null;
+    sort: string;
+    direction: 'asc' | 'desc';
     per_page: number;
 };
 type Props = {
@@ -41,7 +44,7 @@ const TYPES = [
     { value: 'system', label: 'Sistem' },
     { value: 'custom', label: 'Kustom' },
 ];
-const DEFAULTS = { per_page: 25 };
+const DEFAULTS = { sort: 'name', direction: 'asc', per_page: 25 };
 // The server lowercases the entity and turns spaces and underscores into hyphens before checking it.
 const ENTITY_CHARACTER = /^[A-Za-z0-9 _-]$/;
 
@@ -94,22 +97,26 @@ export default function PermissionsIndex({ permissions, filters, entities, actio
         {
             key: 'name',
             header: 'Izin',
+            sort: 'name',
             className: 'font-mono text-xs',
             cell: (p) => p.name,
         },
         {
             key: 'module',
             header: 'Modul',
+            sort: 'module',
             cell: (p) => p.module ?? <span className="text-muted">–</span>,
         },
         {
             key: 'type',
             header: 'Jenis',
+            sort: 'type',
             cell: (p) => <Badge tone={p.custom ? 'info' : 'neutral'}>{p.custom ? 'Kustom' : 'Sistem'}</Badge>,
         },
         {
             key: 'roles',
             header: 'Peran',
+            sort: 'roles',
             align: 'right',
             className: 'tabular-nums',
             cell: (p) => p.roles,
@@ -180,6 +187,7 @@ export default function PermissionsIndex({ permissions, filters, entities, actio
                     </FilterBar>
                 }
                 columns={columns}
+                sort={{ sort: filters.sort, direction: filters.direction, onSort: (column) => visit(nextSort(filters, column)) }}
                 empty={{
                     icon: <KeyRound />,
                     title: hasFilters ? 'Tidak ada izin yang cocok dengan filter' : 'Belum ada izin',
