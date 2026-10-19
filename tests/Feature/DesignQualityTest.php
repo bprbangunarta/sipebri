@@ -140,10 +140,18 @@ function designLineCount(string $file): int
 function expectOnlyListedDesignDebt(array $violations, string $prefix): void
 {
     $exceptions = designExceptions();
-    $scoped = array_filter(array_keys($exceptions), fn (string $key): bool => ! str_contains($key, '::') && str_starts_with($key, $prefix));
+    $scoped = array_filter(array_keys($exceptions), fn (string $key): bool => ! str_contains($key, '::') && str_starts_with($key, $prefix) && (str_ends_with($prefix, 'js/') || ! str_starts_with($key, 'resources/js/')));
 
     expect(array_values(array_diff($violations, array_keys($exceptions))))->toBe([], 'Design limit broken without a listed reason (see `.ai/rules/php.md`, "Mutu desain").');
     expect(array_values(array_diff($scoped, $violations)))->toBe([], 'Exception no longer matches: remove it from designExceptions().');
+}
+
+/**
+ * @return list<string> the PHP files the size and method rules apply to: the application, the migrations and seeders, and the routes
+ */
+function designPhpFiles(): array
+{
+    return [...designFiles('app', ['php']), ...designFiles('database', ['php']), ...designFiles('routes', ['php'])];
 }
 
 it('requires a clear reason for every design exception', function () {
@@ -152,16 +160,23 @@ it('requires a clear reason for every design exception', function () {
     }
 });
 
-it('keeps PHP files within 400 lines', function () {
-    $violations = array_values(array_filter(designFiles('app', ['php']), fn (string $file): bool => designLineCount($file) > DESIGN_MAX_PHP_FILE_LINES));
+it('lists only exceptions of a shape the checks below can match, so a typo cannot hide a dead entry', function () {
+    $shapes = '#^(app|database|routes)/[\w/.\-]+\.php(::\w+|::DB::table)?$|^resources/js/[\w/.\-\[\]]+\.tsx?$#';
 
-    expectOnlyListedDesignDebt($violations, 'app/');
+    expect(array_values(array_filter(array_keys(designExceptions()), fn (string $key): bool => preg_match($shapes, $key) !== 1)))->toBe([]);
+});
+
+it('keeps PHP files within 400 lines', function () {
+    $violations = array_values(array_filter(designPhpFiles(), fn (string $file): bool => designLineCount($file) > DESIGN_MAX_PHP_FILE_LINES));
+
+    expectOnlyListedDesignDebt($violations, '');
 });
 
 it('keeps every method within 80 lines and four levels of nested blocks', function () {
     $violations = [];
 
-    foreach (designFiles('app', ['php']) as $file) {
+    // A migration is never edited once it has run (`.ai/rules/database.md`), so its long `up()` of table definitions cannot be paid down.
+    foreach (array_filter(designPhpFiles(), fn (string $file): bool => ! str_starts_with($file, 'database/migrations/')) as $file) {
         foreach (designMethods((string) file_get_contents(base_path($file))) as [$name, $lines, $depth]) {
             if ($lines > DESIGN_MAX_METHOD_LINES || $depth > DESIGN_MAX_NESTING) {
                 $violations[] = "{$file}::{$name}";
@@ -182,16 +197,17 @@ it('keeps TypeScript files within 500 lines', function () {
 });
 
 it('uses no meaningless class names: Helper, Util, Manager, Misc, Common', function () {
-    $generic = array_values(array_filter(designFiles('app', ['php']), fn (string $file): bool => preg_match('/(Helpers?|Utils?|Utilities|Managers?|Misc|Common)\.php$/', $file) === 1));
+    // A file ending in one of these words, or a folder named by one (`Support/Helpers/Money.php`).
+    $generic = array_values(array_filter(designPhpFiles(), fn (string $file): bool => preg_match('/(Helpers?|Utils?|Utilities|Managers?|Misc|Common)\.php$/', $file) === 1 || preg_match('#/(Helpers?|Utils?|Utilities|Managers?|Misc|Common)/#', $file) === 1));
 
     expect($generic)->toBe([]);
 });
 
-it('does not read tables directly with DB::table in controllers', function () {
+it('does not read or write tables directly with the DB facade in controllers', function () {
     $violations = [];
 
     foreach (designFiles('app/Http/Controllers', ['php']) as $file) {
-        if (str_contains((string) file_get_contents(base_path($file)), 'DB::table(')) {
+        if (preg_match('/\bDB::(table|select|insert|update|delete|statement|unprepared)\s*\(/', (string) file_get_contents(base_path($file))) === 1) {
             $violations[] = "{$file}::DB::table";
         }
     }
@@ -203,7 +219,7 @@ it('does not read tables directly with DB::table in controllers', function () {
 });
 
 // One rule per layer and per dependency: arch() given a list at once reads it in a way that lets violations through.
-foreach (['App\Models', 'App\Support', 'App\Enums', 'App\Services', 'App\Audit', 'App\Security'] as $layer) {
+foreach (['App\Models', 'App\Support', 'App\Enums', 'App\Services', 'App\Audit', 'App\Security', 'App\Auth', 'App\Console', 'App\Mail', 'App\Policies'] as $layer) {
     foreach (['App\Http\Controllers', 'App\Http\Middleware'] as $http) {
         arch("{$layer} does not depend on {$http}")->expect($layer)->not->toUse($http);
     }
@@ -212,3 +228,32 @@ foreach (['App\Models', 'App\Support', 'App\Enums', 'App\Services', 'App\Audit',
 foreach (['dd', 'dump', 'var_dump', 'ray', 'die', 'exit'] as $debug) {
     arch("no {$debug} call is left in app")->expect('App')->not->toUse($debug);
 }
+
+/**
+ * A class with one method of the given shape, to prove the size and nesting rules on text instead of trusting them on today's code.
+ */
+function methodSource(int $bodyLines, int $nesting = 0): string
+{
+    $body = str_repeat("        \$line = 1;\n", $bodyLines);
+
+    for ($level = 0; $level < $nesting; $level++) {
+        $body = "        if (\$a > {$level}) {\n{$body}        }\n";
+    }
+
+    return "<?php\nclass Sample\n{\n    public function run(int \$a): void\n    {\n{$body}    }\n}\n";
+}
+
+it('measures the length and the nesting of a method', function (int $bodyLines, int $nesting, int $lines, int $depth) {
+    expect(designMethods(methodSource($bodyLines, $nesting)))->toBe([['run', $lines, $depth]]);
+})->with([
+    'a short flat method' => [3, 0, 6, 0],
+    'one level of nesting' => [3, 1, 8, 1],
+    'five levels of nesting' => [3, 5, 16, 5],
+    'a method of 81 lines' => [75, 0, 78, 0],
+]);
+
+it('does not count a closure as a method, nor an abstract method as a body', function () {
+    $source = "<?php\nabstract class A\n{\n    abstract public function noBody(): void;\n\n    public function run(): void\n    {\n        \$f = function () {\n            return 1;\n        };\n    }\n}\n";
+
+    expect(array_column(designMethods($source), 0))->toBe(['run']);
+});

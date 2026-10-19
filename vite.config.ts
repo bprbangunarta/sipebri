@@ -81,6 +81,8 @@ export default defineConfig({
             '.ai/rules/index.md',
             'lang/**',
             'composer.json',
+            // Written by `php artisan boost:update` in its own layout (4 spaces), on every run.
+            'boost.json',
             'pint.json',
             'pnpm-workspace.yaml',
             '.mcp.json',

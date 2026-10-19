@@ -40,7 +40,7 @@ it('names every skill in .ai/skills with its usage rule in AGENTS.md section 5, 
     $section = agentsSkillSection();
 
     foreach (vendoredSkills() as $skill) {
-        expect($section)->toContain("`{$skill}`");
+        expect(preg_match('/^\|\s*`'.preg_quote($skill, '/').'`/m', $section))->toBe(1, "{$skill} has no row in the table of AGENTS.md section 5");
     }
 
     preg_match_all('/\|\s*`(antislop[a-z-]*)`/', $section, $named);
@@ -67,6 +67,14 @@ it('runs the contrast checker shipped with antislop-human with its own self-test
     expect($result->successful())->toBeTrue($result->output().$result->errorOutput());
 });
 
+it('lists every antislop skill in boost.json and no skill there that is not in .ai/skills', function () {
+    $boost = json_decode((string) file_get_contents(base_path('boost.json')), true, flags: JSON_THROW_ON_ERROR);
+    $listed = array_values(array_filter($boost['skills'], fn (string $skill): bool => str_starts_with($skill, 'antislop')));
+
+    expect(array_diff(vendoredSkills(), $listed))->toBe([])
+        ->and(array_diff($listed, vendoredSkills()))->toBe([]);
+});
+
 it('keeps every antislop file exactly as released, without hand edits or automatic formatting', function () {
     $lines = array_filter(explode("\n", (string) file_get_contents(base_path('.ai/skills/antislop/MANIFEST.sha256'))));
     $changed = [];
@@ -80,4 +88,29 @@ it('keeps every antislop file exactly as released, without hand edits or automat
     }
 
     expect($lines)->not->toBeEmpty()->and($changed)->toBe([]);
+});
+
+it('has no file in .ai/skills that the manifest does not list, and no path in the manifest that leaves the folder', function () {
+    $listed = [];
+
+    foreach (array_filter(explode("\n", (string) file_get_contents(base_path('.ai/skills/antislop/MANIFEST.sha256')))) as $line) {
+        $path = trim((string) (preg_split('/\s+/', trim($line), 2)[1] ?? ''));
+        $listed[] = $path;
+
+        expect($path)->not->toContain('..')->not->toStartWith('/');
+    }
+
+    $present = [];
+
+    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(base_path('.ai/skills'), FilesystemIterator::SKIP_DOTS)) as $file) {
+        if ($file->getFilename() === '.DS_Store') {
+            continue; // Finder litter, never part of a skill
+        }
+
+        $present[] = substr($file->getPathname(), strlen(base_path('.ai/skills')) + 1);
+    }
+
+    $present = array_values(array_diff($present, ['antislop/MANIFEST.sha256']));
+
+    expect(array_values(array_diff($present, $listed)))->toBe([], 'A file under .ai/skills that MANIFEST.sha256 does not list.');
 });

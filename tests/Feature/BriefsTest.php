@@ -41,44 +41,87 @@ it('keeps a brief template with every required section and one checklist', funct
     expect(preg_match_all('/^- \[ \]/m', $template))->toBeGreaterThanOrEqual(15);
 });
 
+/**
+ * Everything wrong with one brief, as sentences. Kept apart from the file loop so each rule can be proven on a sample text.
+ *
+ * @return list<string>
+ */
+function briefProblems(string $name, string $text): array
+{
+    $problems = [];
+
+    if (preg_match('/^\d{4}-[a-z0-9-]+\.md$/', $name) !== 1) {
+        $problems[] = "{$name}: the name must be NNNN-short-title.md";
+    }
+
+    if (preg_match('/^Status: (draft|approved)$/m', $text) !== 1) {
+        $problems[] = "{$name}: no 'Status: draft' or 'Status: approved' line";
+    }
+
+    if (preg_match('/^Status: approved$/m', $text) === 1) {
+        $approved = preg_match('/^Approved: (\d{4}-\d{2}-\d{2})$/m', $text, $date) === 1 ? DateTime::createFromFormat('!Y-m-d', $date[1]) : false;
+
+        if ($approved === false || $approved->format('Y-m-d') !== $date[1]) {
+            $problems[] = "{$name}: approved brief without a real 'Approved: YYYY-MM-DD' date";
+        }
+    }
+
+    foreach (briefHeadings($text) as $heading) {
+        if (preg_match('/^'.preg_quote($heading, '/').'$/m', $text) !== 1) {
+            $problems[] = "{$name}: section '{$heading}' is missing";
+        }
+    }
+
+    if (preg_match_all('/^- \[[ x]\]/m', $text) < 2) {
+        $problems[] = "{$name}: acceptance criteria and checklist must hold '- [ ]' items";
+    }
+
+    preg_match_all('/^- \[x\].*N\/A(?!: .{10,})/m', $text, $noReason);
+
+    if ($noReason[0] !== []) {
+        $problems[] = "{$name}: N/A item without a reason of 10 characters or more: ".$noReason[0][0];
+    }
+
+    return $problems;
+}
+
+function sampleBrief(string $replace = '', string $with = ''): string
+{
+    $brief = "# Sample\n\nStatus: approved\nApproved: 2026-10-20\n\n## Goal\nx\n## Acceptance criteria\n- [ ] a\n## Out of scope\nx\n## Assumptions and open questions\nx\n## Checklist\n- [ ] b\n";
+
+    return $replace === '' ? $brief : str_replace($replace, $with, $brief);
+}
+
 it('keeps every running brief complete: name, status, approval date, required sections, and checklist items', function () {
     $problems = [];
 
     foreach (activeBriefs() as $file) {
-        $name = basename($file);
-        $text = (string) file_get_contents($file);
-
-        if (preg_match('/^\d{4}-[a-z0-9-]+\.md$/', $name) !== 1) {
-            $problems[] = "{$name}: the name must be NNNN-short-title.md";
-        }
-
-        if (preg_match('/^Status: (draft|approved)$/m', $text) !== 1) {
-            $problems[] = "{$name}: no 'Status: draft' or 'Status: approved' line";
-        }
-
-        if (str_contains($text, "\nStatus: approved\n") && preg_match('/^Approved: \d{4}-\d{2}-\d{2}$/m', $text) !== 1) {
-            $problems[] = "{$name}: approved brief without an 'Approved: YYYY-MM-DD' line";
-        }
-
-        foreach (briefHeadings($text) as $heading) {
-            if (! str_contains($text, $heading)) {
-                $problems[] = "{$name}: section '{$heading}' is missing";
-            }
-        }
-
-        if (preg_match_all('/^- \[[ x]\]/m', $text) < 2) {
-            $problems[] = "{$name}: acceptance criteria and checklist must hold '- [ ]' items";
-        }
-
-        preg_match_all('/^- \[x\].*N\/A(?!: .{5,})/m', $text, $noReason);
-
-        if ($noReason[0] !== []) {
-            $problems[] = "{$name}: N/A item without a reason: ".$noReason[0][0];
-        }
+        $problems = [...$problems, ...briefProblems(basename($file), (string) file_get_contents($file))];
     }
 
     expect($problems)->toBe([]);
 });
+
+it('accepts a complete brief and refuses each way a brief can be incomplete', function (string $name, string $text, string $expected) {
+    expect(briefProblems($name, $text))->toBe($expected === '' ? [] : [$name.': '.$expected]);
+})->with([
+    'complete' => ['0004-sample.md', sampleBrief(), ''],
+    'complete, Indonesian headings' => ['0004-sample.md', str_replace(['## Goal', '## Acceptance criteria', '## Out of scope', '## Assumptions and open questions', '## Checklist'], BRIEF_SECTIONS[1], sampleBrief()), ''],
+    'name without a number' => ['sample.md', sampleBrief(), 'the name must be NNNN-short-title.md'],
+    'name with capitals' => ['0004-Sample.md', sampleBrief(), 'the name must be NNNN-short-title.md'],
+    'no status line' => ['0004-sample.md', sampleBrief("Status: approved\n", ''), "no 'Status: draft' or 'Status: approved' line"],
+    'unknown status' => ['0004-sample.md', sampleBrief('Status: approved', 'Status: done'), "no 'Status: draft' or 'Status: approved' line"],
+    'approved without a date' => ['0004-sample.md', sampleBrief("Approved: 2026-10-20\n", ''), "approved brief without a real 'Approved: YYYY-MM-DD' date"],
+    'approved with a date that does not exist' => ['0004-sample.md', sampleBrief('2026-10-20', '2026-13-45'), "approved brief without a real 'Approved: YYYY-MM-DD' date"],
+    'approved with a date in another order' => ['0004-sample.md', sampleBrief('2026-10-20', '20-10-2026'), "approved brief without a real 'Approved: YYYY-MM-DD' date"],
+    'a section missing' => ['0004-sample.md', sampleBrief("## Out of scope\n", ''), "section '## Out of scope' is missing"],
+    'a section only mentioned inside a deeper heading' => ['0004-sample.md', sampleBrief('## Goal', '### Goal'), "section '## Goal' is missing"],
+    'a section indented' => ['0004-sample.md', sampleBrief('## Goal', ' ## Goal'), "section '## Goal' is missing"],
+    'no checklist items' => ['0004-sample.md', sampleBrief("- [ ] a\n", '')."\n", "acceptance criteria and checklist must hold '- [ ]' items"],
+    'N/A without a reason' => ['0004-sample.md', sampleBrief('- [ ] b', '- [x] b N/A'), 'N/A item without a reason of 10 characters or more: - [x] b N/A'],
+    'N/A with a one-word reason' => ['0004-sample.md', sampleBrief('- [ ] b', '- [x] b N/A: nope'), 'N/A item without a reason of 10 characters or more: - [x] b N/A'],
+    'N/A with a reason' => ['0004-sample.md', sampleBrief('- [ ] b', '- [x] b N/A: nothing is shown on screen'), ''],
+]);
 
 it('does not let briefs whose items are all done pile up: they are deleted in the closing commit', function () {
     $finished = array_values(array_filter(activeBriefs(), function (string $file): bool {

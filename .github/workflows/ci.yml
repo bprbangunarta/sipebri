@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.3'
           tools: composer:v2
@@ -49,7 +49,24 @@ jobs:
         run: git config core.hooksPath .githooks
 
       # The only gate is scripts/verify.sh: adding a check to scripts/verify.steps adds it here and in the pre-push hook.
+      # The range comes from the event. When its start is no commit this clone has (a new branch, or a force-push that dropped the old
+      # tip), verify.sh would fall back to "commits on no remote", which is empty here because the checked-out branch is itself the
+      # remote one, so nothing would be read. The commits listed by the event are checked instead (GitHub lists at most 20).
       - name: Run the gate
-        run: scripts/verify.sh
+        run: |
+          start="${VERIFY_RANGE%%..*}"
+          if ! git cat-file -e "${start}^{commit}" 2>/dev/null; then
+            set -- $PUSHED_COMMITS
+            count=$#
+            [ "$count" -ge 1 ] || count=1
+            if git rev-parse --verify --quiet "HEAD~${count}" >/dev/null; then
+              VERIFY_RANGE="HEAD~${count}..HEAD"
+            else
+              VERIFY_RANGE=HEAD
+            fi
+            export VERIFY_RANGE
+          fi
+          scripts/verify.sh
         env:
+          PUSHED_COMMITS: ${{ join(github.event.commits.*.id, ' ') }}
           VERIFY_RANGE: ${{ github.event_name == 'pull_request' && format('{0}..{1}', github.event.pull_request.base.sha, github.event.pull_request.head.sha) || format('{0}..{1}', github.event.before, github.sha) }}

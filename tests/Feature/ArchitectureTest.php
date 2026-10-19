@@ -42,27 +42,78 @@ arch('models do not reach into HTTP')
 | Writes that raise no model events (pivot changes, bulk updates, raw table updates, file deletes) leave no trace in the
 | audit trail by themselves. Any class that does one must also call Audit::record(), or be listed below with the reason.
 */
+/**
+ * The source of a PHP file without its comments, so a word in a comment never counts as code.
+ */
+function phpCodeOnly(string $source): string
+{
+    $code = '';
+
+    foreach (token_get_all($source) as $token) {
+        $code .= is_array($token) ? (in_array($token[0], [T_COMMENT, T_DOC_COMMENT], true) ? ' ' : $token[1]) : $token;
+    }
+
+    return $code;
+}
+
+/**
+ * @return list<string> files of `app/` (relative to the project root)
+ */
+function appPhpFiles(): array
+{
+    $files = [];
+
+    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(base_path('app'), FilesystemIterator::SKIP_DOTS)) as $file) {
+        if ($file->getExtension() === 'php') {
+            $files[] = str_replace(base_path().'/', '', $file->getPathname());
+        }
+    }
+
+    sort($files);
+
+    return $files;
+}
+
 it('records writes that bypass model events', function () {
-    $bypass = '/->(syncWithoutDetaching|attach|detach|sync)\(|DB::table\([^)]*\)->(insert|update|delete|upsert)|::query\(\)->[^;]*->(update|delete)\(|Quietly\(/';
+    $bypass = '/->(syncWithoutDetaching|attach|detach|sync|toggle|updateExistingPivot)\(|DB::(table\([^)]*\)->(insert|insertOrIgnore|update|delete|upsert|truncate|increment|decrement)|insert|update|delete|statement|unprepared)\(|->(where|whereIn|whereKey|whereNull|whereNotNull)\([^;{}]*\)->(update|delete|forceDelete|increment|decrement)\(|::query\(\)->[^;{}]*->(update|delete)\(|->(upsert|insertOrIgnore|truncate)\(|Quietly\(|Storage::[^;]*(delete|deleteDirectory)\(|->delete\([\'"][^)]/';
     $exempt = [
         'app/Http/Controllers/NotificationController.php' => 'read markers of the signed-in person, not business data',
-        'app/Audit/Audit.php' => 'the audit writer itself',
-        'app/Audit/Auditable.php' => 'the audit hook itself',
-        'app/Console/Commands/AuditPrune.php' => 'retention pruning records itself',
     ];
     $offenders = [];
+    $needless = [];
 
-    foreach (['app/Http', 'app/Auth', 'app/Support', 'app/Security', 'app/Services', 'app/Audit', 'app/Console'] as $dir) {
-        foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(base_path($dir))) as $file) {
-            if ($file->getExtension() !== 'php') {
-                continue;
-            }
+    foreach (appPhpFiles() as $relative) {
+        $code = phpCodeOnly((string) file_get_contents(base_path($relative)));
+        $bypasses = preg_match($bypass, $code) === 1 && ! str_contains($code, 'Audit::record');
 
-            $relative = str_replace(base_path().'/', '', $file->getPathname());
-            $source = (string) file_get_contents($file->getPathname());
+        if ($bypasses && ! array_key_exists($relative, $exempt)) {
+            $offenders[] = $relative;
+        }
 
-            if (! array_key_exists($relative, $exempt) && preg_match($bypass, $source) && ! str_contains($source, 'Audit::record')) {
-                $offenders[] = $relative;
+        if (! $bypasses && array_key_exists($relative, $exempt)) {
+            $needless[] = $relative;
+        }
+    }
+
+    expect($offenders)->toBe([])
+        ->and(array_diff(array_keys($exempt), appPhpFiles()))->toBe([], 'An exemption for a file that no longer exists: remove it.')
+        ->and($needless)->toBe([], 'An exemption for a file that records its writes or bypasses nothing: remove it.');
+});
+
+it('leaves no debugging call in app, however the function is called', function () {
+    $debug = ['dd', 'ddd', 'dump', 'ray', 'var_dump', 'phpinfo', 'error_log', 'die', 'exit'];
+    $offenders = [];
+
+    foreach (appPhpFiles() as $relative) {
+        $tokens = array_values(array_filter(token_get_all((string) file_get_contents(base_path($relative))), fn ($token): bool => ! is_array($token) || ! in_array($token[0], [T_WHITESPACE, T_COMMENT, T_DOC_COMMENT], true)));
+
+        foreach ($tokens as $i => $token) {
+            $isCall = is_array($token) && in_array($token[0], [T_STRING, T_EXIT], true) && in_array(strtolower($token[1]), $debug, true);
+            $before = $tokens[$i - 1] ?? null;
+            $isMember = is_array($before) && in_array($before[0], [T_OBJECT_OPERATOR, T_NULLSAFE_OBJECT_OPERATOR, T_DOUBLE_COLON, T_FUNCTION, T_NEW], true);
+
+            if ($isCall && ! $isMember && (($tokens[$i + 1] ?? null) === '(' || $token[0] === T_EXIT)) {
+                $offenders[] = "{$relative}: {$token[1]}";
             }
         }
     }
@@ -111,17 +162,18 @@ it('centres the actions of title-and-action rows instead of pinning them to the 
     expect($offenders)->toBe([]);
 });
 
-it('reads the device position only through the shared geolocation helper, never in the photo upload flow', function () {
+it('names the device position only through the shared geolocation helper, never in the photo upload flow', function () {
     $offenders = [];
 
     foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(resource_path('js'))) as $file) {
         $path = $file->getPathname();
 
-        if (! in_array($file->getExtension(), ['ts', 'tsx'], true) || str_ends_with($path, 'lib/geolocation.ts')) {
+        if (! in_array($file->getExtension(), ['ts', 'tsx', 'js', 'jsx'], true) || str_ends_with($path, 'lib/geolocation.ts')) {
             continue;
         }
 
-        if (str_contains((string) file_get_contents($path), 'navigator.geolocation')) {
+        // The word itself, so `navigator['geolocation']` and `const { geolocation } = navigator` are caught too; the helper is only imported.
+        if (preg_match('/\bgeolocation\b/i', str_replace('lib/geolocation', '', (string) file_get_contents($path))) === 1) {
             $offenders[] = str_replace(base_path().'/', '', $path);
         }
     }

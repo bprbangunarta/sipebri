@@ -54,8 +54,7 @@ Identitas pengguna dan nasabah datang dari Codex.
   `Auditable` + SQLite untuk test), `lib/http.ts` (SIPEBRI memakai Inertia + Wayfinder), `layouts/menu.ts` (menu dari `Navigation`), SSO,
   karyawan, `ReferenceManager`/`RegionPicker`, kata "akun" dilarang, `IdleTimeout` dan foto profil (butuh kontrak server yang belum ada).
 - **Penyimpangan dari standar devcore, dicatat:** (1) PHPStan level 7, bukan 8; level 8 memberi 47 temuan di kode lama (`AuditPrune`,
-  `LoanApplicationController`, `SchedulingController`, dan lain-lain), ditunda sebagai pekerjaan terpisah. (2) `.env.example` memuat komentar
-  penjelasan singkat; `laravel.md` meminta berkas itu hanya berisi variabel; pemilik belum menjawab konflik ini (`.ai/rules/php.md`). (3) Audit
+  `LoanApplicationController`, `SchedulingController`, dan lain-lain), ditunda sebagai brief terpisah; `GateCoverageTest` menjaga level agar tidak turun di bawah 7. (2) (selesai 2026-10-20) `.env.example` kini hanya variabel; penjelasannya di `docs/deployment.md`, dijaga `EnvExampleTest`. (3) Audit
   dependency tanpa jaringan kini menggagalkan gerbang (tidak lagi peringatan) mengikuti devcore. (4) `DesignQualityTest`, `check-standards.mjs`,
   `phpstan.neon`, `pint.json`, dan `.jscpd.json` tetap versi SIPEBRI (lebih lengkap atau memuat daftar utang).
 - **Dependency karena adopsi (user, 2026-10-19):** ditambah devDependency `@testing-library/{react,user-event,jest-dom}`, `jsdom`, `jscpd`; `recharts` dibuang (grafik lewat `components/ui/chart.tsx`). Risiko diterima: `npm audit` masih melaporkan temuan hanya di alat pengembangan (`--omit=dev` bersih), perbaikannya butuh versi di luar rentang.
@@ -79,6 +78,20 @@ Identitas pengguna dan nasabah datang dari Codex.
   target sentuh 28 px (kepadatan, `ui.md`); `Combobox` dan `DatePicker` memakai `onChange` yang membawa nilai, sedangkan isian lain `onValueChange` (mengubahnya
   menyentuh puluhan layar); singkatan Agustus "Agt" dari date-fns (bukan "Agu"); jam tampil menurut zona perangkat, bukan WIB (perangkat di luar WIB melihat jam lain
   dari audit log); `ColorInput` dan `RadioGroup` belum dipakai layar mana pun (tetap ada dengan contoh dan test).
+- **Audit fitur 25, gerbang dan kerangka agent (brief 0003, user, 2026-10-20):** temuan pada berkas milik devcore (skrip, hook, aturan standar) hanya dilaporkan
+  sebagai umpan balik, tidak diedit lokal. Diperbaiki di sisi proyek dengan test yang gagal dulu: rentang pemeriksaan CI kosong pada cabang baru, force-push, dan
+  `before` kosong (commit tanpa `Brief:` lolos; kini dikoreksi di `ci.yml`); `dependabot.yml` hanya mencakup aksi (kini juga composer dan npm); `env:check` (BOM, kunci
+  berindentasi atau huruf kecil, tulis serentak yang menggandakan variabel, nilai rahasia tercetak di peringatan, symlink, berkas read-only, contoh kosong; kini semua
+  `APP_ENV` selain `local` dan `testing` diperlakukan seperti server); `.env.example` hanya variabel dan `docs/deployment.md` baru; `.gitignore` menutup `.env.*`; blok Boost
+  rusak bila bagian proyek `AGENTS.md` menyebut tag pembukanya (`RulesCoverageTest`); banyak klaim basi di `CLAUDE.md`, `general.md`, `php.md`, `audit-log.md`, `js.md`.
+  Penjaga baru: `GateCoverageTest` (langkah `verify.steps` wajib, level PHPStan, `.jscpd.json`, `denyWarnings`, cakupan `CODE_PATHS`/`WEAKENED_SCAN`/`TEST_PATHS`, bit eksekusi
+  hook, tanda to-do dan skip yang tidak dibaca skrip), `CiWorkflowTest`, `RulesCoverageTest`; test penjaga lama dimutasi (±250 mutasi) dan yang hijau-setelah-mutasi diperkuat
+  (`DocsMatchCodeTest`, `CommentHygieneTest`, `SkillsRegistryTest`, `EnvExampleTest`, `DesignQualityTest`, `ArchitectureTest`, `BriefsTest`). `CODE_PATHS` kini mencakup `artisan`,
+  `.jscpd.json`, `.env.example`, `.npmrc`, `pnpm-workspace.yaml`, `.gitattributes`, `.mcp.json`; `composer install` memasang hook; `composer setup` memakai `npm ci` dan `package.json` bernama
+  `sipebri`; test kosong bawaan skeleton Laravel dan enum `BloodType` (sisa HRIS) dihapus. **Diterima:** edit skrip atau hook sendiri hanya terlihat di tinjauan; alasan 10 karakter apa pun
+  lolos; klon baru tanpa hook hanya dijaga CI sampai `composer install`; audit dependency butuh jaringan dan memblokir push saat offline; urutan langkah gerbang tidak ketat
+  dari yang tercepat (standar dan jscpd sesudah Tests); `boost:update` membuang bagian "Test Enforcement" dan menulis ulang `boost.json` (dikecualikan dari format). Waktu terukur: klon baru ke
+  hijau ±170 dtk (Tests 54 dtk terbesar), `selftest.sh` 8 sampai 10 dtk. **Di luar cakupan:** PR atau penggabungan ke `main`; pekerjaan hanya di `v3.0.0-alpha` (pemilik, 2026-10-20).
 - **Tidak boleh menambah status berkas baru tanpa dibahas.**
 - **Antrean offline survei tidak dibuat** (user): tanpa sinyal aplikasi pun tidak bisa dibuka; indikator jaringan sudah memberi tahu.
 - **Alamat dari koordinat tidak dibandingkan dengan alamat KTP nasabah:** survei bisa dilakukan di mana saja.
@@ -94,22 +107,23 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Konflik kepentingan keluarga dekat** anggota komite belum ditangani (butuh data hubungan keluarga atau penandaan manual wajib).
 - **BMPK penuh** (berdasarkan modal, paparan per peminjam/kelompok) belum dimodelkan; sekarang satu angka.
 - **Audit akses baca halaman daftar** belum dicatat (volume besar); tambahkan ringkas bila auditor meminta.
-- Retensi/arsip audit log (OJK, bertahun-tahun) belum diatur; jangan hapus baris.
+- **Retensi audit log:** kodenya sudah ada (`AUDIT_RETENTION_YEARS`, bawaan 5; `audit:prune` terjadwal tanggal 1 pukul 03:00; `audit:verify` harian pukul 02:00), tetapi aturan proyek menyatakan baris audit tidak boleh dihapus; keputusan kebijakan retensi (OJK) belum ada dan belum diuji di server. Sampai putus, jangan menyalakan penjadwal produksi tanpa memutuskan nasib `audit:prune`.
 - Role lama `HR Admin`/`Viewer` masih ada di database dev (tanpa izin).
 
 ## Langkah berikutnya
 
 Dipilih user; agent tidak memulai fitur baru tanpa diminta.
 
-1. **Audit silang dokumen ↔ kode per fitur** (user, 2026-10-19; nomor fitur = baris tabel fitur yang ditampilkan di chat, fitur 1 login dan 24 UI bersama
+1. **Audit silang dokumen ↔ kode per fitur** (user, 2026-10-19; nomor fitur = baris tabel fitur yang ditampilkan di chat, fitur 1 login, 24 UI bersama, dan 25 gerbang
    sudah selesai): satu brief "Audit fitur N" per fitur (bentuk: brief 0004 codex, commit 584013f), mengikuti `AGENTS.md` bagian 1 dan 3; temuan
-   langsung diperbaiki kecuali yang mengubah kebijakan (dijelaskan ke pemilik dulu). **Urutan dari pemilik:** (24 selesai), 25 gerbang dan
-   kerangka agent, 8 halaman error + status jaringan, 6 audit log, 7 notifikasi, 2 MFA + profil, 3 peran dan izin, 4 Data Pengguna,
+   langsung diperbaiki kecuali yang mengubah kebijakan (dijelaskan ke pemilik dulu). **Urutan dari pemilik:** (24 dan 25 selesai), 8 halaman error + status jaringan, 6 audit log, 7 notifikasi, 2 MFA + profil, 3 peran dan izin, 4 Data Pengguna,
    5 navigasi (di sini juga: pesan 403 berbahasa Inggris dari paket izin sudah dibuang di `bootstrap/app.php`, uji ulang bersama halaman error), 9 data referensi, 10 parameter produk, 11 BMPK, 12 komite, 13 anggota komite; alur kredit (14 sampai 23) dibahas nanti.
    Temuan awal untuk fitur yang belum diaudit: (4) `UserSeeder` memuat nama dan email yang tampak asli, (6) `audit:prune` terjadwal bulanan
-   padahal retensi belum diatur, (25) `.ai/rules/general.md` masih berjudul "UI nanti Indonesia" dan melarang menerjemahkan.
+   padahal retensi belum diatur.
 2. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): `/ui-guideline`, layar tamu, halaman error, serta daftar Analisa dan Persetujuan sudah; layar fitur lain diperiksa bersama audit fiturnya.
 3. Realisasi/pencairan + posting core banking (menunggu rancangan).
+   **Brief terpisah yang menunggu:** PHPStan level 8 (47 titik akses ke nilai yang bisa null di tujuh controller dan command); daftar umpan balik untuk devcore dari audit 25
+   (rename menyembunyikan test yang dihapus, spoof header `++ `, `diff.mnemonicPrefix`, rentang CI kosong, pre-push dengan sha remote tak dikenal, merge buruk, selftest tidak hermetik).
 4. Pesan validasi kustom dan atribut (`->attributes()`) yang masih Inggris di controller: rapikan, pakai laravel-lang sebisanya.
 5. Ekspor/impor Excel (ada di SIPEBRI lama) belum dibawa.
 6. Saran layanan email OTP (keputusan user): layanan transaksional atau relay resmi, SPF/DKIM/DMARC untuk `bprbangunarta.co.id`, antrean +

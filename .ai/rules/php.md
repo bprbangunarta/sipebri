@@ -4,8 +4,15 @@ paths:
     - 'routes/**'
     - 'config/**'
     - 'bootstrap/**'
+    - 'lang/**'
+    - '.env.example'
     - 'database/seeders/**'
     - 'database/factories/**'
+    - 'composer.json'
+    - 'phpunit.xml'
+    - 'phpstan.neon'
+    - 'pint.json'
+    - '.jscpd.json'
 ---
 
 # Kode aplikasi: tambahan khas SIPEBRI
@@ -14,19 +21,19 @@ Tambahan proyek di atas standar `.ai/rules/quality.md` (sembilan pertanyaan, mut
 
 ## Pengecualian dari aturan standar
 
-- **`.env.example` boleh memuat komentar penjelasan singkat** (`laravel.md` meminta berkas itu hanya berisi variabel). Alasan: proyek belum punya dokumen deployment tempat penjelasan itu bisa dipindah. Jawaban pemilik atas konflik ini belum ada; sampai ada, komentar dijaga pendek dan `EnvExampleTest` hanya memeriksa variabelnya.
-- **Satu `catch (Throwable)` yang tidak mencatat dan tidak melempar ulang diizinkan** untuk layanan pendamping yang tidak boleh menghalangi penyimpanan (`ReverseGeocoder`: gagal berarti tanpa alamat), dengan komentar yang mengatakannya.
+- **Tidak ada pengecualian untuk `.env.example`.** Berkas itu hanya berisi variabel (variabel opsional ditulis `# NAME=value`); penjelasan tiap variabel ada di `docs/deployment.md`, dan `EnvExampleTest` gagal bila ada baris komentar penjelasan (keputusan pemilik 2026-10-20).
+- **Tidak ada pengecualian `catch (Throwable)` milik proyek.** Aturan standar (`quality.md`, "Errors and validation") sudah mengizinkan satu bentuk: menguraikan masukan yang bermusuhan di mana satu-satunya jawaban adalah penolakan polos, dengan komentar yang mengatakannya (kini `App\Support\PhotoExif`: metadata foto yang rusak berarti foto tanpa posisi). Penyimpanan alamat perkiraan (`ReverseGeocoder`) menangkap galat tetapi memanggil `report()`, jadi tercatat dan tidak melanggar apa pun.
 
 ## Sembilan pertanyaan: bentuk di SIPEBRI
 
-Jawabannya masuk laporan, seperti di `quality.md`. Yang khas di sini:
+Jawabannya masuk laporan, seperti di `quality.md`; nomornya sama dengan nomor di sana (pertanyaan 2, 4, dan 9 tidak punya tambahan khas SIPEBRI). Yang khas di sini:
 
-1. **Siapa:** middleware `permission:<modul>.<aksi>` atau `role:Super Admin` di route, atau policy, sebelum validasi dan sebelum record dicari. Pemohon yang anggota komite tidak memutus berkasnya sendiri.
-2. **Hasil:** halaman error Inertia untuk 403/404/419, galat validasi per kolom, toast untuk hasil aksi. Pesan untuk orang berupa kalimat Indonesia (pesan standar dari `laravel-lang`, jangan ditulis ulang). Teks eksepsi, nama kelas, SQL, dan jalur tidak pernah sampai ke jawaban, log untuk orang, atau audit log.
-3. **Sisa kegagalan:** berkas lampiran (foto survei) ditulis ke disk lampiran (`config('filesystems.attachments')`) dan dibersihkan bila penyimpanan gagal.
-4. **Biaya:** setiap panggilan keluar (Codex, Nominatim, S3, SMTP) punya batas waktu sambung dan total, dan kegagalannya menurunkan satu fitur saja; apa pun yang mengirim email atau menulis penyimpanan dibatasi per sasaran dan per waktu.
-5. **Bocor:** NIK tersamar (4 digit terakhir) dan tidak pernah masuk audit log; kata sandi, token, dan kode tidak masuk audit log (`Audit::REDACTED`).
-6. **Tercatat:** lewat `Auditable` dan `Audit::record()` (`.ai/rules/audit-log.md`); perubahan sensitif membawa alasan; penolakan akses juga tercatat; mengulang sesuatu yang tidak mengubah apa pun (seeder, sinkron Codex tanpa perubahan) tidak menulis apa pun.
+- **1, siapa:** middleware `permission:<modul>.<aksi>` atau `role:Super Admin` di route, atau policy, sebelum validasi dan sebelum record dicari. Pemohon yang anggota komite tidak memutus berkasnya sendiri.
+- **3, hasil:** halaman error Inertia untuk 403/404/419, galat validasi per kolom, toast untuk hasil aksi. Pesan untuk orang berupa kalimat Indonesia (pesan standar dari `laravel-lang`, jangan ditulis ulang). Teks eksepsi, nama kelas, SQL, dan jalur tidak pernah sampai ke jawaban, log untuk orang, atau audit log.
+- **5, sisa kegagalan:** berkas lampiran (foto survei) ditulis ke disk lampiran (`config('filesystems.attachments')`) dan dibersihkan bila penyimpanan gagal.
+- **6, biaya:** setiap panggilan keluar (Codex, Nominatim, S3, SMTP) punya batas waktu sambung dan total, dan kegagalannya menurunkan satu fitur saja; apa pun yang mengirim email atau menulis penyimpanan dibatasi per sasaran dan per waktu.
+- **7, bocor:** NIK tersamar (4 digit terakhir) di layar dan di jejak cek nasabah, NIK pengguna tidak pernah masuk audit log; kata sandi, token, dan kode tidak masuk audit log (`Audit::REDACTED`).
+- **8, tercatat:** lewat `Auditable` dan `Audit::record()` (`.ai/rules/audit-log.md`); perubahan sensitif membawa alasan; penolakan akses juga tercatat; mengulang sesuatu yang tidak mengubah apa pun (seeder, sinkron Codex tanpa perubahan) tidak menulis apa pun.
 
 ## Mutu desain: contoh di SIPEBRI
 

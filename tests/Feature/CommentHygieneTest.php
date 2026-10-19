@@ -7,24 +7,16 @@
  */
 
 /**
- * Files that already used the long dash in screen text before 2026-10-19. Changing them changes what people read, so each is fixed by the
- * owner of that screen; an entry that no longer matches fails the test so the list cannot rot.
+ * Where comments are read from: the code folders of the project (generated Wayfinder output excluded) and the files at the root that
+ * hold comments people read.
  *
- * @return array<string, string> file -> reason
- */
-function longDashDebt(): array
-{
-    return [];
-}
-
-/**
- * @return list<string> source files from the project's code folders (generated Wayfinder output excluded)
+ * @return list<string>
  */
 function sourceFilesForComments(): array
 {
     $files = [];
 
-    foreach (['app', 'bootstrap', 'config', 'database', 'routes', 'tests', 'resources/js', 'scripts'] as $folder) {
+    foreach (['app', 'bootstrap', 'config', 'database', 'routes', 'tests', 'resources/js', 'resources/css', 'resources/views', 'scripts', '.github'] as $folder) {
         if (! is_dir(base_path($folder))) {
             continue;
         }
@@ -33,8 +25,9 @@ function sourceFilesForComments(): array
             $path = $file->getPathname();
             $relative = substr($path, strlen(base_path()) + 1);
 
-            if (! in_array($file->getExtension(), ['php', 'ts', 'tsx', 'mjs', 'sh'], true)
+            if (! in_array($file->getExtension(), ['php', 'ts', 'tsx', 'mjs', 'sh', 'css', 'yml', 'yaml', 'steps'], true)
                 || preg_match('#^resources/js/(actions|routes|wayfinder)/#', $relative) === 1
+                || preg_match('#^bootstrap/cache/#', $relative) === 1
                 || str_contains($path, '/node_modules/')
                 || $file->getFilename() === 'CommentHygieneTest.php') {
                 continue;
@@ -45,9 +38,11 @@ function sourceFilesForComments(): array
     }
 
     // Comments in `.env.example` are read by whoever sets up a server: the same rules as code comments apply.
-    $files[] = base_path('.env.example');
-    $files[] = base_path('.githooks/commit-msg');
-    $files[] = base_path('.githooks/pre-push');
+    foreach (['.env.example', '.githooks/commit-msg', '.githooks/pre-push', 'devcore.conf', 'phpstan.neon', 'vite.config.ts'] as $file) {
+        if (is_file(base_path($file))) {
+            $files[] = base_path($file);
+        }
+    }
 
     sort($files);
 
@@ -55,25 +50,52 @@ function sourceFilesForComments(): array
 }
 
 /**
- * The text of every comment line, without its comment marker.
+ * Every comment in a source text: whole-line comments (PHP, TypeScript, shell, CSS, YAML, Blade), JSX comments, doc-block lines, and
+ * comments that trail a statement.
  *
- * @return list<array{0: string, 1: int, 2: string}> file, line number, text
+ * @return list<array{0: int, 1: string, 2: string}> line number, text without its comment marker, the whole comment as written
  */
-function commentLines(): array
+function commentsInSource(string $source): array
 {
     $found = [];
 
+    foreach (preg_split('/\r\n|\n|\r/', $source) ?: [] as $index => $line) {
+        $trimmed = trim($line);
+
+        if (str_starts_with($trimmed, '#!')) {
+            continue;
+        }
+
+        if (preg_match('#^(//+|/\*+|\{\s*/\*+|\{\{--|<!--|\*+(?!/)|\#(?!\[))\s?(.*)$#', $trimmed, $match) === 1) {
+            [$raw, $text] = [$trimmed, $match[2]];
+        } elseif (preg_match('#[;{},)]\s+((?://+|\#(?!\[))\s?(.*))$#', $trimmed, $match) === 1) {
+            [$raw, $text] = [$match[1], $match[2]];
+        } else {
+            continue;
+        }
+
+        $found[] = [$index + 1, trim((string) preg_replace('#\s*(\*/\}?|--\}\}|-->)\s*$#', '', $text)), $raw];
+    }
+
+    return $found;
+}
+
+/**
+ * @return list<array{0: string, 1: int, 2: string, 3: string}> file, line number, text, comment as written
+ */
+function commentLines(): array
+{
+    static $found = null;
+
+    if ($found !== null) {
+        return $found;
+    }
+
+    $found = [];
+
     foreach (sourceFilesForComments() as $file) {
-        foreach (file($file) ?: [] as $number => $line) {
-            $trimmed = trim($line);
-
-            if (str_starts_with($trimmed, '#!')) {
-                continue;
-            }
-
-            if (preg_match('#^(//+|/\*+|\*+(?!/)|\#(?!\[))\s?(.*)$#', $trimmed, $match) === 1) {
-                $found[] = [substr($file, strlen(base_path()) + 1), $number + 1, trim(rtrim($match[2], '*/ '))];
-            }
+        foreach (commentsInSource((string) file_get_contents($file)) as [$line, $text, $raw]) {
+            $found[] = [substr($file, strlen(base_path()) + 1), $line, $text, $raw];
         }
     }
 
@@ -81,16 +103,35 @@ function commentLines(): array
 }
 
 /**
- * @param  callable(string): bool  $isSlop
+ * The rules, one place for the tests below and for the samples that prove each rule can fire.
+ *
+ * @return array<string, callable(string, string): bool> rule name => whether the comment (text, as written) breaks it
+ */
+function commentRules(): array
+{
+    return [
+        'banner' => fn (string $text, string $raw): bool => preg_match('/([=_~#*-])\1{3,}/', $raw) === 1 || preg_match('/^-{2,}\s*\S.*\s*-{2,}$/', $text) === 1,
+        'step narration' => fn (string $text): bool => preg_match('/^(step|phase)\s+\d+\b/i', $text) === 1,
+        'end marker' => fn (string $text): bool => preg_match('/^end\s+(of\s+)?(if|for|foreach|while|switch|function|class|method)\b/i', $text) === 1,
+        'emoji' => fn (string $text): bool => preg_match('/\p{Extended_Pictographic}/u', $text) === 1,
+        'empty label' => fn (string $text): bool => preg_match('/^(MAIN LOGIC|CORE LOGIC|BUSINESS LOGIC|HELPER FUNCTIONS?|ERROR HANDLING|ENTRY POINT)\.?$/i', $text) === 1,
+        'vague TODO' => fn (string $text): bool => preg_match('/^(TODO|FIXME|XXX|HACK):?\s*$/i', $text) === 1 || preg_match('/^(TODO|FIXME|XXX|HACK):?\s*(improve( this)?|refactor( this)?|fix( this)?|add more( validation)?|clean ?up)\.?$/i', $text) === 1,
+    ];
+}
+
+/**
+ * @param  list<string>  $rules  names from commentRules()
  * @return list<string>
  */
-function commentViolations(callable $isSlop): array
+function commentViolations(array $rules): array
 {
     $violations = [];
 
-    foreach (commentLines() as [$file, $line, $text]) {
-        if ($text !== '' && $isSlop($text)) {
-            $violations[] = "{$file}:{$line}: {$text}";
+    foreach (commentLines() as [$file, $line, $text, $raw]) {
+        foreach ($rules as $rule) {
+            if (($text !== '' || $rule === 'banner') && commentRules()[$rule]($text, $raw)) {
+                $violations[] = "{$file}:{$line}: {$raw}";
+            }
         }
     }
 
@@ -98,57 +139,127 @@ function commentViolations(callable $isSlop): array
 }
 
 it('uses no banner separators made of repeated characters in comments', function () {
-    expect(commentViolations(fn (string $text): bool => preg_match('/([=_~#*-])\1{3,}/', $text) === 1 || preg_match('/^-{2,}\s*\S.*\s*-{2,}$/', $text) === 1))->toBe([]);
+    expect(commentViolations(['banner']))->toBe([]);
 });
 
 it('does not narrate the flow step by step in comments', function () {
-    expect(commentViolations(fn (string $text): bool => preg_match('/^(step|phase)\s+\d+\b/i', $text) === 1))->toBe([]);
+    expect(commentViolations(['step narration']))->toBe([]);
 });
 
 it('puts no block end markers, emoji, or empty labels in comments', function () {
-    $endMarker = fn (string $text): bool => preg_match('/^end\s+(of\s+)?(if|for|foreach|while|switch|function|class|method)\b/i', $text) === 1;
-    $emoji = fn (string $text): bool => preg_match('/\p{Extended_Pictographic}/u', $text) === 1;
-    $emptyLabel = fn (string $text): bool => preg_match('/^(MAIN LOGIC|CORE LOGIC|BUSINESS LOGIC|HELPER FUNCTIONS?|ERROR HANDLING|ENTRY POINT)\.?$/i', $text) === 1;
-
-    expect(commentViolations(fn (string $text): bool => $endMarker($text) || $emoji($text) || $emptyLabel($text)))->toBe([]);
+    expect(commentViolations(['end marker', 'emoji', 'empty label']))->toBe([]);
 });
 
 it('leaves no TODO without a clear task', function () {
-    expect(commentViolations(fn (string $text): bool => preg_match('/^TODO:?\s*$/i', $text) === 1 || preg_match('/^TODO:?\s*(improve( this)?|refactor( this)?|fix( this)?|add more( validation)?|clean ?up)\.?$/i', $text) === 1))->toBe([]);
+    expect(commentViolations(['vague TODO']))->toBe([]);
 });
 
-it('uses no long dash in text the project writes: code, translations, docs, and screens', function () {
-    $dash = "\u{2014}";
-    $files = [
-        ...sourceFilesForComments(),
-        ...glob(base_path('lang/*/*.php')) ?: [],
-        base_path('CLAUDE.md'),
-        base_path('memory/PRD.md'),
-        ...glob(base_path('.ai/rules/*.md')) ?: [],
-        ...glob(base_path('docs/briefs/*.md')) ?: [],
-        ...glob(base_path('resources/views/**/*.blade.php')) ?: [],
-        ...glob(base_path('resources/views/*.blade.php')) ?: [],
-    ];
-    $agents = (string) file_get_contents(base_path('AGENTS.md'));
-    $violations = [];
+it('finds each kind of comment in the places a source can hold one', function (string $source, string $text) {
+    expect(array_values(array_filter(array_column(commentsInSource($source), 1))))->toBe([$text]);
+})->with([
+    'a PHP line comment' => ["<?php\n// why this is so\n", 'why this is so'],
+    'a hash comment' => ["# why this is so\n", 'why this is so'],
+    'a doc block line' => ["/**\n * why this is so\n */\n", 'why this is so'],
+    'a one-line block comment' => ["/* why this is so */\n", 'why this is so'],
+    'a JSX comment' => ["<div>\n    {/* why this is so */}\n</div>\n", 'why this is so'],
+    'a Blade comment' => ["{{-- why this is so --}}\n", 'why this is so'],
+    'an HTML comment' => ["<!-- why this is so -->\n", 'why this is so'],
+    'a comment after a statement' => ["\$a = 1; // why this is so\n", 'why this is so'],
+    'a comment after a brace' => ["if (\$a) { // why this is so\n", 'why this is so'],
+]);
 
-    // AGENTS.md: only the project part; the Boost block below "# Bagian 2" is generated and never edited by hand.
-    if (str_contains(substr($agents, 0, (int) strpos($agents, '# Bagian 2')), $dash)) {
-        $violations[] = 'AGENTS.md';
+it('does not mistake a URL, an attribute, a colour, or a shebang for a comment', function (string $source) {
+    expect(commentsInSource($source))->toBe([]);
+})->with([
+    'a URL in a string' => ["\$url = 'https://example.test/a';\n"],
+    'a PHP attribute' => ["#[Test]\n"],
+    'a hex colour' => ["color: #fff;\n"],
+    'a shebang' => ["#!/usr/bin/env bash\n"],
+]);
+
+it('has a rule that fires on each kind of empty comment, and lets a real reason through', function (string $rule, string $text, string $raw) {
+    expect(commentRules()[$rule]($text, $raw))->toBeTrue();
+})->with([
+    'a row of equals signs' => ['banner', '======', '// ======'],
+    'a row of dashes around a title' => ['banner', '---- Helpers ----', '// ---- Helpers ----'],
+    'a block comment made of stars' => ['banner', '', '/**********/'],
+    'a doc block line made of stars' => ['banner', '********', '* ********'],
+    'Step 1' => ['step narration', 'Step 1: load', '// Step 1: load'],
+    'phase 2' => ['step narration', 'phase 2', '// phase 2'],
+    'end if' => ['end marker', 'end if', '// end if'],
+    'an emoji' => ['emoji', 'done ✅', '// done ✅'],
+    'MAIN LOGIC' => ['empty label', 'MAIN LOGIC', '// MAIN LOGIC'],
+    'a bare TODO' => ['vague TODO', 'TODO', '// TODO'],
+    'a bare FIXME' => ['vague TODO', 'FIXME:', '// FIXME:'],
+    'TODO fix this' => ['vague TODO', 'TODO: fix this', '// TODO: fix this'],
+    'HACK cleanup' => ['vague TODO', 'HACK cleanup', '// HACK cleanup'],
+]);
+
+it('lets a comment that says why, and a TODO with a task, through every rule', function (string $text) {
+    foreach (commentRules() as $rule) {
+        expect($rule($text, '// '.$text))->toBeFalse();
     }
+})->with([
+    'a reason' => ['The bank closes the file after 30 days, so the date is kept as given.'],
+    'a TODO with a task' => ['TODO: move the limit to the product table once the owner has chosen the rule.'],
+    'a sentence with a dash in it' => ['Route-model binding is skipped here on purpose.'],
+]);
 
-    foreach ($files as $file) {
-        if (is_file($file) && str_contains((string) file_get_contents($file), $dash)) {
-            $violations[] = substr($file, strlen(base_path()) + 1);
+/**
+ * Text files whose content people read or that hold comments: the project's folders and root files, never the installed packages, the
+ * build output, or the vendored skills (released as they are and checked by their manifest).
+ *
+ * @return list<string>
+ */
+function textFilesForLongDash(): array
+{
+    $files = [];
+    $skip = '#^(vendor|node_modules|\.git|storage|public/build|public/hot|bootstrap/cache|\.claude|\.ai/skills|resources/js/(actions|routes|wayfinder))/#';
+    $text = ['php', 'ts', 'tsx', 'js', 'mjs', 'css', 'md', 'json', 'yml', 'yaml', 'xml', 'sh', 'py', 'txt', 'neon', 'conf', 'steps', 'svg', 'html', 'example'];
+
+    // Pruned folder by folder, so the installed packages are never walked.
+    $walk = new RecursiveIteratorIterator(new RecursiveCallbackFilterIterator(
+        new RecursiveDirectoryIterator(base_path(), FilesystemIterator::SKIP_DOTS),
+        fn (SplFileInfo $entry): bool => preg_match($skip, substr($entry->getPathname(), strlen(base_path()) + 1).'/') !== 1,
+    ));
+
+    foreach ($walk as $file) {
+        $relative = substr($file->getPathname(), strlen(base_path()) + 1);
+
+        if (! $file->isFile() || $file->isLink()) {
+            continue;
+        }
+
+        $name = $file->getFilename();
+
+        if (in_array($file->getExtension(), $text, true) || in_array($name, ['commit-msg', 'pre-push'], true)) {
+            $files[] = $relative;
         }
     }
 
-    expect(array_values(array_diff($violations, array_keys(longDashDebt()))))->toBe([], 'Long dash in project text; use a colon, comma, or parentheses (antislop R-02).')
-        ->and(array_values(array_diff(array_keys(longDashDebt()), $violations)))->toBe([], 'Long-dash debt entry no longer matches: remove it from longDashDebt().');
-});
+    sort($files);
 
-it('gives every long-dash debt entry a real reason', function () {
-    foreach (longDashDebt() as $file => $reason) {
-        expect(mb_strlen($reason))->toBeGreaterThanOrEqual(10, "Debt entry {$file} has no reason.");
+    return $files;
+}
+
+it('uses no long dash in text the project writes: code, translations, docs, configuration, and screens', function () {
+    $dash = "\u{2014}";
+    $violations = [];
+
+    foreach (textFilesForLongDash() as $relative) {
+        $text = (string) file_get_contents(base_path($relative));
+
+        // AGENTS.md: only the project part; the Boost block is generated by `php artisan boost:update` and never edited by hand.
+        if ($relative === 'AGENTS.md') {
+            $boost = strpos($text, '<laravel-boost-guidelines>');
+            $text = $boost === false ? $text : substr($text, 0, $boost);
+        }
+
+        if (str_contains($text, $dash)) {
+            $violations[] = $relative;
+        }
     }
+
+    expect(textFilesForLongDash())->toContain('AGENTS.md', 'CLAUDE.md', 'memory/PRD.md', 'composer.json', 'devcore.conf', '.github/workflows/ci.yml', 'resources/css/app.css', '.env.example')
+        ->and($violations)->toBe([], 'Long dash in project text; use a colon, comma, or parentheses (antislop R-02).');
 });

@@ -3,12 +3,15 @@ paths:
     - 'resources/js/**'
     - 'resources/css/**'
     - 'resources/views/**'
-    - 'scripts/**'
+    - 'scripts/check-standards.mjs'
+    - 'package.json'
+    - 'vite.config.ts'
+    - 'tsconfig.json'
 ---
 
 # Antarmuka: aturan khas SIPEBRI (React 19 + Inertia v3 + Tailwind v4)
 
-Aturan proyek di atas standar `.ai/rules/ui.md` (yang standar tetap berlaku; arah desain dan pilihan pemilik ada di bagian "The project's design choices" di sana). Diambil dari react-starter (`docs/STANDARDS.md`, 2026-10-19) dan disesuaikan dengan Inertia. **Pengecualian dari `ui.md`:** bagian "Talking to the server" di sana (satu modul `lib/http.ts`) tidak berlaku; SIPEBRI memakai Inertia dan Wayfinder (bagian "Bicara dengan server" di bawah). Aturan bertanda **[mesin]** diperiksa `npm run standards` (`scripts/check-standards.mjs`) atau `ArchitectureTest`; sisanya diperiksa saat tinjauan. `npm run check` menjalankan `vp check` (format + lint oxlint bertipe), `npm run standards`, dan Vitest.
+Aturan proyek di atas standar `.ai/rules/ui.md` (yang standar tetap berlaku; arah desain dan pilihan pemilik ada di bagian "The project's design choices" di sana). Diambil dari react-starter (`docs/STANDARDS.md`, 2026-10-19) dan disesuaikan dengan Inertia. **Pengecualian dari `ui.md`:** bagian "Talking to the server" di sana (satu modul `lib/http.ts`) tidak berlaku; SIPEBRI memakai Inertia dan Wayfinder (bagian "Bicara dengan server" di bawah). Aturan bertanda **[mesin]** diperiksa `npm run standards` (`scripts/check-standards.mjs`) atau `ArchitectureTest`; sisanya diperiksa saat tinjauan. `npm run check` menjalankan `vp check` (format + lint oxlint bertipe) dan Vitest; `npm run standards` berjalan sendiri sebagai langkah gerbang.
 
 ## Mengubah UI
 
@@ -28,7 +31,7 @@ Tanggal, waktu, dan angka diubah menjadi teks di satu tempat: `lib/format.ts` (`
 
 ## Bicara dengan server
 
-Semua akses server lewat Inertia: `router`, `useForm`/`<Form>`, `useHttp` untuk permintaan JSON tanpa navigasi, dengan URL dari Wayfinder (`@/actions`, `@/routes`), bukan string tulisan tangan. `fetch` langsung dilarang **[mesin]** (kecuali ping koneksi di `hooks/use-network-status.ts`). Galat validasi tampil per kolom; jangan tampilkan galat teknis mentah. Jangan menyimpan rahasia (kata sandi, kode, token) di `localStorage`/`sessionStorage` **[mesin]**, URL, atau log.
+Semua akses server lewat Inertia: `router`, `useForm`/`<Form>`, `useHttp` untuk permintaan JSON tanpa navigasi, dengan URL dari Wayfinder (`@/actions`, `@/routes`), bukan string tulisan tangan. `fetch` langsung dilarang **[mesin]** (kecuali ping koneksi di `hooks/use-network-status.ts`). Galat validasi tampil per kolom; jangan tampilkan galat teknis mentah. `localStorage` dan `sessionStorage` tidak dipakai sama sekali di layar **[mesin]** (rahasia seperti kata sandi, kode, dan token tidak boleh di peramban, di URL, atau di log; yang perlu diingat disimpan di server).
 
 ## TypeScript dan React
 
@@ -138,4 +141,4 @@ Periksa setiap layar yang diubah di **desktop 1280px** (bukan lebar bawaan panel
 
 ## Sebelum selesai
 
-`npm run check` (format, lint, aturan rumah, test Vitest), `npm run types:check`, `npm run duplicates`, dan `npm run build` (test Pest merender halaman lewat manifest Vite).
+`npm run check` (format, lint, test Vitest), `npm run standards` (aturan rumah), `npm run types:check`, `npx jscpd`, dan `npm run build` (test Pest merender halaman lewat manifest Vite). Gerbang `scripts/verify.sh` menjalankan semuanya.

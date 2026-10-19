@@ -50,7 +50,7 @@
             "@php artisan key:generate",
             "@php -r \"is_dir('.git') && shell_exec('git config core.hooksPath .githooks');\"",
             "@php artisan migrate --force",
-            "npm install",
+            "npm ci",
             "npm run build"
         ],
         "dev": [
@@ -81,6 +81,9 @@
         "test": [
             "@php artisan config:clear --ansi",
             "@php artisan test"
+        ],
+        "post-install-cmd": [
+            "@php -r \"is_dir('.git') && shell_exec('git config core.hooksPath .githooks');\""
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
