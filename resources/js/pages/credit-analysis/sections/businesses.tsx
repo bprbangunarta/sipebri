@@ -2,11 +2,13 @@ import { router, useForm } from '@inertiajs/react';
 import { Plus, Store, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
+import { ConfirmDialog, DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tip } from '@/components/ui/tooltip';
 import { rupiah } from '@/lib/format';
 import type { BusinessRow } from '@/pages/credit-analysis/types';
 
@@ -54,7 +56,6 @@ export function BusinessesSection({
             key: 'revenue',
             header: 'Pendapatan',
             align: 'right',
-            hideBelow: 'sm',
             className: 'tabular-nums',
             cell: (b) => rupiah(b.revenue),
         },
@@ -62,7 +63,6 @@ export function BusinessesSection({
             key: 'expense',
             header: 'Pengeluaran',
             align: 'right',
-            hideBelow: 'md',
             className: 'tabular-nums',
             cell: (b) => rupiah(b.expense),
         },
@@ -81,17 +81,19 @@ export function BusinessesSection({
             align: 'right',
             cell: (b) =>
                 canEdit && (
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label={`Hapus ${b.code}`}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setToDelete(b);
-                        }}
-                    >
-                        <Trash2 />
-                    </Button>
+                    <Tip label="Hapus">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={`Hapus ${b.code}`}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setToDelete(b);
+                            }}
+                        >
+                            <Trash2 />
+                        </Button>
+                    </Tip>
                 ),
         },
     ];
@@ -99,19 +101,15 @@ export function BusinessesSection({
     return (
         <div className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex flex-wrap gap-1 rounded-md border border-line bg-canvas p-1">
-                    {BUSINESS_TYPES.map((t) => (
-                        <button
-                            key={t.key}
-                            type="button"
-                            onClick={() => onType(t.key)}
-                            className={`cursor-pointer rounded px-3 py-1 text-xs font-medium transition-colors ${t.key === type ? 'bg-surface text-ink shadow-sm' : 'text-muted hover:text-ink'}`}
-                        >
-                            {t.label.replace('Usaha ', '')} (
-                            {businesses.filter((b) => b.type === t.key).length})
-                        </button>
-                    ))}
-                </div>
+                <Tabs value={type} onValueChange={(value) => onType(value as BusinessRow['type'])} className="min-w-0">
+                    <TabsList className="flex-wrap gap-x-4 gap-y-0">
+                        {BUSINESS_TYPES.map((t) => (
+                            <TabsTrigger key={t.key} value={t.key}>
+                                {t.label.replace('Usaha ', '')} ({businesses.filter((b) => b.type === t.key).length})
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
+                </Tabs>
                 {canEdit && (
                     <Button
                         onClick={() => {
@@ -129,26 +127,15 @@ export function BusinessesSection({
                 rows={rows}
                 rowKey={(b) => b.id}
                 columns={columns}
-                onRowClick={(b) =>
-                    router.visit(
-                        `/credit-analysis/${loanId}/businesses/${b.id}`,
-                    )
-                }
+                onRowClick={(b) => router.visit(`/credit-analysis/${loanId}/businesses/${b.id}`)}
                 empty={{
                     icon: <Store />,
                     title: `Belum ada ${label.toLowerCase()} yang dicatat.`,
-                    description: canEdit
-                        ? `Tambahkan satu, lalu lengkapi datanya.`
-                        : undefined,
+                    description: canEdit ? `Tambahkan satu, lalu lengkapi datanya.` : undefined,
                 }}
             />
 
-            <Modal
-                open={adding}
-                onOpenChange={setAdding}
-                title={`Tambah ${label}`}
-                description="Datanya dilengkapi di halaman berikutnya."
-            >
+            <Modal open={adding} onOpenChange={setAdding} title={`Tambah ${label}`} description="Datanya dilengkapi di halaman berikutnya." persistent>
                 <form
                     noValidate
                     onSubmit={(e) => {
@@ -156,35 +143,22 @@ export function BusinessesSection({
                         form.post(`/credit-analysis/${loanId}/businesses`);
                     }}
                 >
-                    <div className="p-4">
-                        <Field
-                            label="Nama Usaha"
-                            required
-                            error={form.errors.name}
-                        >
+                    <DialogBody>
+                        <Field label="Nama Usaha" required error={form.errors.name}>
                             <Input
                                 autoFocus
                                 maxLength={150}
                                 value={form.data.name}
-                                onChange={(e) =>
-                                    form.setData('name', e.target.value)
-                                }
+                                onChange={(e) => form.setData('name', e.target.value)}
                                 aria-invalid={!!form.errors.name}
                             />
                         </Field>
-                    </div>
+                    </DialogBody>
                     <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setAdding(false)}
-                        >
+                        <Button variant="outline" onClick={() => setAdding(false)}>
                             Batal
                         </Button>
-                        <Button
-                            type="submit"
-                            loading={form.processing}
-                            disabled={form.data.name.trim() === ''}
-                        >
+                        <Button type="submit" loading={form.processing} disabled={form.data.name.trim() === ''}>
                             Simpan &amp; Lanjut
                         </Button>
                     </DialogFooter>
@@ -197,19 +171,15 @@ export function BusinessesSection({
                 title="Hapus usaha?"
                 description={
                     <>
-                        Usaha <strong>{toDelete?.name}</strong> beserta
-                        rinciannya akan dihapus permanen.
+                        Usaha <strong>{toDelete?.name}</strong> beserta rinciannya akan dihapus permanen.
                     </>
                 }
                 onConfirm={() => {
                     if (toDelete) {
-                        router.delete(
-                            `/credit-analysis/${loanId}/businesses/${toDelete.id}`,
-                            {
-                                preserveScroll: true,
-                                onFinish: () => setToDelete(null),
-                            },
-                        );
+                        router.delete(`/credit-analysis/${loanId}/businesses/${toDelete.id}`, {
+                            preserveScroll: true,
+                            onFinish: () => setToDelete(null),
+                        });
                     }
                 }}
             />

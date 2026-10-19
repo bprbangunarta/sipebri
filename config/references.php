@@ -20,7 +20,7 @@ use App\Models\Region;
 |  usage   – relations that reference a record; deleting a record in use is refused.
 |  fields  – columns, in table order. Keys: name, label, type (text|number|select|boolean), required,
 |            unique (true, or a sibling column the value is unique within), uppercase, max, min, hint,
-|            default, empty (label for null), hide_below (hide on small screens), options_from
+|            default, empty (label for null), options_from
 |            ([model, value, label columns]), rules (extra validation rules).
 |  actions – extra row actions: label, url (with {id}).
 */
@@ -37,7 +37,7 @@ return [
             ['name' => 'regency', 'label' => 'Kabupaten/Kota', 'type' => 'text', 'required' => true, 'max' => 100, 'uppercase' => true],
             ['name' => 'district', 'label' => 'Kecamatan', 'type' => 'text', 'required' => true, 'max' => 100, 'uppercase' => true],
             ['name' => 'village', 'label' => 'Desa/Kelurahan', 'type' => 'text', 'required' => true, 'max' => 100, 'uppercase' => true],
-            ['name' => 'postal_code', 'label' => 'Kode pos', 'type' => 'text', 'max' => 8, 'hide_below' => 'md'],
+            ['name' => 'postal_code', 'label' => 'Kode pos', 'type' => 'text', 'max' => 8],
         ],
     ],
 

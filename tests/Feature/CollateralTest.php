@@ -63,3 +63,21 @@ it('restricts collaterals to permitted users', function () {
     $this->get(route('collaterals.index'))->assertOk();
     $this->get(route('collaterals.create'))->assertForbidden();
 });
+
+it('orders the collaterals by every column of the list, both ways', function (string $key) {
+    CollateralType::create(['code' => '06', 'name' => 'VEHICLE']);
+    $this->travelTo(now()->subDay());
+    $a = Collateral::create(['cbs_id' => 'AG-1', 'collateral_type_code' => '05', 'owner_name' => 'ANI', 'description' => 'A HOUSE', 'document_number' => 'DOC 1', 'appraisal_value' => 1_000_000]);
+    $this->travelBack();
+    $b = Collateral::create(['cbs_id' => 'AG-2', 'collateral_type_code' => '06', 'owner_name' => 'BUDI', 'description' => 'B LAND', 'document_number' => 'DOC 2', 'appraisal_value' => 2_000_000]);
+
+    foreach (['asc' => [$a->id, $b->id], 'desc' => [$b->id, $a->id]] as $direction => [$top, $bottom]) {
+        $this->get(route('collaterals.index', ['sort' => $key, 'direction' => $direction]))->assertInertia(fn (Assert $page) => $page
+            ->where('filters.sort', $key)->where('filters.direction', $direction)
+            ->where('collaterals.data.0.id', $top)->where('collaterals.data.1.id', $bottom));
+    }
+})->with(['cbs_id', 'collateral_type_code', 'owner_name', 'description', 'document_number', 'appraisal_value', 'created_at']);
+
+it('falls back to the newest collaterals first for an unknown sort key', function () {
+    $this->get(route('collaterals.index', ['sort' => 'owner_address']))->assertInertia(fn (Assert $page) => $page->where('filters.sort', 'created_at'));
+});

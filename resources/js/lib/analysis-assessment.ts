@@ -2,8 +2,7 @@
 type Choice = { value: number; label: string };
 type Aspect = { label: string; key: string; options: Choice[] };
 
-const opt = (pairs: [number, string][]): Choice[] =>
-    pairs.map(([value, label]) => ({ value, label }));
+const opt = (pairs: [number, string][]): Choice[] => pairs.map(([value, label]) => ({ value, label }));
 
 const GOOD = opt([
     [3, 'Baik'],
@@ -164,16 +163,8 @@ export const FIVE_C: { key: string; title: string; fields: Aspect[] }[] = [
                     [1, 'Agunan lain yang tidak memenuhi syarat'],
                 ]),
             ),
-            a(
-                'Kepemilikan Agunan Tambahan',
-                'additional_collateral_ownership',
-                OWNED,
-            ),
-            a(
-                'Legalitas Agunan Tambahan',
-                'additional_collateral_legality',
-                OWNED,
-            ),
+            a('Kepemilikan Agunan Tambahan', 'additional_collateral_ownership', OWNED),
+            a('Legalitas Agunan Tambahan', 'additional_collateral_legality', OWNED),
             a(
                 'Stabilitas Harga',
                 'price_stability',

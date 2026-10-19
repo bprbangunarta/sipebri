@@ -3,17 +3,18 @@ import { CircleAlert, Pencil, UserRound, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
-import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
+import { ConfirmDialog, DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Field } from '@/components/ui/field';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
-import { Input } from '@/components/ui/input';
+import { MaskedInput } from '@/components/ui/masked-input';
 import { CommitteeTabs } from '@/components/committee-tabs';
-import { Badge, PageHeader } from '@/components/ui/misc';
+import { Alert, Badge, PageHeader } from '@/components/ui/misc';
 import type { PageMeta } from '@/components/ui/pagination';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
+import { MASKS } from '@/lib/mask';
 
 type Member = {
     id: number;
@@ -34,40 +35,30 @@ type Props = {
 
 const DEFAULTS = { per_page: 25 };
 
-export default function CommitteeMembers({
-    members,
-    filters,
-    roles,
-    withoutNik,
-}: Props) {
+export default function CommitteeMembers({ members, filters, roles, withoutNik }: Props) {
     const [editing, setEditing] = useState<Member | null>(null);
     const [removing, setRemoving] = useState<Member | null>(null);
     const form = useForm({ nik: '' });
-    const { visit, search, onSearch, clear, loading, error } =
-        useListQuery<Filters>({
-            url: '/committees/members',
-            filters,
-            defaults: DEFAULTS,
-            only: ['members', 'filters', 'withoutNik'],
-        });
+    const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
+        url: '/committees/members',
+        filters,
+        defaults: DEFAULTS,
+        only: ['members', 'filters', 'withoutNik'],
+    });
     const hasFilters = Boolean(filters.search || filters.role);
 
     const columns: Column<Member>[] = [
         {
             key: 'name',
             header: 'Anggota',
-            cell: (m) => (
-                <>
-                    <p className="font-medium">{m.name}</p>
-                    <p className="text-xs text-muted">{m.username ?? '–'}</p>
-                </>
-            ),
+            className: 'font-medium',
+            cell: (m) => m.name,
         },
+        { key: 'username', header: 'Username', cell: (m) => m.username ?? '–' },
         { key: 'role', header: 'Peran di komite', cell: (m) => m.role ?? '–' },
         {
             key: 'office',
             header: 'Kantor',
-            hideBelow: 'md',
             cell: (m) => m.office ?? '–',
         },
         {
@@ -77,9 +68,7 @@ export default function CommitteeMembers({
                 m.nik ? (
                     <span className="flex flex-wrap items-center gap-1.5">
                         <span className="font-mono text-xs">{m.nik}</span>
-                        <Badge>
-                            {m.nik_source === 'codex' ? 'Codex' : 'Diketik'}
-                        </Badge>
+                        <Badge>{m.nik_source === 'codex' ? 'Codex' : 'Diketik'}</Badge>
                     </span>
                 ) : (
                     <Badge tone="warning">Belum diisi</Badge>
@@ -110,12 +99,7 @@ export default function CommitteeMembers({
                     </Tip>
                     {m.nik && (
                         <Tip label="Hapus NIK">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                aria-label={`Hapus NIK ${m.name}`}
-                                onClick={() => setRemoving(m)}
-                            >
+                            <Button variant="ghost" size="icon" aria-label={`Hapus NIK ${m.name}`} onClick={() => setRemoving(m)}>
                                 <X />
                             </Button>
                         </Tip>
@@ -135,18 +119,10 @@ export default function CommitteeMembers({
             <CommitteeTabs current="members" />
 
             {withoutNik > 0 && (
-                <div
-                    role="status"
-                    className="mb-3 flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800"
-                >
-                    <CircleAlert className="mt-0.5 size-3.5 shrink-0" />
-                    <span>
-                        {withoutNik} anggota belum punya NIK, sehingga kredit
-                        yang mereka ajukan tidak bisa dikenali otomatis. NIK
-                        biasanya datang dari Codex; sampai itu terjadi, ketik di
-                        sini.
-                    </span>
-                </div>
+                <Alert tone="warning" icon={<CircleAlert />} className="mb-3">
+                    {withoutNik} anggota belum punya NIK, sehingga kredit yang mereka ajukan tidak bisa dikenali otomatis. NIK biasanya datang dari Codex;
+                    sampai itu terjadi, ketik di sini.
+                </Alert>
             )}
 
             <DataTable
@@ -156,16 +132,7 @@ export default function CommitteeMembers({
                 error={error}
                 onRetry={() => visit({})}
                 toolbar={
-                    <FilterBar
-                        search={
-                            <SearchInput
-                                value={search}
-                                onChange={onSearch}
-                                placeholder="Cari nama atau username…"
-                                label="Cari anggota"
-                            />
-                        }
-                    >
+                    <FilterBar search={<SearchInput value={search} onChange={onSearch} placeholder="Cari nama atau username…" label="Cari anggota" />}>
                         <Combobox
                             className="w-full sm:w-56"
                             clearable
@@ -175,11 +142,7 @@ export default function CommitteeMembers({
                             onChange={(v) => visit({ role: v })}
                         />
                         {hasFilters && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => clear({ role: null })}
-                            >
+                            <Button variant="ghost" size="sm" onClick={() => clear({ role: null })}>
                                 <X /> Atur ulang
                             </Button>
                         )}
@@ -188,12 +151,8 @@ export default function CommitteeMembers({
                 columns={columns}
                 empty={{
                     icon: <UserRound />,
-                    title: hasFilters
-                        ? 'Tidak ada anggota yang cocok dengan filter'
-                        : 'Belum ada anggota komite',
-                    description: hasFilters
-                        ? undefined
-                        : 'Anggota muncul setelah sebuah peran dipakai di jenjang komite.',
+                    title: hasFilters ? 'Tidak ada anggota yang cocok dengan filter' : 'Belum ada anggota komite',
+                    description: hasFilters ? undefined : 'Anggota muncul setelah sebuah peran dipakai di jenjang komite.',
                 }}
                 pagination={{
                     meta: members,
@@ -207,6 +166,7 @@ export default function CommitteeMembers({
             <Modal
                 open={editing !== null}
                 onOpenChange={(open) => !open && setEditing(null)}
+                persistent
                 title={`NIK ${editing?.name ?? ''}`}
                 description="16 digit. Setelah disimpan hanya empat digit terakhir yang tampil."
             >
@@ -222,7 +182,7 @@ export default function CommitteeMembers({
                         }
                     }}
                 >
-                    <div className="p-4">
+                    <DialogBody>
                         <Field
                             label="NIK (KTP)"
                             required
@@ -233,33 +193,14 @@ export default function CommitteeMembers({
                                     : undefined
                             }
                         >
-                            <Input
-                                autoFocus
-                                inputMode="numeric"
-                                maxLength={16}
-                                value={form.data.nik}
-                                onChange={(e) =>
-                                    form.setData(
-                                        'nik',
-                                        e.target.value.replace(/\D/g, ''),
-                                    )
-                                }
-                                aria-invalid={!!form.errors.nik}
-                            />
+                            <MaskedInput autoFocus mask={MASKS.nik} value={form.data.nik} onValueChange={(v) => form.setData('nik', v)} />
                         </Field>
-                    </div>
+                    </DialogBody>
                     <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setEditing(null)}
-                        >
+                        <Button variant="outline" onClick={() => setEditing(null)}>
                             Batal
                         </Button>
-                        <Button
-                            type="submit"
-                            loading={form.processing}
-                            disabled={form.data.nik.length !== 16}
-                        >
+                        <Button type="submit" loading={form.processing} disabled={form.data.nik.length !== 16}>
                             Simpan
                         </Button>
                     </DialogFooter>
@@ -272,8 +213,7 @@ export default function CommitteeMembers({
                 title="Hapus NIK?"
                 description={
                     <>
-                        <strong>{removing?.name}</strong> tidak lagi dikenali
-                        saat mengajukan kredit, sampai NIK diisi lagi.
+                        NIK <strong>{removing?.name}</strong> akan dihapus, sehingga ia tidak lagi dikenali saat mengajukan kredit sampai NIK diisi lagi.
                     </>
                 }
                 confirmLabel="Hapus"

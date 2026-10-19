@@ -47,7 +47,7 @@ class SurveyController extends Controller
                 'supervisor_name' => $l->supervisor?->name,
                 // Progress of the two things a survey needs, so the list shows what is left without opening each file.
                 'has_location' => $l->survey_latitude !== null,
-                'located_at' => $l->survey_located_at?->format('d M Y H:i'),
+                'located_at' => $l->survey_located_at?->toIso8601String(),
                 'survey_photos' => (int) $l->getAttribute('survey_photos_count'),
             ]),
             'filters' => ['search' => $search],
@@ -78,12 +78,12 @@ class SurveyController extends Controller
             'locations' => LocationTargets::for($loan, $this->customer($loan)['address'] ?? null),
             'photos' => $loan->photos->map(fn (LoanSurveyPhoto $p): array => [
                 'id' => $p->id, 'url' => $p->url(), 'collateral_id' => $p->collateral_id, 'latitude' => $p->latitude === null ? null : (float) $p->latitude,
-                'longitude' => $p->longitude === null ? null : (float) $p->longitude, 'taken_at' => $p->taken_at?->format('d M Y H:i'),
-                'saved' => $p->loan_survey_id !== null, 'created_at' => $p->created_at?->format('d M Y H:i'),
+                'longitude' => $p->longitude === null ? null : (float) $p->longitude, 'taken_at' => $p->taken_at?->toIso8601String(),
+                'saved' => $p->loan_survey_id !== null, 'created_at' => $p->created_at?->toIso8601String(),
             ]),
             'survey' => $survey ? [
                 'note' => $survey->note, 'latitude' => $survey->latitude, 'longitude' => $survey->longitude,
-                'created_by' => $survey->created_by, 'created_at' => $survey->created_at?->format('d M Y H:i'),
+                'created_by' => $survey->created_by, 'created_at' => $survey->created_at?->toIso8601String(),
             ] : null,
             'maxPhotos' => (int) config('credit.max_survey_photos'),
         ]);

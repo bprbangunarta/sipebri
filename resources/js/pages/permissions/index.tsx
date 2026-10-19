@@ -3,10 +3,11 @@ import { KeyRound, Trash2, Wand2, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
-import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
+import { Checkbox } from '@/components/ui/choice';
+import { ConfirmDialog, DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
-import { Input } from '@/components/ui/input';
+import { FilteredInput } from '@/components/ui/filtered-input';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Badge, PageHeader } from '@/components/ui/misc';
@@ -41,28 +42,22 @@ const TYPES = [
     { value: 'custom', label: 'Kustom' },
 ];
 const DEFAULTS = { per_page: 25 };
+// The server lowercases the entity and turns spaces and underscores into hyphens before checking it.
+const ENTITY_CHARACTER = /^[A-Za-z0-9 _-]$/;
 
-export default function PermissionsIndex({
-    permissions,
-    filters,
-    entities,
-    actions,
-}: Props) {
+export default function PermissionsIndex({ permissions, filters, entities, actions }: Props) {
     const [generating, setGenerating] = useState(false);
     const [toDelete, setToDelete] = useState<Row | null>(null);
     const [deleting, setDeleting] = useState(false);
     const form = useForm({ entity: '', actions: actions as string[] });
-    const { visit, search, onSearch, clear, loading, error } =
-        useListQuery<Filters>({
-            url: '/permissions',
-            filters,
-            defaults: DEFAULTS,
-            only: ['permissions', 'filters'],
-        });
+    const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
+        url: '/permissions',
+        filters,
+        defaults: DEFAULTS,
+        only: ['permissions', 'filters'],
+    });
 
-    const hasFilters = Boolean(
-        filters.search || filters.entity || filters.type,
-    );
+    const hasFilters = Boolean(filters.search || filters.entity || filters.type);
 
     const openGenerator = () => {
         form.clearErrors();
@@ -93,14 +88,7 @@ export default function PermissionsIndex({
     };
 
     const toggle = (action: string, on: boolean) =>
-        form.setData(
-            'actions',
-            on
-                ? actions.filter(
-                      (a) => a === action || form.data.actions.includes(a),
-                  )
-                : form.data.actions.filter((a) => a !== action),
-        );
+        form.setData('actions', on ? actions.filter((a) => a === action || form.data.actions.includes(a)) : form.data.actions.filter((a) => a !== action));
 
     const columns: Column<Row>[] = [
         {
@@ -112,17 +100,12 @@ export default function PermissionsIndex({
         {
             key: 'module',
             header: 'Modul',
-            hideBelow: 'sm',
             cell: (p) => p.module ?? <span className="text-muted">–</span>,
         },
         {
             key: 'type',
             header: 'Jenis',
-            cell: (p) => (
-                <Badge tone={p.custom ? 'info' : 'neutral'}>
-                    {p.custom ? 'Kustom' : 'Sistem'}
-                </Badge>
-            ),
+            cell: (p) => <Badge tone={p.custom ? 'info' : 'neutral'}>{p.custom ? 'Kustom' : 'Sistem'}</Badge>,
         },
         {
             key: 'roles',
@@ -140,12 +123,7 @@ export default function PermissionsIndex({
             cell: (p) =>
                 p.custom && (
                     <Tip label="Hapus">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            aria-label={`Hapus ${p.name}`}
-                            onClick={() => setToDelete(p)}
-                        >
+                        <Button variant="ghost" size="icon" aria-label={`Hapus ${p.name}`} onClick={() => setToDelete(p)}>
                             <Trash2 />
                         </Button>
                     </Tip>
@@ -173,16 +151,7 @@ export default function PermissionsIndex({
                 error={error}
                 onRetry={() => visit({})}
                 toolbar={
-                    <FilterBar
-                        search={
-                            <SearchInput
-                                value={search}
-                                onChange={onSearch}
-                                placeholder="Cari izin…"
-                                label="Cari izin"
-                            />
-                        }
-                    >
+                    <FilterBar search={<SearchInput value={search} onChange={onSearch} placeholder="Cari izin…" label="Cari izin" />}>
                         <Combobox
                             className="w-full sm:w-48"
                             clearable
@@ -201,18 +170,10 @@ export default function PermissionsIndex({
                             placeholder="Jenis"
                             options={TYPES}
                             value={filters.type}
-                            onChange={(v) =>
-                                visit({ type: v as Filters['type'] })
-                            }
+                            onChange={(v) => visit({ type: v as Filters['type'] })}
                         />
                         {hasFilters && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() =>
-                                    clear({ entity: null, type: null })
-                                }
-                            >
+                            <Button variant="ghost" size="sm" onClick={() => clear({ entity: null, type: null })}>
                                 <X /> Atur ulang
                             </Button>
                         )}
@@ -221,9 +182,7 @@ export default function PermissionsIndex({
                 columns={columns}
                 empty={{
                     icon: <KeyRound />,
-                    title: hasFilters
-                        ? 'Tidak ada izin yang cocok dengan filter'
-                        : 'Belum ada izin',
+                    title: hasFilters ? 'Tidak ada izin yang cocok dengan filter' : 'Belum ada izin',
                 }}
                 pagination={{
                     meta: permissions,
@@ -237,67 +196,39 @@ export default function PermissionsIndex({
             <Modal
                 open={generating}
                 onOpenChange={setGenerating}
+                persistent
                 title="Generator izin standar"
                 description="Membuat izin entitas.aksi; yang sudah ada dilewati."
             >
                 <form onSubmit={submit} noValidate>
-                    <div className="flex flex-col gap-3 p-4">
-                        <Field
-                            label="Entitas"
-                            required
-                            error={form.errors.entity}
-                            hint='Huruf kecil dengan tanda hubung, mis. "credit-analysis".'
-                        >
-                            <Input
+                    <DialogBody className="flex flex-col gap-3">
+                        <Field label="Entitas" required error={form.errors.entity} hint='Huruf kecil dengan tanda hubung, mis. "credit-analysis".'>
+                            <FilteredInput
                                 autoFocus
+                                maxLength={50}
+                                allowed={ENTITY_CHARACTER}
                                 value={form.data.entity}
-                                onChange={(e) =>
-                                    form.setData('entity', e.target.value)
-                                }
-                                aria-invalid={!!form.errors.entity}
+                                onValueChange={(v) => form.setData('entity', v)}
                             />
                         </Field>
-                        <Field
-                            label="Aksi standar"
-                            error={
-                                form.errors.actions ??
-                                (form.errors as Record<string, string>)[
-                                    'actions.0'
-                                ]
-                            }
-                        >
+                        <Field label="Aksi standar" error={form.errors.actions ?? (form.errors as Record<string, string>)['actions.0']}>
                             <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 rounded-md border border-line p-2">
                                 {actions.map((a) => (
-                                    <label
+                                    <Checkbox
                                         key={a}
-                                        className="flex items-center gap-1.5 font-mono text-xs"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            className="accent-primary"
-                                            checked={form.data.actions.includes(
-                                                a,
-                                            )}
-                                            onChange={(e) =>
-                                                toggle(a, e.target.checked)
-                                            }
-                                        />
-                                        {a}
-                                    </label>
+                                        label={<span className="font-mono text-xs">{a}</span>}
+                                        checked={form.data.actions.includes(a)}
+                                        onCheckedChange={(checked) => toggle(a, checked === true)}
+                                    />
                                 ))}
                             </div>
                         </Field>
                         <p className="text-xs text-muted">
-                            Sebuah izin baru melindungi sesuatu setelah route
-                            atau policy memeriksanya. Super Admin otomatis
-                            menerima izin baru.
+                            Sebuah izin baru melindungi sesuatu setelah route atau policy memeriksanya. Super Admin otomatis menerima izin baru.
                         </p>
-                    </div>
+                    </DialogBody>
                     <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setGenerating(false)}
-                        >
+                        <Button variant="outline" onClick={() => setGenerating(false)}>
                             Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
@@ -313,8 +244,7 @@ export default function PermissionsIndex({
                 title="Hapus izin?"
                 description={
                     <>
-                        Ini menghapus <strong>{toDelete?.name}</strong>. Izin
-                        ini tidak dipegang peran mana pun.
+                        Izin <strong>{toDelete?.name}</strong> akan dihapus permanen. Izin ini tidak dipegang peran mana pun.
                     </>
                 }
                 loading={deleting}

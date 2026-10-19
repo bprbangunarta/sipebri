@@ -175,3 +175,36 @@ it('sends the file to the committee only when the required parts are filled in',
     // Once at the committee the worksheet is read-only.
     $this->put(route('credit-analysis.memorandum.update', $loan), ['proposed_amount' => 1])->assertForbidden();
 });
+
+it('sorts the list by every column in both directions', function () {
+    test()->seed(RoleSeeder::class);
+    $analyst = User::factory()->create()->assignRole('Staff Analis & Appraisal');
+    $make = fn (string $name, int $amount, string $surveyDate, LoanStatus $status) => LoanApplication::create([
+        'application_code' => LoanApplication::nextCode(), 'application_date' => now(), 'status' => $status, 'nik' => '320100000000000'.strlen($name),
+        'full_name' => $name, 'requested_amount' => $amount, 'requested_tenor' => 12, 'survey_date' => $surveyDate, 'surveyor_id' => $analyst->id,
+    ]);
+    $a = $make('Ani', 30_000_000, '2026-01-03', LoanStatus::Analysis);
+    $b = $make('Budi', 10_000_000, '2026-01-01', LoanStatus::Survey);
+    $c = $make('Citra', 20_000_000, '2026-01-02', LoanStatus::Survey);
+    $a->collaterals()->attach([Collateral::create(['collateral_type_code' => '05'])->id, Collateral::create(['collateral_type_code' => '05'])->id]);
+    $c->collaterals()->attach(Collateral::create(['collateral_type_code' => '05']));
+
+    // Ties keep the id order in both directions, so the stage (two values) is not simply reversed.
+    $expected = [
+        'application_code' => [[$a, $b, $c], [$c, $b, $a]],
+        'full_name' => [[$a, $b, $c], [$c, $b, $a]],
+        'requested_amount' => [[$b, $c, $a], [$a, $c, $b]],
+        'survey_date' => [[$b, $c, $a], [$a, $c, $b]],
+        'status' => [[$a, $b, $c], [$b, $c, $a]],
+        'collaterals_count' => [[$b, $c, $a], [$a, $c, $b]],
+    ];
+
+    foreach ($expected as $sort => [$asc, $desc]) {
+        foreach (['asc' => $asc, 'desc' => $desc] as $direction => $rows) {
+            $this->actingAs($analyst)->get(route('credit-analysis.index', ['sort' => $sort, 'direction' => $direction]))
+                ->assertInertia(fn (Assert $page) => $page
+                    ->where('filters.sort', $sort)
+                    ->where('loans.data.0.id', $rows[0]->id)->where('loans.data.1.id', $rows[1]->id)->where('loans.data.2.id', $rows[2]->id));
+        }
+    }
+});

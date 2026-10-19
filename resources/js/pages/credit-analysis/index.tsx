@@ -34,22 +34,13 @@ type Filters = {
 
 const DEFAULTS = { sort: 'application_code', direction: 'desc', per_page: 10 };
 
-export default function AnalysisIndex({
-    loans,
-    filters,
-    perPageOptions,
-}: {
-    loans: { data: Row[] } & PageMeta;
-    filters: Filters;
-    perPageOptions: number[];
-}) {
-    const { visit, search, onSearch, clear, loading, error } =
-        useListQuery<Filters>({
-            url: '/credit-analysis',
-            filters,
-            defaults: DEFAULTS,
-            only: ['loans', 'filters'],
-        });
+export default function AnalysisIndex({ loans, filters, perPageOptions }: { loans: { data: Row[] } & PageMeta; filters: Filters; perPageOptions: number[] }) {
+    const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
+        url: '/credit-analysis',
+        filters,
+        defaults: DEFAULTS,
+        only: ['loans', 'filters'],
+    });
     const sortBy = (column: string) => visit(nextSort(filters, column));
 
     const columns: Column<Row>[] = [
@@ -80,14 +71,11 @@ export default function AnalysisIndex({
             header: 'Plafon',
             sort: 'requested_amount',
             align: 'right',
-            hideBelow: 'sm',
             className: 'whitespace-nowrap tabular-nums',
             cell: (l) => (
                 <>
                     {rupiah(l.requested_amount)}
-                    <p className="text-xs text-muted">
-                        {l.requested_tenor} months
-                    </p>
+                    <p className="text-xs text-muted">{l.requested_tenor} bulan</p>
                 </>
             ),
         },
@@ -95,14 +83,11 @@ export default function AnalysisIndex({
             key: 'survey',
             header: 'Survei',
             sort: 'survey_date',
-            hideBelow: 'md',
             cell: (l) => (
                 <>
                     {formatDate(l.survey_date)}
                     <p>
-                        <Badge tone={l.surveyed ? 'success' : 'info'}>
-                            {l.surveyed ? 'Disurvei' : 'Tanpa kunjungan'}
-                        </Badge>
+                        <Badge tone={l.surveyed ? 'success' : 'info'}>{l.surveyed ? 'Disurvei' : 'Tanpa kunjungan'}</Badge>
                     </p>
                 </>
             ),
@@ -110,17 +95,14 @@ export default function AnalysisIndex({
         {
             key: 'stage',
             header: 'Tahap',
-            cell: (l) => (
-                <Badge tone={l.in_analysis ? 'info' : 'neutral'}>
-                    {l.in_analysis ? 'Dalam analisa' : 'Siap dianalisa'}
-                </Badge>
-            ),
+            sort: 'status',
+            cell: (l) => <Badge tone={l.in_analysis ? 'info' : 'neutral'}>{l.in_analysis ? 'Dalam analisa' : 'Siap dianalisa'}</Badge>,
         },
         {
             key: 'collateral',
             header: 'Jaminan',
+            sort: 'collaterals_count',
             align: 'right',
-            hideBelow: 'lg',
             className: 'tabular-nums',
             cell: (l) => l.collaterals_count,
         },
@@ -141,18 +123,7 @@ export default function AnalysisIndex({
                 error={error}
                 onRetry={() => visit({})}
                 onRowClick={(l) => router.visit(`/credit-analysis/${l.id}`)}
-                toolbar={
-                    <FilterBar
-                        search={
-                            <SearchInput
-                                value={search}
-                                onChange={onSearch}
-                                placeholder="Cari kode, nama, NIK…"
-                                label="Cari berkas"
-                            />
-                        }
-                    />
-                }
+                toolbar={<FilterBar search={<SearchInput value={search} onChange={onSearch} placeholder="Cari kode, nama, NIK…" label="Cari berkas" />} />}
                 columns={columns}
                 sort={{
                     sort: filters.sort,
@@ -161,18 +132,12 @@ export default function AnalysisIndex({
                 }}
                 empty={{
                     icon: <ClipboardCheck />,
-                    title: filters.search
-                        ? 'Tidak ada berkas yang cocok dengan pencarian'
-                        : 'Belum ada yang perlu dianalisa',
+                    title: filters.search ? 'Tidak ada berkas yang cocok dengan pencarian' : 'Belum ada yang perlu dianalisa',
                     description: filters.search
                         ? 'Coba kata kunci lain.'
                         : 'Berkas tampil di sini setelah surveinya disimpan (atau, untuk produk tanpa survei lapangan, setelah dijadwalkan).',
                     action: filters.search ? (
-                        <button
-                            type="button"
-                            className="cursor-pointer text-xs text-primary hover:underline"
-                            onClick={() => clear()}
-                        >
+                        <button type="button" className="cursor-pointer text-xs text-primary hover:underline" onClick={() => clear()}>
                             Hapus pencarian
                         </button>
                     ) : undefined,

@@ -1,21 +1,16 @@
-import { Head, router, useForm } from '@inertiajs/react';
-import {
-    ArrowDown,
-    ArrowLeft,
-    ArrowUp,
-    Pencil,
-    Plus,
-    Trash2,
-} from 'lucide-react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import { ArrowDown, ArrowLeft, ArrowUp, Pencil, Plus, RotateCcw, SlidersHorizontal, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
-import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
+import { Checkbox } from '@/components/ui/choice';
+import { CurrencyInput } from '@/components/ui/currency-input';
+import { ConfirmDialog, DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
-import { Badge, PageHeader } from '@/components/ui/misc';
+import { Badge, Card, PageHeader } from '@/components/ui/misc';
 import { Tip } from '@/components/ui/tooltip';
 import { rupiah } from '@/lib/format';
 import type { PathRow } from '@/pages/committees/special-rules';
@@ -58,8 +53,8 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
         label: '',
         role: '',
         is_individual: false,
-        min_amount: '' as string | number,
-        max_amount: '' as string | number,
+        min_amount: null as number | null,
+        max_amount: null as number | null,
         can_escalate: false,
         can_approve: false,
         can_cancel: false,
@@ -75,8 +70,8 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                       label: '',
                       role: '',
                       is_individual: false,
-                      min_amount: '',
-                      max_amount: '',
+                      min_amount: null,
+                      max_amount: null,
                       can_escalate: false,
                       can_approve: false,
                       can_cancel: false,
@@ -86,8 +81,8 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                       label: tier.label ?? '',
                       role: tier.role,
                       is_individual: tier.is_individual,
-                      min_amount: tier.min_amount ?? '',
-                      max_amount: tier.max_amount ?? '',
+                      min_amount: tier.min_amount,
+                      max_amount: tier.max_amount,
                       can_escalate: tier.can_escalate,
                       can_approve: tier.can_approve,
                       can_cancel: tier.can_cancel,
@@ -141,8 +136,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                       header: 'Rentang plafon',
                       align: 'right',
                       className: 'whitespace-nowrap tabular-nums',
-                      cell: (t: Tier) =>
-                          `${rupiah(t.min_amount ?? 0)} – ${t.max_amount === null ? 'tanpa batas' : rupiah(t.max_amount)}`,
+                      cell: (t: Tier) => `${rupiah(t.min_amount ?? 0)} – ${t.max_amount === null ? 'tanpa batas' : rupiah(t.max_amount)}`,
                   } satisfies Column<Tier>,
               ]
             : []),
@@ -154,15 +148,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                     {DECISIONS.filter(([key]) => t[key]).map(([key, label]) => (
                         <Badge
                             key={key}
-                            tone={
-                                key === 'can_approve'
-                                    ? 'success'
-                                    : key === 'can_reject'
-                                      ? 'danger'
-                                      : key === 'can_escalate'
-                                        ? 'info'
-                                        : 'neutral'
-                            }
+                            tone={key === 'can_approve' ? 'success' : key === 'can_reject' ? 'danger' : key === 'can_escalate' ? 'info' : 'neutral'}
                         >
                             {label}
                         </Badge>
@@ -186,13 +172,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                                       size="icon"
                                       aria-label="Naikkan urutan"
                                       disabled={i === 0}
-                                      onClick={() =>
-                                          router.put(
-                                              `${base}/${t.id}/move/up`,
-                                              {},
-                                              { preserveScroll: true },
-                                          )
-                                      }
+                                      onClick={() => router.put(`${base}/${t.id}/move/up`, {}, { preserveScroll: true })}
                                   >
                                       <ArrowUp />
                                   </Button>
@@ -203,34 +183,18 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                                       size="icon"
                                       aria-label="Turunkan urutan"
                                       disabled={i === path.tiers.length - 1}
-                                      onClick={() =>
-                                          router.put(
-                                              `${base}/${t.id}/move/down`,
-                                              {},
-                                              { preserveScroll: true },
-                                          )
-                                      }
+                                      onClick={() => router.put(`${base}/${t.id}/move/down`, {}, { preserveScroll: true })}
                                   >
                                       <ArrowDown />
                                   </Button>
                               </Tip>
                               <Tip label="Ubah">
-                                  <Button
-                                      variant="ghost"
-                                      size="icon"
-                                      aria-label={`Ubah ${t.role}`}
-                                      onClick={() => openForm(t)}
-                                  >
+                                  <Button variant="ghost" size="icon" aria-label={`Ubah ${t.role}`} onClick={() => openForm(t)}>
                                       <Pencil />
                                   </Button>
                               </Tip>
                               <Tip label="Hapus">
-                                  <Button
-                                      variant="ghost"
-                                      size="icon"
-                                      aria-label={`Hapus ${t.role}`}
-                                      onClick={() => setToDelete(t)}
-                                  >
+                                  <Button variant="ghost" size="icon" aria-label={`Hapus ${t.role}`} onClick={() => setToDelete(t)}>
                                       <Trash2 />
                                   </Button>
                               </Tip>
@@ -249,15 +213,8 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                 description={`${path.product_label} · ${path.mechanism_label}${path.note ? ` · ${path.note}` : ''}`}
                 actions={
                     <>
-                        <Badge tone={path.is_active ? 'success' : 'neutral'}>
-                            {path.is_active ? 'Aktif' : 'Nonaktif'}
-                        </Badge>
-                        <Button
-                            variant="outline"
-                            onClick={() =>
-                                router.visit('/committees/special-rules')
-                            }
-                        >
+                        <Badge tone={path.is_active ? 'success' : 'neutral'}>{path.is_active ? 'Aktif' : 'Nonaktif'}</Badge>
+                        <Button variant="outline" onClick={() => router.visit('/committees/special-rules')}>
                             <ArrowLeft /> Kembali
                         </Button>
                         {editable && (
@@ -271,54 +228,35 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
 
             {path.is_default && (
                 <p className="mb-3 text-sm text-muted">
-                    Jenjang ini dipakai bersama oleh {path.followers ?? 0} jalur
-                    yang mengikuti bawaan. Setiap perubahan di sini berlaku
-                    untuk semuanya. Pada jalur hierarki hanya urutan peran yang
-                    dipakai.
+                    Jenjang ini dipakai bersama oleh {path.followers ?? 0} jalur yang mengikuti bawaan. Setiap perubahan di sini berlaku untuk semuanya. Pada
+                    jalur hierarki hanya urutan peran yang dipakai.
                 </p>
             )}
             {locked && canManage && (
-                <div className="border-border mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border bg-surface px-3 py-2 text-sm">
-                    <span>
+                <Card className="mb-3 flex flex-wrap items-center justify-between gap-2 px-3 py-2 text-sm">
+                    <span className="min-w-0">
                         Jalur ini mengikuti{' '}
-                        <a
-                            className="text-primary hover:underline"
-                            href="/committees/levels"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                router.visit('/committees/levels');
-                            }}
-                        >
+                        <Link className="text-primary hover:underline" href="/committees/levels">
                             jenjang wewenang bawaan
-                        </a>
+                        </Link>
                         . Beri jenjang sendiri untuk mengubahnya di sini.
                     </span>
                     <Button
                         size="sm"
                         variant="outline"
-                        onClick={() =>
-                            router.put(
-                                `/committees/${path.id}/follow`,
-                                { follow: false },
-                                { preserveScroll: true },
-                            )
-                        }
+                        onClick={() => router.put(`/committees/${path.id}/follow`, { follow: false }, { preserveScroll: true })}
                     >
-                        Atur sendiri
+                        <SlidersHorizontal /> Atur sendiri
                     </Button>
-                </div>
+                </Card>
             )}
             {!path.is_default && !locked && canManage && (
-                <div className="border-border mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border bg-surface px-3 py-2 text-sm">
-                    <span>Jalur ini memakai jenjang wewenang sendiri.</span>
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setFollowing(true)}
-                    >
-                        Ikuti bawaan
+                <Card className="mb-3 flex flex-wrap items-center justify-between gap-2 px-3 py-2 text-sm">
+                    <span className="min-w-0">Jalur ini memakai jenjang wewenang sendiri.</span>
+                    <Button size="sm" variant="outline" onClick={() => setFollowing(true)}>
+                        <RotateCcw /> Ikuti bawaan
                     </Button>
-                </div>
+                </Card>
             )}
 
             <DataTable
@@ -328,38 +266,23 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                 empty={{
                     icon: <Plus />,
                     title: 'Belum ada jenjang',
-                    description:
-                        'Tambahkan jenjang pemutus sesuai urutan naiknya.',
+                    description: 'Tambahkan jenjang pemutus sesuai urutan naiknya.',
                 }}
             />
 
             <Modal
                 open={editing !== null}
                 onOpenChange={(open) => !open && setEditing(null)}
+                persistent
                 title={editing === 'new' ? 'Tambah jenjang' : 'Ubah jenjang'}
-                description={
-                    byAmount
-                        ? 'Wewenang mengikuti rentang plafon.'
-                        : 'Jenjang naik berurutan; hanya jenjang pemutus terakhir yang memutus.'
-                }
+                description={byAmount ? 'Wewenang mengikuti rentang plafon.' : 'Jenjang naik berurutan; hanya jenjang pemutus terakhir yang memutus.'}
             >
                 <form onSubmit={submit} noValidate>
-                    <div className="flex flex-col gap-3 p-4">
+                    <DialogBody className="flex flex-col gap-3">
                         <Field label="Nama jenjang" error={form.errors.label}>
-                            <Input
-                                value={form.data.label}
-                                maxLength={50}
-                                onChange={(e) =>
-                                    form.setData('label', e.target.value)
-                                }
-                                placeholder="mis. Komite I"
-                            />
+                            <Input value={form.data.label} maxLength={50} onChange={(e) => form.setData('label', e.target.value)} placeholder="mis. Komite I" />
                         </Field>
-                        <Field
-                            label="Peran pemutus"
-                            required
-                            error={form.errors.role}
-                        >
+                        <Field label="Peran pemutus" required error={form.errors.role}>
                             <Combobox
                                 options={roles.map((r) => ({
                                     value: r,
@@ -370,111 +293,38 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                                 invalid={!!form.errors.role}
                             />
                         </Field>
-                        <label className="flex items-start gap-2 text-sm">
-                            <input
-                                type="checkbox"
-                                className="mt-0.5 accent-primary"
-                                checked={form.data.is_individual}
-                                onChange={(e) =>
-                                    form.setData(
-                                        'is_individual',
-                                        e.target.checked,
-                                    )
-                                }
-                            />
-                            <span>
-                                Wewenang perorangan
-                                <span className="block text-xs text-muted">
-                                    Orang yang memegang berkas yang memutus,
-                                    bukan komite. Pemegangnya tidak dimasukkan
-                                    ke daftar anggota komite.
-                                </span>
-                            </span>
-                        </label>
+                        <Checkbox
+                            label="Wewenang perorangan"
+                            description="Orang yang memegang berkas yang memutus, bukan komite. Pemegangnya tidak dimasukkan ke daftar anggota komite."
+                            checked={form.data.is_individual}
+                            onCheckedChange={(checked) => form.setData('is_individual', checked === true)}
+                        />
                         {byAmount && (
                             <div className="grid grid-cols-2 gap-3">
-                                <Field
-                                    label="Plafon minimum"
-                                    error={form.errors.min_amount}
-                                    hint={
-                                        form.data.min_amount !== ''
-                                            ? rupiah(
-                                                  Number(form.data.min_amount),
-                                              )
-                                            : undefined
-                                    }
-                                >
-                                    <Input
-                                        type="number"
-                                        min={0}
-                                        value={form.data.min_amount}
-                                        onChange={(e) =>
-                                            form.setData(
-                                                'min_amount',
-                                                e.target.value,
-                                            )
-                                        }
-                                        aria-invalid={!!form.errors.min_amount}
-                                    />
+                                <Field label="Plafon minimum" error={form.errors.min_amount}>
+                                    <CurrencyInput value={form.data.min_amount} onValueChange={(v) => form.setData('min_amount', v)} />
                                 </Field>
-                                <Field
-                                    label="Plafon maksimum"
-                                    error={form.errors.max_amount}
-                                    hint={
-                                        form.data.max_amount !== ''
-                                            ? rupiah(
-                                                  Number(form.data.max_amount),
-                                              )
-                                            : 'Kosong = tanpa batas'
-                                    }
-                                >
-                                    <Input
-                                        type="number"
-                                        min={0}
-                                        value={form.data.max_amount}
-                                        onChange={(e) =>
-                                            form.setData(
-                                                'max_amount',
-                                                e.target.value,
-                                            )
-                                        }
-                                        aria-invalid={!!form.errors.max_amount}
-                                    />
+                                <Field label="Plafon maksimum" error={form.errors.max_amount} hint="Kosong berarti tanpa batas.">
+                                    <CurrencyInput value={form.data.max_amount} onValueChange={(v) => form.setData('max_amount', v)} />
                                 </Field>
                             </div>
                         )}
                         <fieldset>
-                            <legend className="mb-1 text-xs font-medium">
-                                Keputusan yang diizinkan
-                            </legend>
+                            <legend className="mb-1 text-xs font-medium">Keputusan yang diizinkan</legend>
                             <div className="grid grid-cols-2 gap-1.5">
                                 {DECISIONS.map(([key, label]) => (
-                                    <label
+                                    <Checkbox
                                         key={key}
-                                        className="flex items-center gap-2 text-sm"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            className="accent-primary"
-                                            checked={form.data[key]}
-                                            onChange={(e) =>
-                                                form.setData(
-                                                    key,
-                                                    e.target.checked,
-                                                )
-                                            }
-                                        />
-                                        {label}
-                                    </label>
+                                        label={label}
+                                        checked={form.data[key]}
+                                        onCheckedChange={(checked) => form.setData(key, checked === true)}
+                                    />
                                 ))}
                             </div>
                         </fieldset>
-                    </div>
+                    </DialogBody>
                     <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setEditing(null)}
-                        >
+                        <Button variant="outline" onClick={() => setEditing(null)}>
                             Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
@@ -508,8 +358,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                 title="Hapus jenjang?"
                 description={
                     <>
-                        Ini menghapus jenjang <strong>{toDelete?.role}</strong>{' '}
-                        dari jalur ini.
+                        Jenjang <strong>{toDelete?.role}</strong> akan dihapus dari jalur ini.
                     </>
                 }
                 onConfirm={() => {

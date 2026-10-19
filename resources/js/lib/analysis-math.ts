@@ -103,29 +103,20 @@ export const farmMetrics = (
         installment_period: number;
     },
 ) => {
-    const harvestIncome = round(
-        num(form.harvest_quintals) * num(form.price_per_quintal),
-    );
+    const harvestIncome = round(num(form.harvest_quintals) * num(form.price_per_quintal));
     const totalCost = FARM_COSTS.reduce((t, c) => t + num(form[c.key]), 0);
     const net = harvestIncome - totalCost;
 
     const tenor = num(application.requested_tenor);
     // No installment system at all: one harvest. A period of 0 (bullet): the whole tenor.
-    const period =
-        application.installment_label === null
-            ? HARVEST_MONTHS
-            : application.installment_period > 0
-              ? application.installment_period
-              : tenor;
+    const period = application.installment_label === null ? HARVEST_MONTHS : application.installment_period > 0 ? application.installment_period : tenor;
     const terms = period > 0 ? tenor / period : 0;
 
-    const principal =
-        terms > 0 ? round(num(application.requested_amount) / terms) : 0;
+    const principal = terms > 0 ? round(num(application.requested_amount) / terms) : 0;
     const afterPrincipal = net - principal;
 
     return {
-        total_area:
-            num(form.area_own) + num(form.area_rent) + num(form.area_pawn),
+        total_area: num(form.area_own) + num(form.area_rent) + num(form.area_pawn),
         harvest_income: harvestIncome,
         total_cost: totalCost,
         net_profit: net,
@@ -133,11 +124,7 @@ export const farmMetrics = (
         principal_installment: principal,
         after_principal: afterPrincipal,
         other_bank_loan: num(form.cost_other_bank),
-        monthly_income:
-            period > 0
-                ? Math.floor(afterPrincipal / period) +
-                  num(form.addition_result)
-                : 0,
+        monthly_income: period > 0 ? Math.floor(afterPrincipal / period) + num(form.addition_result) : 0,
     };
 };
 
@@ -152,27 +139,16 @@ export const serviceMetrics = (form: Form) => {
     };
 };
 
-export const otherMetrics = (
-    form: Form,
-    materials: Item[],
-    incomes: Item[],
-    expenses: Item[],
-) => {
+export const otherMetrics = (form: Form, materials: Item[], incomes: Item[], expenses: Item[]) => {
     const businessIncome = incomes.reduce((t, r) => t + num(r.price), 0);
     const operational = expenses.reduce((t, r) => t + num(r.price), 0);
-    const material = round(
-        materials.reduce((t, r) => t + num(r.qty) * num(r.price), 0),
-    );
+    const material = round(materials.reduce((t, r) => t + num(r.qty) * num(r.price), 0));
 
     return {
         business_income: businessIncome,
         operational_cost: operational,
         material_cost: material,
-        net_profit:
-            businessIncome -
-            operational -
-            material +
-            num(form.projection_addition),
+        net_profit: businessIncome - operational - material + num(form.projection_addition),
     };
 };
 
@@ -188,11 +164,7 @@ export const financeMetrics = (
 ) => {
     const household = HOUSEHOLD_COSTS.reduce((t, c) => t + num(form[c.key]), 0);
     const obligation = obligations.reduce((t, r) => t + num(r.amount), 0);
-    const businessIncome =
-        incomeByType.trade_income +
-        incomeByType.farm_income +
-        incomeByType.service_income +
-        incomeByType.other_income;
+    const businessIncome = incomeByType.trade_income + incomeByType.farm_income + incomeByType.service_income + incomeByType.other_income;
 
     return {
         household_cost: household,

@@ -6,6 +6,7 @@ use App\Models\LoanApplication;
 use App\Models\LoanSchedule;
 use App\Models\LoanSurvey;
 use App\Models\LoanSurveyPhoto;
+use App\Models\Office;
 use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
@@ -219,3 +220,29 @@ it('stops flagging a file once it is scheduled again', function () {
     $this->get(route('scheduling.index', ['status' => 'all']))->assertInertia(fn (Assert $page) => $page
         ->where('loans.data.0.status', 'scheduling')->where('loans.data.0.needs_reschedule', false));
 });
+
+it('orders the scheduling list by every column, both ways', function (string $key) {
+    $kasi = roleUser('Kepala Seksi Analis');
+    $first = Office::create(['code' => '01', 'alias' => 'AAA', 'name' => 'First']);
+    $second = Office::create(['code' => '02', 'alias' => 'BBB', 'name' => 'Second']);
+    $a = submittedLoan(User::factory()->create(['name' => 'Ani Kasi']), 'AAA');
+    $b = submittedLoan(User::factory()->create(['name' => 'Budi Kasi']), 'BBB');
+    $a->update([
+        'application_date' => '2026-01-01', 'full_name' => 'Ani', 'office_id' => $first->id, 'requested_amount' => 1_000_000, 'requested_tenor' => 6,
+        'status' => LoanStatus::Scheduling, 'survey_date' => now()->toDateString(), 'surveyor_id' => User::factory()->create(['name' => 'Ani Surveyor'])->id,
+    ]);
+    $b->update([
+        'application_date' => '2026-02-01', 'full_name' => 'Budi', 'office_id' => $second->id, 'requested_amount' => 2_000_000, 'requested_tenor' => 12,
+        'status' => LoanStatus::Survey, 'survey_date' => now()->addDay()->toDateString(), 'surveyor_id' => User::factory()->create(['name' => 'Budi Surveyor'])->id,
+    ]);
+    foreach ([[$a, LoanSchedule::ACTION_SCHEDULE], [$b, LoanSchedule::ACTION_SCHEDULE], [$b, LoanSchedule::ACTION_RESCHEDULE]] as $sequence => [$loan, $action]) {
+        LoanSchedule::create(['loan_application_id' => $loan->id, 'sequence' => $sequence + 1, 'action' => $action, 'created_by' => 'Test']);
+    }
+    $this->actingAs($kasi);
+
+    foreach (['asc' => [$a->id, $b->id], 'desc' => [$b->id, $a->id]] as $direction => [$top, $bottom]) {
+        $this->get(route('scheduling.index', ['scope' => 'all', 'status' => 'all', 'sort' => $key, 'direction' => $direction]))->assertInertia(fn (Assert $page) => $page
+            ->where('filters.sort', $key)->where('filters.direction', $direction)
+            ->where('loans.data.0.id', $top)->where('loans.data.1.id', $bottom));
+    }
+})->with(['application_code', 'application_date', 'product', 'full_name', 'office', 'supervisor', 'requested_amount', 'requested_tenor', 'survey_date', 'surveyor', 'schedule_count', 'status']);

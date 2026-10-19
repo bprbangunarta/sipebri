@@ -17,7 +17,7 @@ use Inertia\Response;
 
 class CollateralController extends Controller
 {
-    private const SORTABLE = ['cbs_id', 'collateral_type_code', 'owner_name', 'appraisal_value', 'created_at'];
+    private const SORTABLE = ['cbs_id', 'collateral_type_code', 'owner_name', 'description', 'document_number', 'appraisal_value', 'created_at'];
 
     private const PER_PAGE_OPTIONS = [10, 25, 50];
 

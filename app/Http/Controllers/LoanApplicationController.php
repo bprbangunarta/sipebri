@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Support\CommitteeMembers;
 use App\Support\CustomerDirectory;
 use App\Support\LendingLimit;
+use App\Support\LoanListOrder;
 use App\Support\LocationTargets;
 use App\Support\Notify;
 use Illuminate\Http\JsonResponse;
@@ -41,7 +42,7 @@ class LoanApplicationController extends Controller
 {
     private const PER_PAGE_OPTIONS = [10, 25, 50];
 
-    private const SORTABLE = ['application_code', 'application_date', 'full_name', 'requested_amount', 'status'];
+    private const SORTABLE = ['application_code', 'application_date', 'full_name', 'nik', 'product', 'requested_amount', 'requested_tenor', 'status'];
 
     public function index(Request $request): Response
     {
@@ -61,7 +62,7 @@ class LoanApplicationController extends Controller
                 $like = '%'.addcslashes($term, '%_\\').'%';
                 $q->where(fn ($w) => $w->where('application_code', 'like', $like)->orWhere('full_name', 'like', $like)->orWhere('nik', 'like', $like));
             })
-            ->orderBy($sort, $direction)->orderBy('id', 'desc')
+            ->tap(fn ($q) => LoanListOrder::apply($q, $sort, $direction))->orderBy('id', 'desc')
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 10)
             ->withQueryString();
 
@@ -100,7 +101,7 @@ class LoanApplicationController extends Controller
             'found' => (bool) $customer,
             'customer' => $customer,
             'committee_member' => $member ? ['id' => $member->id, 'name' => $member->name, 'role' => $member->getRoleNames()->first()] : null,
-            'message' => $customer ? null : 'This national ID is not registered in the customer system. Register the customer first.',
+            'message' => $customer ? null : 'NIK ini belum terdaftar di sistem nasabah. Daftarkan nasabahnya dulu.',
         ]);
     }
 
@@ -377,11 +378,11 @@ class LoanApplicationController extends Controller
         $options = Collateral::query()->orderBy('id')->get()
             ->map(fn (Collateral $c): array => [
                 'value' => $c->id,
-                'label' => trim(($c->cbs_id ?? "#{$c->id}").' — '.$c->owner_name),
+                'label' => trim(($c->cbs_id ?? "#{$c->id}").' · '.$c->owner_name),
                 'description' => collect([
-                    $c->document_number ? 'Doc '.$c->document_number : null,
+                    $c->document_number ? 'Dok '.$c->document_number : null,
                     $types[$c->collateral_type_code] ?? $c->collateral_type_code,
-                    $c->appraisal_value ? 'Appraisal '.LendingLimit::format($c->appraisal_value) : null,
+                    $c->appraisal_value ? 'Taksasi '.LendingLimit::format($c->appraisal_value) : null,
                     $c->description,
                 ])->filter()->implode(' · '),
             ]);

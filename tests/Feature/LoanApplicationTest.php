@@ -200,6 +200,32 @@ it('describes attachable collaterals fully so similar ones cannot be confused', 
     ]);
 
     $this->get(route('loan-applications.show', $loan))->assertInertia(fn (Assert $page) => $page
-        ->where('collateralOptions.0.label', '#1 — ONIH')
-        ->where('collateralOptions.0.description', 'Doc SHM 1234/2020 · SKMHT : SURAT KUASA MEMBEBANKAN HAK TANGGUNGAN · Appraisal Rp150.000.000 · DUSUN WANARASA RT 20 RW 05 DESA SUKAMANDI KECAMATAN PAGADEN BARAT'));
+        ->where('collateralOptions.0.label', '#1 · ONIH')
+        ->where('collateralOptions.0.description', 'Dok SHM 1234/2020 · SKMHT : SURAT KUASA MEMBEBANKAN HAK TANGGUNGAN · Taksasi Rp150.000.000 · DUSUN WANARASA RT 20 RW 05 DESA SUKAMANDI KECAMATAN PAGADEN BARAT'));
+});
+
+it('orders the applications by every column of the list, both ways', function (string $key) {
+    $officer = loanOfficer();
+    $first = Product::create(['code' => '01', 'alias' => 'AAA', 'name' => 'FIRST', 'is_active' => true]);
+    $second = Product::create(['code' => '02', 'alias' => 'BBB', 'name' => 'SECOND', 'is_active' => true]);
+    $a = LoanApplication::create([
+        'application_code' => '00700001', 'application_date' => '2026-01-01', 'status' => LoanStatus::Draft, 'nik' => '3201000000000001', 'full_name' => 'Ani',
+        'product_id' => $first->id, 'requested_amount' => 1_000_000, 'requested_tenor' => 6, 'created_by' => $officer->id,
+    ]);
+    $b = LoanApplication::create([
+        'application_code' => '00700002', 'application_date' => '2026-02-01', 'status' => LoanStatus::Submitted, 'nik' => '3201000000000002', 'full_name' => 'Budi',
+        'product_id' => $second->id, 'requested_amount' => 2_000_000, 'requested_tenor' => 12, 'created_by' => $officer->id,
+    ]);
+    $this->actingAs($officer);
+
+    foreach (['asc' => [$a->id, $b->id], 'desc' => [$b->id, $a->id]] as $direction => [$top, $bottom]) {
+        $this->get(route('loan-applications.index', ['sort' => $key, 'direction' => $direction]))->assertInertia(fn (Assert $page) => $page
+            ->where('filters.sort', $key)->where('filters.direction', $direction)
+            ->where('loans.data.0.id', $top)->where('loans.data.1.id', $bottom));
+    }
+})->with(['application_code', 'application_date', 'full_name', 'nik', 'product', 'requested_amount', 'requested_tenor', 'status']);
+
+it('falls back to the default order for an unknown sort key', function () {
+    $this->actingAs(loanOfficer())->get(route('loan-applications.index', ['sort' => 'created_by']))
+        ->assertInertia(fn (Assert $page) => $page->where('filters.sort', 'application_code'));
 });

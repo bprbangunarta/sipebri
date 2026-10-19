@@ -27,7 +27,8 @@ class CreditAnalysisController extends Controller
 {
     private const PER_PAGE_OPTIONS = [10, 25, 50];
 
-    private const SORTABLE = ['application_code', 'application_date', 'full_name', 'requested_amount', 'survey_date'];
+    /** Columns of the list that sort; `status` orders the stage (analysis before survey) and `collaterals_count` is the withCount alias. */
+    private const SORTABLE = ['application_code', 'application_date', 'full_name', 'requested_amount', 'survey_date', 'status', 'collaterals_count'];
 
     public function index(Request $request): Response
     {
@@ -141,9 +142,9 @@ class CreditAnalysisController extends Controller
                 'status' => $c->status,
                 'status_label' => AnalysisCorrection::LABELS[$c->status],
                 'reason' => $c->reason,
-                'requested_at' => $c->requested_at?->isoFormat('D MMM YYYY HH:mm'),
-                'opened_at' => $c->opened_at?->isoFormat('D MMM YYYY HH:mm'),
-                'resolved_at' => $c->resolved_at?->isoFormat('D MMM YYYY HH:mm'),
+                'requested_at' => $c->requested_at?->toIso8601String(),
+                'opened_at' => $c->opened_at?->toIso8601String(),
+                'resolved_at' => $c->resolved_at?->toIso8601String(),
                 'resolution_note' => $c->resolution_note,
             ])->values()->all(),
             'approved' => $approved,
@@ -174,7 +175,7 @@ class CreditAnalysisController extends Controller
             'installment_period' => $loan->installment->period_months ?? 0,
             'survey_note' => $survey?->note,
             'survey_by' => $survey?->surveyor_name,
-            'survey_at' => $survey?->created_at?->isoFormat('D MMM YYYY HH:mm'),
+            'survey_at' => $survey?->created_at?->toIso8601String(),
         ];
     }
 }

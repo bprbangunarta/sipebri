@@ -2,16 +2,9 @@ import { useForm } from '@inertiajs/react';
 import { Landmark } from 'lucide-react';
 import { Combobox } from '@/components/ui/combobox';
 import { Field } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
 import { EmptyState, Card } from '@/components/ui/misc';
 import { rupiah } from '@/lib/format';
-import {
-    MoneyField,
-    Panel,
-    SaveBar,
-    Stat,
-    TextField,
-} from '@/pages/credit-analysis/parts';
+import { DigitsField, MoneyField, Panel, SaveBar, Stat, TextField } from '@/pages/credit-analysis/parts';
 import type { CollateralRow } from '@/pages/credit-analysis/types';
 
 const KIND_LABELS: Record<string, string> = {
@@ -20,45 +13,27 @@ const KIND_LABELS: Record<string, string> = {
     other: 'Lainnya',
 };
 
+// The longest text each field takes, as the server allows (the year is four digits).
 const VEHICLE_FIELDS = [
-    ['Merek Kendaraan', 'brand'],
-    ['Tipe Kendaraan', 'vehicle_type'],
-    ['Tahun Kendaraan', 'year'],
-    ['Nomor Rangka', 'chassis_number'],
-    ['Nomor Mesin', 'engine_number'],
-    ['Nomor Polisi', 'plate_number'],
-    ['Warna Kendaraan', 'color'],
+    ['Merek Kendaraan', 'brand', 100],
+    ['Tipe Kendaraan', 'vehicle_type', 100],
+    ['Tahun Kendaraan', 'year', 4],
+    ['Nomor Rangka', 'chassis_number', 50],
+    ['Nomor Mesin', 'engine_number', 50],
+    ['Nomor Polisi', 'plate_number', 20],
+    ['Warna Kendaraan', 'color', 50],
 ] as const;
 
-export function CollateralSection({
-    loanId,
-    rows,
-    kinds,
-    canEdit,
-}: {
-    loanId: number;
-    rows: CollateralRow[];
-    kinds: string[];
-    canEdit: boolean;
-}) {
+export function CollateralSection({ loanId, rows, kinds, canEdit }: { loanId: number; rows: CollateralRow[]; kinds: string[]; canEdit: boolean }) {
     const form = useForm<{ rows: CollateralRow[] }>({ rows });
-    const set = (index: number, key: keyof CollateralRow, value: string) =>
+    const set = (index: number, key: keyof CollateralRow, value: string | number | null) =>
         form.setData(
             'rows',
-            form.data.rows.map((r, i) =>
-                i === index ? { ...r, [key]: value } : r,
-            ),
+            form.data.rows.map((r, i) => (i === index ? { ...r, [key]: value } : r)),
         );
-    const error = (index: number, key: string) =>
-        (form.errors as Record<string, string>)[`rows.${index}.${key}`];
-    const totalMarket = form.data.rows.reduce(
-        (t, r) => t + Number(r.market_value || 0),
-        0,
-    );
-    const totalAppraisal = form.data.rows.reduce(
-        (t, r) => t + Number(r.appraisal_value || 0),
-        0,
-    );
+    const error = (index: number, key: string) => (form.errors as Record<string, string>)[`rows.${index}.${key}`];
+    const totalMarket = form.data.rows.reduce((t, r) => t + Number(r.market_value || 0), 0);
+    const totalAppraisal = form.data.rows.reduce((t, r) => t + Number(r.appraisal_value || 0), 0);
 
     if (rows.length === 0) {
         return (
@@ -75,11 +50,7 @@ export function CollateralSection({
     return (
         <div className="flex flex-col gap-3">
             {form.data.rows.map((row, index) => (
-                <Panel
-                    key={row.collateral_id}
-                    title={`${row.owner_name ?? '–'} · ${row.document_number ?? '–'}`}
-                    hint={row.label ?? undefined}
-                >
+                <Panel key={row.collateral_id} title={`${row.owner_name ?? '–'} · ${row.document_number ?? '–'}`} hint={row.label ?? undefined}>
                     <Field label="Jenis Pemeriksaan">
                         <Combobox
                             searchable={false}
@@ -88,44 +59,44 @@ export function CollateralSection({
                                 label: KIND_LABELS[k] ?? k,
                             }))}
                             value={row.kind}
-                            onChange={(v) =>
-                                canEdit && set(index, 'kind', v ?? 'other')
-                            }
+                            onChange={(v) => canEdit && set(index, 'kind', v ?? 'other')}
                         />
                     </Field>
-                    <Stat
-                        label="Taksasi CBS"
-                        value={rupiah(row.cbs_appraisal)}
-                    />
+                    <Stat label="Taksasi CBS" value={rupiah(row.cbs_appraisal)} />
                     {row.kind === 'vehicle' &&
-                        VEHICLE_FIELDS.map(([label, key]) => (
-                            <TextField
-                                key={key}
-                                label={label}
-                                value={row[key]}
-                                onChange={(v) => set(index, key, v)}
-                                error={error(index, key)}
-                                disabled={!canEdit}
-                                maxLength={key === 'year' ? 4 : 100}
-                            />
-                        ))}
+                        VEHICLE_FIELDS.map(([label, key, max]) =>
+                            key === 'year' ? (
+                                <DigitsField
+                                    key={key}
+                                    label={label}
+                                    digits={4}
+                                    value={row.year}
+                                    onChange={(v) => set(index, 'year', v)}
+                                    error={error(index, 'year')}
+                                    disabled={!canEdit}
+                                />
+                            ) : (
+                                <TextField
+                                    key={key}
+                                    label={label}
+                                    value={row[key]}
+                                    onChange={(v) => set(index, key, v)}
+                                    error={error(index, key)}
+                                    disabled={!canEdit}
+                                    maxLength={max}
+                                />
+                            ),
+                        )}
                     {row.kind === 'land' && (
                         <>
-                            <Field
+                            <MoneyField
                                 label="Luas Tanah (m²)"
+                                prefix={null}
+                                value={row.land_area}
+                                onChange={(v) => set(index, 'land_area', v)}
                                 error={error(index, 'land_area')}
-                            >
-                                <Input
-                                    type="number"
-                                    min={0}
-                                    disabled={!canEdit}
-                                    value={row.land_area}
-                                    onChange={(e) =>
-                                        set(index, 'land_area', e.target.value)
-                                    }
-                                    className="text-right tabular-nums"
-                                />
-                            </Field>
+                                disabled={!canEdit}
+                            />
                             <TextField
                                 label="Lokasi Agunan"
                                 value={row.location}
@@ -162,16 +133,9 @@ export function CollateralSection({
                 </Panel>
             ))}
             <Panel title="Ringkasan Agunan">
-                <Stat
-                    label="Jumlah Agunan"
-                    value={String(form.data.rows.length)}
-                />
+                <Stat label="Jumlah Agunan" value={String(form.data.rows.length)} />
                 <Stat label="Total Nilai Pasar" value={rupiah(totalMarket)} />
-                <Stat
-                    label="Total Nilai Taksasi"
-                    value={rupiah(totalAppraisal)}
-                    strong
-                />
+                <Stat label="Total Nilai Taksasi" value={rupiah(totalAppraisal)} strong />
             </Panel>
             {canEdit && (
                 <SaveBar

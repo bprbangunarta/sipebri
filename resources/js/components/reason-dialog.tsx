@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { DialogFooter, Modal } from '@/components/ui/dialog';
+import { DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 
@@ -33,12 +33,7 @@ export function ReasonDialog({
     const form = useForm({ reason: '' });
 
     return (
-        <Modal
-            open={action !== null}
-            onOpenChange={(open) => !open && onClose()}
-            title={title}
-            description={description}
-        >
+        <Modal persistent open={action !== null} onOpenChange={(open) => !open && onClose()} title={title} description={description}>
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
@@ -55,33 +50,22 @@ export function ReasonDialog({
                 }}
                 noValidate
             >
-                <div className="p-4">
-                    <Field
-                        label={fieldLabel}
-                        required
-                        error={form.errors.reason}
-                        hint={hint}
-                    >
+                <DialogBody>
+                    <Field label={fieldLabel} required error={form.errors.reason} hint={hint}>
                         <Input
                             autoFocus
                             value={form.data.reason}
                             maxLength={255}
-                            onChange={(e) =>
-                                form.setData('reason', e.target.value)
-                            }
+                            onChange={(e) => form.setData('reason', e.target.value)}
                             aria-invalid={!!form.errors.reason}
                         />
                     </Field>
-                </div>
+                </DialogBody>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>
                         Kembali
                     </Button>
-                    <Button
-                        type="submit"
-                        variant={tone === 'danger' ? 'danger' : 'primary'}
-                        loading={form.processing}
-                    >
+                    <Button type="submit" variant={tone === 'danger' ? 'danger' : 'primary'} loading={form.processing}>
                         {confirmLabel}
                     </Button>
                 </DialogFooter>

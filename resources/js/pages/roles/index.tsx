@@ -2,7 +2,7 @@ import { Head, router, useForm } from '@inertiajs/react';
 import { Lock, Plus, Settings2, Shield, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { DialogFooter, Modal } from '@/components/ui/dialog';
+import { DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
 import { Input } from '@/components/ui/input';
@@ -39,9 +39,7 @@ const columns: Column<RoleRow>[] = [
         cell: (r) => (
             <span className="inline-flex items-center gap-1.5">
                 {r.name}
-                {r.locked && (
-                    <Lock className="size-3 text-muted" aria-label="Terkunci" />
-                )}
+                {r.locked && <Lock className="size-3 text-muted" aria-label="Terkunci" />}
             </span>
         ),
     },
@@ -69,12 +67,7 @@ const columns: Column<RoleRow>[] = [
         align: 'right',
         cell: (r) => (
             <Tip label="Buka">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label={`Buka ${r.name}`}
-                    onClick={() => router.visit(`/roles/${r.id}`)}
-                >
+                <Button variant="ghost" size="icon" aria-label={`Buka ${r.name}`} onClick={() => router.visit(`/roles/${r.id}`)}>
                     <Settings2 />
                 </Button>
             </Tip>
@@ -82,24 +75,15 @@ const columns: Column<RoleRow>[] = [
     },
 ];
 
-export default function RolesIndex({
-    roles,
-    filters,
-    canManage,
-}: {
-    roles: { data: RoleRow[] } & PageMeta;
-    filters: Filters;
-    canManage: boolean;
-}) {
+export default function RolesIndex({ roles, filters, canManage }: { roles: { data: RoleRow[] } & PageMeta; filters: Filters; canManage: boolean }) {
     const [creating, setCreating] = useState(false);
     const form = useForm({ name: '' });
-    const { visit, search, onSearch, clear, loading, error } =
-        useListQuery<Filters>({
-            url: '/roles',
-            filters,
-            defaults: DEFAULTS,
-            only: ['roles', 'filters'],
-        });
+    const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
+        url: '/roles',
+        filters,
+        defaults: DEFAULTS,
+        only: ['roles', 'filters'],
+    });
     const hasSearch = filters.search !== '';
 
     const submit = (e: React.FormEvent) => {
@@ -135,22 +119,9 @@ export default function RolesIndex({
                 error={error}
                 onRetry={() => visit({})}
                 toolbar={
-                    <FilterBar
-                        search={
-                            <SearchInput
-                                value={search}
-                                onChange={onSearch}
-                                placeholder="Cari peran…"
-                                label="Cari peran"
-                            />
-                        }
-                    >
+                    <FilterBar search={<SearchInput value={search} onChange={onSearch} placeholder="Cari peran…" label="Cari peran" />}>
                         {hasSearch && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => clear()}
-                            >
+                            <Button variant="ghost" size="sm" onClick={() => clear()}>
                                 <X /> Atur ulang
                             </Button>
                         )}
@@ -164,9 +135,7 @@ export default function RolesIndex({
                 }}
                 empty={{
                     icon: <Shield />,
-                    title: hasSearch
-                        ? 'Tidak ada peran yang cocok dengan pencarian'
-                        : 'Belum ada peran',
+                    title: hasSearch ? 'Tidak ada peran yang cocok dengan pencarian' : 'Belum ada peran',
                 }}
                 pagination={{
                     meta: roles,
@@ -177,31 +146,21 @@ export default function RolesIndex({
                 }}
             />
 
-            <Modal
-                open={creating}
-                onOpenChange={setCreating}
-                title="Tambah peran"
-                description="Izinnya Anda pilih setelah ini."
-            >
+            <Modal open={creating} onOpenChange={setCreating} persistent title="Tambah peran" description="Izinnya Anda pilih setelah ini.">
                 <form onSubmit={submit} noValidate>
-                    <div className="p-4">
+                    <DialogBody>
                         <Field label="Nama" required error={form.errors.name}>
                             <Input
                                 autoFocus
                                 value={form.data.name}
                                 maxLength={100}
-                                onChange={(e) =>
-                                    form.setData('name', e.target.value)
-                                }
+                                onChange={(e) => form.setData('name', e.target.value)}
                                 aria-invalid={!!form.errors.name}
                             />
                         </Field>
-                    </div>
+                    </DialogBody>
                     <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setCreating(false)}
-                        >
+                        <Button variant="outline" onClick={() => setCreating(false)}>
                             Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>

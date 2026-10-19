@@ -48,23 +48,14 @@ const TONES: Record<string, BadgeTone> = {
     cancelled: 'neutral',
 };
 
-export default function ApprovalsIndex({
-    loans,
-    filters,
-    perPageOptions,
-    statuses,
-}: Props) {
-    const { visit, search, onSearch, clear, loading, error } =
-        useListQuery<Filters>({
-            filters,
-            url: '/approvals',
-            defaults: DEFAULTS,
-            only: ['loans', 'filters'],
-        });
-    const hasFilters =
-        filters.search !== '' ||
-        filters.status !== DEFAULTS.status ||
-        filters.scope !== DEFAULTS.scope;
+export default function ApprovalsIndex({ loans, filters, perPageOptions, statuses }: Props) {
+    const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
+        filters,
+        url: '/approvals',
+        defaults: DEFAULTS,
+        only: ['loans', 'filters'],
+    });
+    const hasFilters = filters.search !== '' || filters.status !== DEFAULTS.status || filters.scope !== DEFAULTS.scope;
 
     const columns: Column<Row>[] = [
         {
@@ -86,7 +77,6 @@ export default function ApprovalsIndex({
         {
             key: 'product',
             header: 'Produk',
-            hideBelow: 'md',
             cell: (l) => l.product_label ?? '–',
         },
         {
@@ -94,13 +84,11 @@ export default function ApprovalsIndex({
             header: 'Usulan',
             align: 'right',
             className: 'whitespace-nowrap tabular-nums',
-            cell: (l) =>
-                `${rupiah(l.proposed_amount)} · ${l.proposed_tenor} bln`,
+            cell: (l) => `${rupiah(l.proposed_amount)} · ${l.proposed_tenor} bln`,
         },
         {
             key: 'submitted',
             header: 'Diajukan',
-            hideBelow: 'lg',
             cell: (l) => formatDate(l.submitted_at),
         },
         {
@@ -108,9 +96,7 @@ export default function ApprovalsIndex({
             header: 'Status',
             cell: (l) => (
                 <span className="flex flex-col items-start gap-0.5">
-                    <Badge tone={TONES[l.status] ?? 'neutral'}>
-                        {l.status_label}
-                    </Badge>
+                    <Badge tone={TONES[l.status] ?? 'neutral'}>{l.status_label}</Badge>
                     {l.pending_position && (
                         <span className="text-xs text-muted">
                             {l.my_turn ? 'Giliran Anda · ' : ''}
@@ -125,10 +111,7 @@ export default function ApprovalsIndex({
     return (
         <>
             <Head title="Persetujuan" />
-            <PageHeader
-                title="Persetujuan"
-                description="Keputusan komite atas berkas yang sudah dianalisa"
-            />
+            <PageHeader title="Persetujuan" description="Keputusan komite atas berkas yang sudah dianalisa" />
             <DataTable
                 rows={loans.data}
                 rowKey={(l) => l.id}
@@ -137,25 +120,14 @@ export default function ApprovalsIndex({
                 onRetry={() => visit({})}
                 onRowClick={(l) => router.visit(`/approvals/${l.id}`)}
                 toolbar={
-                    <FilterBar
-                        search={
-                            <SearchInput
-                                value={search}
-                                onChange={onSearch}
-                                placeholder="Cari kode, nama, NIK…"
-                                label="Cari berkas"
-                            />
-                        }
-                    >
+                    <FilterBar search={<SearchInput value={search} onChange={onSearch} placeholder="Cari kode, nama, NIK…" label="Cari berkas" />}>
                         <Combobox
                             className="w-full sm:w-44"
                             searchable={false}
                             placeholder="Status"
                             options={statuses}
                             value={filters.status}
-                            onChange={(v) =>
-                                visit({ status: v ?? DEFAULTS.status })
-                            }
+                            onChange={(v) => visit({ status: v ?? DEFAULTS.status })}
                         />
                         <Combobox
                             className="w-full sm:w-44"
@@ -191,11 +163,7 @@ export default function ApprovalsIndex({
                 columns={columns}
                 empty={{
                     icon: <BadgeCheck />,
-                    title:
-                        filters.scope === 'mine' &&
-                        filters.status === 'committee'
-                            ? 'Tidak ada berkas yang menunggu keputusan Anda'
-                            : 'Tidak ada berkas',
+                    title: filters.scope === 'mine' && filters.status === 'committee' ? 'Tidak ada berkas yang menunggu keputusan Anda' : 'Tidak ada berkas',
                     description:
                         filters.scope === 'mine'
                             ? 'Pilih "Semua berkas saya" untuk melihat berkas yang Anda ikuti tetapi belum giliran Anda.'

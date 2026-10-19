@@ -1,9 +1,4 @@
-import type {
-    DivIcon,
-    LatLngExpression,
-    Map as LeafletMap,
-    Marker,
-} from 'leaflet';
+import type { DivIcon, LatLngExpression, Map as LeafletMap, Marker } from 'leaflet';
 import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -12,21 +7,20 @@ export type MapPin = {
     label: string;
     latitude: number;
     longitude: number;
-    /** `survey` pins are drawn in the primary colour, collateral pins in amber, a draft pin (being placed) in red. */
+    /** `survey` pins are drawn in the primary colour, collateral pins in the warning colour, a draft pin (being placed) in the danger colour. */
     tone: 'survey' | 'collateral' | 'draft';
 };
 
 const COLORS: Record<MapPin['tone'], string> = {
-    survey: '#2f4aa8',
-    collateral: '#d97706',
-    draft: '#dc2626',
+    survey: 'var(--color-primary)',
+    collateral: 'var(--color-warning)',
+    draft: 'var(--color-danger)',
 };
 
 // Indonesia as a whole, shown when there is nothing to pin yet.
 const DEFAULT_CENTER: LatLngExpression = [-2.5, 118];
 
-const mapsUrl = (lat: number, lng: number) =>
-    `https://www.google.com/maps?q=${lat},${lng}`;
+const mapsUrl = (lat: number, lng: number) => `https://www.google.com/maps?q=${lat},${lng}`;
 
 type Props = {
     pins: MapPin[];
@@ -54,10 +48,7 @@ export function LocationMap({ pins, height = 260, onPick, className }: Props) {
         let cancelled = false;
 
         void (async () => {
-            const [L] = await Promise.all([
-                import('leaflet'),
-                import('leaflet/dist/leaflet.css'),
-            ]);
+            const [L] = await Promise.all([import('leaflet'), import('leaflet/dist/leaflet.css')]);
 
             if (cancelled || !element.current) {
                 return;
@@ -71,8 +62,7 @@ export function LocationMap({ pins, height = 260, onPick, className }: Props) {
             });
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
-                attribution:
-                    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             }).addTo(created);
             created.on('click', (e) => {
                 // The wheel zooms the map only after it was clicked, so scrolling the page past it still works.
@@ -118,9 +108,7 @@ export function LocationMap({ pins, height = 260, onPick, className }: Props) {
         // Fit the view to the saved places only when they change: a pin being placed must not make the map jump
         // while the person is still panning and zooming.
         const saved = pins.filter((p) => p.tone !== 'draft');
-        const fitKey = JSON.stringify(
-            saved.map((p) => [p.key, p.latitude, p.longitude]),
-        );
+        const fitKey = JSON.stringify(saved.map((p) => [p.key, p.latitude, p.longitude]));
 
         if (fitKey !== lastFit.current) {
             lastFit.current = fitKey;
@@ -128,15 +116,7 @@ export function LocationMap({ pins, height = 260, onPick, className }: Props) {
             if (saved.length === 1) {
                 current.setView([saved[0].latitude, saved[0].longitude], 17);
             } else if (saved.length > 1) {
-                current.fitBounds(
-                    L.latLngBounds(
-                        saved.map(
-                            (p) =>
-                                [p.latitude, p.longitude] as [number, number],
-                        ),
-                    ),
-                    { padding: [32, 32], maxZoom: 17 },
-                );
+                current.fitBounds(L.latLngBounds(saved.map((p) => [p.latitude, p.longitude] as [number, number])), { padding: [32, 32], maxZoom: 17 });
             }
         }
 
@@ -155,23 +135,21 @@ export function LocationMap({ pins, height = 260, onPick, className }: Props) {
         <div
             ref={element}
             style={{ height }}
-            className={cn(
-                'z-0 w-full overflow-hidden rounded-md border border-line bg-canvas',
-                className,
-            )}
+            className={cn('z-0 w-full overflow-hidden rounded-md border border-line bg-canvas', className)}
             role="region"
             aria-label="Peta"
         />
     );
 }
 
+// Theme colours are CSS variables, which SVG presentation attributes do not resolve, so they go in `style`.
 function pinIcon(L: typeof import('leaflet'), color: string): DivIcon {
     return L.divIcon({
         className: '',
         iconSize: [26, 34],
         iconAnchor: [13, 34],
         popupAnchor: [0, -30],
-        html: `<svg width="26" height="34" viewBox="0 0 26 34" xmlns="http://www.w3.org/2000/svg"><path d="M13 0C5.8 0 0 5.6 0 12.6 0 22 13 34 13 34s13-12 13-21.4C26 5.6 20.2 0 13 0z" fill="${color}" stroke="white" stroke-width="2"/><circle cx="13" cy="12.5" r="4.5" fill="white"/></svg>`,
+        html: `<svg width="26" height="34" viewBox="0 0 26 34" xmlns="http://www.w3.org/2000/svg"><path d="M13 0C5.8 0 0 5.6 0 12.6 0 22 13 34 13 34s13-12 13-21.4C26 5.6 20.2 0 13 0z" style="fill: ${color}; stroke: var(--color-surface)" stroke-width="2"/><circle cx="13" cy="12.5" r="4.5" style="fill: var(--color-surface)"/></svg>`,
     });
 }
 

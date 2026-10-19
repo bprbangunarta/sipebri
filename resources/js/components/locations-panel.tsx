@@ -52,53 +52,36 @@ export function LocationsPanel({ places }: { places: LocationPlace[] }) {
             <LocationMap pins={pins} />
             <ul className="divide-y divide-line rounded-md border border-line text-sm">
                 {places.map((p) => (
-                    <li
-                        key={p.key}
-                        className="flex flex-wrap items-center justify-between gap-2 px-3 py-2"
-                    >
+                    <li key={p.key} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2">
                         <div className="min-w-0">
                             <p className="font-medium">{p.label}</p>
-                            {p.detail && (
-                                <p className="text-xs text-muted">{p.detail}</p>
-                            )}
+                            {p.detail && <p className="text-xs text-muted">{p.detail}</p>}
                         </div>
                         {p.location ? (
                             <div className="flex flex-col gap-0.5 text-xs">
                                 <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                                     <MapPin className="size-3.5 text-primary" />
                                     <span className="font-mono tabular-nums">
-                                        {p.location.latitude.toFixed(6)},{' '}
-                                        {p.location.longitude.toFixed(6)}
+                                        {p.location.latitude.toFixed(6)}, {p.location.longitude.toFixed(6)}
                                     </span>
-                                    {p.location.source && (
-                                        <Badge>
-                                            {SOURCES[p.location.source] ??
-                                                p.location.source}
-                                        </Badge>
-                                    )}
+                                    {p.location.source && <Badge>{SOURCES[p.location.source] ?? p.location.source}</Badge>}
                                     <a
                                         href={p.location.maps_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="inline-flex items-center gap-1 text-primary hover:underline"
                                     >
-                                        Google Maps{' '}
-                                        <ExternalLink className="size-3" />
+                                        Google Maps <ExternalLink className="size-3" />
                                     </a>
                                 </p>
                                 {p.location.address && (
-                                    <p
-                                        className="text-muted"
-                                        title="Perkiraan alamat dari OpenStreetMap, berdasarkan koordinat. Cek di lokasi."
-                                    >
+                                    <p className="text-muted" title="Perkiraan alamat dari OpenStreetMap, berdasarkan koordinat. Cek di lokasi.">
                                         ≈ {p.location.address}
                                     </p>
                                 )}
                             </div>
                         ) : (
-                            <span className="text-xs text-muted">
-                                Belum ada posisi tercatat
-                            </span>
+                            <span className="text-xs text-muted">Belum ada posisi tercatat</span>
                         )}
                     </li>
                 ))}

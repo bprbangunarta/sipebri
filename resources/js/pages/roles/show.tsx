@@ -2,9 +2,11 @@ import { Head, router, useForm } from '@inertiajs/react';
 import { ArrowLeft, Lock, Save, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/choice';
 import { ConfirmDialog } from '@/components/ui/dialog';
+import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Card, PageHeader } from '@/components/ui/misc';
+import { Card, CardBody, CardFooter, CardHeader, PageHeader } from '@/components/ui/misc';
 
 type Matrix = {
     group: string;
@@ -29,9 +31,7 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
     const [confirmDelete, setConfirmDelete] = useState(false);
 
     const toggle = (name: string, checked: boolean) => {
-        let next = checked
-            ? [...form.data.permissions, name]
-            : form.data.permissions.filter((p) => p !== name);
+        let next = checked ? [...form.data.permissions, name] : form.data.permissions.filter((p) => p !== name);
         // Managing implies viewing; removing view removes manage.
         if (checked && name.endsWith('.manage')) {
             next = [...new Set([...next, name.replace('.manage', '.view')])];
@@ -42,44 +42,25 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
         form.setData('permissions', next);
     };
 
-    const isChecked = (name: string) =>
-        role.locked || form.data.permissions.includes(name);
+    const isChecked = (name: string) => role.locked || form.data.permissions.includes(name);
 
     return (
         <>
             <Head title={role.name} />
             <PageHeader
                 title={role.name}
-                description={
-                    role.locked
-                        ? 'Peran ini selalu punya semua izin dan tidak bisa diubah.'
-                        : 'Pilih apa saja yang boleh dilakukan peran ini'
-                }
+                description={role.locked ? 'Peran ini selalu punya semua izin dan tidak bisa diubah.' : 'Pilih apa saja yang boleh dilakukan peran ini'}
                 actions={
                     <>
-                        <Button
-                            variant="outline"
-                            onClick={() => router.visit('/roles')}
-                        >
+                        <Button variant="outline" onClick={() => router.visit('/roles')}>
                             <ArrowLeft /> Kembali
                         </Button>
                         {editable && (
                             <>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => setConfirmDelete(true)}
-                                >
+                                <Button variant="outline" onClick={() => setConfirmDelete(true)}>
                                     <Trash2 /> Hapus
                                 </Button>
-                                <Button
-                                    loading={form.processing}
-                                    onClick={() =>
-                                        form.put(
-                                            `/roles/${role.id}/permissions`,
-                                            { preserveScroll: true },
-                                        )
-                                    }
-                                >
+                                <Button loading={form.processing} onClick={() => form.put(`/roles/${role.id}/permissions`, { preserveScroll: true })}>
                                     <Save /> Simpan izin
                                 </Button>
                             </>
@@ -89,9 +70,9 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
             />
 
             {editable && (
-                <Card className="mb-3 max-w-xl p-3">
+                <Card className="mb-3 max-w-xl">
                     <form
-                        className="flex items-end gap-2"
+                        noValidate
                         onSubmit={(e) => {
                             e.preventDefault();
                             rename.put(`/roles/${role.id}`, {
@@ -99,34 +80,17 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                             });
                         }}
                     >
-                        <div className="flex-1">
-                            <label
-                                className="mb-1 block text-xs font-medium"
-                                htmlFor="role-name"
-                            >
-                                Nama peran
-                            </label>
-                            <Input
-                                id="role-name"
-                                value={rename.data.name}
-                                onChange={(e) =>
-                                    rename.setData('name', e.target.value)
-                                }
-                                aria-invalid={!!rename.errors.name}
-                            />
-                            {rename.errors.name && (
-                                <p className="mt-1 text-xs text-danger">
-                                    {rename.errors.name}
-                                </p>
-                            )}
-                        </div>
-                        <Button
-                            type="submit"
-                            variant="outline"
-                            loading={rename.processing}
-                        >
-                            Ubah nama
-                        </Button>
+                        <CardHeader title="Nama peran" />
+                        <CardBody>
+                            <Field label="Nama" required error={rename.errors.name}>
+                                <Input id="role-name" maxLength={100} value={rename.data.name} onChange={(e) => rename.setData('name', e.target.value)} />
+                            </Field>
+                        </CardBody>
+                        <CardFooter className="justify-end">
+                            <Button type="submit" loading={rename.processing}>
+                                Ubah nama
+                            </Button>
+                        </CardFooter>
                     </form>
                 </Card>
             )}
@@ -134,41 +98,20 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
             <div className="grid gap-3 lg:grid-cols-2">
                 {matrix.map((group) => (
                     <Card key={group.group}>
-                        <h2 className="flex items-center gap-1.5 border-b border-line px-3 py-2 text-sm font-semibold">
-                            {group.group}
-                            {role.locked && (
-                                <Lock className="size-3 text-muted" />
-                            )}
-                        </h2>
+                        <CardHeader title={group.group} actions={role.locked && <Lock className="size-3 text-muted" aria-label="Terkunci" />} />
                         <ul className="divide-y divide-line">
                             {group.modules.map((module) => (
-                                <li
-                                    key={module.key}
-                                    className="flex items-center justify-between gap-3 px-3 py-1.5 text-sm"
-                                >
-                                    <span>{module.label}</span>
+                                <li key={module.key} className="flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 text-sm">
+                                    <span className="min-w-0">{module.label}</span>
                                     <span className="flex items-center gap-3">
                                         {module.abilities.map((ability) => (
-                                            <label
+                                            <Checkbox
                                                 key={ability.name}
-                                                className="flex items-center gap-1.5 text-xs text-muted"
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    className="accent-primary"
-                                                    checked={isChecked(
-                                                        ability.name,
-                                                    )}
-                                                    disabled={!editable}
-                                                    onChange={(e) =>
-                                                        toggle(
-                                                            ability.name,
-                                                            e.target.checked,
-                                                        )
-                                                    }
-                                                />
-                                                {ability.label}
-                                            </label>
+                                                label={ability.label}
+                                                checked={isChecked(ability.name)}
+                                                disabled={!editable}
+                                                onCheckedChange={(checked) => toggle(ability.name, checked === true)}
+                                            />
                                         ))}
                                     </span>
                                 </li>
@@ -184,8 +127,7 @@ export default function RoleShow({ role, matrix, granted, canManage }: Props) {
                 title="Hapus peran?"
                 description={
                     <>
-                        Ini menghapus peran <strong>{role.name}</strong>. Peran
-                        yang dipakai pengguna tidak bisa dihapus.
+                        Peran <strong>{role.name}</strong> akan dihapus permanen. Peran yang masih dipakai pengguna tidak bisa dihapus.
                     </>
                 }
                 onConfirm={() => router.delete(`/roles/${role.id}`)}

@@ -24,15 +24,7 @@ export function useListQuery<F extends { search?: string }>({
     const [error, setError] = useState<string | null>(null);
     const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-    useEffect(
-        () =>
-            router.on('networkError', () =>
-                setError(
-                    'Server tidak dapat dihubungi. Periksa koneksi Anda lalu coba lagi.',
-                ),
-            ),
-        [],
-    );
+    useEffect(() => router.on('networkError', () => setError('Server tidak dapat dihubungi. Periksa koneksi Anda lalu coba lagi.')), []);
     useEffect(() => () => clearTimeout(timer.current), []);
 
     const visit = (changes: Partial<F & { page: number }>) => {
@@ -67,20 +59,24 @@ export function useListQuery<F extends { search?: string }>({
     const onSearch = (value: string) => {
         setSearch(value);
         clearTimeout(timer.current);
-        timer.current = setTimeout(
-            () =>
-                visit({ search: value.trim() } as Partial<
-                    F & { page: number }
-                >),
-            300,
-        );
+        timer.current = setTimeout(() => visit({ search: value.trim() } as Partial<F & { page: number }>), 300);
     };
 
-    /** Clears the search box plus any other filter keys given. */
+    /** Clears the search box plus any other filter keys given, and goes back to the default order ("Atur ulang", .ai/rules/js.md). */
     const clear = (others: Partial<F> = {}) => {
         setSearch('');
-        visit({ search: '', ...others } as Partial<F & { page: number }>);
+        visit({
+            search: '',
+            sort: undefined,
+            direction: undefined,
+            ...others,
+        } as Partial<F & { page: number }>);
     };
 
-    return { visit, search, onSearch, clear, loading, error };
+    const current = filters as Partial<Record<string, unknown>>;
+    const preset = defaults as Partial<Record<string, unknown>>;
+    /** The list is ordered by something else than its default, so "Atur ulang" has something to undo. */
+    const sorted = (current.sort !== undefined && current.sort !== preset.sort) || (current.direction !== undefined && current.direction !== preset.direction);
+
+    return { visit, search, onSearch, clear, sorted, loading, error };
 }

@@ -7,16 +7,10 @@ import { ConfirmDialog } from '@/components/ui/dialog';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Field } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import { Badge, Card, PageHeader } from '@/components/ui/misc';
+import { Alert, Badge, Card, CardHeader, PageHeader } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
-import { rupiah } from '@/lib/format';
-import {
-    MoneyField,
-    Panel,
-    Stat,
-    TextField,
-} from '@/pages/credit-analysis/parts';
+import { formatDateTime, rupiah } from '@/lib/format';
+import { DecimalField, DigitsField, MoneyField, Panel, Stat, TextField } from '@/pages/credit-analysis/parts';
 
 type Step = {
     id: number;
@@ -111,6 +105,11 @@ const TONES: Record<string, BadgeTone> = {
     reject: 'danger',
     cancel: 'neutral',
 };
+const RATES = [
+    ['interest_rate', 'Suku Bunga (%)'],
+    ['provision_rate', 'Biaya Provisi (%)'],
+    ['admin_rate', 'Biaya Admin (%)'],
+] as const;
 const STATUS_TONES: Record<string, BadgeTone> = {
     committee: 'info',
     approved: 'success',
@@ -118,20 +117,11 @@ const STATUS_TONES: Record<string, BadgeTone> = {
     cancelled: 'neutral',
 };
 
-export default function ApprovalShow({
-    record,
-    basis,
-    steps,
-    flow,
-    form: initial,
-    methodOptions,
-    decisionLabels,
-    corrections,
-}: Props) {
+export default function ApprovalShow({ record, basis, steps, flow, form: initial, methodOptions, decisionLabels, corrections }: Props) {
     const form = useForm({
         decision: flow.allowed[0] ?? '',
         method_id: initial.method_id === null ? '' : String(initial.method_id),
-        amount: String(initial.amount),
+        amount: initial.amount as number | null,
         tenor: String(initial.tenor),
         interest_rate: String(initial.interest_rate),
         provision_rate: String(initial.provision_rate),
@@ -169,32 +159,22 @@ export default function ApprovalShow({
             cell: (s) =>
                 s.decision ? (
                     <>
-                        <Badge tone={TONES[s.decision] ?? 'neutral'}>
-                            {s.decision_label}
-                        </Badge>
+                        <Badge tone={TONES[s.decision] ?? 'neutral'}>{s.decision_label}</Badge>
                         <p className="text-xs text-muted">
-                            {s.decided_by} · {s.decided_at}
+                            {s.decided_by} · {formatDateTime(s.decided_at)}
                         </p>
                     </>
                 ) : (
-                    <Badge tone="warning">
-                        {s.pending &&
-                        s.label === flow.pending_label?.split(' · ')[0]
-                            ? 'Menunggu'
-                            : 'Belum giliran'}
-                    </Badge>
+                    <Badge tone="warning">{s.pending && s.label === flow.pending_label?.split(' · ')[0] ? 'Menunggu' : 'Belum giliran'}</Badge>
                 ),
         },
         {
             key: 'terms',
             header: 'Syarat yang diputus',
-            hideBelow: 'md',
             cell: (s) =>
                 s.decision ? (
                     <span className="text-xs tabular-nums">
-                        {rupiah(s.amount)} · {s.tenor} bln · bunga{' '}
-                        {s.interest_rate}% · provisi {s.provision_rate}% · admin{' '}
-                        {s.admin_rate}%
+                        {rupiah(s.amount)} · {s.tenor} bln · bunga {s.interest_rate}% · provisi {s.provision_rate}% · admin {s.admin_rate}%
                         {s.method_label ? ` · ${s.method_label}` : ''}
                         <span className="block text-muted">
                             RC {s.rc_ratio}% dari maks. {rupiah(s.max_amount)}
@@ -207,7 +187,6 @@ export default function ApprovalShow({
         {
             key: 'note',
             header: 'Catatan',
-            hideBelow: 'lg',
             cell: (s) => s.note ?? '–',
         },
     ];
@@ -220,21 +199,10 @@ export default function ApprovalShow({
                 description={`${record.full_name} · ${record.nik}`}
                 actions={
                     <>
-                        <Badge tone={STATUS_TONES[record.status] ?? 'neutral'}>
-                            {record.status_label}
-                        </Badge>
-                        <Button
-                            variant="outline"
-                            onClick={() => router.visit('/approvals')}
-                        >
+                        <Button variant="outline" onClick={() => router.visit('/approvals')}>
                             <ArrowLeft /> Kembali
                         </Button>
-                        <Button
-                            variant="outline"
-                            onClick={() =>
-                                router.visit(`/credit-analysis/${record.id}`)
-                            }
-                        >
+                        <Button variant="outline" onClick={() => router.visit(`/credit-analysis/${record.id}`)}>
                             <FileText /> Lembar analisa
                         </Button>
                     </>
@@ -242,73 +210,36 @@ export default function ApprovalShow({
             />
 
             {record.exception && (
-                <p
-                    role="status"
-                    className="mb-3 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800"
-                >
+                <Alert tone="warning" className="mb-3">
                     <strong>Pengecualian.</strong> {record.exception}
-                </p>
+                </Alert>
             )}
 
             <div className="flex flex-col gap-3">
                 <Panel
                     title="Pengajuan dan Usulan Analis"
-                    hint={
-                        record.submitted_at
-                            ? `Diajukan ${record.submitted_at} oleh ${record.submitted_by}`
-                            : undefined
-                    }
+                    hint={record.submitted_at ? `Diajukan ${formatDateTime(record.submitted_at)} oleh ${record.submitted_by}` : undefined}
+                    actions={<Badge tone={STATUS_TONES[record.status] ?? 'neutral'}>{record.status_label}</Badge>}
                     columns="sm:grid-cols-2 lg:grid-cols-4"
                 >
                     <Stat label="Produk" value={record.product_label ?? '–'} />
                     <Stat label="Kantor" value={record.office_label ?? '–'} />
-                    <Stat
-                        label="Kasi Analis"
-                        value={record.supervisor_name ?? '–'}
-                    />
-                    <Stat
-                        label="Surveyor / Analis"
-                        value={record.surveyor_name ?? '–'}
-                    />
-                    <Stat
-                        label="Plafon Diajukan"
-                        value={`${rupiah(record.requested_amount)} · ${record.requested_tenor} bln`}
-                    />
-                    <Stat
-                        label="Usulan Analis"
-                        value={`${rupiah(basis.amount)} · ${basis.tenor} bln`}
-                        strong
-                    />
-                    <Stat
-                        label="Bunga / Provisi / Admin"
-                        value={`${basis.interest_rate}% / ${basis.provision_rate}% / ${basis.admin_rate}%`}
-                    />
-                    <Stat
-                        label="Metode Bunga"
-                        value={basis.method_label ?? '–'}
-                    />
-                    <Stat
-                        label="Taksasi Agunan"
-                        value={rupiah(basis.appraisal_total)}
-                    />
-                    <Stat
-                        label="Kemampuan per Bulan"
-                        value={rupiah(basis.capacity)}
-                    />
-                    <Stat
-                        label={`Plafon Maksimum (RC ${basis.rc_threshold}%)`}
-                        value={rupiah(basis.max_amount)}
-                    />
-                    <Stat
-                        label="Usulan terhadap Maksimum"
-                        value={`${basis.rc_ratio}%`}
-                        strong
-                    />
+                    <Stat label="Kasi Analis" value={record.supervisor_name ?? '–'} />
+                    <Stat label="Surveyor / Analis" value={record.surveyor_name ?? '–'} />
+                    <Stat label="Plafon Diajukan" value={`${rupiah(record.requested_amount)} · ${record.requested_tenor} bln`} />
+                    <Stat label="Usulan Analis" value={`${rupiah(basis.amount)} · ${basis.tenor} bln`} strong />
+                    <Stat label="Bunga / Provisi / Admin" value={`${basis.interest_rate}% / ${basis.provision_rate}% / ${basis.admin_rate}%`} />
+                    <Stat label="Metode Bunga" value={basis.method_label ?? '–'} />
+                    <Stat label="Taksasi Agunan" value={rupiah(basis.appraisal_total)} />
+                    <Stat label="Kemampuan per Bulan" value={rupiah(basis.capacity)} />
+                    <Stat label={`Plafon Maksimum (RC ${basis.rc_threshold}%)`} value={rupiah(basis.max_amount)} />
+                    <Stat label="Usulan terhadap Maksimum" value={`${basis.rc_ratio}%`} strong />
                 </Panel>
 
-                <div>
-                    <h2 className="mb-2 text-sm font-semibold">Jalur Komite</h2>
+                <Card>
+                    <CardHeader title="Jalur Komite" />
                     <DataTable
+                        bare
                         rows={steps}
                         rowKey={(s) => s.id}
                         columns={columns}
@@ -317,77 +248,34 @@ export default function ApprovalShow({
                             title: 'Belum ada jalur komite',
                         }}
                     />
-                </div>
+                </Card>
 
                 {decided && (
-                    <Panel
-                        title="Hasil Keputusan"
-                        columns="sm:grid-cols-2 lg:grid-cols-4"
-                    >
-                        <Stat
-                            label="Keputusan"
-                            value={record.status_label}
-                            strong
-                        />
+                    <Panel title="Hasil Keputusan" columns="sm:grid-cols-2 lg:grid-cols-4">
+                        <Stat label="Keputusan" value={record.status_label} strong />
                         {record.status === 'approved' && (
                             <>
-                                <Stat
-                                    label="Plafon Disetujui"
-                                    value={rupiah(record.approved_amount)}
-                                />
-                                <Stat
-                                    label="Jangka Waktu"
-                                    value={`${record.approved_tenor} bln`}
-                                />
-                                <Stat
-                                    label="Suku Bunga"
-                                    value={`${record.approved_rate}%`}
-                                />
+                                <Stat label="Plafon Disetujui" value={rupiah(record.approved_amount)} />
+                                <Stat label="Jangka Waktu" value={`${record.approved_tenor} bln`} />
+                                <Stat label="Suku Bunga" value={`${record.approved_rate}%`} />
                             </>
                         )}
-                        {record.decision_note && (
-                            <Stat
-                                label="Catatan"
-                                value={record.decision_note}
-                            />
-                        )}
+                        {record.decision_note && <Stat label="Catatan" value={record.decision_note} />}
                     </Panel>
                 )}
 
                 {corrections.length > 0 && (
-                    <Panel
-                        title="Koreksi Analisa Setelah Persetujuan"
-                        columns=""
-                    >
+                    <Panel title="Koreksi Analisa Setelah Persetujuan" columns="">
                         <ul className="flex flex-col gap-1.5 text-sm">
                             {corrections.map((c) => (
-                                <li
-                                    key={c.id}
-                                    className="rounded-md border border-line p-2"
-                                >
-                                    <Badge
-                                        tone={
-                                            c.status === 'closed'
-                                                ? 'success'
-                                                : c.status === 'open'
-                                                  ? 'info'
-                                                  : 'neutral'
-                                        }
-                                    >
-                                        {c.status_label}
-                                    </Badge>{' '}
+                                <li key={c.id} className="rounded-md border border-line p-2">
+                                    <Badge tone={c.status === 'closed' ? 'success' : c.status === 'open' ? 'info' : 'neutral'}>{c.status_label}</Badge>{' '}
                                     <span className="text-xs text-muted">
-                                        {c.opened_at ?? ''}
-                                        {c.resolved_at
-                                            ? ` → ${c.resolved_at}`
-                                            : ''}
+                                        {c.opened_at ? formatDateTime(c.opened_at) : ''}
+                                        {c.resolved_at ? ` → ${formatDateTime(c.resolved_at)}` : ''}
                                     </span>
                                     <p className="mt-1">{c.reason}</p>
-                                    {c.resolution_note && (
-                                        <p className="text-xs text-muted">
-                                            Catatan: {c.resolution_note}
-                                        </p>
-                                    )}
+                                    {c.resolution_note && <p className="text-xs text-muted">Catatan: {c.resolution_note}</p>}
                                 </li>
                             ))}
                         </ul>
@@ -399,12 +287,13 @@ export default function ApprovalShow({
                         title="Keputusan Anda"
                         hint={`Jenjang ${flow.pending_label}`}
                         columns="sm:grid-cols-2 lg:grid-cols-4"
+                        footer={
+                            <Button disabled={form.data.decision === '' || form.processing} loading={form.processing} onClick={() => setConfirming(true)}>
+                                Simpan keputusan
+                            </Button>
+                        }
                     >
-                        <Field
-                            label="Keputusan"
-                            required
-                            error={form.errors.decision}
-                        >
+                        <Field label="Keputusan" required error={form.errors.decision}>
                             <Combobox
                                 searchable={false}
                                 options={flow.allowed.map((d) => ({
@@ -412,76 +301,36 @@ export default function ApprovalShow({
                                     label: decisionLabels[d] ?? d,
                                 }))}
                                 value={form.data.decision}
-                                onChange={(v) =>
-                                    form.setData('decision', v ?? '')
-                                }
+                                onChange={(v) => form.setData('decision', v ?? '')}
                                 invalid={!!form.errors.decision}
                             />
                         </Field>
-                        <Field
-                            label="Metode Bunga"
-                            required
-                            error={form.errors.method_id}
-                        >
+                        <Field label="Metode Bunga" required error={form.errors.method_id}>
                             <Combobox
                                 options={methodOptions}
                                 value={form.data.method_id}
-                                onChange={(v) =>
-                                    form.setData('method_id', v ?? '')
-                                }
+                                onChange={(v) => form.setData('method_id', v ?? '')}
                                 invalid={!!form.errors.method_id}
                             />
                         </Field>
-                        <MoneyField
-                            label="Plafon"
-                            value={form.data.amount}
-                            onChange={(v) => form.setData('amount', v)}
-                            error={form.errors.amount}
-                        />
-                        <Field
+                        <MoneyField label="Plafon" required value={form.data.amount} onChange={(v) => form.setData('amount', v)} error={form.errors.amount} />
+                        <DigitsField
                             label="Jangka Waktu (Bulan)"
+                            required
+                            digits={3}
+                            value={form.data.tenor}
+                            onChange={(v) => form.setData('tenor', v)}
                             error={form.errors.tenor}
-                        >
-                            <Input
-                                type="number"
-                                min={1}
-                                value={form.data.tenor}
-                                onChange={(e) =>
-                                    form.setData('tenor', e.target.value)
-                                }
-                                className="text-right tabular-nums"
-                            />
-                        </Field>
-                        {(
-                            [
-                                'interest_rate',
-                                'provision_rate',
-                                'admin_rate',
-                            ] as const
-                        ).map((key) => (
-                            <Field
+                        />
+                        {RATES.map(([key, label]) => (
+                            <DecimalField
                                 key={key}
-                                label={
-                                    key === 'interest_rate'
-                                        ? 'Suku Bunga (%)'
-                                        : key === 'provision_rate'
-                                          ? 'Biaya Provisi (%)'
-                                          : 'Biaya Admin (%)'
-                                }
+                                label={label}
+                                hint="0 sampai 100, desimal memakai titik"
+                                value={form.data[key]}
+                                onChange={(v) => form.setData(key, v)}
                                 error={form.errors[key]}
-                            >
-                                <Input
-                                    type="number"
-                                    min={0}
-                                    max={100}
-                                    step="0.01"
-                                    value={form.data[key]}
-                                    onChange={(e) =>
-                                        form.setData(key, e.target.value)
-                                    }
-                                    className="text-right tabular-nums"
-                                />
-                            </Field>
+                            />
                         ))}
                         <TextField
                             label="Catatan"
@@ -490,29 +339,10 @@ export default function ApprovalShow({
                             error={form.errors.note}
                             className="sm:col-span-2 lg:col-span-4"
                         />
-                        <div className="sm:col-span-2 lg:col-span-4">
-                            <Button
-                                disabled={
-                                    form.data.decision === '' || form.processing
-                                }
-                                loading={form.processing}
-                                onClick={() => setConfirming(true)}
-                            >
-                                Simpan keputusan
-                            </Button>
-                        </div>
                     </Panel>
                 )}
 
-                {!decided &&
-                    !(flow.my_turn && flow.allowed.length > 0) &&
-                    flow.blocked_reason && (
-                        <Card>
-                            <p className="p-3 text-sm text-muted">
-                                {flow.blocked_reason}
-                            </p>
-                        </Card>
-                    )}
+                {!decided && !(flow.my_turn && flow.allowed.length > 0) && flow.blocked_reason && <Alert tone="neutral">{flow.blocked_reason}</Alert>}
             </div>
 
             <ConfirmDialog
@@ -522,13 +352,11 @@ export default function ApprovalShow({
                 description={
                     final ? (
                         <>
-                            Berkas <strong>{record.application_code}</strong>{' '}
-                            diputus dan tidak bisa diubah lagi.
+                            Berkas <strong>{record.application_code}</strong> diputus dan tidak bisa diubah lagi.
                         </>
                     ) : (
                         <>
-                            Berkas <strong>{record.application_code}</strong>{' '}
-                            diteruskan ke jenjang berikutnya.
+                            Berkas <strong>{record.application_code}</strong> diteruskan ke jenjang berikutnya.
                         </>
                     )
                 }

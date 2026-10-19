@@ -7,6 +7,7 @@ use App\Models\LoanApplication;
 use App\Models\LoanSchedule;
 use App\Models\LoanSurveyPhoto;
 use App\Models\User;
+use App\Support\LoanListOrder;
 use App\Support\Notify;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class SchedulingController extends Controller
 {
     private const PER_PAGE_OPTIONS = [10, 25, 50];
 
-    private const SORTABLE = ['application_code', 'application_date', 'full_name', 'survey_date', 'status'];
+    private const SORTABLE = ['application_code', 'application_date', 'product', 'full_name', 'office', 'supervisor', 'requested_amount', 'requested_tenor', 'survey_date', 'surveyor', 'schedule_count', 'status'];
 
     /**
      * `survey` files stay listed: a survey judged insufficient needs a RE-SURVEY by a more senior role.
@@ -60,7 +61,7 @@ class SchedulingController extends Controller
             })
             // Unless a sort was asked for, files the surveyor sent back come first: they have waited the longest.
             ->when(! isset($filters['sort']), fn ($q) => $q->orderByRaw('(loan_applications.status = ? and exists (select 1 from loan_schedules s where s.loan_application_id = loan_applications.id and s.action = ?)) desc', [LoanStatus::Submitted->value, LoanSchedule::ACTION_CANCEL]))
-            ->orderBy($sort, $direction)->orderBy('id')
+            ->tap(fn ($q) => LoanListOrder::apply($q, $sort, $direction))->orderBy('id')
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 10)
             ->withQueryString();
 
@@ -157,7 +158,7 @@ class SchedulingController extends Controller
         Notify::toPermission('scheduling.manage', $exceeded ? 'Batas jadwal ulang terlampaui' : 'Permintaan jadwal ulang', 'Penjadwalan',
             "Berkas {$loanApplication->application_code}: {$data['reason']}".($exceeded ? " (sudah dijadwalkan {$done} kali)" : ''), '/scheduling', $exceeded ? 'warning' : 'info');
 
-        $message = $exceeded ? "Jadwal dibatalkan. Berkas sudah dijadwalkan {$done} kali — mohon ditinjau." : 'Jadwal dibatalkan; berkas menunggu jadwal baru.';
+        $message = $exceeded ? "Jadwal dibatalkan. Berkas sudah dijadwalkan {$done} kali, mohon ditinjau." : 'Jadwal dibatalkan; berkas menunggu jadwal baru.';
 
         // From the survey page the file is no longer the surveyor's, so going back to it would be refused.
         return ($data['return'] ?? null) === 'surveys' ? to_route('surveys.index')->with('success', $message) : back()->with('success', $message);
@@ -266,13 +267,13 @@ class SchedulingController extends Controller
             'over_limit' => $done >= (int) config('credit.max_schedules'),
             'walk_in' => $walkIn,
             'resurvey' => $loan->status === LoanStatus::Survey,
-            'surveyor_role' => $walkIn ? 'Office staff (walk-in)' : $this->ladderRole($loan),
+            'surveyor_role' => $walkIn ? 'Staf kantor (tanpa survei lapangan)' : $this->ladderRole($loan),
             'surveyor_options' => $this->surveyors($loan),
             'can_cancel' => $loan->status === LoanStatus::Scheduling && $loan->surveyor_id === request()->user()?->id,
             'history' => $loan->schedules->reverse()->values()->map(fn (LoanSchedule $s): array => [
                 'id' => $s->id, 'sequence' => $s->sequence, 'action' => LoanSchedule::LABELS[$s->action] ?? $s->action,
                 'survey_date' => $s->survey_date?->toDateString(), 'surveyor_name' => $s->surveyor_name, 'note' => $s->note,
-                'reason' => $s->reason, 'created_by' => $s->created_by, 'created_at' => $s->created_at?->format('d M Y H:i'),
+                'reason' => $s->reason, 'created_by' => $s->created_by, 'created_at' => $s->created_at?->toIso8601String(),
             ]),
         ];
     }

@@ -4,14 +4,9 @@ import { useState } from 'react';
 import { CommitteeTabs } from '@/components/committee-tabs';
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
-import { ConfirmDialog, DialogFooter, Modal } from '@/components/ui/dialog';
-import {
-    DropdownContent,
-    DropdownItem,
-    DropdownMenu,
-    DropdownSeparator,
-    DropdownTrigger,
-} from '@/components/ui/dropdown';
+import { Checkbox, Switch } from '@/components/ui/choice';
+import { ConfirmDialog, DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
+import { DropdownContent, DropdownItem, DropdownMenu, DropdownSeparator, DropdownTrigger } from '@/components/ui/dropdown';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
@@ -46,14 +41,7 @@ type Props = {
     canManage: boolean;
 };
 
-export default function CommitteeSpecialRules({
-    paths,
-    productOptions,
-    pathOptions,
-    mechanisms,
-    defaultLevels,
-    canManage,
-}: Props) {
+export default function CommitteeSpecialRules({ paths, productOptions, pathOptions, mechanisms, defaultLevels, canManage }: Props) {
     const [editing, setEditing] = useState<PathRow | 'new' | null>(null);
     const [toDelete, setToDelete] = useState<PathRow | null>(null);
     const [showAll, setShowAll] = useState(false);
@@ -120,9 +108,7 @@ export default function CommitteeSpecialRules({
         });
     };
 
-    const rows = showAll
-        ? paths
-        : paths.filter((p) => !p.follows_default || p.mechanism !== 'plafon');
+    const rows = showAll ? paths : paths.filter((p) => !p.follows_default || p.mechanism !== 'plafon');
 
     const columns: Column<PathRow>[] = [
         {
@@ -134,41 +120,29 @@ export default function CommitteeSpecialRules({
         {
             key: 'condition',
             header: 'Kondisi',
-            hideBelow: 'sm',
             cell: (p) => p.condition_label,
         },
         {
             key: 'mechanism',
             header: 'Mekanisme',
-            hideBelow: 'md',
             cell: (p) => p.mechanism_label,
         },
         {
             key: 'tiers',
             header: 'Jenjang',
             align: 'right',
-            hideBelow: 'sm',
             className: 'tabular-nums',
             cell: (p) => p.tiers_count,
         },
         {
             key: 'levels',
             header: 'Batas',
-            hideBelow: 'sm',
-            cell: (p) => (
-                <Badge tone={p.follows_default ? 'info' : 'neutral'}>
-                    {p.follows_default ? 'Bawaan' : 'Sendiri'}
-                </Badge>
-            ),
+            cell: (p) => <Badge tone={p.follows_default ? 'info' : 'neutral'}>{p.follows_default ? 'Bawaan' : 'Sendiri'}</Badge>,
         },
         {
             key: 'status',
             header: 'Status',
-            cell: (p) => (
-                <Badge tone={p.is_active ? 'success' : 'neutral'}>
-                    {p.is_active ? 'Aktif' : 'Nonaktif'}
-                </Badge>
-            ),
+            cell: (p) => <Badge tone={p.is_active ? 'success' : 'neutral'}>{p.is_active ? 'Aktif' : 'Nonaktif'}</Badge>,
         },
         {
             key: 'actions',
@@ -181,28 +155,17 @@ export default function CommitteeSpecialRules({
                     <DropdownMenu>
                         <Tip label="Aksi">
                             <DropdownTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    aria-label={`Aksi untuk ${p.title}`}
-                                >
+                                <Button variant="ghost" size="icon" aria-label={`Aksi untuk ${p.title}`}>
                                     <MoreHorizontal />
                                 </Button>
                             </DropdownTrigger>
                         </Tip>
                         <DropdownContent>
-                            <DropdownItem
-                                icon={<Pencil />}
-                                onSelect={() => openForm(p)}
-                            >
+                            <DropdownItem icon={<Pencil />} onSelect={() => openForm(p)}>
                                 Ubah
                             </DropdownItem>
                             <DropdownSeparator />
-                            <DropdownItem
-                                danger
-                                icon={<Trash2 />}
-                                onSelect={() => setToDelete(p)}
-                            >
+                            <DropdownItem danger icon={<Trash2 />} onSelect={() => setToDelete(p)}>
                                 Hapus
                             </DropdownItem>
                         </DropdownContent>
@@ -228,20 +191,12 @@ export default function CommitteeSpecialRules({
             <CommitteeTabs current="paths" />
 
             <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
-                <span>
+                <span className="min-w-0">
                     {showAll
                         ? `Semua ${paths.length} jalur.`
                         : `${paths.length - rows.length} jalur mengikuti jenjang bawaan dan disembunyikan; ${rows.length} jalur di bawah memakai hierarki atau jenjang sendiri.`}
                 </span>
-                <label className="flex items-center gap-2">
-                    <input
-                        type="checkbox"
-                        className="accent-primary"
-                        checked={showAll}
-                        onChange={(e) => setShowAll(e.target.checked)}
-                    />
-                    Tampilkan semua jalur
-                </label>
+                <Switch label="Tampilkan semua jalur" checked={showAll} onCheckedChange={setShowAll} />
             </div>
 
             <DataTable
@@ -252,8 +207,7 @@ export default function CommitteeSpecialRules({
                 empty={{
                     icon: <Gavel />,
                     title: 'Belum ada jalur komite',
-                    description:
-                        'Buat satu jalur per produk (atau lintas produk untuk kondisi seperti RELOAN), lalu atur jenjangnya.',
+                    description: 'Buat satu jalur per produk (atau lintas produk untuk kondisi seperti RELOAN), lalu atur jenjangnya.',
                     action: canManage ? (
                         <Button size="sm" onClick={() => openForm('new')}>
                             <Plus /> Tambah jalur
@@ -265,129 +219,67 @@ export default function CommitteeSpecialRules({
             <Modal
                 open={editing !== null}
                 onOpenChange={(open) => !open && setEditing(null)}
-                title={
-                    editing === 'new'
-                        ? 'Tambah jalur komite'
-                        : 'Ubah jalur komite'
-                }
+                persistent
+                title={editing === 'new' ? 'Tambah jalur komite' : 'Ubah jalur komite'}
                 description="Satu jalur per produk dan kondisi."
             >
                 <form onSubmit={submit} noValidate>
-                    <div className="flex flex-col gap-3 p-4">
-                        <Field
-                            label="Produk"
-                            error={form.errors.product_id}
-                            hint="Kosongkan agar berlaku untuk semua produk."
-                        >
+                    <DialogBody className="flex flex-col gap-3">
+                        <Field label="Produk" error={form.errors.product_id} hint="Kosongkan agar berlaku untuk semua produk.">
                             <Combobox
                                 clearable
                                 placeholder="Semua produk"
                                 options={productOptions}
                                 value={form.data.product_id}
-                                onChange={(v) =>
-                                    form.setData('product_id', v ?? '')
-                                }
+                                onChange={(v) => form.setData('product_id', v ?? '')}
                                 invalid={!!form.errors.product_id}
                             />
                         </Field>
-                        <Field
-                            label="Kondisi / kategori"
-                            error={form.errors.condition}
-                            hint="Kosong berarti Normal. Disimpan huruf besar, mis. RELOAN."
-                        >
+                        <Field label="Kondisi / kategori" error={form.errors.condition} hint="Kosong berarti Normal. Disimpan huruf besar, mis. RELOAN.">
                             <Input
                                 className="uppercase"
                                 value={form.data.condition}
                                 maxLength={30}
-                                onChange={(e) =>
-                                    form.setData('condition', e.target.value)
-                                }
+                                onChange={(e) => form.setData('condition', e.target.value)}
                                 aria-invalid={!!form.errors.condition}
                             />
                         </Field>
-                        <Field
-                            label="Mekanisme"
-                            required
-                            error={form.errors.mechanism}
-                        >
+                        <Field label="Mekanisme" required error={form.errors.mechanism}>
                             <Combobox
                                 searchable={false}
                                 options={mechanisms}
                                 value={form.data.mechanism}
-                                onChange={(v) =>
-                                    form.setData('mechanism', v ?? 'plafon')
-                                }
+                                onChange={(v) => form.setData('mechanism', v ?? 'plafon')}
                                 invalid={!!form.errors.mechanism}
                             />
                         </Field>
                         {editing === 'new' && defaultLevels && (
-                            <label className="flex items-start gap-2 text-sm">
-                                <input
-                                    type="checkbox"
-                                    className="mt-0.5 accent-primary"
-                                    checked={
-                                        form.data.follows_default &&
-                                        form.data.copy_from === ''
-                                    }
-                                    disabled={form.data.copy_from !== ''}
-                                    onChange={(e) =>
-                                        form.setData(
-                                            'follows_default',
-                                            e.target.checked,
-                                        )
-                                    }
-                                />
-                                <span>
-                                    Ikuti jenjang wewenang bawaan
-                                    <span className="block text-xs text-muted">
-                                        Batas disimpan di satu tempat; ubah di
-                                        sana dan jalur ini ikut berubah.
-                                    </span>
-                                </span>
-                            </label>
+                            <Checkbox
+                                label="Ikuti jenjang wewenang bawaan"
+                                description="Batas disimpan di satu tempat; ubah di sana dan jalur ini ikut berubah."
+                                checked={form.data.follows_default && form.data.copy_from === ''}
+                                disabled={form.data.copy_from !== ''}
+                                onCheckedChange={(checked) => form.setData('follows_default', checked === true)}
+                            />
                         )}
                         {editing === 'new' && (
-                            <Field
-                                label="Salin jenjang dari"
-                                error={form.errors.copy_from}
-                            >
+                            <Field label="Salin jenjang dari" error={form.errors.copy_from}>
                                 <Combobox
                                     clearable
                                     placeholder="Jangan salin"
                                     options={pathOptions}
                                     value={form.data.copy_from}
-                                    onChange={(v) =>
-                                        form.setData('copy_from', v ?? '')
-                                    }
+                                    onChange={(v) => form.setData('copy_from', v ?? '')}
                                 />
                             </Field>
                         )}
                         <Field label="Catatan" error={form.errors.note}>
-                            <Input
-                                value={form.data.note}
-                                maxLength={255}
-                                onChange={(e) =>
-                                    form.setData('note', e.target.value)
-                                }
-                            />
+                            <Input value={form.data.note} maxLength={255} onChange={(e) => form.setData('note', e.target.value)} />
                         </Field>
-                        <label className="flex items-center gap-2 text-sm">
-                            <input
-                                type="checkbox"
-                                className="accent-primary"
-                                checked={form.data.is_active}
-                                onChange={(e) =>
-                                    form.setData('is_active', e.target.checked)
-                                }
-                            />
-                            Aktif
-                        </label>
-                    </div>
+                        <Checkbox label="Aktif" checked={form.data.is_active} onCheckedChange={(checked) => form.setData('is_active', checked === true)} />
+                    </DialogBody>
                     <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setEditing(null)}
-                        >
+                        <Button variant="outline" onClick={() => setEditing(null)}>
                             Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
@@ -403,8 +295,7 @@ export default function CommitteeSpecialRules({
                 title="Hapus jalur komite?"
                 description={
                     <>
-                        Ini menghapus <strong>{toDelete?.title}</strong> beserta
-                        seluruh jenjangnya.
+                        Jalur <strong>{toDelete?.title}</strong> akan dihapus permanen beserta seluruh jenjangnya.
                     </>
                 }
                 loading={deleting}

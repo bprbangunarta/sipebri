@@ -17,10 +17,7 @@ export type CommitteeTab = (typeof TABS)[number]['key'];
 /** The four parts of Data Komite, one page each, so the menu stays a single item. */
 export function CommitteeTabs({ current }: { current: CommitteeTab }) {
     return (
-        <nav
-            aria-label="Bagian data komite"
-            className="mb-4 flex gap-4 overflow-x-auto border-b border-line"
-        >
+        <nav aria-label="Bagian data komite" className="mb-4 flex gap-4 overflow-x-auto border-b border-line">
             {TABS.map((tab) => (
                 <Link
                     key={tab.key}

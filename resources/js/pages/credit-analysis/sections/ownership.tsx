@@ -19,9 +19,7 @@ export function OwnershipSection({
     const keys = Object.keys(assets);
     type Values = Record<string, string | null> & { items: { name: string }[] };
     const form = useForm<Values>({
-        ...Object.fromEntries(
-            keys.map((k) => [k, (finance[k] as string | null) ?? '']),
-        ),
+        ...Object.fromEntries(keys.map((k) => [k, (finance[k] as string | null) ?? ''])),
         items: finance.assets,
     } as unknown as Values);
 
@@ -29,11 +27,7 @@ export function OwnershipSection({
         <div className="flex flex-col gap-3">
             <Panel title="Harta Kepemilikan">
                 {keys.map((key) => (
-                    <Field
-                        key={key}
-                        label={ASSET_LABELS[key] ?? key}
-                        error={form.errors[key]}
-                    >
+                    <Field key={key} label={ASSET_LABELS[key] ?? key} error={form.errors[key]}>
                         <Combobox
                             clearable
                             searchable={false}
@@ -43,9 +37,7 @@ export function OwnershipSection({
                                 label: o,
                             }))}
                             value={form.data[key]}
-                            onChange={(v) =>
-                                canEdit && form.setData(key, v ?? '')
-                            }
+                            onChange={(v) => canEdit && form.setData(key, v ?? '')}
                         />
                     </Field>
                 ))}

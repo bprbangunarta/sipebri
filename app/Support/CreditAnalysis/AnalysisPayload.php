@@ -39,7 +39,7 @@ final class AnalysisPayload
             'administration' => self::administration($analysis),
             'submission' => [
                 'gaps' => $analysis->gaps(),
-                'submitted_at' => $analysis->submitted_at?->isoFormat('D MMM YYYY HH:mm'),
+                'submitted_at' => $analysis->submitted_at?->toIso8601String(),
                 'submitted_by' => $analysis->submitter?->name,
             ],
             'options' => [
@@ -83,7 +83,7 @@ final class AnalysisPayload
                 'service_income', 'vehicle_tax', 'other_expense', 'business_kind', 'projection_addition',
                 'revenue', 'expense', 'net_profit', 'monthly_income',
             ]),
-            'updated_at' => $business->updated_at?->isoFormat('D MMM YYYY HH:mm'),
+            'updated_at' => $business->updated_at?->toIso8601String(),
             'items' => $business->items->map(fn (AnalysisBusinessItem $i): array => [
                 'id' => $i->id, 'group' => $i->group, 'name' => $i->name, 'qty' => $i->qty, 'price' => $i->price, 'sell_price' => $i->sell_price,
             ])->values()->all(),
@@ -104,7 +104,7 @@ final class AnalysisPayload
             'obligations' => $finance->items->where('group', 'obligation')->map(fn (AnalysisFinanceItem $i): array => ['name' => $i->name, 'amount' => $i->amount])->values()->all(),
             'assets' => $finance->items->where('group', 'asset')->map(fn (AnalysisFinanceItem $i): array => ['name' => $i->name])->values()->all(),
             'metrics' => $finance->metrics(),
-            'updated_at' => $finance->updated_at?->isoFormat('D MMM YYYY HH:mm'),
+            'updated_at' => $finance->updated_at?->toIso8601String(),
         ];
     }
 
@@ -119,7 +119,7 @@ final class AnalysisPayload
         return [
             ...$columns->mapWithKeys(fn (string $c): array => [$c => $five->getAttribute($c)])->all(),
             'metrics' => $five->metrics(),
-            'updated_at' => $five->updated_at?->isoFormat('D MMM YYYY HH:mm'),
+            'updated_at' => $five->updated_at?->toIso8601String(),
         ];
     }
 
@@ -132,7 +132,7 @@ final class AnalysisPayload
 
         return [
             ...collect(AnalysisQualitative::columns())->mapWithKeys(fn (string $c): array => [$c => $record->getAttribute($c)])->all(),
-            'updated_at' => $record->updated_at?->isoFormat('D MMM YYYY HH:mm'),
+            'updated_at' => $record->updated_at?->toIso8601String(),
         ];
     }
 
@@ -187,7 +187,7 @@ final class AnalysisPayload
             'requested_tenor' => $loan->requested_tenor,
             'appraisal_total' => (int) $loan->collaterals->sum('appraisal_value'),
             'monthly_balance' => $monthlyBalance,
-            'updated_at' => $record->updated_at?->isoFormat('D MMM YYYY HH:mm'),
+            'updated_at' => $record->updated_at?->toIso8601String(),
         ];
     }
 
@@ -201,7 +201,7 @@ final class AnalysisPayload
         return [
             ...collect(AnalysisAdministration::FEES)->mapWithKeys(fn (string $c): array => [$c => (int) $record->getAttribute($c)])->all(),
             'total' => $record->total(),
-            'updated_at' => $record->updated_at?->isoFormat('D MMM YYYY HH:mm'),
+            'updated_at' => $record->updated_at?->toIso8601String(),
         ];
     }
 }

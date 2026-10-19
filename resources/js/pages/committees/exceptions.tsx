@@ -3,7 +3,7 @@ import { Scale, Users } from 'lucide-react';
 import { useState } from 'react';
 import { CommitteeTabs } from '@/components/committee-tabs';
 import { Button } from '@/components/ui/button';
-import { PageHeader } from '@/components/ui/misc';
+import { Card, CardBody, CardHeader, PageHeader } from '@/components/ui/misc';
 import { AuthorityCheck } from '@/pages/committees/authority-check';
 
 type Option = { value: number | string; label: string };
@@ -24,12 +24,7 @@ const RULES = [
     'Cakupan: pemohon sendiri. Keluarga dekat masih dalam rencana.',
 ];
 
-export default function CommitteeExceptions({
-    members,
-    productOptions,
-    conditionMap,
-    committeeMembers,
-}: Props) {
+export default function CommitteeExceptions({ members, productOptions, conditionMap, committeeMembers }: Props) {
     const [checking, setChecking] = useState(false);
 
     return (
@@ -40,10 +35,7 @@ export default function CommitteeExceptions({
                 description="Bila pemohon adalah anggota komite"
                 actions={
                     <>
-                        <Button
-                            variant="outline"
-                            onClick={() => router.visit('/committees/members')}
-                        >
+                        <Button variant="outline" onClick={() => router.visit('/committees/members')}>
                             <Users /> Anggota
                         </Button>
                         <Button onClick={() => setChecking(true)}>
@@ -54,16 +46,19 @@ export default function CommitteeExceptions({
             />
             <CommitteeTabs current="exceptions" />
 
-            <ul className="border-border flex list-disc flex-col gap-1.5 rounded-lg border bg-surface py-3 pr-3 pl-7 text-sm text-muted">
-                {RULES.map((rule) => (
-                    <li key={rule}>{rule}</li>
-                ))}
-            </ul>
-            <p className="mt-3 text-sm text-muted">
-                {members.total} anggota komite · {members.withoutNik} belum
-                punya NIK. Pakai Cek wewenang dan pilih pemohon untuk melihat
-                bagaimana sebuah berkas akan diputus.
-            </p>
+            <Card>
+                <CardHeader
+                    title="Aturan pemohon anggota komite"
+                    description={`${members.total} anggota komite, ${members.withoutNik} belum punya NIK. Pakai Cek wewenang dan pilih pemohon untuk melihat bagaimana sebuah berkas akan diputus.`}
+                />
+                <CardBody>
+                    <ul className="flex list-disc flex-col gap-1.5 pl-4 text-sm text-muted">
+                        {RULES.map((rule) => (
+                            <li key={rule}>{rule}</li>
+                        ))}
+                    </ul>
+                </CardBody>
+            </Card>
 
             <AuthorityCheck
                 open={checking}

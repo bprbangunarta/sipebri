@@ -1,11 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { rupiah } from '@/lib/format';
-import {
-    MoneyField,
-    Panel,
-    SaveBar,
-    Stat,
-} from '@/pages/credit-analysis/parts';
+import { MoneyField, Panel, SaveBar, Stat } from '@/pages/credit-analysis/parts';
 import type { Administration } from '@/pages/credit-analysis/types';
 
 const GROUPS = [
@@ -42,19 +37,9 @@ const GROUPS = [
     },
 ] as const;
 
-export function AdministrationSection({
-    loanId,
-    administration,
-    canEdit,
-}: {
-    loanId: number;
-    administration: Administration;
-    canEdit: boolean;
-}) {
+export function AdministrationSection({ loanId, administration, canEdit }: { loanId: number; administration: Administration; canEdit: boolean }) {
     const keys = GROUPS.flatMap((g) => g.fields.map(([, k]) => k));
-    const form = useForm<Record<string, string | number>>(
-        Object.fromEntries(keys.map((k) => [k, administration[k] ?? 0])),
-    );
+    const form = useForm<Record<string, string | number | null>>(Object.fromEntries(keys.map((k) => [k, administration[k] ?? 0])));
     const total = keys.reduce((t, k) => t + Number(form.data[k] || 0), 0);
 
     return (
@@ -74,11 +59,7 @@ export function AdministrationSection({
                 </Panel>
             ))}
             <Panel title="Ringkasan Biaya" columns="">
-                <Stat
-                    label="Total Biaya Administrasi"
-                    value={rupiah(total)}
-                    strong
-                />
+                <Stat label="Total Biaya Administrasi" value={rupiah(total)} strong />
             </Panel>
             {canEdit && (
                 <SaveBar

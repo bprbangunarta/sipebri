@@ -1,20 +1,19 @@
 import { Head, router } from '@inertiajs/react';
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
 import { Download, Eye, ScrollText, ShieldCheck, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
 import { DatePicker } from '@/components/ui/date-picker';
-import { DialogFooter, Modal } from '@/components/ui/dialog';
+import { DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
-import { Badge, PageHeader } from '@/components/ui/misc';
+import { Alert, Badge, PageHeader } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
 import type { PageMeta } from '@/components/ui/pagination';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
+import { formatDateTime } from '@/lib/format';
 
 type Values = Record<string, unknown>;
 type LogRow = {
@@ -65,9 +64,7 @@ const OUTCOMES = [
     { value: 'failure', label: 'Gagal' },
     { value: 'denied', label: 'Ditolak' },
 ];
-const OUTCOME_LABEL = Object.fromEntries(
-    OUTCOMES.map((o) => [o.value, o.label]),
-) as Record<LogRow['outcome'], string>;
+const OUTCOME_LABEL = Object.fromEntries(OUTCOMES.map((o) => [o.value, o.label])) as Record<LogRow['outcome'], string>;
 const TONES: Record<LogRow['outcome'], BadgeTone> = {
     success: 'success',
     failure: 'danger',
@@ -76,17 +73,9 @@ const TONES: Record<LogRow['outcome'], BadgeTone> = {
 const DEFAULTS = { per_page: 25 };
 const MIN_DATE = new Date(2020, 0, 1);
 
-const show = (value: unknown): string =>
-    value === null || value === undefined
-        ? '–'
-        : typeof value === 'string'
-          ? value
-          : JSON.stringify(value);
+const show = (value: unknown): string => (value === null || value === undefined ? '–' : typeof value === 'string' ? value : JSON.stringify(value));
 
-const changedFields = (log: LogRow): string[] =>
-    Array.from(
-        new Set([...Object.keys(log.old ?? {}), ...Object.keys(log.new ?? {})]),
-    );
+const changedFields = (log: LogRow): string[] => Array.from(new Set([...Object.keys(log.old ?? {}), ...Object.keys(log.new ?? {})]));
 
 const diffColumns = (log: LogRow): Column<string>[] => [
     { key: 'field', header: 'Kolom', className: 'font-medium', cell: (f) => f },
@@ -104,36 +93,22 @@ const diffColumns = (log: LogRow): Column<string>[] => [
     },
 ];
 
-export default function AuditLogsIndex({
-    logs,
-    filters,
-    modules,
-    verification,
-}: Props) {
+export default function AuditLogsIndex({ logs, filters, modules, verification }: Props) {
     const [selected, setSelected] = useState<LogRow | null>(null);
     const [verifying, setVerifying] = useState(false);
-    const { visit, search, onSearch, clear, loading, error } =
-        useListQuery<Filters>({
-            url: '/audit-logs',
-            filters,
-            defaults: DEFAULTS,
-            only: ['logs', 'filters'],
-        });
+    const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
+        url: '/audit-logs',
+        filters,
+        defaults: DEFAULTS,
+        only: ['logs', 'filters'],
+    });
 
-    const hasFilters = Boolean(
-        filters.search ||
-        filters.module ||
-        filters.outcome ||
-        filters.from ||
-        filters.to,
-    );
+    const hasFilters = Boolean(filters.search || filters.module || filters.outcome || filters.from || filters.to);
     const iso = (d: string) => (d ? d : null);
 
     const exportCsv = () => {
         const params = new URLSearchParams();
-        (['search', 'module', 'outcome', 'from', 'to'] as const).forEach(
-            (key) => filters[key] && params.set(key, filters[key] as string),
-        );
+        (['search', 'module', 'outcome', 'from', 'to'] as const).forEach((key) => filters[key] && params.set(key, filters[key] as string));
         window.location.assign(`/audit-logs/export?${params.toString()}`);
     };
 
@@ -152,48 +127,38 @@ export default function AuditLogsIndex({
         {
             key: 'time',
             header: 'Waktu',
-            className: 'whitespace-nowrap',
-            cell: (log) =>
-                format(
-                    new Date(log.at.replace(' ', 'T')),
-                    'dd MMM yyyy HH:mm:ss',
-                    { locale: id },
-                ),
+            cell: (log) => formatDateTime(log.at),
         },
         {
             key: 'user',
             header: 'Pengguna',
-            cell: (log) => (
-                <>
-                    <p className="font-medium">{log.user ?? 'Sistem'}</p>
-                    <p className="text-xs text-muted">{log.ip ?? ''}</p>
-                </>
-            ),
+            className: 'font-medium',
+            cell: (log) => log.user ?? 'Sistem',
+        },
+        {
+            key: 'ip',
+            header: 'Alamat IP',
+            cell: (log) => log.ip ?? '–',
         },
         {
             key: 'event',
             header: 'Kejadian',
-            cell: (log) => (
-                <>
-                    <p>{log.event}</p>
-                    <p className="text-xs text-muted">{log.module}</p>
-                </>
-            ),
+            cell: (log) => log.event,
+        },
+        {
+            key: 'module',
+            header: 'Modul',
+            cell: (log) => log.module,
         },
         {
             key: 'record',
             header: 'Data',
-            hideBelow: 'md',
             cell: (log) => log.subject ?? '–',
         },
         {
             key: 'outcome',
             header: 'Hasil',
-            cell: (log) => (
-                <Badge tone={TONES[log.outcome]}>
-                    {OUTCOME_LABEL[log.outcome]}
-                </Badge>
-            ),
+            cell: (log) => <Badge tone={TONES[log.outcome]}>{OUTCOME_LABEL[log.outcome]}</Badge>,
         },
         {
             key: 'actions',
@@ -203,12 +168,7 @@ export default function AuditLogsIndex({
             align: 'right',
             cell: (log) => (
                 <Tip label="Detail">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        aria-label={`Detail entri ${log.id}`}
-                        onClick={() => setSelected(log)}
-                    >
+                    <Button variant="ghost" size="icon" aria-label={`Detail entri ${log.id}`} onClick={() => setSelected(log)}>
                         <Eye />
                     </Button>
                 </Tip>
@@ -218,40 +178,28 @@ export default function AuditLogsIndex({
 
     return (
         <>
-            <Head title="Data Audit Log" />
+            <Head title="Audit Log" />
             <PageHeader
-                title="Data Audit Log"
+                title="Audit Log"
                 description="Catatan anti-rusak tentang siapa melakukan apa, kapan, dan dari mana"
                 actions={
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            onClick={verify}
-                            disabled={verifying}
-                        >
-                            <ShieldCheck />{' '}
-                            {verifying ? 'Memeriksa…' : 'Periksa integritas'}
+                    <>
+                        <Button variant="outline" onClick={verify} disabled={verifying}>
+                            <ShieldCheck /> {verifying ? 'Memeriksa…' : 'Periksa integritas'}
                         </Button>
                         <Button onClick={exportCsv}>
                             <Download /> Ekspor CSV
                         </Button>
-                    </div>
+                    </>
                 }
             />
 
             {verification && (
-                <div
-                    role="status"
-                    className={
-                        verification.ok
-                            ? 'mb-3 rounded-md border border-emerald-600/20 bg-emerald-50 px-3 py-2 text-sm text-emerald-700'
-                            : 'mb-3 rounded-md border border-danger/30 bg-red-50 px-3 py-2 text-sm text-danger'
-                    }
-                >
+                <Alert tone={verification.ok ? 'success' : 'danger'} className="mb-3">
                     {verification.ok
                         ? `Rantai utuh: ${verification.checked} entri terverifikasi.`
                         : `Rantai terputus di entri #${verification.broken_at}. ${verification.reason}`}
-                </div>
+                </Alert>
             )}
 
             <DataTable
@@ -262,30 +210,13 @@ export default function AuditLogsIndex({
                 onRetry={() => visit({})}
                 toolbar={
                     <FilterBar
-                        search={
-                            <SearchInput
-                                value={search}
-                                onChange={onSearch}
-                                placeholder="Cari pengguna, kejadian, data, IP…"
-                                label="Cari audit log"
-                            />
-                        }
+                        search={<SearchInput value={search} onChange={onSearch} placeholder="Cari pengguna, kejadian, data, IP…" label="Cari audit log" />}
                     >
                         <div className="w-full sm:w-36">
-                            <DatePicker
-                                value={filters.from ?? ''}
-                                min={MIN_DATE}
-                                placeholder="Dari"
-                                onChange={(v) => visit({ from: iso(v) })}
-                            />
+                            <DatePicker value={filters.from ?? ''} min={MIN_DATE} placeholder="Dari" onChange={(v) => visit({ from: iso(v) })} />
                         </div>
                         <div className="w-full sm:w-36">
-                            <DatePicker
-                                value={filters.to ?? ''}
-                                min={MIN_DATE}
-                                placeholder="Sampai"
-                                onChange={(v) => visit({ to: iso(v) })}
-                            />
+                            <DatePicker value={filters.to ?? ''} min={MIN_DATE} placeholder="Sampai" onChange={(v) => visit({ to: iso(v) })} />
                         </div>
                         <Combobox
                             className="w-full sm:w-40"
@@ -305,9 +236,7 @@ export default function AuditLogsIndex({
                             placeholder="Hasil"
                             options={OUTCOMES}
                             value={filters.outcome}
-                            onChange={(v) =>
-                                visit({ outcome: v as Filters['outcome'] })
-                            }
+                            onChange={(v) => visit({ outcome: v as Filters['outcome'] })}
                         />
                         {hasFilters && (
                             <Button
@@ -330,9 +259,7 @@ export default function AuditLogsIndex({
                 columns={columns}
                 empty={{
                     icon: <ScrollText />,
-                    title: hasFilters
-                        ? 'Tidak ada entri yang cocok dengan filter'
-                        : 'Belum ada entri',
+                    title: hasFilters ? 'Tidak ada entri yang cocok dengan filter' : 'Belum ada entri',
                 }}
                 pagination={{
                     meta: logs,
@@ -352,52 +279,28 @@ export default function AuditLogsIndex({
             >
                 {selected && (
                     <>
-                        <div className="max-h-[70vh] overflow-y-auto p-4 text-sm">
+                        <DialogBody className="text-sm">
                             <dl className="grid grid-cols-[7rem_1fr] gap-x-3 gap-y-1">
                                 {(
                                     [
-                                        ['Waktu', selected.at],
-                                        [
-                                            'Pengguna',
-                                            [selected.user, selected.username]
-                                                .filter(Boolean)
-                                                .join(' · ') || 'Sistem',
-                                        ],
+                                        ['Waktu', formatDateTime(selected.at)],
+                                        ['Pengguna', [selected.user, selected.username].filter(Boolean).join(' · ') || 'Sistem'],
                                         [
                                             'Data',
-                                            [
-                                                selected.subject_type,
-                                                selected.subject_id
-                                                    ? `#${selected.subject_id}`
-                                                    : null,
-                                                selected.subject,
-                                            ]
+                                            [selected.subject_type, selected.subject_id ? `#${selected.subject_id}` : null, selected.subject]
                                                 .filter(Boolean)
                                                 .join(' · ') || '–',
                                         ],
-                                        [
-                                            'Hasil',
-                                            OUTCOME_LABEL[selected.outcome],
-                                        ],
+                                        ['Hasil', OUTCOME_LABEL[selected.outcome]],
                                         ['Alamat IP', selected.ip ?? '–'],
-                                        [
-                                            'Permintaan',
-                                            [selected.method, selected.url]
-                                                .filter(Boolean)
-                                                .join(' ') || '–',
-                                        ],
-                                        [
-                                            'Peramban',
-                                            selected.user_agent ?? '–',
-                                        ],
+                                        ['Permintaan', [selected.method, selected.url].filter(Boolean).join(' ') || '–'],
+                                        ['Peramban', selected.user_agent ?? '–'],
                                         ['ID permintaan', selected.request_id],
                                         ['Hash', selected.hash],
                                     ] as [string, string][]
                                 ).map(([label, value]) => (
                                     <div key={label} className="contents">
-                                        <dt className="text-xs text-muted">
-                                            {label}
-                                        </dt>
+                                        <dt className="text-xs text-muted">{label}</dt>
                                         <dd className="break-all">{value}</dd>
                                     </div>
                                 ))}
@@ -424,12 +327,9 @@ export default function AuditLogsIndex({
                                     {JSON.stringify(selected.context, null, 2)}
                                 </pre>
                             )}
-                        </div>
+                        </DialogBody>
                         <DialogFooter>
-                            <Button
-                                variant="outline"
-                                onClick={() => setSelected(null)}
-                            >
+                            <Button variant="outline" onClick={() => setSelected(null)}>
                                 Tutup
                             </Button>
                         </DialogFooter>

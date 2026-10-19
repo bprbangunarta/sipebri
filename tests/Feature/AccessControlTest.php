@@ -124,3 +124,19 @@ it('lists roles as a searchable, sortable, paginated table', function () {
 
     $this->get(route('roles.index', ['sort' => 'password']))->assertSessionHasErrors('sort');
 });
+
+it('sorts the roles by every sortable column in both directions', function (string $sort, string $direction) {
+    $this->actingAs(superAdmin());
+    User::factory()->count(2)->create()->each->assignRole('Teller');
+
+    $rows = Role::query()->withCount(['users', 'permissions'])->get()
+        ->map(fn (Role $role): array => ['name' => $role->name, 'value' => $sort === 'name' ? $role->name : $role->{$sort}]);
+    // The controller breaks ties by name, ascending, whatever the direction of the sorted column.
+    $expected = $rows->sort(fn (array $a, array $b): int => ($direction === 'asc' ? $a['value'] <=> $b['value'] : $b['value'] <=> $a['value']) ?: strcmp($a['name'], $b['name']))
+        ->pluck('name')->take(50)->values()->all();
+
+    $this->get(route('roles.index', ['sort' => $sort, 'direction' => $direction, 'per_page' => 50]))->assertInertia(fn (Assert $page) => $page
+        ->where('filters.sort', $sort)
+        ->where('filters.direction', $direction)
+        ->where('roles.data', fn ($data): bool => collect($data)->pluck('name')->all() === $expected));
+})->with(['name', 'users_count', 'permissions_count'])->with(['asc', 'desc']);

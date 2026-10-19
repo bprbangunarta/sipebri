@@ -3,10 +3,10 @@ import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
 import { DatePicker } from '@/components/ui/date-picker';
+import { CurrencyInput } from '@/components/ui/currency-input';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Card, PageHeader } from '@/components/ui/misc';
-import { rupiah } from '@/lib/format';
+import { Card, CardBody, CardHeader, PageHeader } from '@/components/ui/misc';
 
 type Option = { value: string; label: string };
 type Collateral = {
@@ -55,24 +55,11 @@ const VALUES = [
     ['independent_value', 'Nilai independen'],
 ] as const;
 
-function Section({
-    title,
-    hint,
-    children,
-}: {
-    title: string;
-    hint?: string;
-    children: ReactNode;
-}) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
     return (
         <Card>
-            <div className="border-b border-line px-3 py-2">
-                <h2 className="text-sm font-semibold">{title}</h2>
-                {hint && <p className="text-xs text-muted">{hint}</p>}
-            </div>
-            <div className="grid gap-3 p-3 sm:grid-cols-2 lg:grid-cols-4">
-                {children}
-            </div>
+            <CardHeader title={title} />
+            <CardBody className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{children}</CardBody>
         </Card>
     );
 }
@@ -89,12 +76,12 @@ export default function CollateralForm({ collateral, options }: Props) {
         owner_name: collateral?.owner_name ?? '',
         owner_address: collateral?.owner_address ?? '',
         region_code: collateral?.region_code ?? '',
-        guarantee_value: collateral?.guarantee_value ?? 0,
-        adjustment_value: collateral?.adjustment_value ?? 0,
-        fair_value: collateral?.fair_value ?? 0,
-        njop_value: collateral?.njop_value ?? 0,
-        appraisal_value: collateral?.appraisal_value ?? 0,
-        independent_value: collateral?.independent_value ?? 0,
+        guarantee_value: collateral?.guarantee_value ?? (0 as number | null),
+        adjustment_value: collateral?.adjustment_value ?? (0 as number | null),
+        fair_value: collateral?.fair_value ?? (0 as number | null),
+        njop_value: collateral?.njop_value ?? (0 as number | null),
+        appraisal_value: collateral?.appraisal_value ?? (0 as number | null),
+        independent_value: collateral?.independent_value ?? (0 as number | null),
         independent_name: collateral?.independent_name ?? '',
         independent_at: collateral?.independent_at ?? '',
         condition_code: collateral?.condition_code ?? '',
@@ -108,8 +95,7 @@ export default function CollateralForm({ collateral, options }: Props) {
         id: name,
         className: upper ? 'uppercase' : undefined,
         value: data[name] as string,
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-            setData(name, e.target.value as never),
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => setData(name, e.target.value as never),
         'aria-invalid': !!errors[name],
     });
     const today = new Date();
@@ -127,98 +113,51 @@ export default function CollateralForm({ collateral, options }: Props) {
         <>
             <Head title={isEdit ? 'Ubah jaminan' : 'Tambah jaminan'} />
             <PageHeader
-                title={
-                    isEdit
-                        ? `Ubah ${collateral.cbs_id ?? `jaminan #${collateral.id}`}`
-                        : 'Tambah jaminan'
-                }
+                title={isEdit ? `Ubah ${collateral.cbs_id ?? `jaminan #${collateral.id}`}` : 'Tambah jaminan'}
                 description={
-                    isEdit
-                        ? 'Kondisi, asuransi, dan taksasi wajib diisi pada tahap ini. Penilai tercatat atas nama Anda.'
-                        : 'Kolom bertanda * wajib diisi'
+                    isEdit ? 'Kondisi, asuransi, dan taksasi wajib diisi pada tahap ini. Penilai tercatat atas nama Anda.' : 'Kolom bertanda * wajib diisi'
                 }
             />
 
             <form onSubmit={submit} className="flex flex-col gap-3" noValidate>
                 <Section title="Jaminan">
-                    <Field
-                        label="ID agunan"
-                        error={errors.cbs_id}
-                        hint="ID core banking, bila sudah ada"
-                    >
+                    <Field label="ID agunan" error={errors.cbs_id} hint="ID core banking, bila sudah ada">
                         <Input {...text('cbs_id', true)} maxLength={50} />
                     </Field>
-                    <Field
-                        label="Rekening kredit"
-                        error={errors.credit_account}
-                    >
+                    <Field label="Rekening kredit" error={errors.credit_account}>
                         <Input {...text('credit_account')} maxLength={30} />
                     </Field>
-                    <Field
-                        label="Jenis agunan"
-                        required
-                        error={errors.collateral_type_code}
-                    >
+                    <Field label="Jenis agunan" required error={errors.collateral_type_code}>
                         <Combobox
                             id="collateral_type_code"
                             options={options.types}
                             value={data.collateral_type_code}
-                            onChange={(v) =>
-                                setData('collateral_type_code', v ?? '')
-                            }
+                            onChange={(v) => setData('collateral_type_code', v ?? '')}
                             invalid={!!errors.collateral_type_code}
                         />
                     </Field>
-                    <Field
-                        label="Jenis pengikatan"
-                        error={errors.binding_type_code}
-                    >
+                    <Field label="Jenis pengikatan" error={errors.binding_type_code}>
                         <Combobox
                             id="binding_type_code"
                             clearable
                             options={options.bindings}
                             value={data.binding_type_code}
-                            onChange={(v) =>
-                                setData('binding_type_code', v ?? '')
-                            }
+                            onChange={(v) => setData('binding_type_code', v ?? '')}
                         />
                     </Field>
-                    <Field
-                        label="Nomor dokumen"
-                        required
-                        error={errors.document_number}
-                        className="lg:col-span-2"
-                    >
-                        <Input
-                            {...text('document_number', true)}
-                            maxLength={100}
-                        />
+                    <Field label="Nomor dokumen" required error={errors.document_number} className="lg:col-span-2">
+                        <Input {...text('document_number', true)} maxLength={100} />
                     </Field>
-                    <Field
-                        label="Keterangan"
-                        required
-                        error={errors.description}
-                        className="lg:col-span-2"
-                    >
+                    <Field label="Keterangan" required error={errors.description} className="lg:col-span-2">
                         <Input {...text('description', true)} maxLength={255} />
                     </Field>
                 </Section>
 
                 <Section title="Pemilik & lokasi">
-                    <Field
-                        label="Nama pemilik"
-                        required
-                        error={errors.owner_name}
-                        className="lg:col-span-2"
-                    >
+                    <Field label="Nama pemilik" required error={errors.owner_name} className="lg:col-span-2">
                         <Input {...text('owner_name', true)} maxLength={100} />
                     </Field>
-                    <Field
-                        label="Lokasi (kabupaten/kota)"
-                        required
-                        error={errors.region_code}
-                        className="lg:col-span-2"
-                    >
+                    <Field label="Lokasi (kabupaten/kota)" required error={errors.region_code} className="lg:col-span-2">
                         <Combobox
                             id="region_code"
                             options={options.regions}
@@ -227,55 +166,21 @@ export default function CollateralForm({ collateral, options }: Props) {
                             invalid={!!errors.region_code}
                         />
                     </Field>
-                    <Field
-                        label="Alamat agunan"
-                        required
-                        error={errors.owner_address}
-                        className="sm:col-span-2 lg:col-span-4"
-                    >
-                        <Input
-                            {...text('owner_address', true)}
-                            maxLength={255}
-                        />
+                    <Field label="Alamat agunan" required error={errors.owner_address} className="sm:col-span-2 lg:col-span-4">
+                        <Input {...text('owner_address', true)} maxLength={255} />
                     </Field>
                 </Section>
 
-                <Section title="Nilai (Rp)">
+                <Section title="Nilai">
                     {VALUES.map(([name, label]) => (
-                        <Field
-                            key={name}
-                            label={label}
-                            error={errors[name]}
-                            hint={rupiah(data[name])}
-                        >
-                            <Input
-                                id={name}
-                                type="number"
-                                min={0}
-                                value={data[name]}
-                                onChange={(e) =>
-                                    setData(
-                                        name,
-                                        e.target.value as unknown as number,
-                                    )
-                                }
-                                aria-invalid={!!errors[name]}
-                            />
+                        <Field key={name} label={label} error={errors[name]}>
+                            <CurrencyInput id={name} value={data[name]} onValueChange={(v) => setData(name, v)} aria-invalid={!!errors[name]} />
                         </Field>
                     ))}
-                    <Field
-                        label="Penilai independen"
-                        error={errors.independent_name}
-                    >
-                        <Input
-                            {...text('independent_name', true)}
-                            maxLength={100}
-                        />
+                    <Field label="Penilai independen" error={errors.independent_name}>
+                        <Input {...text('independent_name', true)} maxLength={100} />
                     </Field>
-                    <Field
-                        label="Tanggal penilaian independen"
-                        error={errors.independent_at}
-                    >
+                    <Field label="Tanggal penilaian independen" error={errors.independent_at}>
                         <DatePicker
                             id="independent_at"
                             min={new Date(2000, 0, 1)}
@@ -288,11 +193,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                 </Section>
 
                 <Section title="Kondisi & asuransi">
-                    <Field
-                        label="Kondisi"
-                        required={isEdit}
-                        error={errors.condition_code}
-                    >
+                    <Field label="Kondisi" required={isEdit} error={errors.condition_code}>
                         <Combobox
                             id="condition_code"
                             clearable={!isEdit}
@@ -302,11 +203,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                             invalid={!!errors.condition_code}
                         />
                     </Field>
-                    <Field
-                        label="Tanggal kondisi"
-                        required={isEdit}
-                        error={errors.condition_date}
-                    >
+                    <Field label="Tanggal kondisi" required={isEdit} error={errors.condition_date}>
                         <DatePicker
                             id="condition_date"
                             min={new Date(2000, 0, 1)}
@@ -316,11 +213,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                             invalid={!!errors.condition_date}
                         />
                     </Field>
-                    <Field
-                        label="Diasuransikan"
-                        required={isEdit}
-                        error={errors.insurance_code}
-                    >
+                    <Field label="Diasuransikan" required={isEdit} error={errors.insurance_code}>
                         <Combobox
                             id="insurance_code"
                             searchable={false}
@@ -329,16 +222,10 @@ export default function CollateralForm({ collateral, options }: Props) {
                                 { value: 'T', label: 'Tidak' },
                             ]}
                             value={data.insurance_code}
-                            onChange={(v) =>
-                                setData('insurance_code', v ?? 'T')
-                            }
+                            onChange={(v) => setData('insurance_code', v ?? 'T')}
                         />
                     </Field>
-                    <Field
-                        label="Tanggal mulai asuransi"
-                        required={isEdit}
-                        error={errors.insurance_date}
-                    >
+                    <Field label="Tanggal mulai asuransi" required={isEdit} error={errors.insurance_date}>
                         <DatePicker
                             id="insurance_date"
                             min={new Date(2000, 0, 1)}
@@ -360,10 +247,7 @@ export default function CollateralForm({ collateral, options }: Props) {
                 </Section>
 
                 <div className="flex items-center justify-between gap-2">
-                    <Button
-                        variant="outline"
-                        onClick={() => router.visit('/collaterals')}
-                    >
+                    <Button variant="outline" onClick={() => router.visit('/collaterals')}>
                         Batal
                     </Button>
                     <Button type="submit" loading={form.processing}>

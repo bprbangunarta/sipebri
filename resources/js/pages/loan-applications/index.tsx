@@ -1,20 +1,25 @@
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm, useHttp } from '@inertiajs/react';
 import { FileText, Loader2, Plus, Search, ShieldAlert, X } from 'lucide-react';
 import { useState } from 'react';
+import { lookup as lookupRoute } from '@/actions/App/Http/Controllers/LoanApplicationController';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/choice';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
 import { Combobox } from '@/components/ui/combobox';
-import { DialogFooter, Modal } from '@/components/ui/dialog';
+import { DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { InputGroup } from '@/components/ui/input';
+import { MaskedInput } from '@/components/ui/masked-input';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
-import { Badge, PageHeader } from '@/components/ui/misc';
+import { Alert, Badge, PageHeader } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
 import type { PageMeta } from '@/components/ui/pagination';
 import { nextSort } from '@/components/ui/sort-head';
+import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
-import { formatDate, rupiah } from '@/lib/format';
+import { formatDate, formatNumber, rupiah } from '@/lib/format';
+import { MASKS } from '@/lib/mask';
 
 export type LoanRow = {
     id: number;
@@ -65,68 +70,68 @@ type Customer = {
 
 type Member = { id: number; name: string; role: string | null };
 
-function NewApplication({
-    open,
-    onOpenChange,
-    source,
-    members,
-}: {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    source: string;
-    members: Option[];
-}) {
+type Lookup = { found: boolean; customer: Customer | null; committee_member: Member | null; message: string | null };
+
+/** The lookup answers 503 with a message when the customer system cannot be reached; anything else gets a general sentence. */
+function failureMessage(body: string): string {
+    try {
+        const parsed: unknown = JSON.parse(body);
+
+        if (parsed && typeof parsed === 'object' && 'message' in parsed && typeof parsed.message === 'string') {
+            return parsed.message;
+        }
+    } catch {
+        // Not JSON (a proxy error page): fall through to the general sentence.
+    }
+
+    return 'Server tidak dapat dihubungi. Coba lagi.';
+}
+
+function NewApplication({ open, onOpenChange, source, members }: { open: boolean; onOpenChange: (open: boolean) => void; source: string; members: Option[] }) {
     const form = useForm({ nik: '', committee_conflict_user_id: '' });
+    const http = useHttp<Record<string, never>, Lookup>();
     const [customer, setCustomer] = useState<Customer | null>(null);
     // A committee member recognised by national ID, or one the officer flags by hand.
     const [member, setMember] = useState<Member | null>(null);
     const [flagged, setFlagged] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
-    const [looking, setLooking] = useState(false);
 
-    const lookup = async () => {
-        setLooking(true);
+    const forget = () => {
         setCustomer(null);
         setMember(null);
         setFlagged(false);
-        form.setData('committee_conflict_user_id', '');
         setMessage(null);
+    };
 
-        try {
-            const response = await fetch(
-                `/loan-applications/lookup?nik=${encodeURIComponent(form.data.nik)}`,
-                { headers: { Accept: 'application/json' } },
-            );
-            const body = await response.json();
-            setCustomer(body.customer);
-            setMember(body.committee_member ?? null);
-            setMessage(body.message);
-        } catch {
-            setMessage('Server tidak dapat dihubungi. Coba lagi.');
-        } finally {
-            setLooking(false);
-        }
+    const lookup = () => {
+        forget();
+        form.setData('committee_conflict_user_id', '');
+        http.get(lookupRoute.url({ query: { nik: form.data.nik } }), {
+            onSuccess: (body) => {
+                setCustomer(body.customer);
+                setMember(body.committee_member ?? null);
+                setMessage(body.message);
+            },
+            onHttpException: (response) => {
+                setMessage(failureMessage(response.data));
+            },
+            onNetworkError: () => {
+                setMessage('Server tidak dapat dihubungi. Coba lagi.');
+            },
+        }).catch(() => undefined);
     };
 
     const close = (next: boolean) => {
         if (!next) {
             form.reset();
             form.clearErrors();
-            setCustomer(null);
-            setMember(null);
-            setFlagged(false);
-            setMessage(null);
+            forget();
         }
         onOpenChange(next);
     };
 
     return (
-        <Modal
-            open={open}
-            onOpenChange={close}
-            title="Pengajuan kredit baru"
-            description={`Pemohon dicari di ${source} berdasarkan NIK.`}
-        >
+        <Modal persistent open={open} onOpenChange={close} title="Pengajuan kredit baru" description={`Pemohon dicari di ${source} berdasarkan NIK.`}>
             <form
                 onSubmit={(e) => {
                     e.preventDefault();
@@ -134,73 +139,43 @@ function NewApplication({
                 }}
                 noValidate
             >
-                <div className="flex flex-col gap-3 p-4">
-                    <Field
-                        label="NIK (KTP)"
-                        required
-                        error={form.errors.nik ?? undefined}
-                        hint="16 digit"
-                    >
-                        <div className="flex gap-2">
-                            <Input
+                <DialogBody className="flex flex-col gap-3">
+                    <Field label="NIK (KTP)" required error={form.errors.nik ?? undefined} hint="16 digit">
+                        <InputGroup>
+                            <MaskedInput
                                 autoFocus
-                                inputMode="numeric"
-                                maxLength={16}
+                                className="min-w-0 flex-1"
+                                mask={MASKS.nik}
                                 value={form.data.nik}
-                                onChange={(e) => {
-                                    form.setData(
-                                        'nik',
-                                        e.target.value.replace(/\D/g, ''),
-                                    );
-                                    setCustomer(null);
-                                    setMember(null);
-                                    setFlagged(false);
-                                    form.setData(
-                                        'committee_conflict_user_id',
-                                        '',
-                                    );
-                                    setMessage(null);
+                                onValueChange={(nik) => {
+                                    form.setData({ nik, committee_conflict_user_id: '' });
+                                    forget();
                                 }}
                                 aria-invalid={!!form.errors.nik}
                             />
-                            <Button
-                                variant="outline"
-                                disabled={
-                                    form.data.nik.length !== 16 || looking
-                                }
-                                onClick={lookup}
-                            >
-                                {looking ? (
-                                    <Loader2 className="animate-spin" />
-                                ) : (
-                                    <Search />
-                                )}{' '}
-                                Cari
-                            </Button>
-                        </div>
+                            <Tip label="Cari di sistem nasabah">
+                                <Button
+                                    variant="outline"
+                                    size="fieldIcon"
+                                    aria-label="Cari NIK"
+                                    disabled={form.data.nik.length !== 16 || http.processing}
+                                    onClick={lookup}
+                                >
+                                    {http.processing ? <Loader2 className="animate-spin" /> : <Search />}
+                                </Button>
+                            </Tip>
+                        </InputGroup>
                     </Field>
-                    {message && (
-                        <p className="text-xs text-danger">{message}</p>
-                    )}
+                    {message && <Alert tone="danger">{message}</Alert>}
                     {customer && (
                         <dl className="grid grid-cols-2 gap-2 rounded-md border border-line bg-canvas p-2.5 text-sm">
                             <div className="col-span-2">
                                 <dt className="text-xs text-muted">Nama</dt>
-                                <dd className="font-medium">
-                                    {customer.full_name}
-                                </dd>
+                                <dd className="font-medium">{customer.full_name}</dd>
                             </div>
                             <div>
                                 <dt className="text-xs text-muted">Lahir</dt>
-                                <dd>
-                                    {[
-                                        customer.birth_place,
-                                        customer.birth_date &&
-                                            formatDate(customer.birth_date),
-                                    ]
-                                        .filter(Boolean)
-                                        .join(', ') || '–'}
-                                </dd>
+                                <dd>{[customer.birth_place, customer.birth_date && formatDate(customer.birth_date)].filter(Boolean).join(', ') || '–'}</dd>
                             </div>
                             <div>
                                 <dt className="text-xs text-muted">Sumber</dt>
@@ -213,81 +188,47 @@ function NewApplication({
                         </dl>
                     )}
                     {customer && member && (
-                        <div
-                            role="status"
-                            className="flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800"
-                        >
-                            <ShieldAlert className="mt-0.5 size-3.5 shrink-0" />
-                            <span>
-                                <strong>
-                                    Pemohon adalah anggota komite: {member.name}
-                                    {member.role ? ` (${member.role})` : ''}.
-                                </strong>{' '}
-                                Berkas ditandai sejak awal. Ia tidak bisa
-                                memutus maupun menjadi Kasi Analisnya, dan
-                                persetujuan melewatinya.
-                            </span>
-                        </div>
+                        <Alert tone="warning" icon={<ShieldAlert />}>
+                            <strong>
+                                Pemohon adalah anggota komite: {member.name}
+                                {member.role ? ` (${member.role})` : ''}.
+                            </strong>{' '}
+                            Berkas ditandai sejak awal. Ia tidak bisa memutus maupun menjadi Kasi Analisnya, dan persetujuan melewatinya.
+                        </Alert>
                     )}
                     {customer && !member && (
-                        <div className="flex flex-col gap-2">
-                            <label className="flex items-center gap-2 text-sm">
-                                <input
-                                    type="checkbox"
-                                    className="accent-primary"
-                                    checked={flagged}
-                                    onChange={(e) => {
-                                        setFlagged(e.target.checked);
-                                        form.setData(
-                                            'committee_conflict_user_id',
-                                            '',
-                                        );
-                                    }}
-                                />
-                                Pemohon adalah anggota komite
-                            </label>
+                        <>
+                            <Checkbox
+                                label="Pemohon adalah anggota komite"
+                                checked={flagged}
+                                onCheckedChange={(checked) => {
+                                    setFlagged(checked === true);
+                                    form.setData('committee_conflict_user_id', '');
+                                }}
+                            />
                             {flagged && (
                                 <Field
                                     label="Anggota komite"
                                     required
-                                    error={
-                                        form.errors.committee_conflict_user_id
-                                    }
+                                    error={form.errors.committee_conflict_user_id}
                                     hint="Tidak dikenali dari NIK (belum ada NIK tercatat), jadi pilih orangnya."
                                 >
                                     <Combobox
                                         options={members}
-                                        value={
-                                            form.data.committee_conflict_user_id
-                                        }
-                                        onChange={(v) =>
-                                            form.setData(
-                                                'committee_conflict_user_id',
-                                                v ?? '',
-                                            )
-                                        }
-                                        invalid={
-                                            !!form.errors
-                                                .committee_conflict_user_id
-                                        }
+                                        value={form.data.committee_conflict_user_id}
+                                        onChange={(v) => form.setData('committee_conflict_user_id', v ?? '')}
+                                        invalid={!!form.errors.committee_conflict_user_id}
                                     />
                                 </Field>
                             )}
-                        </div>
+                        </>
                     )}
-                </div>
+                </DialogBody>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => close(false)}>
                         Batal
                     </Button>
-                    <Button
-                        type="submit"
-                        loading={form.processing}
-                        disabled={
-                            !customer ||
-                            (flagged && !form.data.committee_conflict_user_id)
-                        }
-                    >
+                    <Button type="submit" loading={form.processing} disabled={!customer || (flagged && !form.data.committee_conflict_user_id)}>
                         Buka pengajuan
                     </Button>
                 </DialogFooter>
@@ -296,84 +237,41 @@ function NewApplication({
     );
 }
 
-export default function LoanApplicationsIndex({
-    loans,
-    filters,
-    perPageOptions,
-    statuses,
-    products,
-    canManage,
-    customerSource,
-    committeeMembers,
-}: Props) {
+export default function LoanApplicationsIndex({ loans, filters, perPageOptions, statuses, products, canManage, customerSource, committeeMembers }: Props) {
     const [creating, setCreating] = useState(false);
-    const { visit, search, onSearch, clear, loading, error } =
-        useListQuery<Filters>({
-            url: '/loan-applications',
-            filters,
-            defaults: DEFAULTS,
-            only: ['loans', 'filters'],
-        });
-    const hasFilters = Boolean(
-        filters.search || filters.status || filters.product,
-    );
+    const { visit, search, onSearch, clear, sorted, loading, error } = useListQuery<Filters>({
+        url: '/loan-applications',
+        filters,
+        defaults: DEFAULTS,
+        only: ['loans', 'filters'],
+    });
+    const hasFilters = Boolean(filters.search || filters.status || filters.product);
     const sortBy = (column: string) => visit(nextSort(filters, column));
+    const reset = () => clear({ status: null, product: null });
 
     const columns: Column<LoanRow>[] = [
-        {
-            key: 'file',
-            header: 'Berkas',
-            sort: 'application_code',
-            cell: (l) => (
-                <>
-                    <p className="font-medium">{l.application_code}</p>
-                    <p className="text-xs text-muted">
-                        {formatDate(l.application_date)}
-                    </p>
-                </>
-            ),
-        },
-        {
-            key: 'applicant',
-            header: 'Pemohon',
-            sort: 'full_name',
-            cell: (l) => (
-                <>
-                    {l.full_name}
-                    <p className="font-mono text-xs text-muted">{l.nik}</p>
-                </>
-            ),
-        },
-        {
-            key: 'product',
-            header: 'Produk',
-            hideBelow: 'md',
-            cell: (l) => l.product_label ?? '–',
-        },
+        { key: 'code', header: 'Kode', sort: 'application_code', className: 'font-medium', cell: (l) => l.application_code },
+        { key: 'date', header: 'Tanggal', sort: 'application_date', cell: (l) => formatDate(l.application_date) },
+        { key: 'applicant', header: 'Pemohon', sort: 'full_name', cell: (l) => l.full_name },
+        { key: 'nik', header: 'NIK', sort: 'nik', className: 'font-mono', cell: (l) => l.nik },
+        { key: 'product', header: 'Produk', sort: 'product', cell: (l) => l.product_label ?? '–' },
         {
             key: 'amount',
             header: 'Plafon',
             sort: 'requested_amount',
             align: 'right',
-            hideBelow: 'sm',
-            className: 'whitespace-nowrap tabular-nums',
-            cell: (l) => (
-                <>
-                    {l.requested_amount ? rupiah(l.requested_amount) : '–'}
-                    {l.requested_tenor > 0 && (
-                        <p className="text-xs text-muted">
-                            {l.requested_tenor} months
-                        </p>
-                    )}
-                </>
-            ),
+            className: 'tabular-nums',
+            cell: (l) => (l.requested_amount ? rupiah(l.requested_amount) : '–'),
         },
         {
-            key: 'status',
-            header: 'Status',
-            sort: 'status',
-            cell: (l) => <Badge tone={l.status_tone}>{l.status_label}</Badge>,
+            key: 'tenor',
+            header: 'Tenor',
+            sort: 'requested_tenor',
+            align: 'right',
+            className: 'tabular-nums',
+            cell: (l) => (l.requested_tenor > 0 ? `${formatNumber(l.requested_tenor)} bulan` : '–'),
         },
+        { key: 'status', header: 'Status', sort: 'status', cell: (l) => <Badge tone={l.status_tone}>{l.status_label}</Badge> },
     ];
 
     return (
@@ -398,16 +296,7 @@ export default function LoanApplicationsIndex({
                 error={error}
                 onRetry={() => visit({})}
                 toolbar={
-                    <FilterBar
-                        search={
-                            <SearchInput
-                                value={search}
-                                onChange={onSearch}
-                                placeholder="Cari kode, nama, NIK…"
-                                label="Cari pengajuan"
-                            />
-                        }
-                    >
+                    <FilterBar search={<SearchInput value={search} onChange={onSearch} placeholder="Cari kode, nama, NIK…" label="Cari pengajuan" />}>
                         <Combobox
                             className="w-full sm:w-40"
                             clearable
@@ -423,46 +312,24 @@ export default function LoanApplicationsIndex({
                             placeholder="Produk"
                             options={products}
                             value={filters.product}
-                            onChange={(v) =>
-                                visit({ product: v ? Number(v) : null })
-                            }
+                            onChange={(v) => visit({ product: v ? Number(v) : null })}
                         />
-                        {hasFilters && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() =>
-                                    clear({ status: null, product: null })
-                                }
-                            >
+                        {(hasFilters || sorted) && (
+                            <Button variant="ghost" size="sm" onClick={reset}>
                                 <X /> Atur ulang
                             </Button>
                         )}
                     </FilterBar>
                 }
                 columns={columns}
-                sort={{
-                    sort: filters.sort,
-                    direction: filters.direction,
-                    onSort: sortBy,
-                }}
+                sort={{ sort: filters.sort, direction: filters.direction, onSort: sortBy }}
                 onRowClick={(l) => router.visit(`/loan-applications/${l.id}`)}
                 empty={{
                     icon: <FileText />,
-                    title: hasFilters
-                        ? 'Tidak ada pengajuan yang cocok dengan filter'
-                        : 'Belum ada pengajuan',
-                    description: hasFilters
-                        ? 'Coba pencarian lain atau hapus filter.'
-                        : 'Buka pengajuan baru dengan NIK pemohon.',
+                    title: hasFilters ? 'Tidak ada pengajuan yang cocok dengan filter' : 'Belum ada pengajuan',
+                    description: hasFilters ? 'Coba pencarian lain atau hapus filter.' : 'Buka pengajuan baru dengan NIK pemohon.',
                     action: hasFilters ? (
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() =>
-                                clear({ status: null, product: null })
-                            }
-                        >
+                        <Button variant="outline" size="sm" onClick={reset}>
                             Hapus filter
                         </Button>
                     ) : canManage ? (
@@ -480,12 +347,7 @@ export default function LoanApplicationsIndex({
                 }}
             />
 
-            <NewApplication
-                open={creating}
-                onOpenChange={setCreating}
-                source={customerSource}
-                members={committeeMembers}
-            />
+            <NewApplication open={creating} onOpenChange={setCreating} source={customerSource} members={committeeMembers} />
         </>
     );
 }

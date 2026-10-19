@@ -5,7 +5,7 @@ import { CommitteeTabs } from '@/components/committee-tabs';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
-import { Badge, PageHeader } from '@/components/ui/misc';
+import { Badge, Card, CardBody, CardHeader, PageHeader } from '@/components/ui/misc';
 import { rupiah } from '@/lib/format';
 import { AuthorityCheck } from '@/pages/committees/authority-check';
 
@@ -43,16 +43,7 @@ const DECISIONS = [
     ['can_reject', 'Tolak'],
 ] as const;
 
-export default function CommitteeLevels({
-    defaultId,
-    levels,
-    followers,
-    special,
-    productOptions,
-    conditionMap,
-    committeeMembers,
-    canManage,
-}: Props) {
+export default function CommitteeLevels({ defaultId, levels, followers, special, productOptions, conditionMap, committeeMembers, canManage }: Props) {
     const [checking, setChecking] = useState(false);
 
     const columns: Column<Level>[] = [
@@ -73,40 +64,22 @@ export default function CommitteeLevels({
         {
             key: 'kind',
             header: 'Jenis',
-            hideBelow: 'sm',
-            cell: (l) => (
-                <Badge tone={l.is_individual ? 'info' : 'neutral'}>
-                    {l.is_individual ? 'Perorangan' : 'Komite'}
-                </Badge>
-            ),
+            cell: (l) => <Badge tone={l.is_individual ? 'info' : 'neutral'}>{l.is_individual ? 'Perorangan' : 'Komite'}</Badge>,
         },
         {
             key: 'range',
             header: 'Plafon',
             align: 'right',
             className: 'whitespace-nowrap tabular-nums',
-            cell: (l) =>
-                `${rupiah(l.min_amount ?? 0)} – ${l.max_amount === null ? 'tanpa batas' : rupiah(l.max_amount)}`,
+            cell: (l) => `${rupiah(l.min_amount ?? 0)} – ${l.max_amount === null ? 'tanpa batas' : rupiah(l.max_amount)}`,
         },
         {
             key: 'decisions',
             header: 'Keputusan',
-            hideBelow: 'md',
             cell: (l) => (
                 <span className="flex flex-wrap gap-1">
                     {DECISIONS.filter(([k]) => l[k]).map(([k, label]) => (
-                        <Badge
-                            key={k}
-                            tone={
-                                k === 'can_approve'
-                                    ? 'success'
-                                    : k === 'can_reject'
-                                      ? 'danger'
-                                      : k === 'can_escalate'
-                                        ? 'info'
-                                        : 'neutral'
-                            }
-                        >
+                        <Badge key={k} tone={k === 'can_approve' ? 'success' : k === 'can_reject' ? 'danger' : k === 'can_escalate' ? 'info' : 'neutral'}>
                             {label}
                         </Badge>
                     ))}
@@ -117,7 +90,6 @@ export default function CommitteeLevels({
             key: 'people',
             header: 'Orang',
             align: 'right',
-            hideBelow: 'sm',
             className: 'tabular-nums',
             cell: (l) => l.people,
         },
@@ -131,18 +103,11 @@ export default function CommitteeLevels({
                 description="Siapa yang berwenang memutus kredit, menurut plafon"
                 actions={
                     <>
-                        <Button
-                            variant="outline"
-                            onClick={() => setChecking(true)}
-                        >
+                        <Button variant="outline" onClick={() => setChecking(true)}>
                             <Scale /> Cek wewenang
                         </Button>
                         {canManage && defaultId && (
-                            <Button
-                                onClick={() =>
-                                    router.visit(`/committees/${defaultId}`)
-                                }
-                            >
+                            <Button onClick={() => router.visit(`/committees/${defaultId}`)}>
                                 <SlidersHorizontal /> Ubah jenjang
                             </Button>
                         )}
@@ -158,37 +123,32 @@ export default function CommitteeLevels({
                 empty={{
                     icon: <SlidersHorizontal />,
                     title: 'Belum ada jenjang',
-                    description:
-                        'Jalankan seeder komite untuk membuat jenjang bawaan.',
+                    description: 'Jalankan seeder komite untuk membuat jenjang bawaan.',
                 }}
             />
 
-            <div className="mt-4 grid gap-3 text-sm text-muted md:grid-cols-3">
-                <p className="border-border rounded-lg border bg-surface p-3">
-                    <span className="mb-1 block font-medium text-ink">
-                        Menurut plafon
-                    </span>
-                    Berkas masuk ke jenjang yang rentang plafonnya mencakup
-                    kredit; jenjang di bawahnya hanya menaikkan. {followers}{' '}
-                    jalur mengikuti jenjang ini, jadi mengubahnya di sini
-                    berlaku untuk semuanya.
-                </p>
-                <p className="border-border rounded-lg border bg-surface p-3">
-                    <span className="mb-1 block font-medium text-ink">
-                        Perorangan atau komite
-                    </span>
-                    Jenjang perorangan (staf analis) diputus oleh orang yang
-                    memegang berkas. Jenjang komite diputus oleh komitenya,
-                    sehingga hanya mereka yang masuk daftar Anggota.
-                </p>
-                <p className="border-border rounded-lg border bg-surface p-3">
-                    <span className="mb-1 block font-medium text-ink">
-                        Aturan khusus
-                    </span>
-                    {special} jalur memakai hierarki (semua komite dilewati
-                    berurutan, hanya yang terakhir memutus) atau batas sendiri.
-                    Lihat tab Aturan khusus.
-                </p>
+            <div className="mt-3 grid gap-3 md:grid-cols-3">
+                <Card>
+                    <CardHeader title="Menurut plafon" />
+                    <CardBody className="text-sm text-muted">
+                        Berkas masuk ke jenjang yang rentang plafonnya mencakup kredit; jenjang di bawahnya hanya menaikkan. {followers} jalur mengikuti jenjang
+                        ini, jadi mengubahnya di sini berlaku untuk semuanya.
+                    </CardBody>
+                </Card>
+                <Card>
+                    <CardHeader title="Perorangan atau komite" />
+                    <CardBody className="text-sm text-muted">
+                        Jenjang perorangan (staf analis) diputus oleh orang yang memegang berkas. Jenjang komite diputus oleh komitenya, sehingga hanya mereka
+                        yang masuk daftar Anggota.
+                    </CardBody>
+                </Card>
+                <Card>
+                    <CardHeader title="Aturan khusus" />
+                    <CardBody className="text-sm text-muted">
+                        {special} jalur memakai hierarki (semua komite dilewati berurutan, hanya yang terakhir memutus) atau batas sendiri. Lihat tab Aturan
+                        khusus.
+                    </CardBody>
+                </Card>
             </div>
 
             <AuthorityCheck

@@ -1,8 +1,10 @@
+import { Check, LockOpen, MessageSquarePlus, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Badge, Card } from '@/components/ui/misc';
+import { Badge, Card, CardBody, CardHeader } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
 import { ReasonDialog } from '@/components/reason-dialog';
+import { formatDateTime } from '@/lib/format';
 
 export type Corrections = {
     items: {
@@ -34,13 +36,7 @@ const TONES: Record<string, BadgeTone> = {
 type Dialog = 'ask' | 'open' | 'decline' | 'close' | null;
 
 /** Corrections of the analysis of an approved file: ask, open, decline and close them, and the history of them. */
-export function CorrectionPanel({
-    loanId,
-    corrections,
-}: {
-    loanId: number;
-    corrections: Corrections;
-}) {
+export function CorrectionPanel({ loanId, corrections }: { loanId: number; corrections: Corrections }) {
     const [dialog, setDialog] = useState<Dialog>(null);
     const base = `/credit-analysis/${loanId}/corrections`;
     const id = corrections.running_id;
@@ -58,51 +54,38 @@ export function CorrectionPanel({
 
     return (
         <Card className="mb-3">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2">
-                <h2 className="text-sm font-semibold">Koreksi Analisa</h2>
-                <div className="flex flex-wrap gap-2">
-                    {corrections.can_ask && (
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => setDialog('ask')}
-                        >
-                            Minta koreksi
-                        </Button>
-                    )}
-                    {corrections.can_open && (
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => setDialog('open')}
-                        >
-                            Buka untuk koreksi
-                        </Button>
-                    )}
-                    {corrections.can_decide_request && (
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => setDialog('decline')}
-                        >
-                            Tolak permintaan
-                        </Button>
-                    )}
-                    {corrections.can_close && (
-                        <Button size="sm" onClick={() => setDialog('close')}>
-                            Selesai koreksi
-                        </Button>
-                    )}
-                </div>
-            </div>
-            <div className="flex flex-col gap-2 p-3 text-sm">
+            <CardHeader
+                title="Koreksi Analisa"
+                actions={
+                    <>
+                        {corrections.can_ask && (
+                            <Button size="sm" variant="outline" onClick={() => setDialog('ask')}>
+                                <MessageSquarePlus /> Minta koreksi
+                            </Button>
+                        )}
+                        {corrections.can_open && (
+                            <Button size="sm" variant="outline" onClick={() => setDialog('open')}>
+                                <LockOpen /> Buka untuk koreksi
+                            </Button>
+                        )}
+                        {corrections.can_decide_request && (
+                            <Button size="sm" variant="outline" onClick={() => setDialog('decline')}>
+                                <X /> Tolak permintaan
+                            </Button>
+                        )}
+                        {corrections.can_close && (
+                            <Button size="sm" onClick={() => setDialog('close')}>
+                                <Check /> Selesai koreksi
+                            </Button>
+                        )}
+                    </>
+                }
+            />
+            <CardBody className="flex flex-col gap-2 text-sm">
                 {corrections.approved && (
                     <p className="text-xs text-muted">
-                        Berkas ini sudah disetujui komite, jadi lembar
-                        analisanya terkunci. Kasi Analis berkas ini bisa
-                        membukanya untuk koreksi (keterangan, ejaan, atau data
-                        lain). Angka yang diputus komite tidak boleh berubah:
-                        perubahan seperti itu perlu persetujuan ulang.
+                        Berkas ini sudah disetujui komite, jadi lembar analisanya terkunci. Kasi Analis berkas ini bisa membukanya untuk koreksi (keterangan,
+                        ejaan, atau data lain). Angka yang diputus komite tidak boleh berubah: perubahan seperti itu perlu persetujuan ulang.
                     </p>
                 )}
                 {corrections.items.length === 0 ? (
@@ -110,40 +93,28 @@ export function CorrectionPanel({
                 ) : (
                     <ul className="flex flex-col gap-1.5">
                         {[...corrections.items].reverse().map((c) => (
-                            <li
-                                key={c.id}
-                                className="rounded-md border border-line p-2"
-                            >
+                            <li key={c.id} className="rounded-md border border-line p-2">
                                 <div className="flex flex-wrap items-center gap-2">
-                                    <Badge tone={TONES[c.status] ?? 'neutral'}>
-                                        {c.status_label}
-                                    </Badge>
+                                    <Badge tone={TONES[c.status] ?? 'neutral'}>{c.status_label}</Badge>
                                     <span className="text-xs text-muted">
-                                        {c.opened_at ?? c.requested_at}
-                                        {c.resolved_at
-                                            ? ` → ${c.resolved_at}`
-                                            : ''}
+                                        {formatDateTime(c.opened_at ?? c.requested_at)}
+                                        {c.resolved_at ? ` → ${formatDateTime(c.resolved_at)}` : ''}
                                     </span>
                                 </div>
                                 <p className="mt-1">{c.reason}</p>
-                                {c.resolution_note && (
-                                    <p className="text-xs text-muted">
-                                        Catatan: {c.resolution_note}
-                                    </p>
-                                )}
+                                {c.resolution_note && <p className="text-xs text-muted">Catatan: {c.resolution_note}</p>}
                             </li>
                         ))}
                     </ul>
                 )}
-                {corrections.running === 'requested' &&
-                    corrections.can_decide_request && (
-                        <div>
-                            <Button size="sm" onClick={() => setDialog('open')}>
-                                Buka permintaan ini
-                            </Button>
-                        </div>
-                    )}
-            </div>
+                {corrections.running === 'requested' && corrections.can_decide_request && (
+                    <div>
+                        <Button size="sm" onClick={() => setDialog('open')}>
+                            Buka permintaan ini
+                        </Button>
+                    </div>
+                )}
+            </CardBody>
 
             <ReasonDialog
                 title={
@@ -166,30 +137,9 @@ export function CorrectionPanel({
                             ? 'Beri tahu analis kenapa permintaan ini ditolak.'
                             : 'Catat apa yang dikoreksi. Lembar analisa terkunci kembali.'
                 }
-                action={
-                    dialog === null
-                        ? null
-                        : dialog === 'open' &&
-                            corrections.running === 'requested'
-                          ? `${base}/${id}/open`
-                          : urls[dialog]
-                }
-                confirmLabel={
-                    dialog === 'ask'
-                        ? 'Kirim permintaan'
-                        : dialog === 'open'
-                          ? 'Buka'
-                          : dialog === 'decline'
-                            ? 'Tolak'
-                            : 'Selesai'
-                }
-                fieldLabel={
-                    dialog === 'close'
-                        ? 'Catatan koreksi'
-                        : dialog === 'decline'
-                          ? 'Alasan penolakan'
-                          : 'Alasan koreksi'
-                }
+                action={dialog === null ? null : dialog === 'open' && corrections.running === 'requested' ? `${base}/${id}/open` : urls[dialog]}
+                confirmLabel={dialog === 'ask' ? 'Kirim permintaan' : dialog === 'open' ? 'Buka' : dialog === 'decline' ? 'Tolak' : 'Selesai'}
+                fieldLabel={dialog === 'close' ? 'Catatan koreksi' : dialog === 'decline' ? 'Alasan penolakan' : 'Alasan koreksi'}
                 tone={dialog === 'decline' ? 'danger' : 'primary'}
                 onClose={() => setDialog(null)}
             />

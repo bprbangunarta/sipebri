@@ -8,11 +8,7 @@ export const WEAK_GPS_METERS = 100;
 export function currentPosition(): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
         if (!window.isSecureContext) {
-            reject(
-                new Error(
-                    'Lokasi butuh koneksi aman. Buka aplikasi lewat https:// (atau localhost), bukan alamat http:// biasa.',
-                ),
-            );
+            reject(new Error('Lokasi butuh koneksi aman. Buka aplikasi lewat https:// (atau localhost), bukan alamat http:// biasa.'));
 
             return;
         }
@@ -54,9 +50,7 @@ export async function markPosition(
         const accuracy = Math.round(position.coords.accuracy);
 
         if (accuracy > WEAK_GPS_METERS) {
-            toast.warning(
-                `Sinyal GPS lemah (sekitar ±${accuracy} m). Posisi tersimpan; tandai ulang di area terbuka untuk hasil lebih baik.`,
-            );
+            toast.warning(`Sinyal GPS lemah (sekitar ±${accuracy} m). Posisi tersimpan; tandai ulang di area terbuka untuk hasil lebih baik.`);
         }
 
         router.post(
@@ -71,9 +65,7 @@ export async function markPosition(
             { preserveScroll: true, onFinish },
         );
     } catch (e) {
-        toast.error(
-            e instanceof Error ? e.message : 'Tidak bisa membaca lokasi Anda.',
-        );
+        toast.error(e instanceof Error ? e.message : 'Tidak bisa membaca lokasi Anda.');
         onFinish();
     }
 }
