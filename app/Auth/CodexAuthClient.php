@@ -28,13 +28,13 @@ class CodexAuthClient
         }
 
         $user = $data['data']['user'];
+        $office = $data['data']['office'] ?? null;
 
-        // The local user is keyed by the Codex id and username; an answer without them cannot be mirrored safely.
-        if (! is_int($user['id'] ?? null) || $user['id'] < 1 || ! is_string($user['username'] ?? null) || trim($user['username']) === '') {
-            throw new CodexUnavailable('Codex accepted the credentials but sent no usable user id or username.');
+        if (! $this->mirrorable($user, $office)) {
+            throw new CodexUnavailable('Codex accepted the credentials but sent a user that cannot be mirrored.');
         }
 
-        return ['user' => $user, 'office' => is_array($data['data']['office'] ?? null) ? $data['data']['office'] : null];
+        return ['user' => $user, 'office' => $office];
     }
 
     /**
@@ -81,6 +81,7 @@ class CodexAuthClient
             $response = Http::withToken((string) config('services.codex.token'))
                 ->acceptJson()
                 ->asJson()
+                ->withoutRedirecting()
                 ->connectTimeout((float) config('services.codex.connect_timeout'))
                 ->timeout((float) config('services.codex.timeout'))
                 ->withOptions(['verify' => filter_var(config('services.codex.verify'), FILTER_VALIDATE_BOOL)])
@@ -91,10 +92,47 @@ class CodexAuthClient
             throw new CodexUnavailable('Codex request failed.', previous: $exception);
         }
 
-        if ($response->serverError()) {
+        if ($response->serverError() || $response->redirect()) {
             throw new CodexUnavailable("Codex answered {$response->status()}.");
         }
 
         return $response;
+    }
+
+    /**
+     * Whether the answer can be mirrored without guessing: the local user is keyed by the Codex id and username, and every
+     * field the mirror reads as text is text (or absent). A number sent as digits in a string is accepted.
+     *
+     * @param  array<mixed>  $user
+     */
+    private function mirrorable(array $user, mixed $office): bool
+    {
+        $id = filter_var($user['id'] ?? null, FILTER_VALIDATE_INT);
+
+        if (! is_int($id) || $id < 1 || ! is_string($user['username'] ?? null) || trim($user['username']) === '') {
+            return false;
+        }
+
+        foreach (['name', 'email', 'role', 'office'] as $field) {
+            if (! is_string($user[$field] ?? '')) {
+                return false;
+            }
+        }
+
+        if ($office === null) {
+            return true;
+        }
+
+        if (! is_array($office)) {
+            return false;
+        }
+
+        foreach (['code', 'alias', 'name'] as $field) {
+            if (! is_string($office[$field] ?? '')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

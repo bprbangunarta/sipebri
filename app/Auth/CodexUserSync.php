@@ -6,6 +6,8 @@ use App\Audit\Audit;
 use App\Enums\RoleName;
 use App\Models\Office;
 use App\Models\User;
+use Illuminate\Database\QueryException;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -27,7 +29,14 @@ class CodexUserSync
     public function sync(array $user, ?array $office): User
     {
         // One unit: a failure halfway must not leave the person half-updated (restored without their role, ...).
-        return Audit::withContext(['source' => 'codex'], 'Codex sync', fn (): User => DB::transaction(fn (): User => $this->mirror($user, $office)));
+        $run = fn (): User => Audit::withContext(['source' => 'codex'], 'Codex sync', fn (): User => DB::transaction(fn (): User => $this->mirror($user, $office)));
+
+        try {
+            return $run();
+        } catch (UniqueConstraintViolationException) {
+            // Another first sign-in of the same person created the row between our lookup and our insert; the second try finds it.
+            return $run();
+        }
     }
 
     /**
@@ -122,13 +131,22 @@ class CodexUserSync
             return null;
         }
 
-        DB::transaction(function () use ($existing, $id): void {
-            DB::table('model_has_roles')->where('model_type', User::class)->where('model_id', $existing->id)->update(['model_id' => $id]);
-            DB::table('model_has_permissions')->where('model_type', User::class)->where('model_id', $existing->id)->update(['model_id' => $id]);
-            DB::table('users')->where('id', $existing->id)->update(['id' => $id]);
-            // Raw updates raise no model events; the id change is a notable event, so it is recorded by hand.
-            Audit::record('users.id_migrated', 'users', 'id_migrated', null, ['id' => $existing->id], ['id' => $id], label: (string) $existing->username);
-        });
+        try {
+            DB::transaction(function () use ($existing, $id): void {
+                DB::table('model_has_roles')->where('model_type', User::class)->where('model_id', $existing->id)->update(['model_id' => $id]);
+                DB::table('model_has_permissions')->where('model_type', User::class)->where('model_id', $existing->id)->update(['model_id' => $id]);
+                DB::table('users')->where('id', $existing->id)->update(['id' => $id]);
+                // Raw updates raise no model events; the id change is a notable event, so it is recorded by hand.
+                Audit::record('users.id_migrated', 'users', 'id_migrated', null, ['id' => $existing->id], ['id' => $id], label: (string) $existing->username);
+            });
+        } catch (QueryException $exception) {
+            // A person with files, schedules or decisions cannot change id: the records point at the old one.
+            if ($exception->getCode() === '23000') {
+                throw new UserIdConflict("User {$existing->id} ({$username}) has records and cannot move to Codex id {$id}.", previous: $exception);
+            }
+
+            throw $exception;
+        }
 
         return User::withTrashed()->find($id);
     }

@@ -15,25 +15,21 @@ export default function Login() {
                 <Form action={LoginController.store()} resetOnSuccess={['password']} className="flex flex-col gap-3">
                     {({ errors, processing }) => (
                         <>
-                            <Field label="Kredensial" error={errors.username}>
+                            <Field label="Email atau username" error={errors.username}>
                                 <Input
                                     name="username"
                                     type="text"
                                     autoComplete="username"
+                                    autoCapitalize="none"
+                                    autoCorrect="off"
+                                    spellCheck={false}
                                     autoFocus
                                     required
                                     aria-invalid={!!errors.username}
-                                    placeholder="Email atau Username"
                                 />
                             </Field>
                             <Field label="Kata sandi" error={errors.password}>
-                                <PasswordInput
-                                    name="password"
-                                    autoComplete="current-password"
-                                    required
-                                    aria-invalid={!!errors.password}
-                                    placeholder="************************"
-                                />
+                                <PasswordInput name="password" autoComplete="current-password" required aria-invalid={!!errors.password} />
                             </Field>
                             <Checkbox name="remember" value="1" label="Ingat saya" />
                             <Button type="submit" loading={processing} className="w-full">

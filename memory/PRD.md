@@ -70,8 +70,13 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Audit akses baca halaman daftar** belum dicatat (volume besar); tambahkan ringkas bila auditor meminta.
 - Retensi/arsip audit log (OJK, bertahun-tahun) belum diatur; jangan hapus baris.
 - Role lama `HR Admin`/`Viewer` masih ada di database dev (tanpa izin).
-- **Login pertama orang baru yang terkirim dua kali bersamaan** bisa berakhir galat pada salah satunya (id Codex bentrok); diterima
-  sementara karena jarang dan masuk ulang berhasil. Konfirmasi pemilik.
+- **Keputusan pemilik yang menunggu (audit fitur 1, login):** (a) batas percobaan masuk hanya per orang+IP; satu IP boleh mencoba banyak
+  username tanpa batas (tiap percobaan memanggil Codex dan menulis audit) dan batas per IP bisa mengunci satu kantor yang berbagi IP;
+  (b) `CODEX_VERIFY=false` mematikan verifikasi TLS ke Codex tanpa peringatan di produksi; (c) apakah ada proxy/CDN di depan aplikasi
+  (bila ada, IP di audit dan di batas percobaan adalah IP proxy kecuali proxy dipercaya); (d) username yang diketik pada percobaan gagal
+  masuk audit log apa adanya, jadi kata sandi yang salah diketik di kolom username ikut tersimpan; (e) orang yang berkasnya sudah ada
+  tetapi id Codex-nya berubah ditolak (id tidak bisa dipindah karena berkas menunjuk id lama): pindahkan semua rujukan atau selesaikan
+  lewat Super Admin?
 
 ## Langkah berikutnya
 

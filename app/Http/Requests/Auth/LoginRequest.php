@@ -6,9 +6,11 @@ use App\Audit\Audit;
 use App\Auth\CodexAuthClient;
 use App\Auth\CodexUnavailable;
 use App\Auth\CodexUserSync;
+use App\Auth\UserIdConflict;
 use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -40,11 +42,17 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(CodexAuthClient $codex, CodexUserSync $sync): User
     {
-        $this->ensureIsNotRateLimited();
+        $username = $this->codexUsername();
+        $key = $this->throttleKey($username);
+        $this->ensureIsNotRateLimited($key);
+
+        // Counted before Codex is asked, so requests sent at the same moment cannot all slip under the limit; an outage gives it back.
+        RateLimiter::hit($key);
 
         try {
-            $result = $codex->authenticate($this->codexUsername(), $this->string('password')->toString());
+            $result = $codex->authenticate($username, $this->string('password')->toString());
         } catch (CodexUnavailable $exception) {
+            RateLimiter::decrement($key);
             report($exception);
             $this->audit('auth.login_failed', 'sign-in service unavailable');
 
@@ -54,13 +62,20 @@ class LoginRequest extends FormRequest
         }
 
         if ($result === null) {
-            RateLimiter::hit($this->throttleKey());
             $this->audit('auth.login_failed', 'invalid credentials');
 
             throw ValidationException::withMessages(['username' => trans('auth.failed')]);
         }
 
-        $user = $sync->sync($result['user'], $result['office']);
+        try {
+            $user = $sync->sync($result['user'], $result['office']);
+        } catch (UserIdConflict $exception) {
+            RateLimiter::decrement($key);
+            report($exception);
+            $this->audit('auth.login_failed', 'user id conflict');
+
+            throw ValidationException::withMessages(['username' => 'Data Anda di Codex tidak cocok dengan data di SIPEBRI. Hubungi Super Admin.']);
+        }
 
         if ($user->trashed()) {
             $this->audit('auth.login_failed', 'inactive account', $user);
@@ -68,7 +83,7 @@ class LoginRequest extends FormRequest
             throw ValidationException::withMessages(['username' => 'Akun Anda tidak aktif. Hubungi atasan atau bagian SDM.']);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        RateLimiter::clear($key);
 
         return $user;
     }
@@ -98,24 +113,28 @@ class LoginRequest extends FormRequest
     /**
      * @throws ValidationException
      */
-    private function ensureIsNotRateLimited(): void
+    private function ensureIsNotRateLimited(string $key): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts($key, 5)) {
             return;
         }
 
         event(new Lockout($this));
-        $this->audit('auth.locked_out', 'too many attempts');
+        $seconds = RateLimiter::availableIn($key);
 
-        $seconds = RateLimiter::availableIn($this->throttleKey());
+        // One entry per lockout: the blocked requests that follow are not new evidence and must not grow the trail.
+        if (Cache::add('auth.lockout-audited:'.$key, true, $seconds)) {
+            $this->audit('auth.locked_out', 'too many attempts');
+        }
 
         throw ValidationException::withMessages([
             'username' => trans('auth.throttle', ['seconds' => $seconds, 'minutes' => ceil($seconds / 60)]),
         ]);
     }
 
-    private function throttleKey(): string
+    /** One key for a person, however they typed it (email or username, any case): the Codex username decides. */
+    private function throttleKey(string $username): string
     {
-        return Str::transliterate(Str::lower($this->string('username')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($username).'|'.$this->ip());
     }
 }
