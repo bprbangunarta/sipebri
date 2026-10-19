@@ -192,7 +192,7 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
                 description={`${resource.section} · ${items.total} data`}
                 actions={
                     canManage && (
-                        <div className="flex items-center gap-2">
+                        <>
                             {resource.import && (
                                 <Button variant="outline" onClick={() => setImporting(true)}>
                                     <Upload /> Import
@@ -201,7 +201,7 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
                             <Button onClick={() => openForm('new')}>
                                 <Plus /> Tambah
                             </Button>
-                        </div>
+                        </>
                     )
                 }
             />

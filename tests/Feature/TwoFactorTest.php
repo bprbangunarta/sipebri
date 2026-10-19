@@ -230,7 +230,7 @@ it('does not allow email codes for an address that cannot receive them', functio
 });
 
 it('shares the two-factor state used by the reminder banner', function () {
-    $this->actingAs(superAdmin())->get(route('dashboard'))->assertInertia(fn (Assert $p) => $p->where('security', ['enabled' => true, 'method' => null]));
+    $this->actingAs(superAdmin())->get(route('dashboard'))->assertInertia(fn (Assert $p) => $p->where('security', ['enabled' => true, 'method' => null, 'reminderDismissed' => false]));
 });
 
 it('changes the password through Codex and maps its answers', function () {

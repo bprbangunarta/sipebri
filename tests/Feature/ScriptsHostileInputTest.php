@@ -130,6 +130,7 @@ dataset('broken front-end rules', [
     'a status badge in a conditional among the page header buttons' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" actions={ok && <Badge tone=\"success\">Aktif</Badge>} />;\n}\n", 'PageHeader: tanda status'],
     'a wrapping flex row in a table cell' => ['pages/p.tsx', "export function P() {\n    return [{ key: 'a', header: 'A', cell: (row: { x: string }) => <span className=\"flex flex-wrap gap-1\">{row.x}</span> }];\n}\n", 'Sel tabel dengan flex-wrap'],
     'a wrapping flex row in a table cell that is not the last property' => ['pages/p.tsx', "export function P() {\n    return [{ key: 'a', cell: (row: { x: string }) => (\n        <span className=\"flex flex-wrap gap-1\">{row.x}</span>\n    ), align: 'right' }];\n}\n", 'Sel tabel dengan flex-wrap'],
+    'a wrapper behind a condition around the page header buttons' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" actions={ok && (<div className=\"flex gap-2\"><Button>Import</Button><Button>Tambah</Button></div>)} />;\n}\n", 'PageHeader: actions'],
     'a wrapper around the page header buttons' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" actions={<div><Button>Simpan</Button></div>} />;\n}\n", 'PageHeader: actions'],
 ]);
 
@@ -140,6 +141,7 @@ dataset('allowed front-end code', [
     'a text input' => ['pages/p.tsx', "export default function P() {\n    return <input type=\"text\" />;\n}\n"],
     'a list key that is an id' => ['pages/p.tsx', "export function P({ rows }: { rows: { id: number }[] }) {\n    return rows.map((row) => <p key={row.id} />);\n}\n"],
     'a text-only dialog footer' => ['pages/p.tsx', "export default function P() {\n    return (\n        <DialogFooter>\n            <Button>Simpan</Button>\n        </DialogFooter>\n    );\n}\n"],
+    'page header buttons as a fragment behind a condition' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" actions={ok && (<><Button>Import</Button><Button>Tambah</Button></>)} />;\n}\n"],
     'a modal with its body' => ['pages/p.tsx', "export default function P() {\n    return (\n        <Modal open title=\"x\" onOpenChange={() => undefined}>\n            <DialogBody>isi</DialogBody>\n        </Modal>\n    );\n}\n"],
     'page header buttons as a fragment' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" actions={<><Button>Simpan</Button></>} />;\n}\n"],
     'a status badge in the badge prop of the page header' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" badge={<Badge>Aktif</Badge>} actions={<Button>Simpan</Button>} />;\n}\n"],

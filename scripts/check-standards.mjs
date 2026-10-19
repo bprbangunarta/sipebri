@@ -279,9 +279,14 @@ for (const file of files) {
         }
     }
 
-    // PageHeader gives its action buttons equal widths by itself, so `actions` is the buttons (a fragment), never a wrapping div.
-    for (const match of text.matchAll(/<PageHeader\b[^>]*?actions=\{\s*<div\b/gs)) {
-        report(file, lineOf(text, match.index), 'PageHeader: actions berisi tombolnya langsung (fragment), tanpa div pembungkus, supaya tombolnya sama lebar');
+    // PageHeader gives its action buttons equal widths by itself, so `actions` is the buttons (a fragment), never a wrapping div, also
+    // not one behind a condition (`ok && (<div>...</div>)`): the grid would see one child and the buttons would be as wide as their words.
+    for (const match of text.matchAll(/<PageHeader\b[^<]*?\bactions=/g)) {
+        const start = match.index + match[0].length;
+
+        if (/<div\b/.test(text.slice(start, braceEnd(text, start)))) {
+            report(file, lineOf(text, start), 'PageHeader: actions berisi tombolnya langsung (fragment), tanpa div pembungkus, supaya tombolnya sama lebar');
+        }
     }
 }
 
