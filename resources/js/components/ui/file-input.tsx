@@ -86,7 +86,7 @@ export function FileInput({ id, value, onValueChange, accept, multiple, maxBytes
                     }
                 }}
                 className={cn(
-                    'flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-control bg-surface px-3 py-3 text-sm text-muted transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 hover:border-primary/50',
+                    'flex cursor-pointer items-center gap-2 rounded-md border border-dashed border-line bg-surface px-3 py-3 text-sm text-muted transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 hover:border-primary/50',
                     over && 'border-primary bg-primary-soft',
                     disabled && 'cursor-not-allowed opacity-50',
                 )}

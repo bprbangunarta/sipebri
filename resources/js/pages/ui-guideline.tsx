@@ -38,7 +38,7 @@ const TOKENS = [
     ['surface', 'bg-surface', 'Kartu, sidebar, header, dialog'],
     ['canvas', 'bg-canvas', 'Latar halaman, header tabel, hover'],
     ['line', 'bg-line', 'Garis pemisah (kartu, tabel, dialog), bukan tepi kontrol'],
-    ['control', 'bg-control', 'Tepi kontrol: isian, kotak centang, radio, sakelar mati, tombol outline (3:1)'],
+    ['control', 'bg-control', 'Tepi kotak centang, radio, sakelar mati (3:1); isian dan tombol outline memakai line'],
     ['ink', 'bg-ink', 'Teks utama'],
     ['muted', 'bg-muted', 'Teks pendukung (label, hint, header tabel)'],
     ['danger', 'bg-danger', 'Galat, tombol hapus'],

@@ -74,7 +74,8 @@ describe('colour contrast (WCAG)', () => {
 });
 
 describe('colour contrast of controls and focus (WCAG 1.4.11, 2.4.7)', () => {
-    // The edge of a field, a checkbox, a radio, an off switch, or an outline button is what shows where the control is: 3:1, not the 1.2:1 of `line`.
+    // The edge of a checkbox, a radio, or an off switch is what shows where the control is: 3:1, not the 1.2:1 of `line`.
+    // Text fields and outline buttons are the owner's exception (2026-10-20): they keep the light `line` edge of the reference design.
     it.each(['surface', 'canvas'])('the border of a control (control) reaches 3:1 on %s', (background) => {
         expect(ratio('control', background)).toBeGreaterThanOrEqual(3);
     });
@@ -106,13 +107,14 @@ describe('the shared components use those colours', () => {
         expect(faded).toEqual([]);
     });
 
-    it('draws the edge of every field, checkbox, radio, switch, and outline button with the control colour, not the hairline', () => {
+    it('draws the edge of every checkbox, radio, and switch with the control colour, and of every field and outline button with the light line', () => {
         const edge = (name: string) => sources.find(([file]) => file === name)?.[1] ?? '';
 
-        expect(edge('input.tsx')).toContain('border-control');
+        expect(edge('input.tsx')).toContain('border-line');
+        expect(edge('input.tsx')).not.toContain('border-control');
         expect(edge('choice.tsx')).toContain('border-control');
         expect(edge('choice.tsx')).toContain('bg-control');
-        expect(edge('button.tsx')).toMatch(/outline:[^\n]*border-control/);
-        expect(edge('file-input.tsx')).toContain('border-control');
+        expect(edge('button.tsx')).toMatch(/outline:[^\n]*border-line/);
+        expect(edge('file-input.tsx')).toContain('border-line');
     });
 });

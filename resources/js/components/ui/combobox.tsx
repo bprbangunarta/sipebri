@@ -172,7 +172,7 @@ export function Combobox({
                         aria-controls={listId}
                         aria-activedescendant={activeId}
                         placeholder="Cari…"
-                        className="mb-1 h-7 w-full rounded border border-control px-2 text-sm focus:border-primary focus:outline-none"
+                        className="mb-1 h-7 w-full rounded border border-line px-2 text-sm focus:border-primary focus:outline-none"
                     />
                 )}
                 <ul
