@@ -51,7 +51,7 @@ Identitas pengguna dan nasabah datang dari Codex.
   `App\Support\Navigation`), SSO, karyawan, `dev:accounts`, `ReferenceManager`/`RegionPicker` (domain codex), kata "akun" dilarang (pilihan
   bahasa codex), `IdleTimeout` dan foto profil (butuh kontrak server yang belum ada di sipebri).
 - **Dependency karena adopsi (user, 2026-10-19):** ditambah devDependency `@testing-library/{react,user-event,jest-dom}`, `jsdom`, `jscpd`; `recharts` dibuang (grafik lewat `components/ui/chart.tsx`). Risiko diterima: `npm audit` masih melaporkan temuan hanya di alat pengembangan (`--omit=dev` bersih), perbaikannya butuh versi di luar rentang.
-- **Tabel memecah kolom bertumpuk** (satu nilai satu kolom) di pengajuan, jaminan, jadwal, survei, pengguna, anggota komite, dan audit log; daftar analisa dan persetujuan masih bertumpuk (memecahnya butuh kunci urut + indeks tambahan). Audit log hanya urut waktu (tabel besar tanpa indeks lain). Label menu "Data Audit Log" menjadi "Audit Log" (aturan label maksimal dua kata).
+- **Tabel memecah kolom bertumpuk** (satu nilai satu kolom) di semua daftar, termasuk analisa dan persetujuan (2026-10-19). Daftar persetujuan kini diurutkan di server pada semua kolom: usulan plafon/tenor jatuh ke permohonan bila memorandum belum ada, posisi = langkah tertunda, "Giliran" memakai uji yang sama dengan tampilan "Menunggu saya". Kunci dari tabel lain diurutkan lewat subkueri berkunci unik; tanpa migrasi indeks baru karena kolom berkas yang diurutkan sudah berindeks dan indeks pada nilai hasil subkueri tidak dipakai. Audit log hanya urut waktu (tabel besar tanpa indeks lain). Label menu "Data Audit Log" menjadi "Audit Log" (aturan label maksimal dua kata).
 - **Deploy ke VPS sendiri, bukan Laravel Cloud** (sama dengan codex): skill `deploying-to-cloud` tidak dipakai.
 - **Tidak boleh menambah status berkas baru tanpa dibahas.**
 - **Antrean offline survei tidak dibuat** (user): tanpa sinyal aplikasi pun tidak bisa dibuka; indikator jaringan sudah memberi tahu.
@@ -75,13 +75,12 @@ Identitas pengguna dan nasabah datang dari Codex.
 
 Dipilih user; agent tidak memulai fitur baru tanpa diminta.
 
-1. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): belum dilakukan karena login lewat Codex butuh kredensial pemilik; layar tamu dan halaman error sudah.
-2. Pecah kolom bertumpuk di daftar Analisa dan Persetujuan (kunci urut + indeks + test).
-3. Realisasi/pencairan + posting core banking (menunggu rancangan).
-4. Pesan validasi kustom dan atribut (`->attributes()`) yang masih Inggris di controller: rapikan, pakai laravel-lang sebisanya.
-5. Ekspor/impor Excel (ada di SIPEBRI lama) belum dibawa.
-6. Saran layanan email OTP (keputusan user): layanan transaksional atau relay resmi, SPF/DKIM/DMARC untuk `bprbangunarta.co.id`, antrean +
+1. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): belum dilakukan karena login lewat Codex butuh kredensial pemilik; layar tamu, halaman error, serta daftar Analisa dan Persetujuan (sesi lokal pada salinan SQLite) sudah.
+2. Realisasi/pencairan + posting core banking (menunggu rancangan).
+3. Pesan validasi kustom dan atribut (`->attributes()`) yang masih Inggris di controller: rapikan, pakai laravel-lang sebisanya.
+4. Ekspor/impor Excel (ada di SIPEBRI lama) belum dibawa.
+5. Saran layanan email OTP (keputusan user): layanan transaksional atau relay resmi, SPF/DKIM/DMARC untuk `bprbangunarta.co.id`, antrean +
    mailer cadangan bila volume tumbuh, ganti password SMTP yang pernah terlihat di komentar `.env`.
-7. Pengujian yang butuh perangkat/layanan nyata: GPS lewat HTTPS di iOS Safari dan Chrome Android; unggah foto ke S3 pada kondisi buruk;
+6. Pengujian yang butuh perangkat/layanan nyata: GPS lewat HTTPS di iOS Safari dan Chrome Android; unggah foto ke S3 pada kondisi buruk;
    alur MFA penuh dengan authenticator sungguhan; Nominatim produksi (batas pemakaian); cron `schedule:run` di server; `audit:verify` pada jutaan
    baris; deploy dari awal (`migrate`, `db:seed --force`, `locations:geocode`, `ATTACHMENTS_DISK=s3`); kewenangan komite dengan nominal sungguhan.

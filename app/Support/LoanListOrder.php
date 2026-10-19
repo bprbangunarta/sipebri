@@ -10,7 +10,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
- * The sort keys shared by the lists of loan application files (applications, scheduling) and what each one orders by:
+ * The sort keys shared by the lists of loan application files (applications, scheduling, credit analysis, approvals) and what each one orders by:
  * a column of the file, or the name of a related record read through a subquery so the list keeps one row per file.
  * Each controller keeps its own whitelist of the keys its table shows.
  */

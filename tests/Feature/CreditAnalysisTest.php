@@ -6,6 +6,7 @@ use App\Models\AppNotification;
 use App\Models\Collateral;
 use App\Models\LoanAnalysis;
 use App\Models\LoanApplication;
+use App\Models\LoanSurvey;
 use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\CommitteeSeeder;
@@ -179,22 +180,28 @@ it('sends the file to the committee only when the required parts are filled in',
 it('sorts the list by every column in both directions', function () {
     test()->seed(RoleSeeder::class);
     $analyst = User::factory()->create()->assignRole('Staff Analis & Appraisal');
-    $make = fn (string $name, int $amount, string $surveyDate, LoanStatus $status) => LoanApplication::create([
-        'application_code' => LoanApplication::nextCode(), 'application_date' => now(), 'status' => $status, 'nik' => '320100000000000'.strlen($name),
-        'full_name' => $name, 'requested_amount' => $amount, 'requested_tenor' => 12, 'survey_date' => $surveyDate, 'surveyor_id' => $analyst->id,
+    $product = fn (string $alias) => Product::create(['code' => $alias, 'alias' => $alias, 'name' => $alias, 'is_active' => true])->id;
+    $make = fn (string $name, string $nik, string $alias, int $amount, int $tenor, string $surveyDate, LoanStatus $status) => LoanApplication::create([
+        'application_code' => LoanApplication::nextCode(), 'application_date' => now(), 'status' => $status, 'nik' => $nik, 'product_id' => $product($alias),
+        'full_name' => $name, 'requested_amount' => $amount, 'requested_tenor' => $tenor, 'survey_date' => $surveyDate, 'surveyor_id' => $analyst->id,
     ]);
-    $a = $make('Ani', 30_000_000, '2026-01-03', LoanStatus::Analysis);
-    $b = $make('Budi', 10_000_000, '2026-01-01', LoanStatus::Survey);
-    $c = $make('Citra', 20_000_000, '2026-01-02', LoanStatus::Survey);
+    $a = $make('Ani', '3201000000000002', 'KRU', 30_000_000, 12, '2026-01-03', LoanStatus::Analysis);
+    $b = $make('Budi', '3201000000000003', 'KMK', 10_000_000, 36, '2026-01-01', LoanStatus::Survey);
+    $c = $make('Citra', '3201000000000001', 'KTA', 20_000_000, 24, '2026-01-02', LoanStatus::Survey);
     $a->collaterals()->attach([Collateral::create(['collateral_type_code' => '05'])->id, Collateral::create(['collateral_type_code' => '05'])->id]);
     $c->collaterals()->attach(Collateral::create(['collateral_type_code' => '05']));
+    LoanSurvey::create(['loan_application_id' => $a->id, 'sequence' => 1, 'created_by' => 'x']);
 
-    // Ties keep the id order in both directions, so the stage (two values) is not simply reversed.
+    // Ties keep the id order in both directions, so a key with two values (stage, visit) is not simply reversed.
     $expected = [
         'application_code' => [[$a, $b, $c], [$c, $b, $a]],
+        'product' => [[$b, $a, $c], [$c, $a, $b]],
         'full_name' => [[$a, $b, $c], [$c, $b, $a]],
+        'nik' => [[$c, $a, $b], [$b, $a, $c]],
         'requested_amount' => [[$b, $c, $a], [$a, $c, $b]],
+        'requested_tenor' => [[$a, $c, $b], [$b, $c, $a]],
         'survey_date' => [[$b, $c, $a], [$a, $c, $b]],
+        'surveys_count' => [[$b, $c, $a], [$a, $b, $c]],
         'status' => [[$a, $b, $c], [$b, $c, $a]],
         'collaterals_count' => [[$b, $c, $a], [$a, $c, $b]],
     ];
@@ -207,4 +214,12 @@ it('sorts the list by every column in both directions', function () {
                     ->where('loans.data.0.id', $rows[0]->id)->where('loans.data.1.id', $rows[1]->id)->where('loans.data.2.id', $rows[2]->id));
         }
     }
+});
+
+it('falls back to the default order for an unknown sort key', function () {
+    test()->seed(RoleSeeder::class);
+    $analyst = User::factory()->create()->assignRole('Staff Analis & Appraisal');
+
+    $this->actingAs($analyst)->get(route('credit-analysis.index', ['sort' => 'surveyor_id']))
+        ->assertInertia(fn (Assert $page) => $page->where('filters.sort', 'application_code'));
 });

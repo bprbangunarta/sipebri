@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Audit\Audit;
 use App\Enums\LoanStatus;
 use App\Models\AnalysisCorrection;
+use App\Models\AnalysisMemorandum;
+use App\Models\LoanAnalysis;
 use App\Models\LoanApplication;
 use App\Models\LoanApproval;
 use App\Models\Method;
 use App\Models\ProductParameter;
 use App\Models\User;
 use App\Support\Approvals\ApprovalFlow;
+use App\Support\LoanListOrder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,6 +31,12 @@ class ApprovalController extends Controller
 
     private const STATUSES = ['committee', 'approved', 'rejected', 'cancelled'];
 
+    /**
+     * Columns of the list that sort. The proposal falls back to the request while the file has no memorandum, the position
+     * is the pending step (tier, then role) and `my_turn` is the same test as the "waiting for me" scope.
+     */
+    private const SORTABLE = ['application_code', 'full_name', 'nik', 'product', 'proposed_amount', 'proposed_tenor', 'submitted_at', 'status', 'pending_position', 'my_turn'];
+
     public function index(Request $request): Response
     {
         /** @var User $user */
@@ -36,26 +45,29 @@ class ApprovalController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'status' => ['nullable', Rule::in([...self::STATUSES, 'all'])],
             'scope' => ['nullable', Rule::in(['mine', 'all'])],
-            'per_page' => ['nullable', 'integer'],
+            'sort' => ['nullable', 'string'], 'direction' => ['nullable', 'in:asc,desc'], 'per_page' => ['nullable', 'integer'],
         ]);
+        $sort = in_array($filters['sort'] ?? null, self::SORTABLE, true) ? $filters['sort'] : 'application_code';
+        $direction = $filters['direction'] ?? 'desc';
         $status = $filters['status'] ?? 'committee';
         // People who decide see what waits for them first; everyone else sees every file they may open.
         $scope = $filters['scope'] ?? 'mine';
 
         $loans = $this->visibleTo($user)
             ->with(['product:id,alias,name', 'analysis:id,loan_application_id,submitted_at', 'analysis.memorandum'])
+            ->withExists(['approvals as my_turn' => fn (Builder $a) => $this->decidedBy($a, $user)])
             ->when($status !== 'all', fn (Builder $q) => $q->where('status', $status))
             ->when($scope === 'mine', fn (Builder $q) => $this->waitingFor($q, $user))
             ->when($filters['search'] ?? null, function (Builder $q, string $term) {
                 $like = '%'.addcslashes($term, '%_\\').'%';
                 $q->where(fn ($w) => $w->where('application_code', 'like', $like)->orWhere('full_name', 'like', $like)->orWhere('nik', 'like', $like));
             })
-            ->orderByDesc('id')
+            ->tap(fn (Builder $q) => $this->order($q, $sort, $direction))->orderByDesc('id')
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 10)
             ->withQueryString();
 
         return Inertia::render('approvals/index', [
-            'loans' => $loans->through(function (LoanApplication $l) use ($user): array {
+            'loans' => $loans->through(function (LoanApplication $l): array {
                 $pending = $l->status === LoanStatus::Committee ? ApprovalFlow::pending($l) : null;
 
                 return [
@@ -66,11 +78,11 @@ class ApprovalController extends Controller
                     'status' => $l->status->value,
                     'status_label' => $l->status->label(),
                     'pending_position' => $pending ? trim("{$pending->tier_label} · {$pending->role}", ' ·') : null,
-                    'my_turn' => $pending !== null && ApprovalFlow::mayDecide($user, $pending, $l),
+                    'my_turn' => (bool) $l->getAttribute('my_turn'),
                     'submitted_at' => $l->analysis?->submitted_at?->toDateString(),
                 ];
             }),
-            'filters' => ['search' => $filters['search'] ?? '', 'status' => $status, 'scope' => $scope, 'per_page' => $loans->perPage()],
+            'filters' => ['search' => $filters['search'] ?? '', 'status' => $status, 'scope' => $scope, 'sort' => $sort, 'direction' => $direction, 'per_page' => $loans->perPage()],
             'perPageOptions' => self::PER_PAGE_OPTIONS,
             'statuses' => [
                 ['value' => 'committee', 'label' => 'Menunggu keputusan'],
@@ -227,16 +239,63 @@ class ApprovalController extends Controller
      */
     private function waitingFor(Builder $query, User $user): Builder
     {
+        return $query->whereHas('approvals', fn (Builder $a) => $this->decidedBy($a, $user));
+    }
+
+    /**
+     * The step of a committee file that waits for this person: the first undecided one, of a tier the person holds (or the
+     * analyst's own individual step), on a file the person did not apply for. The list's "my turn" column uses the same test.
+     *
+     * @param  Builder<LoanApproval>  $steps
+     * @return Builder<LoanApproval>
+     */
+    private function decidedBy(Builder $steps, User $user): Builder
+    {
         $roles = $user->getRoleNames()->all();
 
-        return $query->where('status', LoanStatus::Committee)
-            ->where(fn (Builder $q) => $q->whereNull('committee_conflict_user_id')->orWhere('committee_conflict_user_id', '!=', $user->id))
-            ->whereHas('approvals', fn (Builder $a) => $a
-                ->whereNull('decision')
-                ->whereRaw('sort = (select min(sort) from loan_approvals as next where next.loan_application_id = loan_approvals.loan_application_id and next.decision is null)')
-                ->where(fn (Builder $w) => $w
-                    ->where(fn (Builder $c) => $c->where('is_individual', false)->when(! $user->hasRole('Super Admin'), fn (Builder $r) => $r->whereIn('role', $roles)))
-                    ->orWhere(fn (Builder $i) => $i->where('is_individual', true)->whereHas('loanApplication', fn (Builder $l) => $l->where('surveyor_id', $user->id)))));
+        return $steps
+            ->whereHas('loanApplication', fn (Builder $l) => $l->where('status', LoanStatus::Committee)
+                ->where(fn (Builder $q) => $q->whereNull('committee_conflict_user_id')->orWhere('committee_conflict_user_id', '!=', $user->id)))
+            ->whereNull('decision')
+            ->whereRaw('sort = (select min(sort) from loan_approvals as next where next.loan_application_id = loan_approvals.loan_application_id and next.decision is null)')
+            ->where(fn (Builder $w) => $w
+                ->where(fn (Builder $c) => $c->where('is_individual', false)->when(! $user->hasRole('Super Admin'), fn (Builder $r) => $r->whereIn('role', $roles)))
+                ->orWhere(fn (Builder $i) => $i->where('is_individual', true)->whereHas('loanApplication', fn (Builder $l) => $l->where('surveyor_id', $user->id))));
+    }
+
+    /**
+     * Order the list by one of the SORTABLE keys.
+     *
+     * @param  Builder<LoanApplication>  $query
+     * @param  'asc'|'desc'  $direction
+     */
+    private function order(Builder $query, string $sort, string $direction): void
+    {
+        $pending = fn (string $column) => LoanApproval::query()->select($column)
+            ->whereColumn('loan_approvals.loan_application_id', 'loan_applications.id')->whereNull('decision')->orderBy('sort')->limit(1);
+
+        match ($sort) {
+            'proposed_amount' => $query->orderBy($this->proposal('coalesce(max(analysis_memorandums.proposed_amount), loan_applications.requested_amount)'), $direction),
+            'proposed_tenor' => $query->orderBy($this->proposal('coalesce(max(analysis_memorandums.term_months), loan_applications.requested_tenor)'), $direction),
+            'submitted_at' => $query->orderBy(LoanAnalysis::query()->select('submitted_at')->whereColumn('loan_analyses.loan_application_id', 'loan_applications.id'), $direction),
+            'pending_position' => $query->orderBy($pending('tier_label'), $direction)->orderBy($pending('role'), $direction),
+            'my_turn' => $query->orderBy('my_turn', $direction),
+            default => LoanListOrder::apply($query, $sort, $direction),
+        };
+    }
+
+    /**
+     * A figure of the file's memorandum. The aggregate always yields one row, so a file without a memorandum falls back to
+     * the request named in `$value`.
+     *
+     * @param  literal-string  $value
+     * @return Builder<AnalysisMemorandum>
+     */
+    private function proposal(string $value): Builder
+    {
+        return AnalysisMemorandum::query()->selectRaw($value)
+            ->join('loan_analyses', 'loan_analyses.id', '=', 'analysis_memorandums.loan_analysis_id')
+            ->whereColumn('loan_analyses.loan_application_id', 'loan_applications.id');
     }
 
     private function authorizeView(User $user, LoanApplication $loan): void

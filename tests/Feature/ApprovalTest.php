@@ -196,6 +196,58 @@ it('lists what waits for the person and shows the file only to those who take pa
     $this->actingAs($people['kabag'])->get(route('credit-analysis.show', $loan))->assertOk();
 });
 
+it('sorts the list by every column in both directions', function () {
+    foreach (['KTA', 'KRM'] as $alias) {
+        Product::firstOrCreate(['alias' => $alias], ['code' => $alias, 'name' => $alias, 'is_active' => true]);
+    }
+    $people = committeePeople();
+    $product = fn (string $alias) => Product::where('alias', $alias)->value('id');
+
+    // a waits for the analyst (staff tier), b for the section head, c is approved; b's memorandum proposes less than it
+    // asked for and c has lost its memorandum, so the proposal falls back to the request.
+    $a = analysedFor($people, 8_000_000, ['full_name' => 'Budi', 'nik' => '3201000000000002', 'product_id' => $product('KTA')]);
+    $b = analysedFor($people, 50_000_000, ['full_name' => 'Ani', 'nik' => '3201000000000003', 'product_id' => $product('KRM')]);
+    $c = analysedFor($people, 20_000_000, ['full_name' => 'Citra', 'nik' => '3201000000000001']);
+    foreach ([$a, $b, $c] as $loan) {
+        submitAnalysis($people['analyst'], $loan);
+    }
+    $this->actingAs($people['kasi'])->post(route('approvals.decide', $c), decision('approve'))->assertSessionHasNoErrors();
+    $a->analysis->memorandum->update(['term_months' => 24]);
+    $b->analysis->memorandum->update(['proposed_amount' => 15_000_000, 'term_months' => 6]);
+    $c->analysis->memorandum->delete();
+    $a->analysis->update(['submitted_at' => '2026-01-03']);
+    $b->analysis->update(['submitted_at' => '2026-01-01']);
+    $c->analysis->update(['submitted_at' => '2026-01-04']);
+
+    // Ties fall back to the newest file first.
+    $expected = [
+        'application_code' => [[$a, $b, $c], [$c, $b, $a]],
+        'full_name' => [[$b, $a, $c], [$c, $a, $b]],
+        'nik' => [[$c, $a, $b], [$b, $a, $c]],
+        'product' => [[$b, $c, $a], [$a, $c, $b]],
+        'proposed_amount' => [[$a, $b, $c], [$c, $b, $a]],
+        'proposed_tenor' => [[$b, $c, $a], [$a, $c, $b]],
+        'submitted_at' => [[$b, $a, $c], [$c, $a, $b]],
+        'status' => [[$c, $b, $a], [$b, $a, $c]],
+        'pending_position' => [[$c, $b, $a], [$a, $b, $c]],
+        'my_turn' => [[$c, $b, $a], [$a, $c, $b]],
+    ];
+
+    foreach ($expected as $sort => [$asc, $desc]) {
+        foreach (['asc' => $asc, 'desc' => $desc] as $direction => $rows) {
+            $this->actingAs($people['analyst'])->get(route('approvals.index', ['scope' => 'all', 'status' => 'all', 'sort' => $sort, 'direction' => $direction]))
+                ->assertInertia(fn (Assert $page) => $page
+                    ->where('filters.sort', $sort)->where('filters.direction', $direction)
+                    ->where('loans.data.0.id', $rows[0]->id)->where('loans.data.1.id', $rows[1]->id)->where('loans.data.2.id', $rows[2]->id));
+        }
+    }
+
+    $this->actingAs($people['analyst'])->get(route('approvals.index', ['scope' => 'all', 'status' => 'all', 'sort' => 'surveyor_id']))
+        ->assertInertia(fn (Assert $page) => $page->where('filters.sort', 'application_code')
+            ->where('loans.data.0.my_turn', false)->where('loans.data.1.my_turn', false)->where('loans.data.2.my_turn', true)
+            ->where('loans.data.1.proposed_amount', 15_000_000)->where('loans.data.0.proposed_amount', 20_000_000));
+});
+
 /** An approved file with its analysis, ready for corrections. */
 function approvedFile(array $people): LoanApplication
 {

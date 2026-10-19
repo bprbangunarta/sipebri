@@ -12,6 +12,7 @@ use App\Support\Approvals\ApprovalFlow;
 use App\Support\CreditAnalysis\AnalysisAccess;
 use App\Support\CreditAnalysis\AnalysisPayload;
 use App\Support\CreditAnalysis\AnalysisTemplates;
+use App\Support\LoanListOrder;
 use App\Support\Notify;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,8 +28,10 @@ class CreditAnalysisController extends Controller
 {
     private const PER_PAGE_OPTIONS = [10, 25, 50];
 
-    /** Columns of the list that sort; `status` orders the stage (analysis before survey) and `collaterals_count` is the withCount alias. */
-    private const SORTABLE = ['application_code', 'application_date', 'full_name', 'requested_amount', 'survey_date', 'status', 'collaterals_count'];
+    /** Columns of the list that sort; `status` orders the stage (analysis before survey), the counts are the withCount aliases. */
+    private const SORTABLE = ['application_code', 'product', 'full_name', 'nik', 'requested_amount', 'requested_tenor', 'survey_date', 'surveys_count', 'status', 'collaterals_count'];
+
+    private const COUNTS = ['surveys_count', 'collaterals_count'];
 
     public function index(Request $request): Response
     {
@@ -40,7 +43,7 @@ class CreditAnalysisController extends Controller
         $direction = $filters['direction'] ?? 'desc';
 
         $loans = LoanApplication::query()
-            ->with(['product:id,alias,name', 'office:id,alias', 'supervisor:id,name'])
+            ->with('product:id,alias,name')
             ->withCount(['surveys', 'collaterals'])
             ->whereIn('status', [LoanStatus::Survey, LoanStatus::Analysis])
             ->where('surveyor_id', $request->user()->id)
@@ -48,18 +51,15 @@ class CreditAnalysisController extends Controller
                 $like = '%'.addcslashes($term, '%_\\').'%';
                 $q->where(fn ($w) => $w->where('application_code', 'like', $like)->orWhere('full_name', 'like', $like)->orWhere('nik', 'like', $like));
             })
-            ->orderBy($sort, $direction)->orderBy('id')
+            ->tap(fn ($q) => in_array($sort, self::COUNTS, true) ? $q->orderBy($sort, $direction) : LoanListOrder::apply($q, $sort, $direction))->orderBy('id')
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 10)
             ->withQueryString();
 
         return Inertia::render('credit-analysis/index', [
             'loans' => $loans->through(fn (LoanApplication $l): array => [
                 ...$l->only(['id', 'application_code', 'full_name', 'nik', 'requested_amount', 'requested_tenor']),
-                'application_date' => $l->application_date->toDateString(),
                 'survey_date' => $l->survey_date?->toDateString(),
                 'product_label' => $l->product ? "{$l->product->alias} : {$l->product->name}" : null,
-                'office_label' => $l->office?->alias,
-                'supervisor_name' => $l->supervisor?->name,
                 'surveyed' => $l->surveys_count > 0,
                 'collaterals_count' => $l->collaterals_count,
                 'in_analysis' => $l->status === LoanStatus::Analysis,

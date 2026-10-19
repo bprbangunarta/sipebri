@@ -1,5 +1,6 @@
 import { Head, router } from '@inertiajs/react';
-import { ClipboardCheck } from 'lucide-react';
+import { ClipboardCheck, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Badge, PageHeader } from '@/components/ui/misc';
@@ -7,18 +8,15 @@ import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
 import type { PageMeta } from '@/components/ui/pagination';
 import { nextSort } from '@/components/ui/sort-head';
 import { useListQuery } from '@/hooks/use-list-query';
-import { formatDate, rupiah } from '@/lib/format';
+import { formatDate, formatNumber, rupiah } from '@/lib/format';
 
 type Row = {
     id: number;
     application_code: string;
-    application_date: string;
     survey_date: string | null;
     full_name: string;
     nik: string;
     product_label: string | null;
-    office_label: string | null;
-    supervisor_name: string | null;
     requested_amount: number;
     requested_tenor: number;
     surveyed: boolean;
@@ -35,7 +33,7 @@ type Filters = {
 const DEFAULTS = { sort: 'application_code', direction: 'desc', per_page: 10 };
 
 export default function AnalysisIndex({ loans, filters, perPageOptions }: { loans: { data: Row[] } & PageMeta; filters: Filters; perPageOptions: number[] }) {
-    const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
+    const { visit, search, onSearch, clear, sorted, loading, error } = useListQuery<Filters>({
         url: '/credit-analysis',
         filters,
         defaults: DEFAULTS,
@@ -44,53 +42,32 @@ export default function AnalysisIndex({ loans, filters, perPageOptions }: { loan
     const sortBy = (column: string) => visit(nextSort(filters, column));
 
     const columns: Column<Row>[] = [
-        {
-            key: 'file',
-            header: 'Berkas',
-            sort: 'application_code',
-            cell: (l) => (
-                <>
-                    <p className="font-medium">{l.application_code}</p>
-                    <p className="text-xs text-muted">{l.product_label}</p>
-                </>
-            ),
-        },
-        {
-            key: 'applicant',
-            header: 'Pemohon',
-            sort: 'full_name',
-            cell: (l) => (
-                <>
-                    {l.full_name}
-                    <p className="font-mono text-xs text-muted">{l.nik}</p>
-                </>
-            ),
-        },
+        { key: 'code', header: 'Kode', sort: 'application_code', className: 'font-medium', cell: (l) => l.application_code },
+        { key: 'product', header: 'Produk', sort: 'product', cell: (l) => l.product_label ?? '–' },
+        { key: 'applicant', header: 'Pemohon', sort: 'full_name', cell: (l) => l.full_name },
+        { key: 'nik', header: 'NIK', sort: 'nik', className: 'font-mono', cell: (l) => l.nik },
         {
             key: 'amount',
             header: 'Plafon',
             sort: 'requested_amount',
             align: 'right',
-            className: 'whitespace-nowrap tabular-nums',
-            cell: (l) => (
-                <>
-                    {rupiah(l.requested_amount)}
-                    <p className="text-xs text-muted">{l.requested_tenor} bulan</p>
-                </>
-            ),
+            className: 'tabular-nums',
+            cell: (l) => rupiah(l.requested_amount),
         },
         {
-            key: 'survey',
-            header: 'Survei',
-            sort: 'survey_date',
-            cell: (l) => (
-                <>
-                    {formatDate(l.survey_date)}
-                    <p>
-                        <Badge tone={l.surveyed ? 'success' : 'info'}>{l.surveyed ? 'Disurvei' : 'Tanpa kunjungan'}</Badge>
-                    </p>
-                </>
-            ),
+            key: 'tenor',
+            header: 'Tenor',
+            sort: 'requested_tenor',
+            align: 'right',
+            className: 'tabular-nums',
+            cell: (l) => `${formatNumber(l.requested_tenor)} bulan`,
+        },
+        { key: 'survey_date', header: 'Tanggal survei', sort: 'survey_date', cell: (l) => formatDate(l.survey_date) },
+        {
+            key: 'visit',
+            header: 'Kunjungan',
+            sort: 'surveys_count',
+            cell: (l) => <Badge tone={l.surveyed ? 'success' : 'info'}>{l.surveyed ? 'Disurvei' : 'Tanpa kunjungan'}</Badge>,
         },
         {
             key: 'stage',
@@ -123,7 +100,15 @@ export default function AnalysisIndex({ loans, filters, perPageOptions }: { loan
                 error={error}
                 onRetry={() => visit({})}
                 onRowClick={(l) => router.visit(`/credit-analysis/${l.id}`)}
-                toolbar={<FilterBar search={<SearchInput value={search} onChange={onSearch} placeholder="Cari kode, nama, NIK…" label="Cari berkas" />} />}
+                toolbar={
+                    <FilterBar search={<SearchInput value={search} onChange={onSearch} placeholder="Cari kode, nama, NIK…" label="Cari berkas" />}>
+                        {(filters.search !== '' || sorted) && (
+                            <Button variant="ghost" size="sm" onClick={() => clear()}>
+                                <X /> Atur ulang
+                            </Button>
+                        )}
+                    </FilterBar>
+                }
                 columns={columns}
                 sort={{
                     sort: filters.sort,

@@ -8,8 +8,9 @@ import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
 import { Badge, PageHeader } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
 import type { PageMeta } from '@/components/ui/pagination';
+import { nextSort } from '@/components/ui/sort-head';
 import { useListQuery } from '@/hooks/use-list-query';
-import { formatDate, rupiah } from '@/lib/format';
+import { formatDate, formatNumber, rupiah } from '@/lib/format';
 
 type Row = {
     id: number;
@@ -30,6 +31,8 @@ type Filters = {
     search: string;
     status: string;
     scope: 'mine' | 'all';
+    sort: string;
+    direction: 'asc' | 'desc';
     per_page: number;
 };
 
@@ -40,7 +43,7 @@ type Props = {
     statuses: { value: string; label: string }[];
 };
 
-const DEFAULTS = { status: 'committee', scope: 'mine', per_page: 10 };
+const DEFAULTS = { status: 'committee', scope: 'mine', sort: 'application_code', direction: 'desc', per_page: 10 };
 const TONES: Record<string, BadgeTone> = {
     committee: 'info',
     approved: 'success',
@@ -49,63 +52,40 @@ const TONES: Record<string, BadgeTone> = {
 };
 
 export default function ApprovalsIndex({ loans, filters, perPageOptions, statuses }: Props) {
-    const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
+    const { visit, search, onSearch, clear, sorted, loading, error } = useListQuery<Filters>({
         filters,
         url: '/approvals',
         defaults: DEFAULTS,
         only: ['loans', 'filters'],
     });
     const hasFilters = filters.search !== '' || filters.status !== DEFAULTS.status || filters.scope !== DEFAULTS.scope;
+    const sortBy = (column: string) => visit(nextSort(filters, column));
 
     const columns: Column<Row>[] = [
+        { key: 'code', header: 'Kode', sort: 'application_code', className: 'font-medium', cell: (l) => l.application_code },
+        { key: 'applicant', header: 'Pemohon', sort: 'full_name', cell: (l) => l.full_name },
+        { key: 'nik', header: 'NIK', sort: 'nik', className: 'font-mono', cell: (l) => l.nik },
+        { key: 'product', header: 'Produk', sort: 'product', cell: (l) => l.product_label ?? '–' },
         {
-            key: 'code',
-            header: 'Berkas',
-            className: 'font-mono text-xs',
-            cell: (l) => l.application_code,
-        },
-        {
-            key: 'applicant',
-            header: 'Pemohon',
-            cell: (l) => (
-                <>
-                    <p className="font-medium">{l.full_name}</p>
-                    <p className="text-xs text-muted">{l.nik}</p>
-                </>
-            ),
-        },
-        {
-            key: 'product',
-            header: 'Produk',
-            cell: (l) => l.product_label ?? '–',
-        },
-        {
-            key: 'proposal',
-            header: 'Usulan',
+            key: 'amount',
+            header: 'Plafon usulan',
+            sort: 'proposed_amount',
             align: 'right',
-            className: 'whitespace-nowrap tabular-nums',
-            cell: (l) => `${rupiah(l.proposed_amount)} · ${l.proposed_tenor} bln`,
+            className: 'tabular-nums',
+            cell: (l) => rupiah(l.proposed_amount),
         },
         {
-            key: 'submitted',
-            header: 'Diajukan',
-            cell: (l) => formatDate(l.submitted_at),
+            key: 'tenor',
+            header: 'Tenor usulan',
+            sort: 'proposed_tenor',
+            align: 'right',
+            className: 'tabular-nums',
+            cell: (l) => `${formatNumber(l.proposed_tenor)} bulan`,
         },
-        {
-            key: 'status',
-            header: 'Status',
-            cell: (l) => (
-                <span className="flex flex-col items-start gap-0.5">
-                    <Badge tone={TONES[l.status] ?? 'neutral'}>{l.status_label}</Badge>
-                    {l.pending_position && (
-                        <span className="text-xs text-muted">
-                            {l.my_turn ? 'Giliran Anda · ' : ''}
-                            {l.pending_position}
-                        </span>
-                    )}
-                </span>
-            ),
-        },
+        { key: 'submitted', header: 'Diajukan', sort: 'submitted_at', cell: (l) => formatDate(l.submitted_at) },
+        { key: 'status', header: 'Status', sort: 'status', cell: (l) => <Badge tone={TONES[l.status] ?? 'neutral'}>{l.status_label}</Badge> },
+        { key: 'position', header: 'Posisi', sort: 'pending_position', cell: (l) => l.pending_position ?? '–' },
+        { key: 'turn', header: 'Giliran', sort: 'my_turn', cell: (l) => (l.my_turn ? <Badge tone="success">Anda</Badge> : '–') },
     ];
 
     return (
@@ -144,7 +124,7 @@ export default function ApprovalsIndex({ loans, filters, perPageOptions, statuse
                                 })
                             }
                         />
-                        {hasFilters && (
+                        {(hasFilters || sorted) && (
                             <Button
                                 variant="ghost"
                                 size="sm"
@@ -161,6 +141,7 @@ export default function ApprovalsIndex({ loans, filters, perPageOptions, statuse
                     </FilterBar>
                 }
                 columns={columns}
+                sort={{ sort: filters.sort, direction: filters.direction, onSort: sortBy }}
                 empty={{
                     icon: <BadgeCheck />,
                     title: filters.scope === 'mine' && filters.status === 'committee' ? 'Tidak ada berkas yang menunggu keputusan Anda' : 'Tidak ada berkas',
