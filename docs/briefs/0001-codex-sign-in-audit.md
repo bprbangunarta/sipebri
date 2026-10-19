@@ -75,5 +75,5 @@ Test dan dokumen
 Gerbang dan penutup
 
 - [x] `scripts/verify.sh` hijau (Pint, PHPStan, semua test, `npm run check`, tipe, build)
-- [ ] Setiap kriteria penerimaan di atas diverifikasi dengan bukti di laporan
-- [ ] Pemilik diberi tahu apa yang berubah, apa yang tidak dikerjakan, dan mengapa; brief ini dihapus di commit penutup
+- [x] Setiap kriteria penerimaan di atas diverifikasi dengan bukti di laporan
+- [x] Pemilik diberi tahu apa yang berubah, apa yang tidak dikerjakan, dan mengapa; brief ini dihapus di commit penutup
