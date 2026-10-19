@@ -12,7 +12,7 @@ Seluruh kode HRIS (model/migrasi/factory/seeder Employee, Gender, Religion, Posi
 - UI **wajib** mengikuti `.ai/rules/js.md`: pakai ulang `resources/js/components/ui/*`, kontrol `h-8`, token warna tema, kalender `compact-calendar`. Jangan buat gaya baru per halaman.
 - Fungsional dari SIPEBRI ditulis ulang mengikuti struktur proyek ini (bukan disalin). Label "simulasi" tidak dipakai.
 - Jangan reset database: perubahan skema lewat migrasi baru. Seeder harus idempotent.
-- Sebelum selesai: `composer verify` (= `scripts/verify.sh`: pelemahan + baris Brief, audit dependency, `env:check`, Pint, PHPStan, build, Pest, `npm run check`, jscpd, `tsc`). Hook git dipasang sekali dengan `composer setup` atau `git config core.hooksPath .githooks`. **Jangan pernah `vp check --fix` pada `resources/js`.**
+- Sebelum selesai: `composer verify` (= `scripts/verify.sh`: baris-baris `scripts/verify.steps`, pengaturan di `devcore.conf`; kerangka agent dari devcore). Hook git dipasang sekali dengan `composer setup` atau `git config core.hooksPath .githooks`. **Jangan pernah `vp check --fix` pada `resources/js`.**
   Folder hasil generate (`resources/js/routes|actions|wayfinder`) tidak di git: di clone baru jalankan `php artisan wayfinder:generate` (atau `npm run build`) sebelum `tsc`.
   Test merender halaman Inertia lewat manifest Vite, jadi **`npm run build` harus dijalankan setelah menambah halaman React**.
 

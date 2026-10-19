@@ -103,6 +103,9 @@ function docAllowlist(): array
     return [
         // Example name in the brief template; real briefs are created and deleted per piece of work.
         'docs/briefs/NNNN-judul-singkat.md',
+        'docs/briefs/NNNN-short-title.md',
+        // Laravel Boost's installer, named in the guide for a fresh clone; the project is already installed.
+        'php artisan boost:install',
         // Registered by Laravel Boost (a dev package) outside the testing environment only.
         'php artisan boost:update',
         // A Claude Code slash command, not a URL of this application.

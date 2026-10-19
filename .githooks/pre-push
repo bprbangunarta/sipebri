@@ -1,13 +1,13 @@
 #!/bin/sh
-# Gate before push: nothing reaches GitHub when a check fails. Never skip with --no-verify (AGENTS.md, section 7).
-# Git tells this hook on stdin what is about to be sent ("<local ref> <local sha> <remote ref> <remote sha>" per line); the commit range
-# is computed from that, whatever branch is checked out.
+# The gate before a push: nothing leaves the machine while a check fails. Never skip with --no-verify.
+# Git tells this hook through stdin what is about to be sent ("<local ref> <local sha> <remote ref> <remote sha>" per line); from that the
+# right range of commits is worked out, whatever branch is checked out.
 root="$(git rev-parse --show-toplevel)"
 zero=0000000000000000000000000000000000000000
 ranges=''
 
 while read -r local_ref local_sha remote_ref remote_sha; do
-    # Deleting a remote branch carries no commits.
+    # Deleting a branch on the remote carries no commits.
     [ "$local_sha" = "$zero" ] && continue
 
     if [ "$remote_sha" = "$zero" ]; then
@@ -20,7 +20,7 @@ while read -r local_ref local_sha remote_ref remote_sha; do
 "
 done
 
-# Nothing is being sent (only branch deletions): no commits to check.
+# Nothing is being sent (only branches being deleted): no commits to check.
 [ -n "$ranges" ] || exit 0
 
 VERIFY_RANGE="$ranges" exec "$root/scripts/verify.sh"

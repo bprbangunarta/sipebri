@@ -1,70 +1,71 @@
-# Templat brief
+# Brief template
 
-Untuk siapa pun yang memulai fitur atau perubahan apa pun yang menyentuh perilaku, kontrak, skema, atau keamanan. Salin berkas ini ke `docs/briefs/NNNN-judul-singkat.md` (nomor berikutnya, kebab-case, Inggris), isi, tunjukkan ke pemilik di chat, dan jangan ubah apa pun sampai pemilik berkata "setuju". Berkas ini satu-satunya berkas tetap di folder ini; berkas lain di sini adalah pekerjaan yang belum selesai.
+For whoever starts a feature or any change that touches behavior, a contract, the schema, or security. Copy this file to `docs/briefs/NNNN-short-title.md` (next number, kebab-case), fill it in, show it to the owner in chat, and change nothing else until the owner approves. This file is the only permanent file in the folder; any other file here is unfinished work.
 
-Cara brief dipakai ditulis sekali di `AGENTS.md`, bagian 3. Daftar periksa di bawah adalah satu-satunya daftar yang harus terpenuhi sebelum pekerjaan disebut selesai.
+How the brief is used is written once in `AGENTS.md`, section 3. The checklist below is the single list of what must hold before the work is called done.
 
 ---
 
-# Judul perubahan
+# Title of the change
 
 Status: draft
-Approved: (hanya setelah pemilik berkata "setuju" di chat untuk brief ini: tulis tanggalnya, YYYY-MM-DD)
+Approved: (only after the owner approves in chat for this brief: write the date, YYYY-MM-DD)
 
-## Tujuan
+## Goal
 
-Satu atau dua kalimat: apa yang bisa dilakukan orang yang memakainya sesudahnya, dan mengapa.
+One or two sentences: what the person who uses this can do afterwards, and why.
 
-## Kriteria penerimaan
+## Acceptance criteria
 
-Tiap baris bisa dijawab "terpenuhi" atau "tidak" dengan bukti (test, perintah, layar yang diperiksa di peramban).
+Each line can be answered "met" or "not met" with evidence (a test, a command, a screen checked in a browser).
 
 - [ ] ...
 
-## Di luar cakupan
+## Out of scope
 
-Apa yang sengaja tidak disentuh perubahan ini.
+What this change deliberately does not touch.
 
-## Asumsi dan pertanyaan terbuka
+## Assumptions and open questions
 
-Bawaan yang dipilih untuk hal kecil, dan pertanyaan untuk pemilik (tidak ada yang tersisa saat brief disetujui).
+Defaults chosen for small things, and questions for the owner (none left open when the brief is approved).
 
-## Daftar periksa
+## Checklist
 
-Setiap butir dicentang `[x]`; butir yang tidak berlaku dicentang dan diakhiri `N/A: alasan`. Tidak ada yang "selesai" selama masih ada `[ ]`. Aturan di balik tiap butir ada di berkas yang disebutnya; jangan menyalin aturannya ke sini.
+Every line is ticked `[x]`; a line that does not apply is ticked and ends with `N/A: reason`. Nothing is "done" while a `[ ]` remains. The rule behind each line is in the file it names; do not copy the rule here. A rule that the project adds (`AGENTS.md`, section 6) adds its own line here, under the group it belongs to.
 
-Membaca dan cakupan
+Reading and scope
 
-- [ ] PRD dan berkas aturan yang cocok dengan jalur yang disentuh sudah dibaca (`AGENTS.md` bagian 1, `.ai/rules/index.md`)
-- [ ] Skill bagian 5 yang berlaku disebut dan dipakai
-- [ ] Orang yang menemui perubahan ini dan saat ia paling mungkin bingung disebut, dan ditangani (prinsip di awal `AGENTS.md`)
-- [ ] Di luar cakupan dihormati; temuan di luar tugas dilaporkan, tidak diperbaiki sambil lalu
+- [ ] The PRD and the rule files matched to the paths touched are read (`AGENTS.md` section 1, `.ai/rules/index.md`)
+- [ ] The skills of section 5 that apply are named and used
+- [ ] The person who meets this change and the moment they are most likely to be confused are named, and handled (principle at the top of `AGENTS.md`)
+- [ ] Out of scope is respected; findings outside the task are reported, not fixed on the side
 
-Desain
+Design
 
-- [ ] Dampak perubahan fungsi, route, kolom, atau kontrak dicari (pemanggil, layar, dokumen, test) sebelum diubah
-- [ ] Nama mengikuti aturan bahasa dan URL sepadan judul layar (`.ai/rules/general.md`)
-- [ ] Siapa yang boleh diputuskan sebelum validasi, dan setiap batas masukan eksplisit (`.ai/rules/php.md`, pertanyaan 1 dan 2)
-- [ ] Setiap hasil punya satu jawaban, dan pesan untuk orang berupa kalimat Indonesia (`.ai/rules/php.md`, pertanyaan 3)
-- [ ] Konkurensi, sisa kegagalan, dan biaya ditangani (`.ai/rules/php.md`, pertanyaan 4 sampai 6)
-- [ ] Kode mudah dibaca, bisa ditingkatkan, bisa diperluas, dan bisa membesar seperti diminta `.ai/rules/php.md`, "Mutu desain"
-- [ ] Tidak ada yang bocor, dan perubahan tercatat di audit (`.ai/rules/php.md`, pertanyaan 7 dan 8; `.ai/rules/audit-log.md`); migrasi baru, tidak pernah disunting (`.ai/rules/database.md`)
-- [ ] Tidak ada status berkas baru tanpa dibahas (`CLAUDE.md`)
+- [ ] The impact of a changed function, interface, field, or contract is searched (callers, screens, documents, tests) before the change
+- [ ] Who may do this is decided before the input is validated, and every input limit is explicit (`.ai/rules/quality.md`, questions 1 and 2)
+- [ ] Every outcome has one defined response, and a failure leaves nothing half done (`.ai/rules/quality.md`, questions 3 to 5)
+- [ ] Concurrency, repetition, and cost are handled (`.ai/rules/quality.md`, questions 4 and 6)
+- [ ] The code is readable, upgradeable, extensible, and scalable as `.ai/rules/quality.md`, "Design quality", asks: small units, one place to add a case, nothing kept in a process, nothing a person would not have written
+- [ ] Nothing leaks, and what must be on record is on record (`.ai/rules/quality.md`, questions 7 and 8)
+- [ ] Project rule: the change is on the audit record, a new model uses `Auditable`, and a new relation has a foreign key with a deliberate delete rule (`.ai/rules/audit-log.md`, `.ai/rules/general.md`, "Integritas relasi")
+- [ ] Project rule: a schema change is a new migration, never an edited one, and the database is not reset (`.ai/rules/database.md`)
+- [ ] Project rule: code, comments, tests, and URLs are English; screen text is Indonesian (`.ai/rules/general.md`)
 
-Layar (N/A tanpa layar)
+Screen (N/A without a screen)
 
-- [ ] Keadaan (memuat, kosong, galat), hint isian sebagai tooltip, format, kata, dan konfirmasi aksi tak terbalikkan mengikuti `.ai/rules/js.md`
-- [ ] Diperiksa di peramban pada 1280 px dan 375 px, konsol bersih, tanpa gulir horizontal halaman
-- [ ] Delivery Gate antislop dijawab sebagai baris PASS/FAIL dengan bukti di laporan
+- [ ] States (loading, empty, error), words, and confirmation of irreversible actions follow the UI rules (`.ai/rules/ui.md`, and the project's `.ai/rules/js.md`: shared components, one value per column, server-side sort keys, inputs that enforce the server rule)
+- [ ] Checked in a browser at 1280 px and at 375 px, with the console clear
+- [ ] The antislop Delivery Gate is answered as PASS/FAIL lines with evidence in the report
 
-Test dan dokumen
+Tests and documents
 
-- [ ] Tiap risiko dan tiap penolakan punya test (`.ai/rules/php.md`, pertanyaan 9; `.ai/rules/tests.md`), dan test penjaga hijau
-- [ ] Dokumen dan kode dibandingkan dua arah, teks basi diperbaiki, `memory/PRD.md` dan tabel arsitektur `CLAUDE.md` diperbarui
-- [ ] Catatan yang disimpan agent untuk dirinya sendiri (memorinya, bila ada) diperbarui dengan apa yang diputuskan atau dipelajari perubahan ini, tanpa menunggu diminta
+- [ ] Each risk and each refusal has a test (`.ai/rules/quality.md`, question 9; `.ai/rules/testing.md`), and the cross-check tests are green
+- [ ] Documents and code are compared in both directions, stale text is fixed, and `memory/PRD.md` is updated (a decision that outlives this change is one line there)
+- [ ] The notes an agent keeps for itself (its own memory, if it has one) are updated with what this change decided or taught, without waiting to be asked
 
-Gerbang dan penutup
+Gates and close
 
-- [ ] `scripts/verify.sh` hijau (Pint, PHPStan, semua test, `npm run check`, tipe, build)
-- [ ] Setiap kriteria penerimaan di atas diverifikasi dengan bukti di laporan
-- [ ] Pemilik diberi tahu apa yang berubah, apa yang tidak dikerjakan, dan mengapa; brief ini dihapus di commit penutup
+- [ ] `scripts/verify.sh` is green and the build runs
+- [ ] Every acceptance criterion above is verified with evidence in the report
+- [ ] The owner is told what changed, what was not done, and why; this brief is deleted in the closing commit

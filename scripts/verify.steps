@@ -1,0 +1,19 @@
+# One check per line, as: label|command
+# The command runs from the repository root through `sh -c`, and the gate stops at the first one that fails. Order them from the
+# quickest to the slowest. Layers add their own lines (format, static analysis, tests); keep a line only if the check exists.
+# Example: Tests|npm test
+Rules and skills registered|scripts/check-registry.sh
+Gate self-test|scripts/selftest.sh
+
+Dependency audit (PHP)|composer audit --locked --no-interaction
+Dependency audit (JavaScript)|npm audit --omit=dev
+.env has every variable of .env.example|php artisan env:check
+Pint (code style)|vendor/bin/pint --test --format agent
+PHPStan (types)|vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+Build (Vite manifest and Wayfinder files)|npm run build
+Tests|php artisan test --compact
+
+Front-end standards|node scripts/check-standards.mjs
+Front-end checks (format, lint, tests)|npm run check
+Copied code|npx jscpd
+Types|npm run types:check

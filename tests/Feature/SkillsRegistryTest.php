@@ -16,8 +16,8 @@ function vendoredSkills(): array
 function agentsSkillSection(): string
 {
     $agents = (string) file_get_contents(base_path('AGENTS.md'));
-    $start = strpos($agents, '## 5. Skill dan alat: kapan memakai yang mana');
-    $end = strpos($agents, '## 6. Pengecualian dari bawaan Boost');
+    $start = strpos($agents, '## 5. Skills and tools: when to use which');
+    $end = strpos($agents, '## 6. Rules: the standard ones and the project\'s own');
 
     expect($start)->not->toBeFalse('AGENTS.md lost its section 5 heading.')
         ->and($end)->not->toBeFalse('AGENTS.md lost its section 6 heading.');

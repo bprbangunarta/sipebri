@@ -1,17 +1,25 @@
 #!/bin/sh
-# Every check that must be green before anything reaches GitHub (AGENTS.md, section 3 step 4). This is the only definition of the gate:
-# the pre-push hook, `composer verify`, `composer ci:check`, and CI run this script and list no checks of their own (`GateDefinitionTest`
-# guards that). It stops at the first failure and exits with a failing status.
+# Everything that must be green before anything is pushed. This is the only definition of the gate: the pre-push hook, the project's own
+# "verify" command, and CI run this script and never list checks of their own. The checks are the lines of scripts/verify.steps, one per
+# line as "label|command". It stops at the first failure and exits with a failure status.
 #
-# Commit range checked (weakened checks and the Brief line in messages): `VERIFY_RANGE` when set (one range per line; the pre-push hook
-# fills it from the commits actually being sent, CI from the push or pull request), otherwise what is not yet upstream, and on a branch
-# without an upstream every commit that is not on any remote, never only the last commit.
+# The commits that are checked for weakened checks and Brief lines: VERIFY_RANGE when set (one range per line; the pre-push hook fills
+# it from the commits that are really being sent, CI from the push or the pull request), otherwise the commits not yet upstream, and on
+# a branch without an upstream every commit that is on no remote, never only the last commit.
 set -e
-cd "$(git rev-parse --show-toplevel)"
+root="$(git rev-parse --show-toplevel)"
+cd "$root"
+# shellcheck source=/dev/null
+. ./devcore.conf
+# shellcheck source=/dev/null
+. ./scripts/lib/msg.sh
 
 if [ "$(git config core.hooksPath)" != ".githooks" ]; then
-    echo "HOOK: hook git belum dipasang di salinan ini (core.hooksPath bukan .githooks), jadi commit dan push tidak dijaga." >&2
-    echo "      Jalankan \`composer setup\` (atau \`git config core.hooksPath .githooks\`), lalu ulangi." >&2
+    dc_msg hook_missing_1 >&2
+    echo >&2
+    printf '      ' >&2
+    dc_msg hook_missing_2 >&2
+    echo >&2
     exit 1
 fi
 
@@ -26,18 +34,23 @@ if [ -z "$ranges" ]; then
     fi
 fi
 
-# check_range <rev-list arguments>: one range, read by both commit checkers.
+# A repository without a commit yet has nothing to read.
+if ! git rev-parse --verify --quiet HEAD >/dev/null; then
+    ranges=''
+fi
+
+# check_range <rev-list arguments>: one range, read by the two checkers.
 check_range() {
     spec="$1"
 
     case "$spec" in
         "$zero"*)
-            # New branch in CI: no known starting point, so use the main branch when present.
-            if git rev-parse --verify --quiet origin/main >/dev/null; then spec='origin/main..HEAD'; else spec='HEAD~1..HEAD'; fi
+            # A new branch in CI: no known starting point, use the main branch when there is one.
+            if git rev-parse --verify --quiet "origin/${MAIN_BRANCH:-main}" >/dev/null; then spec="origin/${MAIN_BRANCH:-main}..HEAD"; else spec='HEAD~1..HEAD'; fi
             ;;
     esac
 
-    # A starting point this clone does not know (someone else's commit not fetched yet): check everything not on a remote.
+    # A starting point this clone does not know (someone else's commit not fetched yet): check everything that is on no remote.
     # shellcheck disable=SC2086
     if ! git rev-list -n 1 $spec >/dev/null 2>&1; then
         spec='HEAD --not --remotes'
@@ -49,39 +62,38 @@ check_range() {
     scripts/check-brief.sh --range $spec || return 1
 }
 
-echo "→ Pelemahan pemeriksaan dan baris Brief (commit yang akan di-push)"
+printf '→ '
+dc_msg verify_commits
+echo
 printf '%s\n' "$ranges" | while IFS= read -r range; do
     [ -z "$range" ] && continue
     check_range "$range" || exit 1
 done
 
-echo "→ Kerentanan dependency"
-scripts/check-dependencies.sh
+steps_file="scripts/verify.steps"
 
-echo "→ .env memuat semua variabel dari .env.example"
-php artisan env:check
+if [ ! -f "$steps_file" ] || ! grep -qvE '^[[:space:]]*(#|$)' "$steps_file"; then
+    dc_msg verify_nosteps >&2
+    echo >&2
+    exit 1
+fi
 
-echo "→ Pint (gaya kode)"
-vendor/bin/pint --test --format agent
+while IFS= read -r line; do
+    case "$line" in
+        '' | '#'*) continue ;;
+    esac
 
-echo "→ PHPStan (tipe)"
-vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+    label="${line%%|*}"
+    command="${line#*|}"
 
-# Pest renders Inertia pages through the Vite manifest, and the build also generates the Wayfinder files TypeScript needs, so it runs
-# before the tests and the type check.
-echo "→ Build aset (manifest Vite dan berkas Wayfinder)"
-npm run build
+    echo "→ $label"
 
-echo "→ Pest (seluruh tes)"
-php artisan test --compact
+    if ! sh -c "$command"; then
+        dc_msg verify_failed "$label" >&2
+        echo >&2
+        exit 1
+    fi
+done < "$steps_file"
 
-echo "→ Layar (format, lint, aturan rumah, tes)"
-npm run check
-
-echo "→ Kode salinan (jscpd)"
-npm run duplicates
-
-echo "→ TypeScript"
-npm run types:check
-
-echo "Semua pemeriksaan hijau."
+dc_msg verify_green
+echo

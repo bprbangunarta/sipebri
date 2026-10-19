@@ -1,123 +1,145 @@
-# SIPEBRI: Panduan Agent (baca ini dulu)
+# Agent guide (read this first)
 
-Berkas ini punya dua bagian. Ketahui mana yang mana sebelum bertindak:
+This guide is the project's standard way of working with a coding agent, whichever agent it is. It comes from devcore. Where the project already had something like it, devcore is followed; what is specific to the project is added as extra rules on top of it (section 6), and those rules are treated exactly like the standard ones.
 
-| Bagian | Di mana | Isinya | Pemilik |
-| --- | --- | --- | --- |
-| **1. Panduan proyek** | bagian ini (di atas blok Boost) | aturan pemilik: alur kerja, aturan bisnis dan proses, git, dokumen dan skill mana yang dipakai | pemilik, boleh diubah |
-| **2. Pedoman Laravel Boost** | blok Boost yang dibuat otomatis di bawah (judul `# Bagian 2`) | praktik umum Laravel untuk **menulis kode** | dibuat `php artisan boost:update`, jangan diubah |
+**Project:** SIPEBRI. Stack: Laravel 13, Inertia v3, React 19, MySQL. Working branch: `v3.0.0-alpha`.
 
-Bila bertentangan, Bagian 1 yang menang; setiap pengecualian dari bawaan Boost tercantum di bagian 6.
+**Principle: people first.** Every change is judged first by what the person who meets it sees, understands, and can do next, and only then by whether it works. When two designs are equal for the machine, take the one that is kinder to the person.
 
-**Proyek:** SIPEBRI v3 adalah aplikasi kredit BPR Bangunarta (Laravel 13 + Inertia v3 + React 19 + Wayfinder, MySQL; versi di `composer.json`, `package.json`). Fungsional SIPEBRI lama ditulis ulang di sini; pengguna dan nasabah datang dari Codex. Setiap perubahan data bisnis harus bisa diaudit (standar OJK). Repositori `https://github.com/bprbangunarta/sipebri.git`, cabang kerja `v3.0.0-alpha`. Peta arsitektur dan cara menjalankan ada di `CLAUDE.md`.
+## 1. Reading order
 
-**Prinsip: orang lebih dulu.** Pada akhirnya SIPEBRI dipakai orang: AO yang membuka berkas, surveyor di lapangan dengan sinyal lemah, analis yang mengisi lembar analisa, anggota komite yang memutus, auditor yang membaca log, Super Admin yang mengatur referensi. Setiap perubahan dinilai pertama dari apa yang dilihat, dipahami, dan bisa dilakukan orang itu berikutnya, baru kemudian dari apakah ia berjalan. Aturan konkretnya ada di tempat berlakunya dan tidak diulang di sini: apa yang dikatakan pesan atau galat (`.ai/rules/php.md`, pertanyaan 3), bagaimana kegagalan meninggalkan orang tetap bisa mengulang (`.ai/rules/php.md`, pertanyaan 5), bagaimana layar berperilaku (`.ai/rules/js.md`, plus `antislop-human` untuk keyboard, kontras, dan keadaan), dan bagaimana dokumen dibaca (`antislop-copywriting`, dan pencocokan dengan kode di langkah 4a). Bila dua rancangan setara bagi mesin, ambil yang lebih ramah bagi orangnya.
+Read in this order, every task, every agent. A step is never skipped because the task looks small, and a file that is missing or unreadable is said so in the report, not passed over.
 
-**Bahasa.** Aturannya satu tempat: `.ai/rules/general.md` (kode, komentar, test, dan commit berbahasa Inggris; semua yang dibaca orang di produk berbahasa Indonesia; URL Inggris tetapi sepadan dengan judul layar). Dokumen agent (`AGENTS.md` bagian 1, `.ai/rules`, `memory/PRD.md`, `CLAUDE.md`) berbahasa Indonesia. Tanggal, waktu, dan angka untuk orang ditulis di satu tempat (`.ai/rules/js.md`, "Tanggal, waktu, dan angka").
-
-## 1. Urutan membaca: bagaimana aturan sampai ke Anda
-
-Baca dalam urutan ini, setiap tugas, setiap agent. Tiap langkah menyebut apa yang diambil; langkah tidak dilewati karena tugasnya tampak kecil, dan berkas yang hilang atau tak terbaca disebut di laporan, tidak dilewati diam-diam.
-
-| Langkah | Baca | Yang diambil |
+| Step | Read | What you take from it |
 | --- | --- | --- |
-| 1 | berkas ini | prinsip, alur kerja (bagian 3), dan letak semua hal lain (bagian 2) |
-| 2 | `memory/PRD.md` | apa yang ada, apa yang diputuskan, apa yang terbuka, apa berikutnya, tanpa membaca seluruh kode |
-| 3 | permintaan, lalu jalurnya | fitur atau perubahan perilaku, kontrak, skema, atau keamanan mendapat brief (bagian 3, langkah 0, `docs/briefs/TEMPLATE.md`); yang kecil menyebut `Brief: none: <alasan>` |
-| 4 | `.ai/rules/index.md`, lalu setiap berkas aturan yang glob-nya cocok dengan jalur yang akan disentuh, lalu `grep -rin '<kata kunci>' .ai/rules` | konvensi dan aturan bisnis proyek, per jalur (Boost juga menegakkannya) |
-| 5 | skill di bagian 5 yang berlaku, masing-masing dari `SKILL.md`-nya | panduan rinci: Laravel dan test untuk PHP, Inertia/Wayfinder/Tailwind untuk layar, antislop untuk layar, teks, dan komentar |
-| 6 | `CLAUDE.md` (tabel "Arsitektur singkat") | bagian kode mana yang mengerjakan fitur yang akan disentuh |
-| 7 | kodenya: berkas sejenis dulu, lalu yang akan diubah | pola yang diikuti; cari implementasi yang sudah ada sebelum menulis yang baru |
+| 1 | this file | the principles, the workflow (section 3), and where everything else lives (section 2) |
+| 2 | `memory/PRD.md` | what exists, what was decided, what is open, what is next |
+| 3 | the request, then the track | a feature or a change to behavior, contract, schema, or security gets a brief (`docs/briefs/TEMPLATE.md`); anything small says `Brief: none: <reason>` |
+| 4 | `.ai/rules/index.md`, then every rule file whose paths match what you will touch | the project's conventions and rules, scoped by path |
+| 5 | the skills of section 5 that apply, each read from its `SKILL.md` | deep, rule-by-rule guidance for a kind of work |
+| 6 | the documents in `docs/` that answer your question | how a thing is meant to behave, before you read or change the code that does it |
+| 7 | the code: sibling files first, then the thing itself | the pattern to follow; search for an existing implementation before writing a new one |
 
-Langkah 3 sampai 5 berakhir di brief: berkas aturan dan skill yang dibaca disebut di sana sebelum suntingan pertama, dan daftar periksanya merujuk balik ke sana. **Bukti membaca** adalah brief (atau, untuk `Brief: none`, daftar periksa yang sama dijawab di laporan): satu butir dicentang hanya setelah berkas yang dirujuknya dibaca.
+Steps 3 to 5 end in the brief: the rule files and skills you read are named there before the first edit, and its checklist points back to them. **Proof of reading** is the brief (or, for `Brief: none`, the same checklist answered in the report).
 
-## 2. Dokumen mana menjawab pertanyaan apa
+## 2. Which document answers which question
 
-| Pertanyaan | Dokumen |
+| Question | Document |
 | --- | --- |
-| Bagaimana menulis kode Laravel yang baik (praktik umum)? | blok Boost di bawah + skill (bagian 5) |
-| Bagaimana kode ditulis di proyek **ini** (standar mutu, konvensi)? | `.ai/rules/general.md`, `.ai/rules/php.md`, `.ai/rules/database.md`, `.ai/rules/tests.md` |
-| Apa aturan bisnis dan proses (audit log, integritas data)? | `.ai/rules/audit-log.md`, `.ai/rules/general.md` |
-| Bagaimana bekerja di sini (alur kerja, git, otonomi, pengecualian)? | berkas ini, Bagian 1 |
-| Bagaimana memulai fitur atau perubahan perilaku, dan apa yang harus benar sebelum disebut selesai? | `docs/briefs/TEMPLATE.md` |
-| Bagaimana UI dibangun (komponen, token, layar, pemeriksaan frontend)? | `.ai/rules/js.md` |
-| Bagian kode mana mengerjakan apa, cara menjalankan, status alur berkas? | `CLAUDE.md` |
-| Apa yang ada sekarang, apa yang diputuskan, apa yang terbuka, apa berikutnya? | `memory/PRD.md` |
+| How do I work here (workflow, git, autonomy)? | this file |
+| How is code written here (quality, tests, dependencies)? | `.ai/rules/` (listed in `.ai/rules/index.md`) |
+| How do I start a feature, and what must be true before I call it done? | `docs/briefs/TEMPLATE.md` |
+| What exists now, what was decided, what is open, what is next? | `memory/PRD.md` |
+| How does the gate work, and how do I change its settings? | `devcore.conf` and `scripts/verify.steps` |
+| Which part of the code does what, and how do I run the app? | `CLAUDE.md` (table "Arsitektur singkat") |
 
-Tiap fakta tinggal di tepat satu dokumen; tautkan, jangan menyalin. Jangan membuat berkas pelacak atau memori lain (`BACKLOG.md`, `memory.md`, `state.md`, `notes.md`, ...); satu-satunya pengecualian sementara adalah brief di `docs/briefs/`, yang dihapus saat pekerjaannya selesai. Gagasan dan tindak lanjut masuk ke "Pertanyaan terbuka" atau "Langkah berikutnya" di `memory/PRD.md`, atau ke issue GitHub.
+Each fact lives in exactly one document; link instead of copying. Do not create other tracking or memory files (`notes.md`, `state.md`, `backlog.md`, ...); the only temporary exception is a brief in `docs/briefs/`, deleted when its work is finished. Ideas and follow-ups go to "Open questions" or "Next steps" in `memory/PRD.md`, or to the issue tracker.
 
-## 3. Alur kerja per tugas
+## 3. Per-task workflow
 
-0. **Brief dulu (fitur dan setiap perubahan perilaku, kontrak, skema, atau keamanan).** Salin `docs/briefs/TEMPLATE.md` ke `docs/briefs/NNNN-judul-singkat.md` (nomor bebas berikutnya), isi tujuan, kriteria penerimaan, di luar cakupan, dan asumsi, lalu usulkan ke pemilik. Revisi sampai pemilik berkata "setuju"; baru kemudian isi `Status: approved` dan `Approved: <tanggal>` dan mulai bekerja. Daftar periksa brief adalah satu-satunya daftar aturan yang harus terpenuhi: tidak ada yang disebut selesai selama masih ada butir `[ ]`; butir yang tidak berlaku dicentang dengan `N/A: <alasan>`. Bila semua tercentang, hapus brief di commit penutup (riwayat tetap di git; keputusan yang bertahan menjadi satu baris di `memory/PRD.md`). Perbaikan kecil, perubahan teks, atau perubahan dokumen saja tidak butuh berkas brief: pesan commit memuat `Brief: none: <alasan>` dan laporan menjawab daftar periksa yang sama. Saat diam, `docs/briefs/` hanya berisi `TEMPLATE.md`; berkas lain di sana adalah pekerjaan yang belum selesai. `.githooks/commit-msg` (`scripts/check-brief.sh`) menolak commit kode tanpa brief yang disetujui atau `Brief: none:`, dan menolak menutup brief yang masih punya butir `[ ]`; `BriefGateTest` dan `BriefsTest` menjaga keduanya. Hook yang sama menjalankan `scripts/check-weakened.sh` (dan `scripts/verify.sh` menjalankannya lagi atas commit yang akan di-push), yang menolak commit yang melonggarkan pemeriksaan kecuali memuat `Weakened: <alasan>` (`WeakenedCheckGateTest`). Aturan ini mengikat setiap agent sama.
-1. **Pahami.** Perjelas permintaan yang ambigu atau berdampak besar lebih dulu. Rujukan luar (tangkapan layar, proyek lain, kode yang ditempel) berlaku hanya untuk aspek yang disebut pemilik: sebutkan apa yang diadopsi, sisanya tetap mengikuti aturan proyek ini, dan tanyakan bila rujukan bertentangan dengan aturan tertulis.
-2. **Muat konteks dan skill.** Jalankan urutan membaca bagian 1 dan sebut skill bagian 5 yang dipakai (atau "tidak ada" dan alasannya) sebelum suntingan pertama.
-3. **Kerjakan** mengikuti berkas aturan dan skill yang cocok. Setelah dua atau tiga percobaan gagal dengan pendekatan yang sama, berhenti: sebut dugaan penyebabnya dan ganti pendekatan atau tanyakan, jangan mengulang atau mencari jalan memutari pemeriksaan.
-4. **Verifikasi.** Jawab sembilan pertanyaan "Standar produksi" di `.ai/rules/php.md` di laporan. Lalu jalankan yang diminta "Sebelum selesai" di tiap berkas aturan yang cocok (test tersempit dulu, lalu semuanya). Selesai berarti terverifikasi, bukan "tampak benar": `scripts/verify.sh` (pelemahan dan baris Brief, audit dependency, `.env` vs `.env.example`, Pint, PHPStan, semua test, `npm run check`, `npm run duplicates`, TypeScript, build) adalah seluruh gerbang, berjalan pada setiap `git push` lewat `.githooks/pre-push`, dan `composer verify` menjalankannya manual (`composer setup` memasang hook dengan `git config core.hooksPath .githooks`). Skrip itu satu-satunya definisi gerbang: CI juga menjalankannya, sehingga push dengan `--no-verify` tertangkap sesudahnya. Untuk pekerjaan UI, teks, dan komentar, Delivery Gate antislop (bagian 5) bagian dari langkah ini. Sebut dalam satu baris orang yang akan menemui perubahan ini dan saat ia paling mungkin bingung atau tertahan, dan apa yang dilakukan untuk itu (prinsip di atas).
-4a. **Cocokkan dokumen dan kode (setiap test, audit, dan perubahan, tanpa diminta).** Tugas belum selesai sebelum dokumen yang menggambarkan apa yang disentuh atau diperiksa dibandingkan dengan kodenya, dua arah: baca klaim dokumen, baca kode yang mengerjakannya, dan perbaiki yang salah di commit yang sama (klaim yang tidak ditepati kode, atau perilaku yang tidak disebut dokumen mana pun). Cakupannya `AGENTS.md`, `CLAUDE.md`, `memory/PRD.md`, dan `.ai/rules/*`. `tests/Feature/DocsMatchCodeTest.php` mengerjakan separuh mekanisnya pada setiap run (setiap berkas, kelas, perintah, dan variabel yang disebut dokumen ada); membandingkan apa yang dikatakan dengan apa yang dilakukan adalah tugas Anda.
-5. **Catat.** Perbarui `memory/PRD.md` bila yang ada berubah (Kondisi sekarang), keputusan dibuat, atau pertanyaan dibuka/ditutup; perbarui tabel arsitektur `CLAUDE.md` bila peta kode berubah. Tulis ulang di tempat; kepala berkas PRD memuat aturannya.
-6. **Commit dan push** (bagian 4).
-7. **Laporan:** baris pertama `Brief: NNNN-judul-singkat (disetujui <tanggal>)` atau `Brief: none: <alasan>`, lalu baris `Dokumen ↔ kode:` (dokumen mana dibandingkan dengan kode mana, apa yang basi dan diperbaiki, atau tidak ada), lalu apa yang berubah, apa yang diverifikasi, apa yang dilewati dan mengapa, dan langkah berikutnya. Jangan pernah meninggalkan tiruan atau TODO diam-diam.
+0. **Brief first (features and any change to behavior, contract, schema, or security).** Copy `docs/briefs/TEMPLATE.md` to `docs/briefs/NNNN-short-title.md` (next free number), fill in the goal, acceptance criteria, out of scope, and assumptions, and propose it to the owner. Revise it until the owner approves in chat; only then set `Status: approved` and `Approved: <date>` and start the work. The brief's checklist is the single list of rules that must hold: nothing is called done while a line is `[ ]`; a line that does not apply is ticked with `N/A: <reason>`. When everything is ticked, delete the brief in the closing commit (history stays in git; a lasting decision becomes one line in `memory/PRD.md`). A small fix, a text change, or a documents-only change needs no brief file: the commit message carries `Brief: none: <reason>` and the report answers the same checklist. `docs/briefs/` holds only `TEMPLATE.md` at rest; any other file there is unfinished work. The hooks enforce this: `.githooks/commit-msg` (`scripts/check-brief.sh`) refuses a code commit without an approved brief or `Brief: none:`, and refuses to close a brief that still has `[ ]` lines; `scripts/check-weakened.sh` refuses a commit that makes a check weaker (a skipped test, a suppression, a deleted test, a test file that loses cases) unless it carries `weakening-allowed: <reason>` on the line or `Weakened: <reason>` in the message. These rules bind every agent the same way.
+1. **Understand.** Clarify ambiguous or high-impact requests first. External references (screenshots, other projects, pasted code) apply only to the aspects the owner named: say what you adopt, keep the rest on this project's rules, and ask when a reference conflicts with a written rule.
+2. **Load context and skills.** Do the reading order of section 1 and name the skills of section 5 you will use (or "none" and why) before the first edit.
+3. **Implement** following the matched rule files and skills. After two or three failed attempts with the same approach, stop: say what you think the cause is and change the approach or ask, never repeat it or find a way around a check.
+4. **Verify.** Go through the questions of "Production standard" in `.ai/rules/quality.md` and answer them in the report. Run what the matched rule files say (narrowest tests first, then everything). Done means verified, not "looks right": `scripts/verify.sh` is the whole gate. It runs the lines of `scripts/verify.steps`, it runs on every push through `.githooks/pre-push`, and CI runs it too, so a push made with `--no-verify` is caught afterwards. Name in one line the person who will meet this change and the moment they are most likely to be confused or blocked, and say what was done about it.
+4a. **Cross-check documents and code (every change, without being asked).** A task is not done until the documents that describe what you touched were compared with the code, in both directions: read what each document claims, read the code that does it, and fix whichever is wrong in the same commit. A stale document is a defect. `tests/Feature/DocsMatchCodeTest.php` does the mechanical half on every run (every file, class, command, and variable that a document names exists); comparing what is said with what is done is yours.
+5. **Record.** Update `memory/PRD.md` when what exists changes, a decision is made, or a question opens or closes. Rewrite in place; the file header has the rules.
+6. **Commit and push** (section 4).
+7. **Report:** first line `Brief: NNNN-short-title (approved <date>)` or `Brief: none: <reason>`, then a `Docs <-> code:` line (which documents were compared with which code, what was stale and fixed, or that nothing was), then what changed, what was verified, what was skipped and why, and next steps. Never leave mocks or TODOs silently.
 
-## 4. Git dan otonomi
+## 4. Git and autonomy
 
-- Bekerja hanya di `v3.0.0-alpha`. Bila tugas selesai dan terverifikasi, commit dan push ke `origin v3.0.0-alpha` tanpa menunggu persetujuan: commit kecil yang logis, pesannya menjelaskan alasannya. Jangan commit atau push ke `main`, jangan force-push, jangan commit `.env`, kredensial, atau rahasia yang dibuat. Commit yang menyentuh kode butuh brief yang disetujui atau baris `Brief: none: <alasan>` (langkah 0); `composer setup` memasang hook, dan `git commit --no-verify` tidak pernah dipakai.
-- Ini proyek lokal yang baru: jangan meminta izin untuk tindakan lokal rutin (test, migrasi di database dev, memperbaiki temuan sendiri). Minta izin hanya untuk tindakan merusak atau tak bisa dibatalkan di luar repositori (termasuk mereset database: `CLAUDE.md`), dan untuk keputusan pemilik: kebijakan penamaan, perilaku produk, status berkas baru, dan dependency yang tidak jelas dibutuhkan tugas (sebut dependency yang ditambahkan di laporan dan di `memory/PRD.md`).
-- Jangan pernah mengetik kredensial Codex milik pemilik; login uji memakai akun yang diberikan pemilik untuk itu.
+- Work only on `v3.0.0-alpha`; never commit or push to `main`. Small logical commits whose message explains the why. Never force-push, never commit `.env`, credentials, or generated secrets, and never use `--no-verify`.
+- A commit that touches code needs an approved brief or a `Brief: none: <reason>` line (step 0). Install the hooks once per clone with `git config core.hooksPath .githooks`; `scripts/verify.sh` refuses to run without them.
+- After a verified task, commit; push only when the owner says so.
+- Never reset the database (schema changes are new migrations) and never type the owner's own Codex credentials: sign in only with accounts the owner gives for testing.
+- Do not ask permission for routine local actions (tests, local migrations, fixing findings you discover). Ask only for destructive or irreversible actions outside the repository, and for decisions that are the owner's: naming policy, product behavior, and dependencies the task does not clearly require (state any dependency you add in the report and in `memory/PRD.md`).
 
-## 5. Skill dan alat: kapan memakai yang mana
+## 5. Skills and tools: when to use which
 
-Bagian ini satu-satunya tempat yang menyebut kapan sebuah skill dipakai; berkas aturan atau deskripsi skill tidak mengulangnya. Skill datang dari dua sumber dan keduanya diterbitkan ke `.claude/skills/` (dibuat ulang, tidak di-commit): milik Laravel Boost (`boost.json`) dan skill antislop vendored di `.ai/skills/` (di-commit). Setelah clone baru jalankan `php artisan boost:update` untuk membuat ulang folder skill dan blok Boost. Agent yang tidak punya folder skill sendiri (semua kecuali Claude Code, yang terdaftar di `boost.json`) membaca skill langsung dari `.ai/skills/<nama>/SKILL.md`, atau untuk skill Boost dari foldernya di `vendor/laravel/boost/.ai/`, sebelum suntingan pertama jenis pekerjaan itu. `tests/Feature/SkillsRegistryTest.php` gagal bila folder skill di `.ai/skills/` tidak disebut di bagian ini.
+This section is the only place that says when a skill is used; a rule file or a skill description never repeats it. Skills live in `.ai/skills/<name>/SKILL.md`. An agent that publishes skills to a folder of its own (for example `.claude/skills/`) does so from there; an agent without one reads the `SKILL.md` before the first edit of that kind of work. `scripts/check-registry.sh` fails when a skill folder is not named here, has no `SKILL.md`, or no longer matches its `MANIFEST.sha256` (a vendored skill is replaced by a newer release, never edited by hand).
 
-| Skill | Status di sini | Pakai bila | Jangan pakai bila |
-| --- | --- | --- | --- |
-| `laravel-best-practices` | **Aktif, setiap tugas PHP** | menulis, mengubah, atau meninjau PHP: controller, model, migrasi, request, policy, job, command, service, query, config. Petakan tiap urusan ke berkas aturannya di indeks skill dan baca sebelum menyunting. | tugas tidak menyentuh PHP (dokumen saja) |
-| `testing-best-practices` | **Aktif** | menulis, memperbaiki, atau meninjau test apa pun | tidak ada test yang ditambah atau diubah |
-| `inertia-react-development` | **Aktif untuk layar** | halaman, form, navigasi, prop tertunda, `useForm`, `router` di `resources/js` | pekerjaan backend saja |
-| `wayfinder-development` | **Aktif untuk layar** | layar memanggil route atau aksi controller (`@/actions`, `@/routes`) | tidak ada pemanggilan route dari layar |
-| `tailwindcss-development` | **Aktif untuk UI** | menulis atau memperbaiki kelas Tailwind di `resources/js` | pekerjaan backend saja |
-| `infer-conventions` | Manual saja (`/infer-conventions`) | pemilik meminta, untuk mencatat konvensi nyata ke `.ai/rules` (butuh 3 contoh konsisten atau lebih) | tanpa permintaan |
+### antislop: the filter for screens, text, people, mobile layout, and code comments
 
-<!-- antislop:start -->
-### antislop: penyaring untuk UI, teks, orang, tata letak ponsel, dan komentar kode
-
-Divendor tangan dari <https://github.com/miqdadbadjuber/anti-slop> (MIT; rilis di `.ai/skills/antislop/VERSION`, lisensi di sebelahnya) ke `.ai/skills/`, sama persis dengan yang dipakai codex. Pemasang, server kontras MCP, dan pintu plugin-nya tidak dipakai. Jangan menyunting folder ini dengan tangan (`SkillsRegistryTest` memeriksa setiap berkas terhadap `MANIFEST.sha256`, dan formatter melewatinya): perbarui dengan menggantinya dengan rilis yang lebih baru, lalu catat versi dan checksum barunya. Intinya (`antislop`, aturan R-01 sampai R-38, tiga tingkat, Delivery Gate) dimuat bersama skill tugasnya.
-
-| Skill | Pakai bila | Jangan pakai bila |
+| Skill | Use it when | Do not use it when |
 | --- | --- | --- |
-| `antislop` (inti) | bersama skill mana pun di bawah, sebelum suntingan pertama jenis pekerjaan itu | tugas tidak menyentuh urusan di bawah (logika backend, test, migrasi, dokumen tentang kode) |
-| `antislop-ui` | membangun atau menyunting layar atau komponen: warna, tata letak, komponen, dekorasi, gerak, dan layar aplikasi (dashboard, tabel, keadaan kosong, status) | pekerjaan backend saja |
-| `antislop-copywriting` | menulis atau menyunting teks yang dibaca orang: label dan pesan UI, email, halaman error, dan prosa dokumen | komentar kode (pakai `antislop-code`) |
-| `antislop-human` | pekerjaan UI yang harus tetap bisa dipakai semua orang: kontras (jalankan `.ai/skills/antislop-human/contrast-check.py`, jangan mengklaim lolos tanpa menjalankannya), keyboard, fokus, keadaan | tidak ada UI yang disentuh |
-| `antislop-layoutmobile` | tata letak yang harus mengalir ulang antara lebar ponsel dan desktop | tidak ada perubahan tata letak |
-| `antislop-code` | menulis atau menyunting komentar kode (PHP, TypeScript) | tidak ada komentar yang ditulis atau disentuh |
+| `antislop` (core) | together with any skill below, before the first edit of that kind of work | the task touches none of the concerns below |
+| `antislop-ui` | building or editing a screen or component: color, layout, components, decoration, motion, and app screens | backend-only work |
+| `antislop-copywriting` | writing or editing text a person reads: labels, messages, emails, error pages, and the prose of documents | code comments (use `antislop-code`) |
+| `antislop-human` | UI work that must stay usable by everyone: contrast (run `.ai/skills/antislop-human/contrast-check.py`, never assert a pass), keyboard, focus, states | no UI is touched |
+| `antislop-layoutmobile` | a layout that has to reflow between phone and desktop widths | no layout change |
+| `antislop-code` | writing or editing code comments | no comment is written or touched |
 
-- **Mode:** pemilik memilih DURING (aturan diterapkan sambil menulis) untuk proyek ini, sama dengan codex. Umumkan `antislop active: during (session override).` sekali per sesi sebelum suntingan pertama dan jangan menanyakan mode; AFTER (audit dengan temuan bernomor di `anti-slop/audit-NNN-YYYY-MM-DD.md`) hanya bila pemilik meminta audit pekerjaan yang sudah ada.
-- **Arah dan pilihan tetap pemilik** (tanpa `DESIGN.md`, set ikon, tema, kepadatan) ditulis sekali di `.ai/rules/js.md`, bagian "antislop: arah dan pilihan pemilik". Aturan yang bertabrakan dengannya disebut ke pemilik, tidak diikuti atau dilanggar diam-diam (R-37).
-- **Gerbang di laporan:** pekerjaan UI, teks, dan komentar diakhiri Delivery Gate antislop berupa baris PASS/FAIL dengan bukti, setelah baris `Dokumen ↔ kode:`. Yang sudah ditegakkan mesin (`CommentHygieneTest`, `npm run check`, `ArchitectureTest`) dikutip sebagai bukti, tidak dijalankan ulang manual.
-<!-- antislop:end -->
+- **Mode:** antislop is used DURING the work (apply the rules while writing). Announce `antislop active: during (session override).` once per session before the first edit. A full audit of existing work (numbered findings in `anti-slop/`) runs only when the owner asks.
+- **Direction.** antislop filters slop and needs a direction to filter against: write the project's standing design choices once in the UI rule file and name any rule that collides with them to the owner, never follow or override it silently.
+- **Gate in the report:** work on screens, text, and comments ends with the antislop Delivery Gate as PASS/FAIL lines with evidence, after the `Docs <-> code:` line.
 
-Alat MCP Boost, bila tersambung, lebih diutamakan daripada tebakan shell: `search-docs` sebelum perubahan yang bergantung pada API atau perilaku versi Laravel/Inertia/Pest; `database-schema` sebelum menulis migrasi atau query; `database-query` untuk pemeriksaan database baca-saja; `last-error` dan `read-log-entries` untuk mendiagnosis kegagalan; `browser-logs` untuk galat di peramban.
+### Stack: Laravel
 
-## 6. Pengecualian dari bawaan Boost
+The Laravel rules are in `.ai/rules/laravel.md`. Laravel Boost (`php artisan boost:install`) generates its own guideline block and the `laravel-best-practices`, `testing-best-practices`, and `tailwindcss-development` skills for the agents it supports; they are generated, so they are not committed here. An agent that has no skill folder reads them from the Boost package. Its block is at the end of this file under its own heading (`php artisan boost:update` regenerates it; never edit it by hand).
 
-- Boost meminta pemilik menjalankan seluruh test: di sini Anda menjalankannya sendiri (`.ai/rules/tests.md`).
-- Boost meminta membuat berkas dokumentasi hanya bila diminta: memperbarui `AGENTS.md`, `CLAUDE.md`, `.ai/rules/*`, dan `memory/PRD.md` adalah bagian dari pekerjaan dan sudah diminta pemilik. Membuat berkas dokumentasi lain tetap butuh permintaan.
-- Boost melarang folder dasar baru tanpa persetujuan: `.ai/`, `.githooks/`, `memory/`, `docs/briefs/`, dan `scripts/` sudah disetujui; yang lain belum.
-- Boost menyebut Laravel Cloud untuk deploy: abaikan. Pemilik men-deploy ke VPS sendiri; skill dan CLI Laravel Cloud tidak dipakai.
-- Tetap berlaku dari Boost: tanpa perubahan dependency, dan tanpa membuat model di tinker, tanpa persetujuan.
+| Skill | Use it when | Do not use it when |
+| --- | --- | --- |
+| `laravel-best-practices` | writing, changing, or reviewing PHP: controllers, models, migrations, requests, policies, jobs, commands, services, queries, config | the task touches no PHP |
+| `testing-best-practices` | writing, fixing, or reviewing any test | no test is added or changed |
 
-## 7. Yang tidak bisa ditawar (walau tidak membaca yang lain)
+### Stack: React and TypeScript
 
-Satu baris masing-masing; aturan dan alasannya ada di berkas yang disebut, bukan di sini.
+The front-end rules are in `.ai/rules/ui.md` (the standard ones) and `.ai/rules/js.md` (the project's own, taken from react-starter). `scripts/check-standards.mjs` holds what a machine can check. The gate runs `npx jscpd` (a block of 20 lines or more copied is refused; set in `.jscpd.json`), `npm run check` (format, lint, Vitest), and `npm run types:check`.
 
-- Setiap perubahan data bisnis, kejadian autentikasi, ekspor, dan baca data sensitif meninggalkan jejak audit: `.ai/rules/audit-log.md`.
-- Jangan pernah menyunting migrasi yang sudah dijalankan di mana pun, dan jangan mereset database: `.ai/rules/database.md`.
-- Jangan menimpa berkas yang belum dibaca utuh; pakai suntingan terarah.
-- Jangan menjalankan `vp check --fix` pada `resources/js`: `.ai/rules/js.md`.
-- Setiap perubahan memenuhi standar produksi dan diperiksa test: `.ai/rules/php.md`.
-- Apa yang ditegakkan server tentang karakter yang diketik, ditegakkan juga oleh isian: `.ai/rules/js.md`.
-- Dokumen dan kode dicocokkan di setiap test, audit, dan perubahan (langkah 4a); dokumen basi adalah cacat yang diperbaiki di commit yang sama.
-- Tanpa rahasia di kode, tiruan diam-diam, gerbang yang dilewati, atau galat yang ditelan (`.ai/rules/php.md`); jangan pernah `git push --no-verify`, dan jangan merangkai push setelah pemeriksaan yang kegagalannya tidak menghentikan rangkaian.
+
+### Skills of the project
+
+Add a row here for every skill the project adds (a folder in `.ai/skills/`), with when to use it and when not. A skill added by the project is registered and checked like the ones above.
+
+Skills that Laravel Boost publishes for this project's stack (generated into `.claude/skills/` by `php artisan boost:update`, listed in `boost.json`, not committed):
+
+| Skill | Use it when | Do not use it when |
+| --- | --- | --- |
+| `inertia-react-development` | pages, forms, navigation, deferred props, `useForm`, `router` in `resources/js` | backend-only work |
+| `wayfinder-development` | a screen calls a route or controller action (`@/actions`, `@/routes`) | no route is called from a screen |
+| `tailwindcss-development` | writing or fixing Tailwind classes in `resources/js` | backend-only work |
+| `infer-conventions` | the owner asks (`/infer-conventions`), to record real conventions into `.ai/rules` (needs 3 or more consistent examples) | not asked |
+
+## 6. Rules: the standard ones and the project's own
+
+devcore is the standard way of working. The standard rules are in `.ai/rules/` (`quality.md` and `testing.md`, plus one file per stack layer), the standard skills in `.ai/skills/`, and the standard gates in `.githooks/` and `scripts/`. They are followed as written.
+
+- **When the project already had something similar** (its own contribution guide, review checklist, or lint setup), devcore replaces it: keep one way, the standard one, and move only what is genuinely different into a project rule.
+- **A rule that belongs only to this project** (a business rule, a security policy, a naming convention, a compliance duty) is added after devcore is fully installed and its gate is green. It is added the same way as a standard rule, and from then on it is applied the same way:
+  1. one file in `.ai/rules/<name>.md`, with the paths it covers in its header;
+  2. one row for it in `.ai/rules/index.md` (the registry check fails otherwise);
+  3. when it can be checked, one line in the brief checklist that points to it, so a brief cannot be closed without answering it;
+  4. when it can be checked by a machine, a check in `scripts/verify.steps` or a test, so it is enforced and not only written;
+  5. any exception to it is listed with a reason and a date, never silent.
+- When a project rule and a standard rule disagree, name the conflict to the owner; do not choose silently. The owner's answer is written in the project rule, which then says it overrides the standard one and why.
+
+### Aturan khas SIPEBRI (bagian proyek, bahasa Indonesia)
+
+SIPEBRI v3 adalah aplikasi kredit BPR Bangunarta (Laravel 13 + Inertia v3 + React 19 + Wayfinder); fungsional SIPEBRI lama ditulis ulang di sini, pengguna dan nasabah datang dari Codex, dan setiap perubahan data bisnis harus bisa diaudit (standar OJK). Peta kode, status alur berkas, dan cara menjalankan ada di `CLAUDE.md`; status dan keputusan di `memory/PRD.md`. Aturan khas proyek (semuanya terdaftar di `.ai/rules/index.md`):
+
+| Aturan | Berkas |
+| --- | --- |
+| bahasa (kode Inggris, layar Indonesia), integritas relasi | `.ai/rules/general.md` |
+| audit log wajib (append-only, rantai hash) | `.ai/rules/audit-log.md` |
+| migrasi dan skema | `.ai/rules/database.md` |
+| tambahan khas proyek atas standar PHP | `.ai/rules/php.md` |
+| tambahan khas proyek atas standar test | `.ai/rules/tests.md` |
+| Compact UI, komponen bersama, tabel, isian | `.ai/rules/js.md` |
+
+**Pengecualian dari bawaan Boost** (Bagian 2 di bawah): Boost meminta pemilik menjalankan seluruh test, di sini agent menjalankannya sendiri (`scripts/verify.sh`); Boost melarang berkas dokumentasi baru, di sini memperbarui `AGENTS.md`, `CLAUDE.md`, `.ai/rules/*`, dan `memory/PRD.md` adalah bagian dari pekerjaan, berkas dokumentasi lain tetap butuh permintaan; folder dasar yang sudah disetujui: `.ai/`, `.githooks/`, `memory/`, `docs/briefs/`, `scripts/`; deploy ke VPS pemilik, jadi skill dan CLI Laravel Cloud tidak dipakai; tetap berlaku dari Boost: tanpa perubahan dependency dan tanpa membuat model di tinker tanpa persetujuan.
+
+**Tidak bisa ditawar (tambahan proyek):** setiap perubahan data bisnis, kejadian autentikasi, ekspor, dan baca data sensitif meninggalkan jejak audit (`.ai/rules/audit-log.md`); jangan mengubah migrasi yang sudah dijalankan dan jangan mereset database (`.ai/rules/database.md`); jangan menjalankan `vp check --fix` pada `resources/js` (`.ai/rules/js.md`); apa yang ditegakkan server tentang karakter yang diketik, ditegakkan juga oleh isian (`.ai/rules/js.md`); tidak ada status berkas baru tanpa dibahas (`CLAUDE.md`).
+
+## 7. Non-negotiables
+
+One line each; the rule itself and its reasons live in the file named, not here.
+
+- Never use `--no-verify`, never skip, delete, or loosen a check to get green: fix the cause (`.ai/rules/quality.md`).
+- Never overwrite an existing file you have not read in full; use targeted edits.
+- Documents and code are compared with each other in every change (step 4a); a stale document is a defect fixed in the same commit.
+- No hardcoded secrets, silent mocks, bypassed gates, or swallowed errors (`.ai/rules/quality.md`).
+- Every change meets the production standard of `.ai/rules/quality.md`, and what can be tested is tested (`.ai/rules/testing.md`).
 
 # Bagian 2: Pedoman Laravel Boost (dibuat otomatis; praktik menulis kode; jangan diubah)
 

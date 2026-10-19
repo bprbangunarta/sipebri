@@ -7,10 +7,9 @@
     "build:ssr": "vp build && vp build --ssr",
     "dev": "vp dev",
     "standards": "node scripts/check-standards.mjs",
-    "duplicates": "jscpd",
     "test": "vp test run",
     "test:watch": "vp test",
-    "check": "vp check && npm run standards && npm run test",
+    "check": "vp check && npm run test",
     "format": "vp fmt",
     "types:check": "tsc --noEmit"
   },

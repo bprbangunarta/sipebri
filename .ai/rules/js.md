@@ -6,24 +6,13 @@ paths:
     - 'scripts/**'
 ---
 
-# Antarmuka (React 19 + Inertia v3 + Tailwind v4)
+# Antarmuka: aturan khas SIPEBRI (React 19 + Inertia v3 + Tailwind v4)
 
-Aturan UI dan komponen diambil dari react-starter (`docs/STANDARDS.md`, 2026-10-19) dan disesuaikan dengan Inertia. Aturan bertanda **[mesin]** diperiksa `npm run standards` (`scripts/check-standards.mjs`) atau `ArchitectureTest`; sisanya diperiksa saat tinjauan. `npm run check` menjalankan `vp check` (format + lint oxlint bertipe), `npm run standards`, dan Vitest.
+Aturan proyek di atas standar `.ai/rules/ui.md` (yang standar tetap berlaku; arah desain dan pilihan pemilik ada di bagian "The project's design choices" di sana). Diambil dari react-starter (`docs/STANDARDS.md`, 2026-10-19) dan disesuaikan dengan Inertia. **Pengecualian dari `ui.md`:** bagian "Talking to the server" di sana (satu modul `lib/http.ts`) tidak berlaku; SIPEBRI memakai Inertia dan Wayfinder (bagian "Bicara dengan server" di bawah). Aturan bertanda **[mesin]** diperiksa `npm run standards` (`scripts/check-standards.mjs`) atau `ArchitectureTest`; sisanya diperiksa saat tinjauan. `npm run check` menjalankan `vp check` (format + lint oxlint bertipe), `npm run standards`, dan Vitest.
 
 ## Mengubah UI
 
 Ubah komponen dengan memperbaiki komponen bersama di `components/ui`, tidak pernah dengan gaya satu kali di halaman; perubahan pola diterapkan konsisten ke semua halaman. **Jangan menjalankan `vp check --fix` pada `resources/js`**: autofix oxlint pernah mengubah perilaku `lib/mask.ts` di codex dan merusak test-nya; pakai `vp check` dan `vp fmt`, perbaiki temuan lint dengan tangan. Acuan hidup semua komponen adalah halaman **`/ui-guideline`** (Super Admin, menu Pengaturan → UI Guideline): tampilan baru harus terlihat sama.
-
-## antislop: arah dan pilihan pemilik
-
-Skill antislop (`AGENTS.md` bagian 5) menyaring "slop" dan butuh arah. Bagian ini arahnya; tidak ada `DESIGN.md`. Sama dengan codex (disetujui pemilik 2026-10-17), diterapkan ke sipebri 2026-10-19; perubahan baris mana pun dibuat di sini.
-
-- **Design Read (R-37):** alat internal staf BPR, padat dan ringkas, tenang: ENERGY 1 / RHYTHM 1 / MOTION 1. Ritme seragam disengaja (tabel, form, dan kartu berulang). Warna dan ukuran hanya dari `resources/css/app.css`, dan `/ui-guideline` menampilkannya.
-- **Ikon (R-04):** `lucide-react` satu-satunya set ikon; tiap ikon dipilih menurut artinya di layar itu; entri submenu memakai titik polos (`dot`).
-- **Tema (R-21):** terang saja, tanpa sakelar (alat kantor siang hari; token dibuat untuk satu tema).
-- **Kepadatan (R-03):** kontrol `h-8` dan sidebar `w-60`, di bawah target sentuh 44 px yang diminta `antislop-layoutmobile`. Penyimpangan yang disengaja demi kepadatan; surveyor memakai ponsel, jadi layar survei diperiksa untuk luapan dan bisa dijangkau jempol, tetapi ukuran kontrol tetap.
-- **Teks (R-02, R-16):** bahasa Indonesia, tanpa tanda pisah panjang (em dash) di teks layar, tanpa kata promosi, tanpa angka atau klaim karangan.
-- **Pengganti yang jujur (R-23, R-38):** halaman yang belum dibangun mengatakannya di halaman dan tidak punya data, tanggal, atau daftar fitur karangan.
 
 ## Bahasa dan nama
 

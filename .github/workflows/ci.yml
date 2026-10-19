@@ -1,9 +1,8 @@
-name: tests
+name: gate
 
 on:
   push:
     branches:
-      - main
       - v3.0.0-alpha
   pull_request:
 
@@ -11,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  ci:
+  gate:
     runs-on: ubuntu-latest
 
     env:
@@ -27,7 +26,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          # Full history: the weakened-check and Brief-line checkers read the pushed commits, not only the last one.
+          # The whole history: the weakened-check and Brief checks read the commits that were sent, not only the last one.
           fetch-depth: 0
 
       - name: Setup PHP
@@ -42,12 +41,15 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Setup Application
+      # Installs the dependencies and the hooks path, creates .env, and builds the assets: whatever `scripts/verify.steps` needs.
+      - name: Setup the application
         run: composer setup
 
-      # The only gate is scripts/verify.sh (`composer ci:check` only calls it): adding a check there adds it here and to the push hook.
-      # The commit range checked is the one pushed, or the one in the pull request.
-      - name: Run CI Checks
-        run: composer ci:check
+      - name: Install the hooks path
+        run: git config core.hooksPath .githooks
+
+      # The only gate is scripts/verify.sh: adding a check to scripts/verify.steps adds it here and in the pre-push hook.
+      - name: Run the gate
+        run: scripts/verify.sh
         env:
           VERIFY_RANGE: ${{ github.event_name == 'pull_request' && format('{0}..{1}', github.event.pull_request.base.sha, github.event.pull_request.head.sha) || format('{0}..{1}', github.event.before, github.sha) }}

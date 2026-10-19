@@ -5,7 +5,23 @@
  * holds only TEMPLATE.md when no work is running.
  */
 
-const BRIEF_HEADINGS = ['## Tujuan', '## Kriteria penerimaan', '## Di luar cakupan', '## Asumsi dan pertanyaan terbuka', '## Daftar periksa'];
+/** The sections of a brief: the template is English (devcore); a brief written from the earlier Indonesian template stays valid until it is closed. */
+const BRIEF_SECTIONS = [
+    ['## Goal', '## Acceptance criteria', '## Out of scope', '## Assumptions and open questions', '## Checklist'],
+    ['## Tujuan', '## Kriteria penerimaan', '## Di luar cakupan', '## Asumsi dan pertanyaan terbuka', '## Daftar periksa'],
+];
+
+/** @return list<string> the headings of the first section set that the text fully holds, else the English set */
+function briefHeadings(string $text): array
+{
+    foreach (BRIEF_SECTIONS as $headings) {
+        if (array_filter($headings, fn (string $heading): bool => ! str_contains($text, $heading)) === []) {
+            return $headings;
+        }
+    }
+
+    return BRIEF_SECTIONS[0];
+}
 
 /** @return list<string> */
 function activeBriefs(): array
@@ -18,7 +34,7 @@ it('keeps a brief template with every required section and one checklist', funct
 
     expect($template)->toContain("\nStatus: draft\n");
 
-    foreach (BRIEF_HEADINGS as $heading) {
+    foreach (BRIEF_SECTIONS[0] as $heading) {
         expect($template)->toContain($heading);
     }
 
@@ -44,7 +60,7 @@ it('keeps every running brief complete: name, status, approval date, required se
             $problems[] = "{$name}: approved brief without an 'Approved: YYYY-MM-DD' line";
         }
 
-        foreach (BRIEF_HEADINGS as $heading) {
+        foreach (briefHeadings($text) as $heading) {
             if (! str_contains($text, $heading)) {
                 $problems[] = "{$name}: section '{$heading}' is missing";
             }

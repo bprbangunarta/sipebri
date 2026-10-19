@@ -31,25 +31,33 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Login dan nasabah lewat Codex** (`App\Auth\CodexAuthClient`, `App\Services\CodexClient`); tanpa login lokal. MFA opsional (TOTP/OTP email).
 - **Audit log:** append-only, rantai hash HMAC, `audit:verify` harian, halaman Audit Log (filter, detail, ekspor CSV, verifikasi).
 - **Bahasa:** seluruh UI sudah Indonesia; kode, test, dan commit Inggris (`.ai/rules/general.md`).
-- **Gerbang mutu:** `scripts/verify.sh` satu-satunya definisi gerbang (pelemahan + baris Brief, audit dependency, `.env` vs contoh, Pint,
-  PHPStan, Pest, `npm run check`, jscpd, TypeScript, build); dijalankan hook `pre-push`, `composer verify`, dan CI. Hook `commit-msg` menegakkan
-  brief (`docs/briefs/TEMPLATE.md`) dan menolak pemeriksaan yang dilemahkan. Hook dipasang dengan `composer setup` atau
+- **Gerbang mutu (devcore):** `scripts/verify.sh` menjalankan baris-baris `scripts/verify.steps` (registri aturan dan skill, selftest gerbang,
+  audit dependency PHP dan JS, `env:check`, Pint, PHPStan, build, Pest, standar UI, `npm run check`, jscpd, `tsc`); pengaturannya di
+  `devcore.conf`. Hook `commit-msg` menolak commit kode tanpa brief (`docs/briefs/TEMPLATE.md`) atau baris `Brief: none:`, dan commit yang
+  melemahkan pemeriksaan (termasuk membuang langkah dari `verify.steps`). `pre-push`, `composer verify`, dan CI menjalankan gerbang yang sama.
+  `scripts/selftest.sh` membuktikan gerbang menolak yang harus ditolak. Hook dipasang dengan `composer setup` atau
   `git config core.hooksPath .githooks`.
 - **UI:** Compact UI dari react-starter/codex: komponen `resources/js/components/ui`, token di `resources/css/app.css`, pemeriksa
   `npm run standards` (`scripts/check-standards.mjs`), tes Vitest di samping kodenya, contoh semua komponen di `/ui-guideline` (Super Admin).
-- **Dokumen agent:** `AGENTS.md` bagian 1 (alur kerja), `.ai/rules/*` (aturan per jalur), `.ai/skills/antislop*` (skill vendored),
-  `CLAUDE.md` (peta arsitektur), berkas ini. Tidak ada yang lain.
+- **Dokumen agent:** `AGENTS.md` (panduan devcore + bagian proyek), `.ai/rules/*` (aturan standar dan aturan proyek, terdaftar di `index.md`),
+  `.ai/skills/antislop*` (skill vendored), `CLAUDE.md` (peta arsitektur), berkas ini. Tidak ada yang lain.
 
 ## Keputusan
 
-- **Kerangka kerja agent diambil dari codex, aturan UI dan komponen dari react-starter (user, 2026-10-19).** Diadopsi: alur brief + hook,
-  `verify.sh`, `check-weakened.sh`, `check-dependencies.sh`, jscpd, standar produksi 9 pertanyaan, kualitas desain, test penjaga (dokumen ↔ kode,
-  skill, komentar, desain, gerbang), skill antislop (mode DURING), memori tunggal ini; komponen isian/grafik/kartu/dialog, token status dan grafik,
-  aturan tabel, Vitest, `/ui-guideline`. **Tidak diambil** (alasan): komentar dan nama test berbahasa Indonesia (aturan sipebri: kode Inggris),
-  dokumen berbahasa Inggris (dokumen sipebri berbahasa Indonesia), trigger MySQL untuk audit (sipebri memakai trait `Auditable` + SQLite untuk test),
-  `lib/http.ts`/`useResource`/`useForm` buatan sendiri dan kontrak `/api/*` (sipebri memakai Inertia + Wayfinder), `layouts/menu.ts` (menu dari
-  `App\Support\Navigation`), SSO, karyawan, `dev:accounts`, `ReferenceManager`/`RegionPicker` (domain codex), kata "akun" dilarang (pilihan
-  bahasa codex), `IdleTimeout` dan foto profil (butuh kontrak server yang belum ada di sipebri).
+- **Kerangka agent = devcore (`/Users/Bananay/Claude/devcore`, user, 2026-10-19), menggantikan salinan codex yang dipasang lebih dulu hari itu.**
+  Dipasang dengan layer laravel dan react: pesan gerbang Inggris, berkas standar (`AGENTS.md` bagian standar, `quality.md`, `testing.md`,
+  `laravel.md`, `ui.md`, `TEMPLATE.md`) Inggris persis seperti sumbernya supaya mudah diperbarui, agent hanya commit dan **bertanya dulu sebelum
+  push**. Aturan khas SIPEBRI tetap berbahasa Indonesia sebagai aturan proyek (`general.md`, `audit-log.md`, `database.md`, `php.md`, `tests.md`,
+  `js.md`) dan terdaftar di `.ai/rules/index.md`. Lima test PHP gerbang (Brief, Weakened, Verify, GateDefinition, DependencyAudit) diganti
+  `scripts/selftest.sh`; skrip audit dependency buatan sendiri diganti dua langkah audit di `verify.steps`. Aturan UI dan komponen dari react-starter tetap
+  (`js.md`, `components/ui`, `/ui-guideline`). **Tidak diambil dari codex/react-starter** (alasan): trigger MySQL untuk audit (SIPEBRI memakai
+  `Auditable` + SQLite untuk test), `lib/http.ts` (SIPEBRI memakai Inertia + Wayfinder), `layouts/menu.ts` (menu dari `Navigation`), SSO,
+  karyawan, `ReferenceManager`/`RegionPicker`, kata "akun" dilarang, `IdleTimeout` dan foto profil (butuh kontrak server yang belum ada).
+- **Penyimpangan dari standar devcore, dicatat:** (1) PHPStan level 7, bukan 8; level 8 memberi 47 temuan di kode lama (`AuditPrune`,
+  `LoanApplicationController`, `SchedulingController`, dan lain-lain), ditunda sebagai pekerjaan terpisah. (2) `.env.example` memuat komentar
+  penjelasan singkat; `laravel.md` meminta berkas itu hanya berisi variabel; pemilik belum menjawab konflik ini (`.ai/rules/php.md`). (3) Audit
+  dependency tanpa jaringan kini menggagalkan gerbang (tidak lagi peringatan) mengikuti devcore. (4) `DesignQualityTest`, `check-standards.mjs`,
+  `phpstan.neon`, `pint.json`, dan `.jscpd.json` tetap versi SIPEBRI (lebih lengkap atau memuat daftar utang).
 - **Dependency karena adopsi (user, 2026-10-19):** ditambah devDependency `@testing-library/{react,user-event,jest-dom}`, `jsdom`, `jscpd`; `recharts` dibuang (grafik lewat `components/ui/chart.tsx`). Risiko diterima: `npm audit` masih melaporkan temuan hanya di alat pengembangan (`--omit=dev` bersih), perbaikannya butuh versi di luar rentang.
 - **Tabel memecah kolom bertumpuk** (satu nilai satu kolom) di semua daftar, termasuk analisa dan persetujuan (2026-10-19). Daftar persetujuan kini diurutkan di server pada semua kolom: usulan plafon/tenor jatuh ke permohonan bila memorandum belum ada, posisi = langkah tertunda, "Giliran" memakai uji yang sama dengan tampilan "Menunggu saya". Kunci dari tabel lain diurutkan lewat subkueri berkunci unik; tanpa migrasi indeks baru karena kolom berkas yang diurutkan sudah berindeks dan indeks pada nilai hasil subkueri tidak dipakai. Audit log hanya urut waktu (tabel besar tanpa indeks lain). Label menu "Data Audit Log" menjadi "Audit Log" (aturan label maksimal dua kata).
 - **Deploy ke VPS sendiri, bukan Laravel Cloud** (sama dengan codex): skill `deploying-to-cloud` tidak dipakai.
