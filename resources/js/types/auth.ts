@@ -34,4 +34,6 @@ export type NotificationItem = {
 export type SecuritySummary = {
     enabled: boolean;
     method: 'totp' | 'email' | null;
+    /** The person closed the banner for this sign-in. */
+    reminderDismissed: boolean;
 };

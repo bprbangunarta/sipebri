@@ -1,1 +1,1 @@
-@extends('errors.layout', ['code' => 403, 'title' => 'Akses ditolak', 'description' => 'Peran Anda tidak diizinkan membuka halaman ini. Bila ini keliru, minta administrator memberikan aksesnya.', 'reload' => false])
+@extends('errors.layout', ['code' => 403, 'title' => 'Akses ditolak', 'description' => 'Peran Anda tidak diizinkan membuka halaman ini. Bila ini keliru, minta administrator memberikan aksesnya.', 'action' => 'home'])

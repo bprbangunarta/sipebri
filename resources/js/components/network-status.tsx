@@ -20,12 +20,13 @@ export function NetworkStatus() {
             role="status"
             aria-live="polite"
             className={cn(
-                'fixed bottom-3 left-1/2 z-50 flex max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-center gap-2 rounded-full border px-3 py-1.5 text-xs shadow-md',
+                // `inset-x-3 mx-auto w-fit` centres a pill as wide as its text, up to the screen width; with `left-1/2` it could only use half of the screen and wrapped into four lines on a phone.
+                'fixed inset-x-3 bottom-3 z-50 mx-auto flex w-fit items-center gap-2 rounded-2xl border px-3 py-1.5 text-xs shadow-md',
                 offline ? 'border-danger-line bg-danger-soft text-danger-ink' : 'border-success-line bg-success-soft text-success-ink',
             )}
         >
             {offline ? <WifiOff className="size-3.5 shrink-0" /> : <CheckCircle2 className="size-3.5 shrink-0" />}
-            <span>{offline ? 'Tidak ada koneksi. Perubahan belum bisa disimpan sampai Anda kembali online.' : 'Kembali online.'}</span>
+            <span>{offline ? 'Tidak ada koneksi. Perubahan belum bisa disimpan.' : 'Kembali online.'}</span>
         </div>
     );
 }

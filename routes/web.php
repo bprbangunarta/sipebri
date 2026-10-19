@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
         Route::post('totp/cancel', [ProfileController::class, 'cancelTotp'])->name('totp.cancel');
         Route::post('totp', [ProfileController::class, 'enableTotp'])->name('totp.enable');
         Route::delete('/', [ProfileController::class, 'disable'])->name('disable');
+        Route::post('reminder/dismiss', [ProfileController::class, 'dismissReminder'])->name('reminder.dismiss');
     });
 
     Route::post('notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');

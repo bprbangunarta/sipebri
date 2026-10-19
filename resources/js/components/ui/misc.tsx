@@ -62,11 +62,15 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
     );
 }
 
-export function PageHeader({ title, description, actions }: { title: string; description?: string; actions?: ReactNode }) {
+export function PageHeader({ title, description, badge, actions }: { title: string; description?: string; badge?: ReactNode; actions?: ReactNode }) {
     return (
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <div>
-                <h1 className="text-base font-semibold">{title}</h1>
+            <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                    <h1 className="text-base font-semibold">{title}</h1>
+                    {/* The status of the page (a `Badge`) sits next to the title: in `actions` it would be stretched to the width of a button. */}
+                    {badge}
+                </div>
                 {description && <p className="text-xs text-muted">{description}</p>}
             </div>
             {/* One width for the buttons of the row. On a phone they fill the width in two equal columns, like the filters (a lone last button

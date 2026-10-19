@@ -36,6 +36,7 @@ Masing-masing membandingkan dua sisi yang harus sepakat, sehingga perubahan di s
 | `scripts/selftest.sh`                   | gerbang dan aturannya: tiap pelanggaran ditolak, tiap pengecualian sah lolos, dengan git sungguhan      |
 | `DocsMatchCodeTest`                     | dokumen dan kode (nama yang disebut dokumen harus ada)                                                  |
 | `ArchitectureTest`                      | kode dan aturan proyek (audit, `DataTable`, `env()`, penjajaran baris judul + aksi, geolokasi)          |
+| `AppShellAuditTest`                     | kata-kata halaman error di view Blade dan di `resources/js/lib/error-pages.ts` (satu bunyi per status)  |
 | `NavigationLinksTest`                   | menu (`Navigation::definition()`) dan route yang terdaftar                                              |
 | `SkillsRegistryTest`                    | skill di `.ai/skills`, barisnya di `AGENTS.md` bagian 5, dan berkas vendored yang persis sama           |
 | `CommentHygieneTest`                    | komentar dan teks terhadap `antislop-code` dan larangan tanda pisah panjang                             |

@@ -178,13 +178,15 @@ export default function SurveyShow({ loan, customer, locations, photos, survey, 
             <PageHeader
                 title={`Survei ${loan.application_code}`}
                 description={`Dijadwalkan ${formatDate(loan.survey_date)}`}
+                badge={
+                    loan.locked && (
+                        <Badge tone="success">
+                            <Lock className="mr-1 size-3" /> Tersimpan
+                        </Badge>
+                    )
+                }
                 actions={
                     <>
-                        {loan.locked && (
-                            <Badge tone="success">
-                                <Lock className="mr-1 size-3" /> Tersimpan
-                            </Badge>
-                        )}
                         {!loan.locked && (
                             <Button onClick={() => ask(surveyPlace)} disabled={marking !== null}>
                                 {marking === 'survey' ? <Loader2 className="animate-spin" /> : <LocateFixed />} Tandai lokasi

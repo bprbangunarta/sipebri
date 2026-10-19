@@ -25,6 +25,9 @@ use Throwable;
  */
 class ProfileController extends Controller
 {
+    /** Session key: the person closed the banner that asks for two-step verification. The session ends at sign-out, so it comes back at the next sign-in. */
+    public const REMINDER_DISMISSED = 'two_factor.reminder_dismissed';
+
     public function __construct(private TwoFactor $twoFactor, private EmailCode $email, private RecoveryCodes $recovery) {}
 
     public function show(Request $request): Response
@@ -175,6 +178,13 @@ class ProfileController extends Controller
         $request->session()->flash('two_factor.recovery_codes', $this->recovery->regenerate($user));
 
         return back()->with('success', 'Verifikasi dua langkah dengan aplikasi authenticator sudah aktif. Simpan kode pemulihan Anda.');
+    }
+
+    public function dismissReminder(Request $request): RedirectResponse
+    {
+        $request->session()->put(self::REMINDER_DISMISSED, true);
+
+        return back();
     }
 
     /** Turn two-factor off. Needs a valid code of the current method, so a hijacked session cannot do it silently. */

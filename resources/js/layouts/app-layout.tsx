@@ -1,6 +1,6 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { Dialog } from 'radix-ui';
-import { ChevronDown, LogOut, Menu, ShieldAlert, UserRound, X } from 'lucide-react';
+import { ChevronDown, LogOut, Menu, UserRound, X } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useEffect, useId, useState } from 'react';
 import { Toaster, toast } from 'sonner';
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownContent, DropdownItem, DropdownLabel, DropdownMenu, DropdownSeparator, DropdownTrigger } from '@/components/ui/dropdown';
 import { navIcon } from '@/components/nav-icons';
 import { NotificationBell } from '@/components/notification-bell';
+import { SecurityReminder } from '@/components/security-reminder';
 import { overlayClass, useRestoreFocus } from '@/components/ui/dialog';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import type { NavLinkItem } from '@/types/auth';
@@ -216,18 +217,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                             </DropdownMenu>
                         </div>
                     </header>
-                    {security?.enabled && security.method === null && (
-                        <div
-                            role="status"
-                            className="flex items-center gap-2 border-b border-warning-line bg-warning-soft px-3 py-1.5 text-xs text-warning-ink sm:px-5"
-                        >
-                            <ShieldAlert className="size-3.5 shrink-0" />
-                            <span className="min-w-0 flex-1 truncate">Akun Anda belum dilindungi verifikasi dua langkah.</span>
-                            <Link href="/profile" className="shrink-0 font-medium underline underline-offset-2 hover:no-underline">
-                                Aktifkan
-                            </Link>
-                        </div>
-                    )}
+                    <SecurityReminder security={security} />
                     <main id="content" tabIndex={-1} className="flex-1 p-3 outline-none sm:p-5">
                         {children}
                     </main>

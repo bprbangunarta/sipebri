@@ -313,13 +313,11 @@ export default function LoanApplicationShow({ loan, collaterals, collateralOptio
             <PageHeader
                 title={`Pengajuan ${loan.application_code}`}
                 description={`${loan.full_name} · ${formatDate(loan.application_date)}`}
+                badge={<Badge tone={loan.status_tone}>{loan.status_label}</Badge>}
                 actions={
-                    <>
-                        <Badge tone={loan.status_tone}>{loan.status_label}</Badge>
-                        <Button variant="outline" onClick={() => router.visit('/loan-applications')}>
-                            <ArrowLeft /> Kembali
-                        </Button>
-                    </>
+                    <Button variant="outline" onClick={() => router.visit('/loan-applications')}>
+                        <ArrowLeft /> Kembali
+                    </Button>
                 }
             />
 

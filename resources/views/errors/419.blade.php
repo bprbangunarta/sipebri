@@ -1,1 +1,1 @@
-@extends('errors.layout', ['code' => 419, 'title' => 'Halaman kedaluwarsa', 'description' => 'Sesi Anda berakhir. Muat ulang halaman lalu coba lagi.', 'reload' => true])
+@extends('errors.layout', ['code' => 419, 'title' => 'Halaman kedaluwarsa', 'description' => 'Sesi Anda berakhir karena terlalu lama tidak aktif. Muat ulang halaman lalu coba lagi.', 'action' => 'retry'])

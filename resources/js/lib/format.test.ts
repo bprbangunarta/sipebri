@@ -87,3 +87,63 @@ describe('format and the company clock (Asia/Jakarta)', () => {
         expect(formatDateTime('2026-10-07 08:45')).toBe('07 Okt 2026 08:45:00');
     });
 });
+
+describe('format shows the company clock (WIB) on a device in any other zone', () => {
+    const zones = ['UTC', 'America/New_York', 'Asia/Tokyo', 'Pacific/Auckland'];
+
+    async function inZone<T>(zone: string, run: () => T): Promise<T> {
+        const before = process.env.TZ;
+        process.env.TZ = zone;
+
+        try {
+            return run();
+        } finally {
+            process.env.TZ = before;
+        }
+    }
+
+    it.each(zones)('reads a moment with a zone as the same WIB time, on a device in %s', async (zone) => {
+        const text = await inZone(zone, () => [
+            formatDateTime('2026-10-31T17:30:00Z'),
+            formatDate('2026-10-31T17:30:00Z'),
+            formatDateTime('2026-10-20T00:15:00+07:00'),
+        ]);
+
+        expect(text).toEqual(['01 Nov 2026 00:30:00', '01 Nov 2026', '20 Okt 2026 00:15:00']);
+    });
+
+    it.each(zones)('reads a time without a zone (the audit log) as already WIB, on a device in %s', async (zone) => {
+        const text = await inZone(zone, () => [
+            formatDateTime('2026-10-07 08:45:03'),
+            formatDateTime('2026-10-07T23:59:59.123456'),
+            formatDateTime('2026-10-07 08:45'),
+        ]);
+
+        expect(text).toEqual(['07 Okt 2026 08:45:03', '07 Okt 2026 23:59:59', '07 Okt 2026 08:45:00']);
+    });
+
+    it.each(zones)('keeps a date alone and a picked day on the same day, on a device in %s', async (zone) => {
+        const text = await inZone(zone, () => [formatDate('2026-10-19'), formatDate('2026-01-01'), formatDate(new Date(2026, 9, 19))]);
+
+        expect(text).toEqual(['19 Okt 2026', '01 Jan 2026', '19 Okt 2026']);
+    });
+
+    it('counts a time without a zone as WIB when it says how long ago', async () => {
+        const now = new Date();
+        const wib = new Date(now.getTime() + 7 * 3600_000);
+        const naive = `${wib.getUTCFullYear()}-${String(wib.getUTCMonth() + 1).padStart(2, '0')}-${String(wib.getUTCDate()).padStart(2, '0')} ${String(wib.getUTCHours()).padStart(2, '0')}:${String(wib.getUTCMinutes()).padStart(2, '0')}:00`;
+
+        for (const zone of zones) {
+            expect(await inZone(zone, () => formatRelative(naive))).toMatch(
+                /^(kurang dari 1 menit|1 menit) yang lalu$|^kurang dari semenit yang lalu$|^1 menit yang lalu$/,
+            );
+        }
+    });
+
+    it('refuses what is not a real date or time', () => {
+        for (const bad of ['2026-02-30', '2026-13-01', '2026-10-07 25:00:00', '2026-10-07 08:61', 'kemarin']) {
+            expect(formatDate(bad)).toBe('–');
+            expect(formatDateTime(bad)).toBe('–');
+        }
+    });
+});

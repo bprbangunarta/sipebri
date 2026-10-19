@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\ProfileController;
 use App\Models\AppNotification;
 use App\Security\TwoFactor\TwoFactor;
 use App\Support\Navigation;
@@ -48,7 +49,10 @@ class HandleInertiaRequests extends Middleware
                     'permissions' => $request->user()->getAllPermissions()->pluck('name')->values(),
                 ] : null,
             ],
-            'security' => fn () => $request->user() ? app(TwoFactor::class)->summary($request->user()) : null,
+            // `reminderDismissed`: the person closed the two-step banner; it lasts until they sign out (the session is dropped), then it is back.
+            'security' => fn () => $request->user()
+                ? [...app(TwoFactor::class)->summary($request->user()), 'reminderDismissed' => (bool) $request->session()->get(ProfileController::REMINDER_DISMISSED, false)]
+                : null,
             'navigation' => fn () => $request->user() ? Navigation::for($request->user()) : [],
             'notifications' => fn () => $request->user() ? [
                 'unread' => AppNotification::query()->where('user_id', $request->user()->id)->whereNull('read_at')->count(),

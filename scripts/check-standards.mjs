@@ -168,6 +168,71 @@ for (const file of files) {
 
 const lineOf = (text, index) => text.slice(0, index).split('\n').length;
 
+/** Where the `{ ... }` that starts at `start` ends (the value of a JSX attribute). */
+function braceEnd(text, start) {
+    let depth = 0;
+    let quote = null;
+
+    for (let i = start; i < text.length; i++) {
+        const char = text[i];
+
+        if (quote) {
+            if (char === '\\') {
+                i++;
+            } else if (char === quote) {
+                quote = null;
+            }
+        } else if (char === '"' || char === "'" || char === '`') {
+            quote = char;
+        } else if (char === '{') {
+            depth++;
+        } else if (char === '}' && --depth === 0) {
+            return i + 1;
+        }
+    }
+
+    return text.length;
+}
+
+/**
+ * Where the value that starts at `start` ends: at the first `,` or closing bracket that is not inside brackets or a string. Enough for the
+ * props and column properties checked below; it does not try to be a parser.
+ */
+function valueEnd(text, start) {
+    let depth = 0;
+    let quote = null;
+
+    for (let i = start; i < text.length; i++) {
+        const char = text[i];
+
+        if (quote) {
+            if (char === '\\') {
+                i++;
+            } else if (char === quote) {
+                quote = null;
+            }
+
+            continue;
+        }
+
+        if (char === '"' || char === "'" || char === '`') {
+            quote = char;
+        } else if ('({['.includes(char)) {
+            depth++;
+        } else if (')}]'.includes(char)) {
+            if (depth === 0) {
+                return i;
+            }
+
+            depth--;
+        } else if (char === ',' && depth === 0) {
+            return i;
+        }
+    }
+
+    return text.length;
+}
+
 for (const file of files) {
     const text = sources.get(file);
 
@@ -185,6 +250,33 @@ for (const file of files) {
     // A screen that opens a Modal supplies the dialog body with DialogBody (header, body, footer).
     if (/<Modal\b/.test(text) && !/\bDialogBody\b/.test(text) && !file.endsWith('components/ui/dialog.tsx')) {
         report(file, 0, 'Dialog tanpa DialogBody: isi dialog dibungkus DialogBody (header, body, footer)');
+    }
+
+    // The actions of a page header are laid out in equal columns (buttons), so a status badge there stretches to the width of a button:
+    // the status goes in the `badge` prop, next to the title.
+    for (const match of text.matchAll(/<PageHeader\b[^<]*?\bactions=/g)) {
+        const start = match.index + match[0].length;
+
+        if (/<Badge\b/.test(text.slice(start, braceEnd(text, start)))) {
+            report(
+                file,
+                lineOf(text, start),
+                'PageHeader: tanda status (Badge) tidak boleh di actions karena melebar sebesar tombol; pakai prop badge di sebelah judul',
+            );
+        }
+    }
+
+    // A table cell never wraps onto a second line ("Cells and headers never wrap"): several things in one cell sit in a row that scrolls, they do not wrap.
+    for (const match of text.matchAll(/\bcell:\s*/g)) {
+        const start = match.index + match[0].length;
+
+        if (/\bflex-wrap\b/.test(text.slice(start, valueEnd(text, start)))) {
+            report(
+                file,
+                lineOf(text, start),
+                'Sel tabel dengan flex-wrap dilarang: isi sel tidak membungkus ke baris kedua (tabel yang lebar bergulir menyamping)',
+            );
+        }
     }
 
     // PageHeader gives its action buttons equal widths by itself, so `actions` is the buttons (a fragment), never a wrapping div.

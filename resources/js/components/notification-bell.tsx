@@ -1,8 +1,25 @@
 import { Link, router, usePage } from '@inertiajs/react';
+import type { MouseEvent } from 'react';
 import { Bell, CheckCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
+
+type Item = { id: number; url: string | null; read: boolean };
+
+/**
+ * An unread notification is marked read first and opened when that request is done: both at once would make the second visit cancel the first,
+ * and the link would never open. A click with a modifier key or a middle click is left to the browser (new tab).
+ */
+function openAfterRead(event: MouseEvent, n: Item) {
+    if (n.read || !n.url || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+    }
+
+    const url = n.url;
+    event.preventDefault();
+    router.post(`/notifications/${n.id}/read`, {}, { preserveState: true, preserveScroll: true, onFinish: () => router.visit(url) });
+}
 
 export function NotificationBell() {
     const { unread, items } = usePage().props.notifications;
@@ -40,7 +57,12 @@ export function NotificationBell() {
                             const content = (
                                 <>
                                     <div className="flex items-start gap-2">
-                                        {!n.read && <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />}
+                                        {!n.read && (
+                                            <>
+                                                <span aria-hidden className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
+                                                <span className="sr-only">Belum dibaca.</span>
+                                            </>
+                                        )}
                                         <div className="min-w-0">
                                             <p className={cn('text-sm', !n.read && 'font-medium')}>{n.title}</p>
                                             {n.body && <p className="text-xs text-muted">{n.body}</p>}
@@ -53,21 +75,7 @@ export function NotificationBell() {
                             return (
                                 <li key={n.id} className="hover:bg-canvas">
                                     {n.url ? (
-                                        <Link
-                                            href={n.url}
-                                            className="block px-3 py-2"
-                                            onClick={() =>
-                                                !n.read &&
-                                                router.post(
-                                                    `/notifications/${n.id}/read`,
-                                                    {},
-                                                    {
-                                                        preserveState: true,
-                                                        preserveScroll: true,
-                                                    },
-                                                )
-                                            }
-                                        >
+                                        <Link href={n.url} className="block px-3 py-2" onClick={(event) => openAfterRead(event, n)}>
                                             {content}
                                         </Link>
                                     ) : (

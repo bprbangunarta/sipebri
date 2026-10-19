@@ -24,6 +24,15 @@ describe('PageHeader', () => {
         expect(row?.children).toHaveLength(2);
     });
 
+    it('puts a status next to the title, not in the row of buttons where it would be stretched to a button width', () => {
+        render(<PageHeader title="Pengajuan 0070001" badge={<span>Diajukan</span>} actions={<button type="button">Kembali</button>} />);
+
+        const title = screen.getByRole('heading', { level: 1, name: 'Pengajuan 0070001' });
+
+        expect(title.parentElement).toContainElement(screen.getByText('Diajukan'));
+        expect(screen.getByRole('button', { name: 'Kembali' }).parentElement).not.toContainElement(screen.getByText('Diajukan'));
+    });
+
     it('shows the title and the description', () => {
         render(<PageHeader title="Audit Logs" description="Catatan anti-rusak" />);
 

@@ -178,9 +178,9 @@ export default function AuditLogsIndex({ logs, filters, modules, verification }:
 
     return (
         <>
-            <Head title="Audit Log" />
+            <Head title="Audit Logs" />
             <PageHeader
-                title="Audit Log"
+                title="Audit Logs"
                 description="Catatan anti-rusak tentang siapa melakukan apa, kapan, dan dari mana"
                 actions={
                     <>

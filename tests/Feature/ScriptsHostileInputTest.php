@@ -126,6 +126,10 @@ dataset('broken front-end rules', [
     'an icon in a dialog footer' => ['pages/p.tsx', "export default function P() {\n    return (\n        <DialogFooter>\n            <Button>\n                <Save /> Simpan\n            </Button>\n        </DialogFooter>\n    );\n}\n", 'footer dialog/kartu hanya teks'],
     'an icon in a card footer' => ['pages/p.tsx', "export default function P() {\n    return (\n        <CardFooter>\n            <Button>\n                <Save /> Simpan\n            </Button>\n        </CardFooter>\n    );\n}\n", 'footer dialog/kartu hanya teks'],
     'a modal without a dialog body' => ['pages/p.tsx', "export default function P() {\n    return <Modal open title=\"x\" onOpenChange={() => undefined}>isi</Modal>;\n}\n", 'DialogBody'],
+    'a status badge among the page header buttons' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" actions={<><Badge>Aktif</Badge><Button>Simpan</Button></>} />;\n}\n", 'PageHeader: tanda status'],
+    'a status badge in a conditional among the page header buttons' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" actions={ok && <Badge tone=\"success\">Aktif</Badge>} />;\n}\n", 'PageHeader: tanda status'],
+    'a wrapping flex row in a table cell' => ['pages/p.tsx', "export function P() {\n    return [{ key: 'a', header: 'A', cell: (row: { x: string }) => <span className=\"flex flex-wrap gap-1\">{row.x}</span> }];\n}\n", 'Sel tabel dengan flex-wrap'],
+    'a wrapping flex row in a table cell that is not the last property' => ['pages/p.tsx', "export function P() {\n    return [{ key: 'a', cell: (row: { x: string }) => (\n        <span className=\"flex flex-wrap gap-1\">{row.x}</span>\n    ), align: 'right' }];\n}\n", 'Sel tabel dengan flex-wrap'],
     'a wrapper around the page header buttons' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" actions={<div><Button>Simpan</Button></div>} />;\n}\n", 'PageHeader: actions'],
 ]);
 
@@ -138,6 +142,10 @@ dataset('allowed front-end code', [
     'a text-only dialog footer' => ['pages/p.tsx', "export default function P() {\n    return (\n        <DialogFooter>\n            <Button>Simpan</Button>\n        </DialogFooter>\n    );\n}\n"],
     'a modal with its body' => ['pages/p.tsx', "export default function P() {\n    return (\n        <Modal open title=\"x\" onOpenChange={() => undefined}>\n            <DialogBody>isi</DialogBody>\n        </Modal>\n    );\n}\n"],
     'page header buttons as a fragment' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" actions={<><Button>Simpan</Button></>} />;\n}\n"],
+    'a status badge in the badge prop of the page header' => ['pages/p.tsx', "export default function P() {\n    return <PageHeader title=\"x\" badge={<Badge>Aktif</Badge>} actions={<Button>Simpan</Button>} />;\n}\n"],
+    'a badge in a card header next to a page header without actions' => ['pages/p.tsx', "export default function P() {\n    return (\n        <>\n            <PageHeader title=\"x\" />\n            <CardHeader title=\"y\" actions={<Badge>Aktif</Badge>} />\n        </>\n    );\n}\n"],
+    'a wrapping flex row outside a table cell' => ['pages/p.tsx', "export default function P() {\n    return <div className=\"flex flex-wrap gap-2\" />;\n}\n"],
+    'a table cell in one flex row that does not wrap' => ['pages/p.tsx', "export function P() {\n    return [{ key: 'a', cell: (row: { x: string }) => <span className=\"flex gap-1\">{row.x}</span> }];\n}\n"],
     'a named export in a component' => ['components/x.tsx', "export function X() {\n    return null;\n}\n"],
 ]);
 

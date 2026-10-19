@@ -6,6 +6,15 @@ import { buttonVariants } from '@/components/ui/button';
 import { errorPage } from '@/lib/error-pages';
 import { cn } from '@/lib/utils';
 
+/** Back when there is somewhere to go back to; a page opened in a new tab has nothing before it, so Kembali goes to the start page. */
+function goBack() {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.assign('/');
+    }
+}
+
 /**
  * A full-screen error, outside the app shell: an illustration, what happened in words, and a way out. It uses plain links and `location`,
  * never the Inertia router, because it also shows when rendering itself failed (ErrorBoundary).
@@ -25,7 +34,7 @@ export function ErrorScreen({ status, message, signedIn, footer }: { status: num
                 <h1 className="mt-3 text-base font-semibold">{spec.title}</h1>
                 <p className="mt-2 max-w-sm text-sm text-muted">{message || spec.description}</p>
                 <div className="mt-6 grid w-full grid-cols-1 gap-2 sm:w-auto sm:auto-cols-fr sm:grid-flow-col">
-                    <button type="button" onClick={() => window.history.back()} className={cn(buttonVariants({ variant: 'outline' }))}>
+                    <button type="button" onClick={goBack} className={cn(buttonVariants({ variant: 'outline' }))}>
                         <ArrowLeft /> Kembali
                     </button>
                     {action === 'retry' ? (

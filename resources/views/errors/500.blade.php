@@ -1,1 +1,1 @@
-@extends('errors.layout', ['code' => 500, 'title' => 'Terjadi kesalahan', 'description' => 'Terjadi kesalahan tak terduga. Coba lagi sebentar lagi.', 'reload' => true])
+@extends('errors.layout', ['code' => 500, 'title' => 'Terjadi kesalahan', 'description' => 'Terjadi kesalahan tak terduga di sisi kami. Coba lagi sebentar lagi; bila terus berulang, hubungi administrator.', 'action' => 'retry'])

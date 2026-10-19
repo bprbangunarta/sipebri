@@ -19,16 +19,15 @@
                 <span class="text-base font-semibold">{{ config('app.name') }}</span>
             </div>
 
-            <p class="text-8xl leading-none font-bold tracking-tight text-primary/20 select-none sm:text-9xl">{{ $code }}</p>
-            <h1 class="mt-4 text-2xl font-semibold">{{ $title }}</h1>
-            <p class="mt-2 max-w-md text-sm text-muted">{{ $description }}</p>
+            <p class="rounded-full bg-primary-soft px-2.5 py-0.5 text-2xs font-semibold tracking-wide text-primary uppercase">Kode {{ $code }}</p>
+            <h1 class="mt-3 text-base font-semibold">{{ $title }}</h1>
+            <p class="mt-2 max-w-sm text-sm text-muted">{{ $description }}</p>
 
             <div class="mt-6 flex flex-wrap justify-center gap-2">
-                @if ($reload ?? false)
-                    <a href="{{ url()->current() }}" class="inline-flex h-8 items-center justify-center gap-1.5 rounded-md bg-primary px-3 text-sm font-medium text-white transition-colors hover:bg-primary-hover">Coba lagi</a>
-                @else
-                    <a href="{{ url('/') }}" class="inline-flex h-8 items-center justify-center gap-1.5 rounded-md bg-primary px-3 text-sm font-medium text-white transition-colors hover:bg-primary-hover">Ke beranda</a>
-                @endif
+                @php($href = ($action ?? 'home') === 'retry' ? url()->current() : (($action ?? 'home') === 'login' ? url('/login') : url('/')))
+                <a href="{{ $href }}" class="inline-flex h-8 items-center justify-center gap-1.5 rounded-md bg-primary px-3 text-sm font-medium text-white transition-colors hover:bg-primary-hover">
+                    {{ ['retry' => 'Coba lagi', 'login' => 'Masuk', 'home' => 'Ke beranda'][$action ?? 'home'] }}
+                </a>
             </div>
         </main>
     </body>

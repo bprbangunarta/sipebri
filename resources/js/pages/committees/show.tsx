@@ -211,6 +211,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
             <Head title={path.title} />
             <PageHeader
                 title={path.title}
+                badge={path.is_default ? undefined : <Badge tone={path.is_active ? 'success' : 'neutral'}>{path.is_active ? 'Aktif' : 'Nonaktif'}</Badge>}
                 description={
                     path.is_default
                         ? 'Dipakai bersama oleh semua jalur yang mengikuti bawaan'
