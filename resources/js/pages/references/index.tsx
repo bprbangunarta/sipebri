@@ -1,6 +1,7 @@
 import { Head, router, useForm } from '@inertiajs/react';
-import { Database, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Database, MoreHorizontal, Pencil, Plus, Trash2, Upload } from 'lucide-react';
 import { useState } from 'react';
+import { ReferenceImportDialog } from '@/components/reference-import-dialog';
 import { Button } from '@/components/ui/button';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
 import { Combobox } from '@/components/ui/combobox';
@@ -13,6 +14,7 @@ import { MaskedInput } from '@/components/ui/masked-input';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Badge, PageHeader } from '@/components/ui/misc';
+import { nextSort } from '@/components/ui/sort-head';
 import type { PageMeta } from '@/components/ui/pagination';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
@@ -31,7 +33,7 @@ type FieldDef = {
 };
 
 type Item = { id: number; usage_count: number } & Record<string, string | number | boolean | null>;
-type Filters = { search: string; per_page: number };
+type Filters = { search: string; sort: string; direction: 'asc' | 'desc'; per_page: number };
 
 type Props = {
     items: { data: Item[] } & PageMeta;
@@ -45,12 +47,11 @@ type Props = {
         tracks_usage: boolean;
         fields: FieldDef[];
         actions: { label: string; url: string }[];
+        import: { url: string; template_url: string } | null;
         store_url: string;
         item_url: string;
     };
 };
-
-const DEFAULTS = { per_page: 25 };
 
 function cell(field: FieldDef, item: Item) {
     const value = item[field.name];
@@ -70,6 +71,7 @@ function cell(field: FieldDef, item: Item) {
 
 export default function ReferencesIndex({ items, filters, perPageOptions, canManage, resource }: Props) {
     const [editing, setEditing] = useState<Item | 'new' | null>(null);
+    const [importing, setImporting] = useState(false);
     const [toDelete, setToDelete] = useState<Item | null>(null);
     const [deleting, setDeleting] = useState(false);
     const blank = () => Object.fromEntries(resource.fields.map((f) => [f.name, f.default ?? (f.type === 'boolean' ? false : '')]));
@@ -77,7 +79,7 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
     const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
         url: `/references/${resource.slug}`,
         filters,
-        defaults: DEFAULTS,
+        defaults: { sort: resource.fields[0].name, direction: 'asc', per_page: 25 },
         only: ['items', 'filters'],
     });
 
@@ -124,6 +126,7 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
         ...resource.fields.map((f): Column<Item> => ({
             key: f.name,
             header: f.label,
+            sort: f.name,
             align: f.type === 'number' ? 'right' : undefined,
             className: f.name === primary ? 'font-medium' : undefined,
             cell: (item) => cell(f, item),
@@ -133,6 +136,7 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
                   {
                       key: 'usage',
                       header: 'Dipakai',
+                      sort: 'usage_count',
                       align: 'right',
                       className: 'tabular-nums',
                       cell: (item: Item) => item.usage_count,
@@ -186,9 +190,16 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
                 description={`${resource.section} · ${items.total} data`}
                 actions={
                     canManage && (
-                        <Button onClick={() => openForm('new')}>
-                            <Plus /> Tambah {label}
-                        </Button>
+                        <div className="flex items-center gap-2">
+                            {resource.import && (
+                                <Button variant="outline" onClick={() => setImporting(true)}>
+                                    <Upload /> Import
+                                </Button>
+                            )}
+                            <Button onClick={() => openForm('new')}>
+                                <Plus /> Tambah
+                            </Button>
+                        </div>
                     )
                 }
             />
@@ -201,6 +212,7 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
                 onRetry={() => visit({})}
                 toolbar={<FilterBar search={<SearchInput value={search} onChange={onSearch} placeholder={`Cari ${label}…`} label="Cari" />} />}
                 columns={columns}
+                sort={{ sort: filters.sort, direction: filters.direction, onSort: (column) => visit(nextSort(filters, column)) }}
                 empty={{
                     icon: <Database />,
                     title: hasSearch ? 'Tidak ada hasil' : `Belum ada data ${label}`,
@@ -211,7 +223,7 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
                         </Button>
                     ) : canManage ? (
                         <Button size="sm" onClick={() => openForm('new')}>
-                            <Plus /> Tambah {label}
+                            <Plus /> Tambah
                         </Button>
                     ) : undefined,
                 }}
@@ -280,6 +292,16 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
                     </DialogFooter>
                 </form>
             </Modal>
+
+            {resource.import && (
+                <ReferenceImportDialog
+                    open={importing}
+                    onOpenChange={setImporting}
+                    label={label}
+                    url={resource.import.url}
+                    templateUrl={resource.import.template_url}
+                />
+            )}
 
             <ConfirmDialog
                 open={toDelete !== null}

@@ -24,6 +24,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductParameterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReferenceController;
+use App\Http\Controllers\ReferenceImportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SchedulingController;
 use App\Http\Controllers\SurveyController;
@@ -138,6 +139,8 @@ Route::middleware('auth')->group(function () {
         Route::put('references/products/{product}/parameters', [ProductParameterController::class, 'update'])->name('products.parameters.update');
 
         Route::prefix('references/{resource}')->group(function () {
+            Route::get('import/template', [ReferenceImportController::class, 'template'])->name('references.import.template');
+            Route::post('import', [ReferenceImportController::class, 'store'])->name('references.import');
             Route::get('/', [ReferenceController::class, 'index'])->name('references.index');
             Route::post('/', [ReferenceController::class, 'store'])->name('references.store');
             Route::put('{id}', [ReferenceController::class, 'update'])->whereNumber('id')->name('references.update');

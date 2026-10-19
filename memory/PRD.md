@@ -26,6 +26,7 @@ Identitas pengguna dan nasabah datang dari Codex.
   jalur, jenjang default/perorangan, aturan khusus, anggota, pengecualian), 3 (agunan + pengajuan), 4 (penjadwalan + survei + lokasi),
   5 (lembar analisa 8 bagian, ajukan ke komite), 6 (persetujuan komite per jenjang, RC, koreksi setelah disetujui) sudah ada. Peta kode: tabel
   "Arsitektur singkat" di `CLAUDE.md`. Periksa: `php artisan test --compact`.
+- **Import Excel (brief 0004, user, 2026-10-20):** Data Resort punya tombol _Import_ (template .xlsx, maks 2 MB dan 1.000 baris, semua-atau-tidak-sama-sekali); kode yang sudah ada memperbarui nama (keputusan user), tidak ada yang dihapus; dependency baru `openspout/openspout` (disetujui user). Tombol _Tambah_ kini tanpa nama tabel di semua tabel referensi, dan semua kolom daftar referensi bisa diurutkan (permintaan user). Tabel lain bisa ikut dengan kunci `import` di `config/references.php`.
 - **Dashboard:** ringkasan berkas kredit (KPI, per bulan/status/produk/kantor, berkas terbaru, survei mendatang).
 - **Login dan nasabah lewat Codex** (`App\Auth\CodexAuthClient`, `App\Services\CodexClient`); tanpa login lokal. MFA opsional (TOTP/OTP email).
 - **Audit log:** append-only, rantai hash HMAC, `audit:verify` harian, halaman Audit Log (filter, detail, ekspor CSV, verifikasi).
@@ -72,7 +73,7 @@ Identitas pengguna dan nasabah datang dari Codex.
   diumumkan ke pembaca layar; DatePicker mogok pada tanggal rusak; `rupiah` dan `formatNumber` menampilkan "NaN"; seretan berkas mengabaikan `accept`
   dan seretan yang ditolak menghapus berkas yang sudah dipilih; pesan 403 paket izin tampil berbahasa Inggris. (Dugaan Tabs melebar di ponsel tidak terbukti
   di 375 px dan tidak diubah; `CommitteeTabs` adalah navigasi tautan buatan sendiri, bukan `Tabs` kit: untuk audit fitur 12.)
-  **Keputusan pemilik:** tepi kontrol 1,26:1 menjadi token `control` (3,65:1), placeholder `muted` penuh (5,27:1), cincin fokus `primary` penuh (7,7:1); dijaga
+  **Keputusan pemilik:** tepi kontrol 1,26:1 menjadi token `control` (3,65:1), **diubah 2026-10-20: kolom isian, tombol outline, zona seret berkas, dan pemilih warna kembali ke `line` yang terang (sesuai referensi desain, kontras tepi ±1,3:1 diterima); `control` hanya untuk kotak centang, radio, sakelar mati;** placeholder `muted` penuh (5,27:1), cincin fokus `primary` penuh (7,7:1); dijaga
   `app.contrast.test.ts`. **Diterima, tidak diubah:** tombol tutup dialog tanpa `Tip` (tooltip yang terbuka pada fokus pertama menelan Escape pertama);
   target sentuh 28 px (kepadatan, `ui.md`); `Combobox` dan `DatePicker` memakai `onChange` yang membawa nilai, sedangkan isian lain `onValueChange` (mengubahnya
   menyentuh puluhan layar); singkatan Agustus "Agt" dari date-fns (bukan "Agu"); jam tampil menurut zona perangkat, bukan WIB (perangkat di luar WIB melihat jam lain

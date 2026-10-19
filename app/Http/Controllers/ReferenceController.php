@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Support\ReferenceResource;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,23 +25,31 @@ class ReferenceController extends Controller
     public function index(Request $request, string $resource): Response
     {
         $definition = ReferenceResource::find($resource);
-        $filters = $request->validate(['search' => ['nullable', 'string', 'max:100'], 'per_page' => ['nullable', 'integer']]);
         $usage = array_keys($definition->usage());
         $first = $definition->rawFields()[0]['name'];
+        $filters = $request->validate([
+            'search' => ['nullable', 'string', 'max:100'],
+            'per_page' => ['nullable', 'integer'],
+            'sort' => ['nullable', Rule::in($definition->sortKeys())],
+            'direction' => ['nullable', 'in:asc,desc'],
+        ]);
+        $sort = $filters['sort'] ?? $first;
+        $direction = $filters['direction'] ?? 'asc';
 
         $query = $definition->model()::query()->withCount($usage);
         $definition->search($query, $filters['search'] ?? null);
 
-        $items = $query->orderBy($first)->orderBy('id')
-            ->paginate(in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 25)
-            ->withQueryString();
+        $perPage = in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 25;
+        $items = $sort === ReferenceResource::USAGE_SORT
+            ? $this->byUsage($query, $usage, $first, $direction, $perPage, $request)
+            : $query->orderBy($sort, $direction)->orderBy($first)->orderBy('id')->paginate($perPage)->withQueryString();
 
         return Inertia::render('references/index', [
             'items' => $items->through(fn ($record): array => [
                 ...$definition->toItem($record),
-                'usage_count' => array_sum(array_map(fn (string $relation): int => (int) $record->{$relation.'_count'}, $usage)),
+                'usage_count' => array_sum(array_map(fn (string $relation): int => (int) $record->getAttribute(Str::snake($relation).'_count'), $usage)),
             ]),
-            'filters' => ['search' => $filters['search'] ?? '', 'per_page' => $items->perPage()],
+            'filters' => ['search' => $filters['search'] ?? '', 'sort' => $sort, 'direction' => $direction, 'per_page' => $items->perPage()],
             'perPageOptions' => self::PER_PAGE_OPTIONS,
             'canManage' => true,
             'resource' => [
@@ -46,10 +59,35 @@ class ReferenceController extends Controller
                 'tracks_usage' => $usage !== [],
                 'fields' => $definition->fields(),
                 'actions' => $definition->actions(),
+                'import' => $definition->importable() ? [
+                    'url' => route('references.import', $resource, false),
+                    'template_url' => route('references.import.template', $resource, false),
+                ] : null,
                 'store_url' => route('references.store', $resource, false),
                 'item_url' => route('references.update', [$resource, '__id__'], false),
             ],
         ]);
+    }
+
+    /**
+     * The "Dipakai" column adds up several relations, which one SQL ORDER BY cannot do without building SQL text from names;
+     * lookup tables that are used by other records stay small, so this one order is done on the rows in memory.
+     *
+     * @param  Builder<Model>  $query
+     * @param  list<string>  $usage
+     * @return LengthAwarePaginator<int, Model>
+     */
+    private function byUsage(Builder $query, array $usage, string $first, string $direction, int $perPage, Request $request): LengthAwarePaginator
+    {
+        $total = fn (Model $record): int => array_sum(array_map(fn (string $relation): int => (int) $record->getAttribute(Str::snake($relation).'_count'), $usage));
+        $rows = $query->get()->sortBy([
+            fn (Model $a, Model $b): int => $direction === 'asc' ? $total($a) <=> $total($b) : $total($b) <=> $total($a),
+            fn (Model $a, Model $b): int => $a->getAttribute($first) <=> $b->getAttribute($first),
+            fn (Model $a, Model $b): int => $a->getKey() <=> $b->getKey(),
+        ])->values();
+        $page = LengthAwarePaginator::resolveCurrentPage();
+
+        return new LengthAwarePaginator($rows->forPage($page, $perPage)->values(), $rows->count(), $perPage, $page, ['path' => $request->url(), 'query' => $request->query()]);
     }
 
     public function store(Request $request, string $resource): RedirectResponse

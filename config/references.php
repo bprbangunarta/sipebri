@@ -22,6 +22,7 @@ use App\Models\Region;
 |            unique (true, or a sibling column the value is unique within), uppercase, max, min, hint,
 |            default, empty (label for null), options_from
 |            ([model, value, label columns]), rules (extra validation rules).
+|  import  – true or ['examples' => [[...cells per field]]] turns on Excel import (the key of a row is its `code`).
 |  actions – extra row actions: label, url (with {id}).
 */
 
@@ -45,7 +46,10 @@ return [
         'label' => 'Kantor', 'section' => 'Referensi', 'group' => 'Organisasi', 'model' => Office::class, 'usage' => ['loanApplications' => 'pengajuan kredit', 'users' => 'pengguna'],
         'fields' => [$code, ['name' => 'alias', 'label' => 'Alias', 'type' => 'text', 'required' => true, 'unique' => true, 'max' => 8, 'uppercase' => true], $label],
     ],
-    'resorts' => ['label' => 'Resort', 'section' => 'Referensi', 'group' => 'Organisasi', 'model' => Institution::class, 'usage' => ['loanApplications' => 'pengajuan kredit'], 'fields' => [$code, $label]],
+    'resorts' => [
+        'label' => 'Resort', 'section' => 'Referensi', 'group' => 'Organisasi', 'model' => Institution::class, 'usage' => ['loanApplications' => 'pengajuan kredit'], 'fields' => [$code, $label],
+        'import' => ['examples' => [['CONTOH1', 'Hapus baris contoh ini'], ['CONTOH2', 'Hapus baris contoh ini']]],
+    ],
     'products' => [
         'label' => 'Produk', 'section' => 'Referensi', 'group' => 'Ketentuan kredit', 'model' => Product::class, 'usage' => ['loanApplications' => 'pengajuan kredit', 'committeePaths' => 'jalur komite'],
         'fields' => [

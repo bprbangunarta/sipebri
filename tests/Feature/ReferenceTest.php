@@ -3,6 +3,7 @@
 use App\Models\CollateralType;
 use App\Models\Installment;
 use App\Models\Institution;
+use App\Models\LoanApplication;
 use App\Models\Method;
 use App\Models\OwnershipStatus;
 use App\Models\Product;
@@ -119,4 +120,61 @@ it('seeds the product parameters of the company staging data and never resets la
     $this->seed(CreditReferenceSeeder::class);
 
     expect((float) $kpn->fresh()->interest_rate)->toBe(18.5);
+});
+
+dataset('sort keys', function () {
+    // Datasets are built before the application boots, so the registry is read from its file.
+    foreach (require __DIR__.'/../../config/references.php' as $slug => $definition) {
+        foreach ([...array_column($definition['fields'], 'name'), ...($definition['usage'] === [] ? [] : ['usage_count'])] as $key) {
+            foreach (['asc', 'desc'] as $direction) {
+                yield "$slug $key $direction" => [$slug, $key, $direction];
+            }
+        }
+    }
+});
+
+it('sorts every reference list by every column in both directions without error', function (string $slug, string $key, string $direction) {
+    $this->get(route('references.index', [$slug, 'sort' => $key, 'direction' => $direction]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page->where('filters.sort', $key)->where('filters.direction', $direction));
+})->with('sort keys');
+
+it('puts the rows in the order of the sorted column, ties by the first column', function (string $key, string $direction) {
+    Institution::create(['code' => 'A1', 'name' => 'BRAVO']);
+    Institution::create(['code' => 'A2', 'name' => 'ALPHA']);
+    Institution::create(['code' => 'A3', 'name' => 'CHARLIE']);
+    Institution::create(['code' => 'A4', 'name' => 'ALPHA']);
+    $expected = $direction === 'asc' ? ['A2', 'A4', 'A1', 'A3'] : ['A3', 'A1', 'A2', 'A4'];
+
+    if ($key === 'code') {
+        $expected = $direction === 'asc' ? ['A1', 'A2', 'A3', 'A4'] : ['A4', 'A3', 'A2', 'A1'];
+    }
+
+    $this->get(route('references.index', ['resorts', 'sort' => $key, 'direction' => $direction]))
+        ->assertInertia(fn (Assert $page) => $page->where('items.data', fn ($rows) => collect($rows)->pluck('code')->all() === $expected));
+})->with([['name', 'asc'], ['name', 'desc'], ['code', 'asc'], ['code', 'desc']]);
+
+it('sorts by how many records use a row, as the Dipakai column shows', function () {
+    $used = Institution::create(['code' => 'U1', 'name' => 'USED']);
+    Institution::create(['code' => 'U0', 'name' => 'FREE']);
+    LoanApplication::create(['application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A', 'created_by' => auth()->id(), 'institution_id' => $used->id]);
+
+    $order = fn (string $direction): array => collect($this->get(route('references.index', ['resorts', 'sort' => 'usage_count', 'direction' => $direction]))->inertiaProps('items.data'))->pluck('code')->all();
+
+    expect($order('desc'))->toBe(['U1', 'U0'])->and($order('asc'))->toBe(['U0', 'U1']);
+});
+
+it('refuses a sort key that is not a column of the table', function (string $key) {
+    $this->get(route('references.index', ['resorts', 'sort' => $key]))->assertSessionHasErrors('sort');
+})->with(['id', 'password', 'usage_count; drop table users', 'regency']);
+
+it('refuses the usage sort on a table that tracks no usage', function () {
+    $this->get(route('references.index', ['regions', 'sort' => 'usage_count']))->assertSessionHasErrors('sort');
+});
+
+it('shows in the Dipakai column how many records use a row, with relations of two or more words', function () {
+    $resort = Institution::create(['code' => 'U1', 'name' => 'USED']);
+    LoanApplication::create(['application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A', 'created_by' => auth()->id(), 'institution_id' => $resort->id]);
+
+    $this->get(route('references.index', 'resorts'))->assertInertia(fn (Assert $page) => $page->where('items.data.0.usage_count', 1));
 });

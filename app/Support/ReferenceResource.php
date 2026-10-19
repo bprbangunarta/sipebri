@@ -11,6 +11,9 @@ use Illuminate\Validation\Rule;
  */
 class ReferenceResource
 {
+    /** Sort key of the "Dipakai" column (how many records refer to a row). */
+    public const USAGE_SORT = 'usage_count';
+
     /**
      * @param  array<string, mixed>  $config
      */
@@ -67,6 +70,45 @@ class ReferenceResource
     public function usage(): array
     {
         return $this->config['usage'];
+    }
+
+    /**
+     * @return list<string> every column of the table the list may be sorted by: each field, and the usage count when the table tracks it
+     */
+    public function sortKeys(): array
+    {
+        return [...array_column($this->rawFields(), 'name'), ...($this->usage() === [] ? [] : [self::USAGE_SORT])];
+    }
+
+    public function importable(): bool
+    {
+        return ($this->config['import'] ?? false) !== false;
+    }
+
+    /**
+     * @return list<string> labels of the fields, the header row of the import template
+     */
+    public function importHeader(): array
+    {
+        return array_column($this->rawFields(), 'label');
+    }
+
+    /**
+     * @return list<list<string>> rows shown in the import template as examples (one cell per field)
+     */
+    public function importExamples(): array
+    {
+        $import = $this->config['import'] ?? [];
+
+        return is_array($import) ? ($import['examples'] ?? []) : [];
+    }
+
+    /**
+     * @return array<string, string> field name => lowercase label, for validation messages
+     */
+    public function attributeNames(): array
+    {
+        return array_column(array_map(fn (array $f): array => ['name' => $f['name'], 'label' => mb_strtolower($f['label'])], $this->rawFields()), 'label', 'name');
     }
 
     /**
