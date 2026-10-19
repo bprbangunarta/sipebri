@@ -113,10 +113,12 @@ Identitas pengguna dan nasabah datang dari Codex.
 
 Dipilih user; agent tidak memulai fitur baru tanpa diminta.
 
-1. **Audit silang dokumen ↔ kode per fitur** (user, 2026-10-19; nomor fitur = baris tabel fitur yang ditampilkan di chat, fitur 1 login, 24 UI bersama, dan 25 gerbang
-   sudah selesai): satu brief "Audit fitur N" per fitur (bentuk: brief 0004 codex, commit 584013f), mengikuti `AGENTS.md` bagian 1 dan 3; temuan
-   langsung diperbaiki kecuali yang mengubah kebijakan (dijelaskan ke pemilik dulu). **Urutan dari pemilik:** (24 dan 25 selesai), 8 halaman error + status jaringan, 6 audit log, 7 notifikasi, 2 MFA + profil, 3 peran dan izin, 4 Data Pengguna,
-   5 navigasi (di sini juga: pesan 403 berbahasa Inggris dari paket izin sudah dibuang di `bootstrap/app.php`, uji ulang bersama halaman error), 9 data referensi, 10 parameter produk, 11 BMPK, 12 komite, 13 anggota komite; alur kredit (14 sampai 23) dibahas nanti.
+1. **Audit silang dokumen ↔ kode per fitur: ditunda** (user, 2026-10-20; fitur 1, 24, dan 25 sudah selesai). Fokus sekarang penyesuaian dan fitur baru. Audit fitur 2 sampai 23
+   tidak dijalankan sebagai deret sendiri; fitur yang belum diaudit diaudit **sekalian saat ada penyesuaian pada fitur itu**, dan baru dianggap selesai bila penyesuaiannya selesai
+   (satu brief memuat penyesuaian dan auditnya, bentuk: brief 0004 codex, commit 584013f, `AGENTS.md` bagian 1 dan 3; temuan diperbaiki kecuali yang mengubah kebijakan, dijelaskan ke pemilik dulu).
+   Fitur baru langsung dibuat mengikuti aturan kerja sekarang, jadi tidak perlu audit susulan. Urutan lama dari pemilik, bila audit berdiri sendiri dilanjutkan: 8 halaman error + status jaringan, 6 audit log, 7 notifikasi,
+   2 MFA + profil, 3 peran dan izin, 4 Data Pengguna, 5 navigasi (pesan 403 berbahasa Inggris dari paket izin sudah dibuang di `bootstrap/app.php`, uji ulang bersama halaman error),
+   9 data referensi, 10 parameter produk, 11 BMPK, 12 komite, 13 anggota komite; alur kredit (14 sampai 23) dibahas nanti.
    Temuan awal untuk fitur yang belum diaudit: (4) `UserSeeder` memuat nama dan email yang tampak asli, (6) `audit:prune` terjadwal bulanan
    padahal retensi belum diatur.
 2. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): `/ui-guideline`, layar tamu, halaman error, serta daftar Analisa dan Persetujuan sudah; layar fitur lain diperiksa bersama audit fiturnya.
