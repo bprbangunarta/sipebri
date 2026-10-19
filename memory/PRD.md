@@ -56,7 +56,8 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Login (audit fitur 1, user, 2026-10-19):** batas gagal 5 per orang+IP dan 60 per IP per menit (longgar karena kantor mungkin berbagi IP);
   `CODEX_VERIFY=false` di produksi hanya diperingatkan di log; username yang diketik pada percobaan gagal disimpan hanya bila berbentuk
   username/email (kata sandi pendek tanpa simbol yang diketik di situ tetap tak terbedakan); orang berkas-ada dengan id Codex berubah
-  ditolak dan diselesaikan Super Admin (memindahkan semua rujukan id berisiko bagi rantai audit).
+  ditolak dan diselesaikan Super Admin (memindahkan semua rujukan id berisiko bagi rantai audit). IP yang dicatat adalah IP sambungan; di balik proxy yang
+  belum dipercaya itu IP proxy (bukan perubahan fitur, diatur saat deploy bila perlu).
 - **Tidak boleh menambah status berkas baru tanpa dibahas.**
 - **Antrean offline survei tidak dibuat** (user): tanpa sinyal aplikasi pun tidak bisa dibuka; indikator jaringan sudah memberi tahu.
 - **Alamat dari koordinat tidak dibandingkan dengan alamat KTP nasabah:** survei bisa dilakukan di mana saja.
@@ -74,8 +75,6 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Audit akses baca halaman daftar** belum dicatat (volume besar); tambahkan ringkas bila auditor meminta.
 - Retensi/arsip audit log (OJK, bertahun-tahun) belum diatur; jangan hapus baris.
 - Role lama `HR Admin`/`Viewer` masih ada di database dev (tanpa izin).
-- **Proxy atau CDN di depan aplikasi belum dikonfirmasi** (audit fitur 1): bila ada, IP di audit dan di batas percobaan masuk adalah IP proxy
-  sampai proxy dipercaya di `bootstrap/app.php`; periksa saat deploy.
 
 ## Langkah berikutnya
 
