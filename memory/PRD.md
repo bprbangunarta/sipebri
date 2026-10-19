@@ -1,7 +1,6 @@
 # PRD / Memori proyek
 
-> SATU-SATUNYA berkas memori proyek ini. Jangan membuat `memory.md`, `state.md`, `backlog.md`, `notes.md`,
-> atau berkas lain di `memory/` (BACKLOG.md lama sudah dilebur ke sini pada 2026-10-19).
+> Satu-satunya berkas memori proyek ini; berkas pelacak lain dilarang (`AGENTS.md` bagian 1).
 >
 > **Tujuan:** agent atau sesi baru tahu apa yang ada, mengapa, dan apa berikutnya tanpa membaca seluruh kode. Baca pertama kali, setiap sesi.
 >
