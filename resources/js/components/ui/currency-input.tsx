@@ -6,6 +6,24 @@ import { caretAfter, dataBefore } from '@/lib/mask';
 
 const isDigit = (char: string) => /\d/.test(char);
 
+/** Typing one digit at a time is read as it is; only a paste or a drop brings a whole amount that may carry cents or a sign. */
+const WHOLE_TEXT = new Set(['insertFromPaste', 'insertFromDrop']);
+
+/**
+ * A pasted amount is whole rupiah: "1.500.000,50" and "1500000.00" are 1.500.000, not 150 million. A decimal part (one or two digits after
+ * the last separator, which a thousands group never has) is dropped. Returns null when the text must not be taken: a negative amount
+ * (the field never holds one) or text with no digit in it.
+ */
+function pastedAmount(text: string): string | null {
+    if (/[-−–]\s*\d/.test(text)) {
+        return null;
+    }
+
+    const whole = text.replace(/[.,]\d{1,2}\s*$/, '');
+
+    return /\d/.test(whole) ? whole : null;
+}
+
 type Props = Omit<React.ComponentProps<typeof Input>, 'value' | 'onChange' | 'defaultValue' | 'prefix'> & {
     /** The amount as a number (whole units), or null when empty. */
     value: number | null;
@@ -44,9 +62,21 @@ export function CurrencyInput({ value, onValueChange, prefix = 'Rp', maxDigits =
                 className={cn('text-right tabular-nums', prefix && 'pl-9', className)}
                 onChange={(event) => {
                     const element = event.currentTarget;
-                    const typed = element.value;
-                    const position = element.selectionStart ?? typed.length;
                     const native = event.nativeEvent as InputEvent;
+                    let typed = element.value;
+
+                    if (WHOLE_TEXT.has(native.inputType)) {
+                        const amount = pastedAmount(typed);
+
+                        // Refused: the controlled value stays as it was.
+                        if (amount === null) {
+                            return;
+                        }
+
+                        typed = amount;
+                    }
+
+                    const position = Math.min(element.selectionStart ?? typed.length, typed.length);
                     let before = dataBefore(typed, position, isDigit);
                     let digits = typed.replace(/\D/g, '');
 

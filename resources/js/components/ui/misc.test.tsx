@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import { PageHeader } from '@/components/ui/misc';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+import { Alert, ErrorState, PageHeader } from '@/components/ui/misc';
 
 describe('PageHeader', () => {
     it('puts the action buttons of the row in equal-width columns, so a pair never looks uneven', () => {
@@ -28,5 +29,33 @@ describe('PageHeader', () => {
 
         expect(screen.getByRole('heading', { level: 1, name: 'Audit Logs' })).toBeInTheDocument();
         expect(screen.getByText('Catatan anti-rusak')).toBeInTheDocument();
+    });
+});
+
+describe('ErrorState', () => {
+    it('is announced when it appears, and offers a retry only when there is one', async () => {
+        const onRetry = vi.fn();
+        const { rerender } = render(<ErrorState message="Server tidak dapat dihubungi." />);
+
+        expect(screen.getByRole('alert')).toHaveTextContent('Server tidak dapat dihubungi.');
+        expect(screen.queryByRole('button', { name: 'Coba lagi' })).not.toBeInTheDocument();
+
+        rerender(<ErrorState message="Server tidak dapat dihubungi." onRetry={onRetry} />);
+        await userEvent.click(screen.getByRole('button', { name: 'Coba lagi' }));
+        expect(onRetry).toHaveBeenCalled();
+    });
+});
+
+describe('Alert', () => {
+    it('announces a danger message at once and the other tones politely', () => {
+        render(
+            <>
+                <Alert tone="danger">Gagal.</Alert>
+                <Alert tone="success">Berhasil.</Alert>
+            </>,
+        );
+
+        expect(screen.getByRole('alert')).toHaveTextContent('Gagal.');
+        expect(screen.getByRole('status')).toHaveTextContent('Berhasil.');
     });
 });

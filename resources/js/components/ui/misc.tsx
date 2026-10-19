@@ -49,7 +49,7 @@ export function EmptyState({ icon, title, description, action }: { icon: ReactNo
 
 export function ErrorState({ message, onRetry }: { message: string; onRetry?: () => void }) {
     return (
-        <div className="flex flex-col items-center gap-1 px-4 py-10 text-center">
+        <div role="alert" className="flex flex-col items-center gap-1 px-4 py-10 text-center">
             <AlertTriangle className="size-8 text-danger/60" />
             <p className="mt-1 text-sm font-medium">Terjadi kesalahan</p>
             <p className="text-xs text-muted">{message}</p>

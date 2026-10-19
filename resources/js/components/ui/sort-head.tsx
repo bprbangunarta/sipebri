@@ -1,4 +1,5 @@
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 /** Sortable table header cell. `sort`/`direction` describe the current ordering. */
@@ -14,7 +15,7 @@ export function SortHead({
     sort: string;
     direction: 'asc' | 'desc';
     onSort: (column: string) => void;
-    children: string;
+    children: ReactNode;
     className?: string;
 }) {
     const active = sort === column;

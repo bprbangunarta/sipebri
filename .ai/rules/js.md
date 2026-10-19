@@ -43,6 +43,15 @@ Semua akses server lewat Inertia: `router`, `useForm`/`<Form>`, `useHttp` untuk 
 
 Tombol ikon wajib `aria-label` plus `Tip`; isian dibungkus `Field` (label, hint, dan galat tersambung lewat `id`, `aria-describedby`, `aria-invalid`); dialog memakai `Modal`/`ConfirmDialog`; semua yang bisa diklik adalah `button` atau `Link`, bukan `div` ber-`onClick`. Aksesibilitas umum (kontras, keyboard, fokus, keadaan) adalah `antislop-human`.
 
+Hasil audit kit UI (brief 0002, 2026-10-19), yang kini dijaga test:
+
+- `Tip` berdiri sendiri: ia membawa penyedia tooltip sendiri bila belum ada, jadi layar di luar cangkang aplikasi (login) boleh memakainya. **Pengecualian:** tombol tutup `Modal` sengaja tanpa `Tip`, karena Radix memberi fokus pertama ke tombol itu, tooltip langsung terbuka, dan Escape pertama hanya menutup tooltip.
+- Tooltip Radix tidak terbuka oleh sentuhan; karena itu keterangan `hint` di `Field` (ikon info) juga terbuka oleh ketukan atau klik, dan menutup dengan ketukan di tempat lain atau Escape. Nama tombolnya memuat label isian ("Lihat keterangan Nama").
+- `Combobox`: dari keyboard dibuka dengan Enter, Spasi, atau panah; fokus langsung ke kotak cari (atau ke daftar bila `searchable={false}`), panah memindah opsi yang disorot (`aria-activedescendant`), Home dan End di daftar tanpa kotak cari, Enter memilih, Escape menutup dan mengembalikan fokus. `Field` menyambungkan galat dan keterangan ke `Combobox` dan `DatePicker` lewat `aria-describedby` dan `aria-invalid`.
+- `DataTable`: baris yang membuka sesuatu (`onRowClick`) bisa dijangkau dengan Tab dan dibuka dengan Enter (tombol di dalam baris tetap milik tombolnya); keadaan memuat diumumkan ("Memuat data…", `aria-busy`); `ErrorState` memakai `role="alert"`.
+- Isian yang tidak boleh membuang masukan tempelan: `CodeInput` tidak memakai `maxLength` bawaan (peramban memotong "Kode: 482915" sebelum dibersihkan) dan memotong sesudah dibersihkan; `CurrencyInput` membaca tempelan sebagai rupiah utuh ("1.500.000,50" dan "1500000.00" menjadi 1.500.000, bukan 150 juta; nominal negatif atau tanpa angka ditolak); `FileInput` menerapkan `accept` pada berkas yang diseret juga, dan seretan yang ditolak tidak menghapus berkas yang sudah dipilih.
+- Nilai yang tidak terbaca dari server tidak merusak layar: `formatNumber` dan `rupiah` menampilkan "–" (bukan "NaN"), `DatePicker` memperlakukannya sebagai kosong.
+
 ## Compact UI
 
 - **Pakai ulang** `components/ui`: Button, Input/InputGroup, Field, Combobox, DatePicker, Modal/ConfirmDialog/DialogBody/DialogFooter, Dropdown, Tabs, Tip, Card/CardHeader/CardBody/CardFooter, Alert, Badge, EmptyState, ErrorState, Skeleton, PageHeader, DataTable, BarChart/ColumnChart/DonutChart, Checkbox/Switch/RadioGroup, Textarea, CurrencyInput, MaskedInput, FilteredInput, ColorInput, FileInput, PasswordInput, CodeInput. Jangan pakai kontrol native (`<textarea>`, `<select>`, `type="checkbox|radio"`) di halaman **[mesin]**.
@@ -76,7 +85,7 @@ Tombol ikon wajib `aria-label` plus `Tip`; isian dibungkus `Field` (label, hint,
 
 Aturan server tentang _apa yang boleh diketik_ (hanya angka, nama tanpa angka, panjang, rentang) ditegakkan juga oleh isian, sehingga kolom yang tidak bisa memuat suatu karakter tidak pernah menampilkannya; server tetap yang berwenang dan memeriksa lagi. Bila satu aturan berubah di satu sisi, ubah sisi lainnya di commit yang sama.
 
-- **Uang dan angka besar:** `CurrencyInput` (format `1.000.000` otomatis, awalan `Rp`; `prefix={null}` untuk angka biasa). Nilainya **number**; ke server dikirim angka itu, tidak pernah teks berformat.
+- **Uang dan angka besar:** `CurrencyInput` (format `1.000.000` otomatis, awalan `Rp`; `prefix={null}` untuk angka biasa). Nilainya **number**; ke server dikirim angka itu, tidak pernah teks berformat. Tempelan dibaca sebagai rupiah utuh (desimal dibuang, negatif ditolak).
 - **Format tetap dan angka polos** (NIK, telepon, NPWP, tenor, persen bulat): `MaskedInput` dengan `mask` dari `lib/mask.ts` (`9` angka, `a` huruf, `*` huruf/angka; `'9'.repeat(n)` untuk angka polos). Nilainya data tanpa tanda baca. Tambah mask baru di `MASKS`.
 - **Huruf dan karakter terbatas** (nama, kode): `FilteredInput` dengan himpunan karakter yang sama dengan aturan server.
 - **Desimal** (bunga, koordinat): `FilteredInput` dengan himpunan angka dan pemisah yang diterima server, atau `CurrencyInput` bila bilangan bulat.
@@ -96,16 +105,17 @@ Aturan server tentang _apa yang boleh diketik_ (hanya angka, nama tanpa angka, p
 
 `resources/css/app.css` satu-satunya sumber warna dan ukuran (Tailwind v4 `@theme`). Tanpa warna tertulis langsung **[mesin]**, tanpa ukuran teks sembarang (`text-[11px]`) **[mesin]**, tanpa palet Tailwind untuk status **[mesin]**: pakai `success`, `warning`, `info`, `danger` dengan `-soft`, `-line`, `-ink`; pesan sebaris memakai `Alert`, bukan `div` buatan sendiri. `html { font-size: 15px }`, jadi `1rem = 15px`.
 
-| Token                                                        | Dipakai untuk                                                             |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| `primary` / `-hover` / `-soft`                               | tombol utama, tautan, menu aktif, fokus / disorot / latar lembut          |
-| `surface`, `canvas`, `line`                                  | kartu, sidebar, dialog / latar halaman, header tabel, hover / semua garis |
-| `ink`, `muted`                                               | teks utama / label, hint, header tabel                                    |
-| `{success,warning,info,danger}` + `-soft` / `-line` / `-ink` | status: badge, `Alert`, toast, indikator jaringan                         |
-| `chart-1` … `chart-5`                                        | seri grafik (tanpa arti status), tiap warna ≥ 3:1 terhadap `surface`      |
-| `text-2xs` / `text-xs` / `text-sm`                           | badge, header tabel, penghitung / label dan hint / isi, sel, tombol       |
+| Token                                                        | Dipakai untuk                                                                                                                                                            |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `primary` / `-hover` / `-soft`                               | tombol utama, tautan, menu aktif, fokus / disorot / latar lembut                                                                                                         |
+| `surface`, `canvas`, `line`                                  | kartu, sidebar, dialog / latar halaman, header tabel, hover / garis pemisah (kartu, tabel, dialog)                                                                       |
+| `control`                                                    | tepi kontrol: isian, kotak centang, radio, sakelar mati, tombol outline, zona seret berkas; 3:1 pada `surface` dan `canvas` (WCAG 1.4.11), dijaga `app.contrast.test.ts` |
+| `ink`, `muted`                                               | teks utama / label, hint, header tabel                                                                                                                                   |
+| `{success,warning,info,danger}` + `-soft` / `-line` / `-ink` | status: badge, `Alert`, toast, indikator jaringan                                                                                                                        |
+| `chart-1` … `chart-5`                                        | seri grafik (tanpa arti status), tiap warna ≥ 3:1 terhadap `surface`                                                                                                     |
+| `text-2xs` / `text-xs` / `text-sm`                           | badge, header tabel, penghitung / label dan hint / isi, sel, tombol                                                                                                      |
 
-Lapisan: header `z-30`, laci `z-40`, dialog dan penanda jaringan `z-50`, tooltip `z-60`, popover `z-70`. Bayangan: `shadow-sm` jempol sakelar, `shadow-md` penanda mengambang, `shadow-lg` dropdown/popover, `shadow-xl` dialog/laci. Kontras token dijaga `app.contrast.test.ts`; token warna baru masuk daftar token `/ui-guideline` dan komponen baru di `components/ui` punya contoh di sana (`ui-guideline.test.ts` menegakkan keduanya). Kalender memakai kelas `compact-calendar` (sel 28px).
+Lapisan: header `z-30`, laci `z-40`, dialog dan penanda jaringan `z-50`, tooltip `z-60`, popover `z-70`. Bayangan: `shadow-sm` jempol sakelar, `shadow-md` penanda mengambang, `shadow-lg` dropdown/popover, `shadow-xl` dialog/laci. Kontras token dijaga `app.contrast.test.ts`, termasuk tepi kontrol (`control`, 3:1), teks placeholder (`muted` penuh, bukan `muted/70`, 4,5:1) dan cincin fokus (`primary` penuh, bukan `primary/40`, 3:1); komponen kit tidak boleh memudarkan ketiganya; token warna baru masuk daftar token `/ui-guideline` dan komponen baru di `components/ui` punya contoh di sana (`ui-guideline.test.ts` menegakkan keduanya). Kalender memakai kelas `compact-calendar` (sel 28px).
 
 ## Combobox dengan teks panjang
 

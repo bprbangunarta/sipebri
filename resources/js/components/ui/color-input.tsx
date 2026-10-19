@@ -30,7 +30,7 @@ export function ColorInput({ id, value, onValueChange, swatches = DEFAULT_SWATCH
                     value={FULL.test(value) ? value : '#000000'}
                     onChange={(event) => onValueChange(event.target.value.toLowerCase())}
                     className={cn(
-                        'size-8 shrink-0 cursor-pointer rounded-md border border-line bg-surface p-0.5 disabled:opacity-50',
+                        'size-8 shrink-0 cursor-pointer rounded-md border border-control bg-surface p-0.5 disabled:opacity-50',
                         !FULL.test(value) && 'opacity-40',
                     )}
                 />
@@ -58,7 +58,7 @@ export function ColorInput({ id, value, onValueChange, swatches = DEFAULT_SWATCH
                             onClick={() => onValueChange(color)}
                             style={{ backgroundColor: color }}
                             className={cn(
-                                'size-5 cursor-pointer rounded border border-line focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none disabled:opacity-50',
+                                'size-5 cursor-pointer rounded border border-control focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none disabled:opacity-50',
                                 value === color && 'ring-2 ring-primary ring-offset-1',
                             )}
                         />

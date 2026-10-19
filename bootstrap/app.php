@@ -9,6 +9,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleMiddleware;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,8 +60,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
             return Inertia::render('error', [
                 'status' => $status,
-                // Only the 403 messages written for people are shown; framework texts of other statuses stay out of sight.
-                'message' => $status === 403 && $exception instanceof HttpExceptionInterface ? $exception->getMessage() : '',
+                // Only the 403 messages written for people are shown; framework texts of other statuses stay out of sight, and so does the
+                // English text of the permission package ("User does not have the right roles."): the screen's own Indonesian wording is used.
+                'message' => $status === 403 && $exception instanceof HttpExceptionInterface && ! $exception instanceof UnauthorizedException ? $exception->getMessage() : '',
             ])->toResponse($request)->setStatusCode($status);
         });
     })->create();

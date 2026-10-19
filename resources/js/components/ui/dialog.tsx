@@ -67,6 +67,8 @@ export function Modal({
                             <D.Title className="text-sm font-semibold">{title}</D.Title>
                             <D.Description className="text-xs text-muted">{description ?? ' '}</D.Description>
                         </div>
+                        {/* No `Tip` here, on purpose: Radix gives the first focus to this button, a tooltip would open at once, and the first
+                            Escape would then close the tooltip instead of the dialog. */}
                         <D.Close asChild>
                             <Button variant="ghost" size="icon" aria-label="Tutup">
                                 <X />

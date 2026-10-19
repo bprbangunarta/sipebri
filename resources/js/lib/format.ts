@@ -40,7 +40,7 @@ const numberFormat = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }
 
 /** A whole number with Indonesian thousands separators: "1.500.000". */
 export function formatNumber(value: number): string {
-    return numberFormat.format(value);
+    return Number.isFinite(value) ? numberFormat.format(value) : '–';
 }
 
 const rupiahFormat = new Intl.NumberFormat('id-ID', {
@@ -51,5 +51,11 @@ const rupiahFormat = new Intl.NumberFormat('id-ID', {
 
 /** Whole-rupiah amount, e.g. "Rp 1.500.000". */
 export function rupiah(value: number | string | null | undefined): string {
-    return value === null || value === undefined || value === '' ? '–' : rupiahFormat.format(Number(value));
+    if (value === null || value === undefined || (typeof value === 'string' && value.trim() === '')) {
+        return '–';
+    }
+
+    const amount = Number(value);
+
+    return Number.isFinite(amount) ? rupiahFormat.format(amount) : '–';
 }

@@ -1,8 +1,42 @@
 import { Info } from 'lucide-react';
-import { cloneElement, isValidElement, useId } from 'react';
+import { Tooltip as T } from 'radix-ui';
+import { cloneElement, isValidElement, useId, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
-import { Tip, TooltipProvider } from '@/components/ui/tooltip';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+
+/**
+ * The info icon beside a label. A Radix tooltip opens on hover and keyboard focus only (it ignores a touch and closes on click), so on a phone
+ * the hint could never be read. Here a click or a tap opens it too; a tap elsewhere or Escape closes it.
+ */
+function HintTip({ label, hint }: { label: string; hint: string }) {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <TooltipProvider>
+            <T.Root open={open} onOpenChange={setOpen}>
+                <T.Trigger asChild>
+                    <button
+                        type="button"
+                        aria-label={`Lihat keterangan ${label}`}
+                        onClick={(event) => {
+                            event.preventDefault();
+                            setOpen(true);
+                        }}
+                        className="flex size-4 cursor-help items-center justify-center rounded-full text-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none [&_svg]:size-3.5"
+                    >
+                        <Info />
+                    </button>
+                </T.Trigger>
+                <T.Portal>
+                    <T.Content sideOffset={4} className="z-60 max-w-xs rounded bg-ink px-2 py-1 text-xs text-white">
+                        {hint}
+                    </T.Content>
+                </T.Portal>
+            </T.Root>
+        </TooltipProvider>
+    );
+}
 
 /**
  * A label, its control, and the error. A description for the field is the `hint`: it is shown as a tooltip on an info icon beside the
@@ -44,19 +78,7 @@ export function Field({
                     {label}
                     {required && <span className="ml-0.5 text-danger">*</span>}
                 </label>
-                {hint && (
-                    <TooltipProvider delayDuration={200}>
-                        <Tip label={hint}>
-                            <button
-                                type="button"
-                                aria-label="Lihat keterangan"
-                                className="flex size-4 cursor-help items-center justify-center rounded-full text-muted hover:text-ink focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none [&_svg]:size-3.5"
-                            >
-                                <Info />
-                            </button>
-                        </Tip>
-                    </TooltipProvider>
-                )}
+                {hint && <HintTip label={label} hint={hint} />}
             </div>
             {control}
             {hint && (

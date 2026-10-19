@@ -38,3 +38,52 @@ describe('format', () => {
         expect(formatRelative('salah')).toBe('–');
     });
 });
+
+describe('format with values that cannot be read as a number', () => {
+    it('shows a dash for a number that is not one, instead of "NaN"', () => {
+        expect(rupiah('abc')).toBe('–');
+        expect(rupiah(Number.NaN)).toBe('–');
+        expect(rupiah(Number.POSITIVE_INFINITY)).toBe('–');
+        expect(formatNumber(Number.NaN)).toBe('–');
+        expect(formatNumber(Number.NEGATIVE_INFINITY)).toBe('–');
+    });
+
+    it('writes zero, a negative amount, a decimal string from the server, and a very large amount', () => {
+        const plain = (text: string) => text.replace(/\s/g, ' ');
+
+        expect(plain(rupiah(0))).toBe('Rp 0');
+        expect(plain(rupiah(-1500))).toBe('-Rp 1.500');
+        expect(plain(rupiah('1500000.00'))).toBe('Rp 1.500.000');
+        expect(plain(rupiah(999999999999999))).toBe('Rp 999.999.999.999.999');
+        expect(formatNumber(0)).toBe('0');
+        expect(formatNumber(-2500)).toBe('-2.500');
+    });
+});
+
+describe('format and the company clock (Asia/Jakarta)', () => {
+    it('takes the day from the clock the tests run on (set in vite.config.ts), also across midnight', () => {
+        expect(process.env.TZ).toBe('Asia/Jakarta');
+        // 17:30 UTC on 31 October is 00:30 on 1 November in Jakarta.
+        expect(formatDate('2026-10-31T17:30:00Z')).toBe('01 Nov 2026');
+        expect(formatDateTime('2026-10-31T17:30:00Z')).toBe('01 Nov 2026 00:30:00');
+        expect(formatDateTime('2026-10-31T17:30:00+00:00')).toBe('01 Nov 2026 00:30:00');
+    });
+
+    it('keeps a date without a time on the same day, whatever the zone', () => {
+        expect(formatDate('2026-10-19')).toBe('19 Okt 2026');
+        expect(formatDate('2026-01-01')).toBe('01 Jan 2026');
+        expect(formatDate('2026-12-31')).toBe('31 Des 2026');
+    });
+
+    it('writes every month abbreviation in Indonesian', () => {
+        const months = Array.from({ length: 12 }, (_, month) => formatDate(new Date(2026, month, 5)).split(' ')[1]);
+
+        expect(months).toEqual(['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des']);
+    });
+
+    it('treats an empty string, zero-like and date-only space values the way the screen expects', () => {
+        expect(formatDate('')).toBe('–');
+        expect(formatDateTime('')).toBe('–');
+        expect(formatDateTime('2026-10-07 08:45')).toBe('07 Okt 2026 08:45:00');
+    });
+});

@@ -43,6 +43,32 @@ describe('FilteredInput', () => {
     });
 });
 
+describe('FilteredInput with odd input', () => {
+    async function pasted(text: string) {
+        const user = userEvent.setup();
+        render(<Harness allowed={NAME_CHARACTER} />);
+        await user.click(screen.getByLabelText('isian'));
+        await user.paste(text);
+
+        return screen.getByLabelText('isian');
+    }
+
+    it('drops emoji, Arabic and Chinese letters, and zero-width joiners, and keeps what is left of the name', async () => {
+        expect(await pasted('Budi 🙂 Santoso\u200D 王 محمد')).toHaveValue('Budi  Santoso  ');
+    });
+
+    it('keeps a letter written as a base plus a combining accent', async () => {
+        expect(await pasted('Jose\u0301 Ren\u00e9e')).toHaveValue('Jose\u0301 Ren\u00e9e');
+    });
+
+    it('takes a very long text without choking, and still drops what is not allowed', async () => {
+        const field = await pasted(`${'Ab '.repeat(3000)}9`);
+
+        expect((field as HTMLInputElement).value).toHaveLength(9000);
+        expect(field).not.toHaveValue(expect.stringContaining('9'));
+    });
+});
+
 describe('NAME_CHARACTER', () => {
     it('accepts Latin letters (also accented), spaces, and the marks common in names', () => {
         for (const character of ['a', 'Z', 'ë', ' ', '.', ',', "'", '’', '-']) {

@@ -43,7 +43,7 @@ describe('Field', () => {
                 <Input />
             </Field>,
         );
-        const trigger = screen.getByRole('button', { name: 'Lihat keterangan' });
+        const trigger = screen.getByRole('button', { name: 'Lihat keterangan Nama' });
 
         // Under the control the hint exists only for screen readers (`sr-only`), not for the eye.
         expect(screen.getByText('Minimal 3 huruf')).toHaveClass('sr-only');
@@ -51,6 +51,36 @@ describe('Field', () => {
         await userEvent.hover(trigger);
 
         await waitFor(() => expect(screen.getAllByText('Minimal 3 huruf').length).toBeGreaterThan(1));
+    });
+
+    it('opens the hint on a tap, which a plain tooltip ignores, and closes it with Escape', async () => {
+        const user = userEvent.setup();
+        render(
+            <Field label="Nama" hint="Minimal 3 huruf">
+                <Input />
+            </Field>,
+        );
+
+        await user.pointer({ keys: '[TouchA]', target: screen.getByRole('button', { name: 'Lihat keterangan Nama' }) });
+        expect(await screen.findByRole('tooltip')).toHaveTextContent('Minimal 3 huruf');
+
+        await user.keyboard('{Escape}');
+        await waitFor(() => expect(screen.queryByRole('tooltip')).not.toBeInTheDocument());
+    });
+
+    it('opens the hint from the keyboard', async () => {
+        const user = userEvent.setup();
+        render(
+            <>
+                <Field label="Nama" hint="Minimal 3 huruf">
+                    <Input />
+                </Field>
+            </>,
+        );
+
+        await user.tab();
+        expect(screen.getByRole('button', { name: 'Lihat keterangan Nama' })).toHaveFocus();
+        expect(await screen.findByRole('tooltip')).toHaveTextContent('Minimal 3 huruf');
     });
 
     it('describes the control by the error and the hint together', () => {
@@ -70,7 +100,7 @@ describe('Field', () => {
             </Field>,
         );
 
-        expect(screen.queryByRole('button', { name: 'Lihat keterangan' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: /Lihat keterangan/ })).not.toBeInTheDocument();
     });
 });
 

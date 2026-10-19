@@ -19,7 +19,7 @@ describe('style guide', () => {
 
     it('shows every exported UI component', () => {
         // Building blocks that are used inside other components (shown there) rather than on their own.
-        const internal = new Set(['Pagination', 'Popover', 'PopoverTrigger', 'PopoverContent', 'PopoverAnchor', 'SortHead', 'TooltipProvider']);
+        const internal = new Set(['Pagination', 'Popover', 'PopoverTrigger', 'PopoverContent', 'SortHead', 'TooltipProvider']);
         const guide = read('resources/js/pages/ui-guideline.tsx');
         const missing: string[] = [];
 

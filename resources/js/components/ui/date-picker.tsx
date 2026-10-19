@@ -20,6 +20,9 @@ type Props = {
     placeholder?: string;
     /** Accessible name when there is no visible `Field` label (e.g. a toolbar filter). */
     'aria-label'?: string;
+    /** Passed down by `Field`: the error and the hint that describe the field, and whether it is invalid. */
+    'aria-describedby'?: string;
+    'aria-invalid'?: boolean;
 };
 
 /**
@@ -43,9 +46,13 @@ export function DatePicker({
     id,
     placeholder = 'Pilih tanggal',
     'aria-label': ariaLabel,
+    'aria-describedby': describedBy,
+    'aria-invalid': ariaInvalid,
 }: Props) {
     const [open, setOpen] = useState(false);
-    const selected = value ? parseISO(value) : undefined;
+    // A value that is not a date (a bad answer from the server) counts as empty: the calendar must still open.
+    const parsed = value ? parseISO(value) : undefined;
+    const selected = parsed && !Number.isNaN(parsed.getTime()) ? parsed : undefined;
 
     return (
         <Popover open={open} onOpenChange={setOpen}>
@@ -53,11 +60,12 @@ export function DatePicker({
                 <button
                     id={id}
                     type="button"
-                    data-invalid={invalid || undefined}
+                    aria-invalid={invalid || ariaInvalid || undefined}
+                    aria-describedby={describedBy}
                     aria-label={ariaLabel}
-                    className={cn(controlClass, 'flex items-center justify-between text-left data-[invalid]:border-danger data-[invalid]:ring-danger/20')}
+                    className={cn(controlClass, 'flex items-center justify-between text-left')}
                 >
-                    <span className={cn(!selected && 'text-muted/70')}>{selected ? formatDate(selected) : placeholder}</span>
+                    <span className={cn(!selected && 'text-muted')}>{selected ? formatDate(selected) : placeholder}</span>
                     <CalendarDays className="size-3.5 text-muted" />
                 </button>
             </PopoverTrigger>

@@ -53,3 +53,50 @@ describe('CurrencyInput', () => {
         expect(screen.queryByText('Rp')).not.toBeInTheDocument();
     });
 });
+
+describe('CurrencyInput pasted amounts', () => {
+    async function paste(text: string, initial: number | null = null) {
+        const user = userEvent.setup();
+        render(<Harness initial={initial} />);
+        await user.click(screen.getByLabelText('Nominal'));
+        await user.keyboard('{Control>}a{/Control}');
+        await user.paste(text);
+
+        return { shown: screen.getByLabelText('Nominal'), value: screen.getByTestId('value') };
+    }
+
+    it.each([
+        ['Indonesian decimals', '1.500.000,50', 1500000],
+        ['English decimals', '1500000.00', 1500000],
+        ['one decimal digit', '15.5', 15],
+        ['a prefix and a space', 'Rp 1.500.000', 1500000],
+        ['thousands only', '1.500', 1500],
+        ['plain digits', '2500000', 2500000],
+        ['spaces and an emoji', '🙂 12 34', 1234],
+    ])('keeps the amount of %s', async (_name, text, expected) => {
+        const { value } = await paste(text);
+
+        expect(value.textContent).toBe(String(expected));
+    });
+
+    it('does not turn a pasted negative amount into a positive one', async () => {
+        const { shown, value } = await paste('-5.000', 1000);
+
+        expect(value.textContent).toBe('1000');
+        expect(shown).toHaveValue('1.000');
+    });
+
+    it('stops at the most digits a number holds exactly', async () => {
+        const { value } = await paste('99999999999999999999');
+
+        expect(value.textContent).toBe('999999999999999');
+    });
+
+    it('shows a value that is replaced from outside', () => {
+        const { rerender } = render(<CurrencyInput aria-label="Nominal" value={2500} onValueChange={() => undefined} />);
+        expect(screen.getByLabelText('Nominal')).toHaveValue('2.500');
+
+        rerender(<CurrencyInput aria-label="Nominal" value={null} onValueChange={() => undefined} />);
+        expect(screen.getByLabelText('Nominal')).toHaveValue('');
+    });
+});

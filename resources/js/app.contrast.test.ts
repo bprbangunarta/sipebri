@@ -1,6 +1,6 @@
 // @vitest-environment node
 /// <reference types="node" />
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const css = readFileSync(new URL('../css/app.css', import.meta.url), 'utf8');
@@ -70,5 +70,49 @@ describe('colour contrast (WCAG)', () => {
 
     it.each([1, 2, 3, 4, 5])('chart series colour %i reaches 3:1 on the surface', (n) => {
         expect(ratio(`chart-${n}`, 'surface')).toBeGreaterThanOrEqual(3);
+    });
+});
+
+describe('colour contrast of controls and focus (WCAG 1.4.11, 2.4.7)', () => {
+    // The edge of a field, a checkbox, a radio, an off switch, or an outline button is what shows where the control is: 3:1, not the 1.2:1 of `line`.
+    it.each(['surface', 'canvas'])('the border of a control (control) reaches 3:1 on %s', (background) => {
+        expect(ratio('control', background)).toBeGreaterThanOrEqual(3);
+    });
+
+    it('the thumb of an off switch (surface) reaches 3:1 on its track (control)', () => {
+        expect(ratio('surface', 'control')).toBeGreaterThanOrEqual(3);
+    });
+
+    it('the focus ring (primary) reaches 3:1 on the surface', () => {
+        expect(ratio('primary', 'surface')).toBeGreaterThanOrEqual(3);
+    });
+
+    it('the colour of a placeholder (muted, full strength) reaches 4.5:1 on the surface', () => {
+        expect(ratio('muted', 'surface')).toBeGreaterThanOrEqual(4.5);
+    });
+});
+
+describe('the shared components use those colours', () => {
+    const dir = new URL('./components/ui/', import.meta.url);
+    const sources = readdirSync(dir)
+        .filter((name) => name.endsWith('.tsx') && !name.includes('.test.'))
+        .map((name) => [name, readFileSync(new URL(name, dir), 'utf8')] as const);
+
+    it('never fades the placeholder or the focus ring, which would take them below the contrast above', () => {
+        const faded = sources
+            .filter(([, text]) => /placeholder:text-muted\/|focus(-visible|-within)?:ring-primary\/(?:[3-9]\d)\b/.test(text))
+            .map(([name]) => name);
+
+        expect(faded).toEqual([]);
+    });
+
+    it('draws the edge of every field, checkbox, radio, switch, and outline button with the control colour, not the hairline', () => {
+        const edge = (name: string) => sources.find(([file]) => file === name)?.[1] ?? '';
+
+        expect(edge('input.tsx')).toContain('border-control');
+        expect(edge('choice.tsx')).toContain('border-control');
+        expect(edge('choice.tsx')).toContain('bg-control');
+        expect(edge('button.tsx')).toMatch(/outline:[^\n]*border-control/);
+        expect(edge('file-input.tsx')).toContain('border-control');
     });
 });

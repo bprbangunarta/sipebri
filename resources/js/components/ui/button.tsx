@@ -5,14 +5,14 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 export const buttonVariants = cva(
-    'inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-3.5 [&_svg]:shrink-0',
+    'inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-3.5 [&_svg]:shrink-0',
     {
         variants: {
             variant: {
                 // Every variant has the same 1px border box (transparent when it has no visible border), so two buttons side by side
                 // are the same size to the pixel, also when a tool scales the screen and a lone border would make one look taller.
                 primary: 'border border-transparent bg-primary text-white hover:bg-primary-hover',
-                outline: 'border border-line bg-surface text-ink hover:bg-canvas',
+                outline: 'border border-control bg-surface text-ink hover:bg-canvas',
                 ghost: 'border border-transparent text-muted hover:bg-canvas hover:text-ink',
                 danger: 'border border-transparent bg-danger text-white hover:bg-danger/90',
             },

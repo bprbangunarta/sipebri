@@ -42,10 +42,7 @@ export function BarChart({ label, items, className }: { label: string; items: Ch
             // A scrollable region must be reachable by keyboard (WCAG 2.1.1), so this list is focusable on purpose.
             // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- weakening-allowed: a scrollable list must be reachable by keyboard (WCAG 2.1.1)
             tabIndex={0}
-            className={cn(
-                'flex max-h-72 flex-col gap-2 overflow-y-auto focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:outline-none',
-                className,
-            )}
+            className={cn('flex max-h-72 flex-col gap-2 overflow-y-auto focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none', className)}
         >
             {items.map((item) => (
                 <li key={item.label} className="text-xs">

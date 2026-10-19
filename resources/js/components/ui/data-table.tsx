@@ -108,7 +108,7 @@ export function DataTable<T>({
         <ErrorState message={error} onRetry={onRetry} />
     ) : (
         <div className="relative overflow-x-auto">
-            <table className={cn('w-full', dense ? 'text-xs' : 'text-sm')}>
+            <table aria-busy={loading || undefined} className={cn('w-full', dense ? 'text-xs' : 'text-sm')}>
                 <thead className="border-b border-line bg-canvas text-2xs tracking-wide text-muted uppercase">
                     <tr>
                         {columns.map((c) =>
@@ -121,7 +121,7 @@ export function DataTable<T>({
                                     onSort={sort.onSort}
                                     className={cn(c.align === 'right' && 'text-right [&_button]:ml-auto')}
                                 >
-                                    {typeof c.header === 'string' ? c.header : c.key}
+                                    {c.header}
                                 </SortHead>
                             ) : (
                                 <th key={c.key} scope="col" className={th(c)}>
@@ -136,6 +136,11 @@ export function DataTable<T>({
                         ? Array.from({ length: 5 }).map((_, i) => (
                               <tr key={i}>
                                   <td colSpan={columns.length} className="px-3 py-2.5">
+                                      {i === 0 && (
+                                          <span role="status" className="sr-only">
+                                              Memuat data…
+                                          </span>
+                                      )}
                                       <Skeleton className="h-4 w-full" />
                                   </td>
                               </tr>
@@ -143,8 +148,25 @@ export function DataTable<T>({
                         : rows.map((row, index) => (
                               <tr
                                   key={rowKey(row)}
-                                  className={cn('hover:bg-canvas/60', onRowClick && 'cursor-pointer', rowClassName?.(row))}
+                                  className={cn(
+                                      'hover:bg-canvas/60',
+                                      onRowClick && 'cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary',
+                                      rowClassName?.(row),
+                                  )}
                                   onClick={onRowClick ? () => onRowClick(row) : undefined}
+                                  // A row that opens something is a stop of the keyboard too, and Enter opens it like a click. A key pressed on a
+                                  // button inside the row belongs to that button.
+                                  tabIndex={onRowClick ? 0 : undefined}
+                                  onKeyDown={
+                                      onRowClick
+                                          ? (event) => {
+                                                if (event.key === 'Enter' && event.target === event.currentTarget) {
+                                                    event.preventDefault();
+                                                    onRowClick(row);
+                                                }
+                                            }
+                                          : undefined
+                                  }
                               >
                                   {columns.map((c) => (
                                       <td

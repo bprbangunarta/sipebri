@@ -66,6 +66,19 @@ Identitas pengguna dan nasabah datang dari Codex.
   username/email (kata sandi pendek tanpa simbol yang diketik di situ tetap tak terbedakan); orang berkas-ada dengan id Codex berubah
   ditolak dan diselesaikan Super Admin (memindahkan semua rujukan id berisiko bagi rantai audit). IP yang dicatat adalah IP sambungan; di balik proxy yang
   belum dipercaya itu IP proxy (bukan perubahan fitur, diatur saat deploy bila perlu).
+- **Audit fitur 24, UI bersama (brief 0002, user, 2026-10-19):** 15 temuan diperbaiki, masing-masing dengan test yang gagal dulu (komponen berperilaku
+  kini punya test Vitest di sampingnya; 235 test layar): Combobox tanpa kotak cari tidak bisa dipakai dengan keyboard (dipakai di 27 tempat); keterangan
+  `hint` tidak pernah terbuka di layar sentuh; baris tabel yang bisa diklik tidak terjangkau keyboard; tempelan kode OTP kehilangan digit ("Kode: 482915"
+  menjadi kosong); nominal tempelan dengan desimal berlipat 100 ("1.500.000,50" menjadi 150 juta); `Tip` melempar galat di luar penyedia tooltip;
+  `Field` tidak menyambungkan galat dan keterangan ke Combobox dan DatePicker; judul kolom bernode tampil sebagai kuncinya; memuat dan galat tidak
+  diumumkan ke pembaca layar; DatePicker mogok pada tanggal rusak; `rupiah` dan `formatNumber` menampilkan "NaN"; seretan berkas mengabaikan `accept`
+  dan seretan yang ditolak menghapus berkas yang sudah dipilih; pesan 403 paket izin tampil berbahasa Inggris. (Dugaan Tabs melebar di ponsel tidak terbukti
+  di 375 px dan tidak diubah; `CommitteeTabs` adalah navigasi tautan buatan sendiri, bukan `Tabs` kit: untuk audit fitur 12.)
+  **Keputusan pemilik:** tepi kontrol 1,26:1 menjadi token `control` (3,65:1), placeholder `muted` penuh (5,27:1), cincin fokus `primary` penuh (7,7:1); dijaga
+  `app.contrast.test.ts`. **Diterima, tidak diubah:** tombol tutup dialog tanpa `Tip` (tooltip yang terbuka pada fokus pertama menelan Escape pertama);
+  target sentuh 28 px (kepadatan, `ui.md`); `Combobox` dan `DatePicker` memakai `onChange` yang membawa nilai, sedangkan isian lain `onValueChange` (mengubahnya
+  menyentuh puluhan layar); singkatan Agustus "Agt" dari date-fns (bukan "Agu"); jam tampil menurut zona perangkat, bukan WIB (perangkat di luar WIB melihat jam lain
+  dari audit log); `ColorInput` dan `RadioGroup` belum dipakai layar mana pun (tetap ada dengan contoh dan test).
 - **Tidak boleh menambah status berkas baru tanpa dibahas.**
 - **Antrean offline survei tidak dibuat** (user): tanpa sinyal aplikasi pun tidak bisa dibuka; indikator jaringan sudah memberi tahu.
 - **Alamat dari koordinat tidak dibandingkan dengan alamat KTP nasabah:** survei bisa dilakukan di mana saja.
@@ -88,14 +101,14 @@ Identitas pengguna dan nasabah datang dari Codex.
 
 Dipilih user; agent tidak memulai fitur baru tanpa diminta.
 
-1. **Audit silang dokumen ↔ kode per fitur** (user, 2026-10-19; nomor fitur = baris tabel fitur yang ditampilkan di chat, fitur 1 login sudah
-   selesai): satu brief "Audit fitur N" per fitur (bentuk: brief 0004 codex, commit 584013f), mengikuti `AGENTS.md` bagian 1 dan 3; temuan
-   langsung diperbaiki kecuali yang mengubah kebijakan (dijelaskan ke pemilik dulu). **Urutan dari pemilik:** 24 UI bersama, 25 gerbang dan
+1. **Audit silang dokumen ↔ kode per fitur** (user, 2026-10-19; nomor fitur = baris tabel fitur yang ditampilkan di chat, fitur 1 login dan 24 UI bersama
+   sudah selesai): satu brief "Audit fitur N" per fitur (bentuk: brief 0004 codex, commit 584013f), mengikuti `AGENTS.md` bagian 1 dan 3; temuan
+   langsung diperbaiki kecuali yang mengubah kebijakan (dijelaskan ke pemilik dulu). **Urutan dari pemilik:** (24 selesai), 25 gerbang dan
    kerangka agent, 8 halaman error + status jaringan, 6 audit log, 7 notifikasi, 2 MFA + profil, 3 peran dan izin, 4 Data Pengguna,
-   5 navigasi, 9 data referensi, 10 parameter produk, 11 BMPK, 12 komite, 13 anggota komite; alur kredit (14 sampai 23) dibahas nanti.
+   5 navigasi (di sini juga: pesan 403 berbahasa Inggris dari paket izin sudah dibuang di `bootstrap/app.php`, uji ulang bersama halaman error), 9 data referensi, 10 parameter produk, 11 BMPK, 12 komite, 13 anggota komite; alur kredit (14 sampai 23) dibahas nanti.
    Temuan awal untuk fitur yang belum diaudit: (4) `UserSeeder` memuat nama dan email yang tampak asli, (6) `audit:prune` terjadwal bulanan
    padahal retensi belum diatur, (25) `.ai/rules/general.md` masih berjudul "UI nanti Indonesia" dan melarang menerjemahkan.
-2. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): belum dilakukan karena login lewat Codex butuh kredensial pemilik; layar tamu, halaman error, serta daftar Analisa dan Persetujuan (sesi lokal pada salinan SQLite) sudah.
+2. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): `/ui-guideline`, layar tamu, halaman error, serta daftar Analisa dan Persetujuan sudah; layar fitur lain diperiksa bersama audit fiturnya.
 3. Realisasi/pencairan + posting core banking (menunggu rancangan).
 4. Pesan validasi kustom dan atribut (`->attributes()`) yang masih Inggris di controller: rapikan, pakai laravel-lang sebisanya.
 5. Ekspor/impor Excel (ada di SIPEBRI lama) belum dibawa.
