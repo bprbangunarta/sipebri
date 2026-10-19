@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Audit\Auditable;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id
@@ -18,4 +19,14 @@ use Illuminate\Database\Eloquent\Model;
 class Region extends Model
 {
     use Auditable;
+
+    /**
+     * Collaterals point at a region by its code, which many villages share (no foreign key).
+     *
+     * @return HasMany<Collateral, $this>
+     */
+    public function collaterals(): HasMany
+    {
+        return $this->hasMany(Collateral::class, 'region_code', 'code');
+    }
 }

@@ -22,6 +22,8 @@ use App\Models\Region;
 |            unique (true, or a sibling column the value is unique within), uppercase, max, min, hint,
 |            default, empty (label for null), options_from
 |            ([model, value, label columns]), rules (extra validation rules).
+|  title   – field that names a record in messages (default: `name`, then the id).
+|  shared_code – ['relation' => 'noun']: records point at the code, and many rows share it; the last row of a code that is in use cannot be deleted or re-coded.
 |  lock_code – true: the code cannot change once any record uses the row (for rows another system finds by code).
 |  import  – true or ['examples' => [[...cells per field]]] turns on Excel import (the key of a row is its `code`).
 |  actions – extra row actions: label, url (with {id}).
@@ -34,6 +36,9 @@ $label = ['name' => 'name', 'label' => 'Nama', 'type' => 'text', 'required' => t
 return [
     'regions' => [
         'label' => 'Wilayah', 'section' => 'Referensi', 'group' => 'Lokasi', 'model' => Region::class, 'usage' => [],
+        'title' => 'village',
+        // Many villages share one code and collaterals point at the code, so the code may only go (deleted or changed) once no other village keeps it.
+        'shared_code' => ['collaterals' => 'agunan'],
         'fields' => [
             ['name' => 'code', 'label' => 'Kode', 'type' => 'text', 'required' => true, 'max' => 8, 'uppercase' => true, 'hint' => 'Kode kabupaten/kota (dati2) yang dikirim ke core banking.'],
             ['name' => 'regency', 'label' => 'Kabupaten/Kota', 'type' => 'text', 'required' => true, 'max' => 100, 'uppercase' => true],

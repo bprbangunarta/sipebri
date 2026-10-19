@@ -126,6 +126,55 @@ class ReferenceResource
             && in_array(SoftDeletes::class, class_uses_recursive($link->getRelated()), true);
     }
 
+    /**
+     * The relation by which records point at a code that many rows share, when this table has one.
+     *
+     * @return array<string, string>
+     */
+    public function sharedCode(): array
+    {
+        return $this->config['shared_code'] ?? [];
+    }
+
+    /**
+     * What still points at the code of this row, when it is the last row holding that code: [count, noun], or null when the code may go.
+     *
+     * @return array{0: int, 1: string}|null
+     */
+    public function lastHolderOfUsedCode(Model $record): ?array
+    {
+        $others = $this->model()::query()->where('code', $record->getAttribute('code'))->whereKeyNot($record->getKey())->exists();
+
+        if ($others) {
+            return null;
+        }
+
+        foreach ($this->sharedCode() as $relation => $noun) {
+            $count = $record->{$relation}()->count();
+
+            if ($count > 0) {
+                return [$count, $noun];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * The field whose value names a record in a message: `title` in the config, else `name`, else the first field.
+     */
+    public function titleField(): string
+    {
+        $names = array_column($this->rawFields(), 'name');
+
+        return $this->config['title'] ?? (in_array('name', $names, true) ? 'name' : $names[0]);
+    }
+
+    public function title(Model $record): string
+    {
+        return (string) ($record->getAttribute($this->titleField()) ?? $record->getKey());
+    }
+
     public function locksCode(): bool
     {
         return (bool) ($this->config['lock_code'] ?? false);

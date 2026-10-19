@@ -59,6 +59,7 @@ class ReferenceController extends Controller
                 'label' => $definition->label(),
                 'section' => $definition->section(),
                 'tracks_usage' => $usage !== [],
+                'title_field' => $definition->titleField(),
                 'fields' => $definition->fields(),
                 'actions' => $definition->actions(),
                 'import' => $definition->importable() ? [
@@ -129,6 +130,10 @@ class ReferenceController extends Controller
             return;
         }
 
+        if (($held = $definition->lastHolderOfUsedCode($record)) !== null) {
+            throw ValidationException::withMessages(['code' => sprintf('Kode tidak bisa diubah: dipakai oleh %d %s.', $held[0], $held[1])]);
+        }
+
         foreach ($definition->usage() as $relation => $noun) {
             $link = $record->{$relation}();
             $byCode = $definition->locksCode() || ($link instanceof HasOneOrMany && $link->getLocalKeyName() === 'code');
@@ -155,7 +160,7 @@ class ReferenceController extends Controller
     {
         $definition = ReferenceResource::find($resource);
         $record = $definition->model()::query()->findOrFail($id);
-        $name = $record->name ?? $record->getKey();
+        $name = $definition->title($record);
 
         foreach ($definition->usage() as $relation => $noun) {
             $count = $definition->usageOf($record, $relation);
@@ -163,6 +168,10 @@ class ReferenceController extends Controller
             if ($count > 0) {
                 return back()->with('error', $this->inUse($name, $count, $noun));
             }
+        }
+
+        if (($held = $definition->lastHolderOfUsedCode($record)) !== null) {
+            return back()->with('error', $this->inUse($name, $held[0], $held[1]));
         }
 
         $record->delete();

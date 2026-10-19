@@ -181,8 +181,9 @@ class CollateralController extends Controller
             'bindings' => $codeName(BindingType::class),
             'conditions' => $codeName(CollateralCondition::class),
             'methods' => $codeName(CollateralMethod::class),
-            'regions' => Region::query()->select('code', 'regency')->distinct()->orderBy('code')->get()
-                ->map(fn (Region $r): array => ['value' => $r->code, 'label' => "{$r->code} : {$r->regency}"]),
+            // One entry per code: a code that the source data writes with two regencies lists both, instead of two entries with one value.
+            'regions' => Region::query()->select('code', 'regency')->distinct()->orderBy('code')->orderBy('regency')->get()->groupBy('code')
+                ->map(fn ($rows, $code): array => ['value' => (string) $code, 'label' => $code.' : '.$rows->pluck('regency')->implode(' / ')])->values(),
         ];
     }
 }

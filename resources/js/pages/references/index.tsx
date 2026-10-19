@@ -45,6 +45,7 @@ type Props = {
         label: string;
         section: string;
         tracks_usage: boolean;
+        title_field: string;
         fields: FieldDef[];
         actions: { label: string; url: string }[];
         import: { url: string; template_url: string } | null;
@@ -86,6 +87,7 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
     const itemUrl = (item: Item) => resource.item_url.replace('__id__', String(item.id));
     const label = resource.label;
     const primary = resource.fields[0].name;
+    const title = resource.title_field;
 
     const openForm = (item: Item | 'new') => {
         form.clearErrors();
@@ -154,7 +156,7 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
                     <DropdownMenu>
                         <Tip label="Aksi">
                             <DropdownTrigger asChild>
-                                <Button variant="ghost" size="icon" aria-label={`Aksi untuk ${item[primary]}`}>
+                                <Button variant="ghost" size="icon" aria-label={`Aksi untuk ${item[title]}`}>
                                     <MoreHorizontal />
                                 </Button>
                             </DropdownTrigger>
@@ -310,12 +312,12 @@ export default function ReferencesIndex({ items, filters, perPageOptions, canMan
                 description={
                     toDelete && toDelete.usage_count > 0 ? (
                         <>
-                            <strong>{String(toDelete[primary])}</strong> dipakai oleh {toDelete.usage_count} data dan tidak bisa dihapus sebelum data itu
+                            <strong>{String(toDelete[title])}</strong> dipakai oleh {toDelete.usage_count} data dan tidak bisa dihapus sebelum data itu
                             dialihkan.
                         </>
                     ) : (
                         <>
-                            <strong>{String(toDelete?.[primary] ?? '')}</strong> akan dihapus permanen dan tidak bisa dikembalikan.
+                            <strong>{String(toDelete?.[title] ?? '')}</strong> akan dihapus permanen dan tidak bisa dikembalikan.
                         </>
                     )
                 }
