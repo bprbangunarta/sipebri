@@ -1,8 +1,12 @@
-# Project Rules Index
+# Indeks aturan proyek
 
-Before planning or editing, find the row whose globs match the file's path and read that rule file.
+Sebelum merencanakan atau menyunting, cari baris yang glob-nya cocok dengan jalur berkas dan baca berkas aturannya.
 
-| Applies to      | Rule file            |
-| --------------- | -------------------- |
-| *_/_            | .ai/rules/general.md |
-| resources/js/** | .ai/rules/js.md      |
+| Berlaku untuk | Berkas aturan |
+| --- | --- |
+| `**/*` | .ai/rules/general.md |
+| `app/**`, `routes/**`, `config/**`, `bootstrap/**`, `database/seeders/**`, `database/factories/**` | .ai/rules/php.md |
+| `app/**`, `routes/**`, `database/**`, `bootstrap/app.php` | .ai/rules/audit-log.md |
+| `database/migrations/**` | .ai/rules/database.md |
+| `tests/**`, `resources/js/**/*.test.ts(x)` | .ai/rules/tests.md |
+| `resources/js/**`, `resources/css/**`, `resources/views/**`, `scripts/**` | .ai/rules/js.md |

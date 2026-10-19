@@ -20,13 +20,7 @@ Label sidebar sudah Indonesia (lihat App\Support\Navigation). Nama peran mengiku
 - Batasan di UI (max/format) selalu berpasangan dengan validasi server; pakai komponen field yang sudah ada.
 - Periksa tampilan konten pada minimal dua lebar layar (ponsel dan desktop).
 - Saat mengadopsi sebuah referensi (proyek/dokumen lain), sebutkan bagian mana yang dipakai dan mana yang tidak.
-- Tidak berlaku di proyek ini: kickoff template, `memory/PRD.md`, dan skill `ui-taste`/`ui-ux-pro-max` (tidak tersedia).
-
-## Audit log (wajib, standar OJK)
-
-- Semua perubahan data bisnis dicatat lewat trait `App\Audit\Auditable` (model baru yang memuat data kredit/master/akses **harus** memakainya). Kejadian non-model (login, MFA, perubahan izin, akses ditolak, cek nasabah, lihat berkas) lewat `App\Audit\Audit::record()`.
-- Tabel `audit_logs` append-only dengan rantai hash HMAC; jangan pernah update/delete barisnya. Verifikasi: `php artisan audit:verify` (terjadwal harian) atau tombol di halaman Audit Log.
-- Rahasia tidak boleh masuk log (`Audit::REDACTED`); NIK hanya 4 digit terakhir. Aksi baru yang mengubah data lewat query builder/pivot (tanpa event model) harus mencatat manual.
+- Tidak berlaku di proyek ini: kickoff template dan skill `ui-taste`/`ui-ux-pro-max` (tidak tersedia). Memori proyek satu-satunya: `memory/PRD.md` (`AGENTS.md` bagian 2).
 
 ## Integritas relasi
 

@@ -1,17 +1,22 @@
 {
-    "agents": ["claude_code"],
-    "cloud": true,
-    "guidelines": true,
-    "mcp": true,
-    "nightwatch": false,
-    "sail": false,
-    "skills": [
-        "infer-conventions",
-        "deploying-to-cloud",
-        "laravel-best-practices",
-        "testing-best-practices",
-        "wayfinder-development",
-        "inertia-react-development",
-        "tailwindcss-development"
-    ]
+  "agents": ["claude_code"],
+  "cloud": false,
+  "guidelines": true,
+  "mcp": true,
+  "nightwatch": false,
+  "sail": false,
+  "skills": [
+    "infer-conventions",
+    "laravel-best-practices",
+    "testing-best-practices",
+    "wayfinder-development",
+    "inertia-react-development",
+    "tailwindcss-development",
+    "antislop",
+    "antislop-code",
+    "antislop-copywriting",
+    "antislop-human",
+    "antislop-layoutmobile",
+    "antislop-ui"
+  ]
 }
