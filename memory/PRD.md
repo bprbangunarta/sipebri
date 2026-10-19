@@ -80,16 +80,13 @@ Identitas pengguna dan nasabah datang dari Codex.
 
 Dipilih user; agent tidak memulai fitur baru tanpa diminta.
 
-1. **Audit silang dokumen ↔ kode per unit** (user, 2026-10-19), satu brief "Audit fitur N" per fitur (bentuk: brief 0004 codex, commit 584013f), urutan dari pemilik ("fitur N"), mengikuti
-   `AGENTS.md` bagian 1 dan 3; temuan langsung diperbaiki kecuali yang mengubah kebijakan (dijelaskan ke pemilik dulu). Unit yang selesai dihapus
-   dari daftar. Platform: (2) MFA + profil, (3) peran dan izin, (4) Data Pengguna (temuan awal:
-   `UserSeeder` memuat nama dan email pribadi yang tampak asli, padahal seeder hanya boleh berisi data karangan), (5) navigasi dan `/`,
-   (6) audit log (temuan awal: `audit:prune` terjadwal bulanan, padahal "Pertanyaan terbuka" menyebut retensi belum diatur), (7) notifikasi,
-   (8) halaman error + status jaringan. Referensi: (9) data referensi generik, (10) parameter produk, (11) BMPK, (12) komite: jalur, jenjang,
-   aturan khusus, (13) anggota komite, NIK, konflik, pengecualian. Alur: (14) dashboard, (15) nasabah Codex, (16) pengajuan, (17) agunan,
-   (18) penjadwalan + batal, (19) survei + foto, (20) lokasi + alamat perkiraan, (21) lembar analisa + rumus, (22) persetujuan komite + RC,
-   (23) koreksi setelah persetujuan. Kerangka: (24) UI bersama + `/ui-guideline`, (25) gerbang dan kerangka agent (temuan awal: `.ai/rules/general.md` masih
-   berjudul "UI nanti Indonesia" dan melarang menerjemahkan, padahal seluruh UI sudah Indonesia).
+1. **Audit silang dokumen ↔ kode per fitur** (user, 2026-10-19; nomor fitur = baris tabel fitur yang ditampilkan di chat, fitur 1 login sudah
+   selesai): satu brief "Audit fitur N" per fitur (bentuk: brief 0004 codex, commit 584013f), mengikuti `AGENTS.md` bagian 1 dan 3; temuan
+   langsung diperbaiki kecuali yang mengubah kebijakan (dijelaskan ke pemilik dulu). **Urutan dari pemilik:** 24 UI bersama, 25 gerbang dan
+   kerangka agent, 8 halaman error + status jaringan, 6 audit log, 7 notifikasi, 2 MFA + profil, 3 peran dan izin, 4 Data Pengguna,
+   5 navigasi, 9 data referensi, 10 parameter produk, 11 BMPK, 12 komite, 13 anggota komite; alur kredit (14 sampai 23) dibahas nanti.
+   Temuan awal untuk fitur yang belum diaudit: (4) `UserSeeder` memuat nama dan email yang tampak asli, (6) `audit:prune` terjadwal bulanan
+   padahal retensi belum diatur, (25) `.ai/rules/general.md` masih berjudul "UI nanti Indonesia" dan melarang menerjemahkan.
 2. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): belum dilakukan karena login lewat Codex butuh kredensial pemilik; layar tamu, halaman error, serta daftar Analisa dan Persetujuan (sesi lokal pada salinan SQLite) sudah.
 3. Realisasi/pencairan + posting core banking (menunggu rancangan).
 4. Pesan validasi kustom dan atribut (`->attributes()`) yang masih Inggris di controller: rapikan, pakai laravel-lang sebisanya.
