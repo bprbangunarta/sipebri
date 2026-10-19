@@ -32,7 +32,7 @@ function mfaUser(string $method, array $attributes = []): User
     $secret = Totp::generateSecret();
 
     return User::factory()->create([
-        'id' => 30, 'username' => '309011221', 'email' => 'person@example.com',
+        'id' => 30, 'username' => '900000030', 'email' => 'person@example.com',
         ...$attributes,
     ])->forceFill([
         'mfa_method' => $method, 'mfa_secret' => $method === 'totp' ? $secret : null, 'mfa_confirmed_at' => now(),
@@ -53,7 +53,7 @@ function lastEmailedCode(): string
 
 function signInStep(): void
 {
-    test()->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    test()->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
 }
 
 it('matches the RFC 6238 test vector', function () {
@@ -65,7 +65,7 @@ it('matches the RFC 6238 test vector', function () {
 
 it('signs in straight away when the person has no second factor', function () {
     fakeCodex();
-    User::factory()->create(['id' => 30, 'username' => '309011221']);
+    User::factory()->create(['id' => 30, 'username' => '900000030']);
 
     signInStep();
 
@@ -204,7 +204,7 @@ it('lets a person turn on email codes after confirming the address, and turn the
 });
 
 it('lets a person turn on an authenticator app and shows recovery codes once', function () {
-    $user = User::factory()->create(['username' => '309011221']);
+    $user = User::factory()->create(['username' => '900000030']);
     $this->actingAs($user);
 
     $this->post(route('profile.two-factor.totp.start'));
@@ -234,14 +234,14 @@ it('shares the two-factor state used by the reminder banner', function () {
 });
 
 it('changes the password through Codex and maps its answers', function () {
-    $user = User::factory()->create(['username' => '309011221']);
+    $user = User::factory()->create(['username' => '900000030']);
     $this->actingAs($user);
     $payload = ['current_password' => 'old-pass-1', 'password' => 'new-pass-22', 'password_confirmation' => 'new-pass-22'];
 
     Http::swap(new Factory);
     Http::fake(['codex.test/api/web-auth/password' => Http::response(['success' => true, 'message' => 'Kata sandi berhasil diubah'])]);
     $this->put(route('profile.password'), $payload)->assertSessionHasNoErrors()->assertSessionHas('success', 'Kata sandi berhasil diubah');
-    Http::assertSent(fn ($r) => $r->url() === 'https://codex.test/api/web-auth/password' && $r['username'] === '309011221' && $r['current_password'] === 'old-pass-1'
+    Http::assertSent(fn ($r) => $r->url() === 'https://codex.test/api/web-auth/password' && $r['username'] === '900000030' && $r['current_password'] === 'old-pass-1'
         && $r['password'] === 'new-pass-22' && $r['confirmed_password'] === 'new-pass-22' && $r->hasHeader('Authorization', 'Bearer test-token'));
 
     Http::swap(new Factory);
@@ -254,7 +254,7 @@ it('changes the password through Codex and maps its answers', function () {
 });
 
 it('validates the new password before calling Codex', function () {
-    $this->actingAs(User::factory()->create(['username' => '309011221']));
+    $this->actingAs(User::factory()->create(['username' => '900000030']));
     Http::swap(new Factory);
     Http::fake();
 

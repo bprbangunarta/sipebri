@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Support\CommitteeAuthorityOptions;
-use App\Support\CommitteeMemberOrder;
 use App\Support\CommitteeMembers;
+use App\Support\UserListOrder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -26,7 +26,7 @@ class CommitteeMemberController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'role' => ['nullable', 'string', 'max:100'],
             'per_page' => ['nullable', 'integer'],
-            'sort' => ['nullable', Rule::in(CommitteeMemberOrder::KEYS)],
+            'sort' => ['nullable', Rule::in(UserListOrder::MEMBER_KEYS)],
             'direction' => ['nullable', 'in:asc,desc'],
         ]);
         $sort = $filters['sort'] ?? 'name';
@@ -40,7 +40,7 @@ class CommitteeMemberController extends Controller
             })
             // A role that no committee level uses holds no member; asking for it is an empty list, not an error.
             ->when($filters['role'] ?? null, fn ($q, string $role) => in_array($role, $roles, true) ? $q->role($role) : $q->whereRaw('1 = 0'))
-            ->tap(fn ($q) => CommitteeMemberOrder::apply($q, $sort, $direction))
+            ->tap(fn ($q) => UserListOrder::apply($q, $sort, $direction))
             ->orderBy('name')->orderBy('id')
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), [10, 25, 50], true) ? (int) $filters['per_page'] : 25)
             ->withQueryString();

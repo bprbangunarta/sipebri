@@ -92,7 +92,7 @@ function fakeCodex(array $user = [], int $status = 200): void
         'success' => true,
         'data' => [
             'user' => [
-                'id' => 30, 'name' => 'Test Person', 'username' => '309011221', 'email' => 'person@example.com',
+                'id' => 30, 'name' => 'Test Person', 'username' => '900000030', 'email' => 'person@example.com',
                 'birthday' => '1998-01-07', 'role' => 'Kepala Seksi Analis', 'office' => 'Pamanukan', 'alias' => 'TPE', 'mso_code' => null, 'collector_code' => null,
                 'is_active' => true, ...$user,
             ],

@@ -284,6 +284,17 @@ class LoanApplicationController extends Controller
             return back()->with('error', 'Lengkapi langkah nasabah, data pengajuan, dan jaminan sebelum mengajukan.');
         }
 
+        // The limits can change after the draft was saved (the BMPK, the maximum of the product): a draft is checked again when it is sent.
+        $productMax = ProductParameter::where('product_id', $loanApplication->product_id)->value('max_amount');
+        $bmpk = LendingLimit::bmpk();
+        $ceiling = $this->amountCeiling($productMax ? (int) $productMax : null, $bmpk);
+
+        if ($ceiling !== null && $loanApplication->requested_amount > $ceiling) {
+            $message = $this->parameterMessages(null, $productMax ? (int) $productMax : null, $bmpk)['requested_amount.max'] ?? 'Plafon melebihi batas.';
+
+            return back()->with('error', "{$message} Ubah plafonnya, lalu ajukan lagi.");
+        }
+
         $loanApplication->update(['status' => LoanStatus::Submitted]);
 
         Notify::toPermission('scheduling.manage', 'Pengajuan baru menunggu penjadwalan', 'Pengajuan',

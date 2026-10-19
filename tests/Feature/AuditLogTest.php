@@ -86,10 +86,10 @@ it('records successful and failed sign-ins and sign-outs', function () {
     $this->seed(RoleSeeder::class);
     fakeCodex();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
     $this->post(route('logout'));
 
-    expect(AuditLog::query()->where('event', 'auth.login')->where('username', '309011221')->exists())->toBeTrue()
+    expect(AuditLog::query()->where('event', 'auth.login')->where('username', '900000030')->exists())->toBeTrue()
         ->and(AuditLog::query()->where('event', 'auth.logout')->exists())->toBeTrue();
 
     Http::swap(new Factory);

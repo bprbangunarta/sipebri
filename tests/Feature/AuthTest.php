@@ -32,21 +32,21 @@ it('renders the login page', function () {
 it('signs in an active person and mirrors them locally with role and office', function () {
     fakeCodex();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'anything'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'anything'])->assertRedirect(route('dashboard'));
 
-    $user = User::where('username', '309011221')->firstOrFail();
+    $user = User::where('username', '900000030')->firstOrFail();
     $this->assertAuthenticatedAs($user);
     expect($user->id)->toBe(30)
         ->and($user->only(['name', 'email']))->toBe(['name' => 'Test Person', 'email' => 'person@example.com'])
         ->and($user->office->code)->toBe('00')
         ->and($user->hasRole('Kepala Seksi Analis'))->toBeTrue();
     Http::assertSent(fn ($request) => $request->hasHeader('Authorization', 'Bearer test-token')
-        && $request->url() === 'https://codex.test/api/web-auth' && $request['username'] === '309011221' && $request['password'] === 'anything');
+        && $request->url() === 'https://codex.test/api/web-auth' && $request['username'] === '900000030' && $request['password'] === 'anything');
 });
 
 it('creates the office from Codex and refreshes it on the next sign-in, ignoring the extra office data', function () {
     fakeCodex();
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
 
     $office = Office::where('code', '00')->firstOrFail();
     expect($office->name)->toBe('Pamanukan')->and($office->alias)->toBe('PMK')
@@ -55,10 +55,10 @@ it('creates the office from Codex and refreshes it on the next sign-in, ignoring
     $this->post(route('logout'));
     Http::swap(new Factory);
     Http::fake(['codex.test/*' => Http::response(['success' => true, 'data' => [
-        'user' => ['id' => 30, 'username' => '309011221', 'name' => 'Test Person', 'role' => 'Guest', 'is_active' => true],
+        'user' => ['id' => 30, 'username' => '900000030', 'name' => 'Test Person', 'role' => 'Guest', 'is_active' => true],
         'office' => ['code' => '00', 'name' => 'Pamanukan Baru', 'address' => 'New street', 'telephone' => '021', 'latitude' => '-6.286353', 'longitude' => '107.820866', 'radius' => '50', 'coa' => '1.100.2.1'],
     ]])]);
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
 
     $office->refresh();
     expect(Office::count())->toBe(1)->and($office->alias)->toBe('PMK')->and($office->name)->toBe('Pamanukan Baru');
@@ -97,21 +97,21 @@ it('leaves the office empty when Codex sends none and refuses to delete an offic
 });
 
 it('updates an existing person and lets the role follow Codex', function () {
-    User::factory()->create(['id' => 30, 'username' => '309011221', 'name' => 'Old Name'])->assignRole('AO Kredit');
+    User::factory()->create(['id' => 30, 'username' => '900000030', 'name' => 'Old Name'])->assignRole('AO Kredit');
     fakeCodex(['name' => 'New Name', 'role' => 'Kepala Seksi Analis']);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
     $user = User::findOrFail(30);
-    expect(User::where('username', '309011221')->count())->toBe(1)->and($user->name)->toBe('New Name')
+    expect(User::where('username', '900000030')->count())->toBe(1)->and($user->name)->toBe('New Name')
         ->and($user->hasRole('Kepala Seksi Analis'))->toBeTrue()->and($user->hasRole('AO Kredit'))->toBeFalse();
 });
 
 it('moves a person stored under another id to the Codex id', function () {
-    $old = User::factory()->create(['id' => 99, 'username' => '309011221'])->assignRole('AO Kredit');
+    $old = User::factory()->create(['id' => 99, 'username' => '900000030'])->assignRole('AO Kredit');
     fakeCodex(['role' => 'AO Kredit']);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
     expect(User::withTrashed()->find(99))->toBeNull()->and(User::find(30)->hasRole('AO Kredit'))->toBeTrue();
 });
@@ -119,30 +119,30 @@ it('moves a person stored under another id to the Codex id', function () {
 it('refuses an inactive person but keeps them stored as soft deleted', function () {
     fakeCodex(['is_active' => false]);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertSessionHasErrors('username');
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertSessionHasErrors('username');
 
     $this->assertGuest();
     expect(User::withTrashed()->findOrFail(30)->trashed())->toBeTrue();
 });
 
 it('restores a soft-deleted person when Codex says active again, and soft-deletes one turned inactive', function () {
-    User::factory()->create(['id' => 30, 'username' => '309011221'])->delete();
+    User::factory()->create(['id' => 30, 'username' => '900000030'])->delete();
     fakeCodex();
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
     expect(User::withTrashed()->findOrFail(30)->trashed())->toBeFalse();
 
     $this->post(route('logout'));
     fakeCodex(['is_active' => false]);
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertSessionHasErrors('username');
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertSessionHasErrors('username');
     expect(User::withTrashed()->findOrFail(30)->trashed())->toBeTrue();
 });
 
 it('leaves the stored person untouched when mirroring fails halfway', function () {
-    User::factory()->create(['id' => 30, 'username' => '309011221', 'name' => 'Old Name'])->delete();
+    User::factory()->create(['id' => 30, 'username' => '900000030', 'name' => 'Old Name'])->delete();
     User::restored(fn () => throw new RuntimeException('restore failed'));
     fakeCodex();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertServerError();
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertServerError();
 
     $user = User::withTrashed()->findOrFail(30);
     expect($user->name)->toBe('Old Name')->and($user->trashed())->toBeTrue()->and($user->office_id)->toBeNull()
@@ -153,7 +153,7 @@ it('leaves the stored person untouched when mirroring fails halfway', function (
 it('refuses wrong credentials without creating anybody', function () {
     Http::fake(['codex.test/*' => Http::response(['success' => false, 'message' => 'Wrong'], 401)]);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'wrong'])->assertSessionHasErrors('username');
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'wrong'])->assertSessionHasErrors('username');
 
     $this->assertGuest();
     expect(User::count())->toBe(0);
@@ -162,7 +162,7 @@ it('refuses wrong credentials without creating anybody', function () {
 it('shows a clear message when Codex is unreachable', function () {
     Http::fake(['codex.test/*' => Http::response('down', 500)]);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])
         ->assertSessionHasErrors(['username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
     $this->assertGuest();
 });
@@ -170,13 +170,13 @@ it('shows a clear message when Codex is unreachable', function () {
 it('treats an answer without a usable id or username as the service being down, storing nobody', function (array $user) {
     Http::fake(['codex.test/*' => Http::response(['success' => true, 'data' => ['user' => $user]])]);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])
         ->assertSessionHasErrors(['username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
     $this->assertGuest();
     expect(User::withTrashed()->count())->toBe(0);
 })->with([
-    'no id' => [['username' => '309011221', 'is_active' => true]],
-    'zero id' => [['id' => 0, 'username' => '309011221', 'is_active' => true]],
+    'no id' => [['username' => '900000030', 'is_active' => true]],
+    'zero id' => [['id' => 0, 'username' => '900000030', 'is_active' => true]],
     'no username' => [['id' => 30, 'is_active' => true]],
     'empty username' => [['id' => 30, 'username' => ' ', 'is_active' => true]],
 ]);
@@ -184,22 +184,22 @@ it('treats an answer without a usable id or username as the service being down, 
 it('refuses an overlong password before calling Codex', function () {
     Http::fake();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => str_repeat('x', 256)])->assertSessionHasErrors('password');
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => str_repeat('x', 256)])->assertSessionHasErrors('password');
     Http::assertNothingSent();
 });
 
 it('accepts an id that Codex sends as a number in a string', function () {
     fakeCodex(['id' => '30']);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
-    expect(User::findOrFail(30)->username)->toBe('309011221');
+    expect(User::findOrFail(30)->username)->toBe('900000030');
 });
 
 it('treats an answer with fields of the wrong type as the service being down, storing nobody', function (array $user) {
     fakeCodex($user);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])
         ->assertSessionHasErrors(['username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
     $this->assertGuest();
     expect(User::withTrashed()->count())->toBe(0)->and(Office::count())->toBe(0);
@@ -208,7 +208,7 @@ it('treats an answer with fields of the wrong type as the service being down, st
     'email as a list' => [['email' => ['a@b.test']]],
     'role as a list' => [['role' => ['Super Admin']]],
     'office name as a list' => [['office' => ['Pamanukan']]],
-    'username as a number' => [['username' => 309011221]],
+    'username as a number' => [['username' => 900000030]],
 ]);
 
 it('does not follow a redirect from Codex and says the service is down', function () {
@@ -217,7 +217,7 @@ it('does not follow a redirect from Codex and says the service is down', functio
         'elsewhere.test/*' => Http::response(['success' => true]),
     ]);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])
         ->assertSessionHasErrors(['username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
     Http::assertSentCount(1);
     $this->assertGuest();
@@ -227,7 +227,7 @@ it('says the service is down when the Codex address is not configured', function
     config(['services.codex.endpoint' => '']);
     Http::preventStrayRequests();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])
         ->assertSessionHasErrors(['username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
     $this->assertGuest();
 });
@@ -236,16 +236,16 @@ it('goes back to the page asked for before signing in, and ignores a destination
     fakeCodex(['role' => 'Super Admin']);
 
     $this->get('/collaterals')->assertRedirect(route('login'));
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x', 'intended' => 'https://evil.test', 'redirect' => 'https://evil.test'])
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x', 'intended' => 'https://evil.test', 'redirect' => 'https://evil.test'])
         ->assertRedirect(url('/collaterals'));
 
     $this->post(route('logout'));
     fakeCodex(['role' => 'Super Admin']);
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x', 'intended' => 'https://evil.test'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x', 'intended' => 'https://evil.test'])->assertRedirect(route('dashboard'));
 });
 
 it('counts the attempt before asking Codex, so parallel requests cannot slip under the limit', function () {
-    $key = Str::transliterate('309011221|127.0.0.1');
+    $key = Str::transliterate('900000030|127.0.0.1');
     $during = null;
     Http::fake(['codex.test/*' => function () use (&$during, $key) {
         $during = RateLimiter::attempts($key);
@@ -253,7 +253,7 @@ it('counts the attempt before asking Codex, so parallel requests cannot slip und
         return Http::response(['success' => false], 401);
     }]);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'bad']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'bad']);
 
     expect($during)->toBe(1)->and(RateLimiter::attempts($key))->toBe(1);
 });
@@ -262,14 +262,14 @@ it('does not count attempts that failed because Codex was down, and a success cl
     foreach (range(1, 6) as $i) {
         Http::swap(new Factory);
         Http::fake(['codex.test/*' => Http::response('down', 500)]);
-        $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
+        $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])
             ->assertSessionHasErrors(['username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
     }
 
-    expect(RateLimiter::attempts(Str::transliterate('309011221|127.0.0.1')))->toBe(0);
+    expect(RateLimiter::attempts(Str::transliterate('900000030|127.0.0.1')))->toBe(0);
 
     fakeCodex();
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
 });
 
 it('stops one address that tries many usernames, without counting outages or successful sign-ins', function () {
@@ -293,7 +293,7 @@ it('stops one address that tries many usernames, without counting outages or suc
     }
     foreach (range(1, 5) as $i) {
         fakeCodex();
-        $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+        $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
         $this->post(route('logout'));
     }
 });
@@ -306,7 +306,7 @@ it('warns in the log when the connection to Codex is not verified in production,
     Log::spy();
     fakeCodex();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
 
     $warns
         ? Log::shouldHaveReceived('warning')->withArgs(fn (string $message) => str_contains($message, 'CODEX_VERIFY'))->once()
@@ -325,7 +325,7 @@ it('keeps in the audit trail only what looks like a username or an email, never 
     $row = AuditLog::query()->where('event', 'auth.login_failed')->firstOrFail();
     expect($row->decoded('context')['username'])->toBe($kept)->and($row->subject_label)->toBe($kept);
 })->with([
-    'staff number' => ['309011221', '309011221'],
+    'staff number' => ['900000030', '900000030'],
     'letters username' => ['superadmin', 'superadmin'],
     'email' => ['person@example.com', 'person@example.com'],
     'a sentence typed as password' => ['Rahasia saya 2026!', '[bukan username]'],
@@ -334,14 +334,14 @@ it('keeps in the audit trail only what looks like a username or an email, never 
 ]);
 
 it('shares one limit between a person\'s email and username', function () {
-    User::factory()->create(['id' => 30, 'username' => '309011221', 'email' => 'person@example.com']);
+    User::factory()->create(['id' => 30, 'username' => '900000030', 'email' => 'person@example.com']);
     Http::fake(['codex.test/*' => Http::response(['success' => false], 401)]);
 
-    foreach (['309011221', 'person@example.com', ' Person@Example.com ', '309011221', 'person@example.com'] as $typed) {
+    foreach (['900000030', 'person@example.com', ' Person@Example.com ', '900000030', 'person@example.com'] as $typed) {
         $this->post(route('login.store'), ['username' => $typed, 'password' => 'bad']);
     }
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'bad'])->assertSessionHasErrors('username');
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'bad'])->assertSessionHasErrors('username');
     Http::assertSentCount(5);
 });
 
@@ -359,7 +359,7 @@ it('writes one lockout entry per lockout, not one per blocked request', function
 it('writes exactly one entry for each outcome of a sign-in and never the password', function (callable $arrange, string $event, string $reason) {
     $arrange();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'S3cret-typed']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'S3cret-typed']);
 
     $rows = AuditLog::query()->where('module', 'auth')->get();
     expect($rows->pluck('event')->all())->toBe([$event]);
@@ -379,7 +379,7 @@ it('writes exactly one entry for each outcome of a sign-in and never the passwor
 
 it('records the person created at the first sign-in as a Codex change and writes nothing more at the next one', function () {
     fakeCodex();
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
     $this->post(route('logout'));
 
     $created = AuditLog::query()->where('event', 'users.created')->get();
@@ -387,7 +387,7 @@ it('records the person created at the first sign-in as a Codex change and writes
 
     $before = AuditLog::query()->count();
     fakeCodex();
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
 
     // Only the sign-in itself: the mirror found nothing to change.
     expect(AuditLog::query()->count())->toBe($before + 1)->and(AuditLog::query()->latest('id')->value('event'))->toBe('auth.login');
@@ -398,7 +398,7 @@ it('gives the person a new session id at sign-in and ends the session at sign-ou
     $this->get(route('login'));
     $before = session()->getId();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
     expect(session()->getId())->not->toBe($before);
 
     $signedIn = session()->getId();
@@ -409,7 +409,7 @@ it('gives the person a new session id at sign-in and ends the session at sign-ou
 
 it('sends a person who Codex switched off to the login page on the next request', function () {
     fakeCodex(['role' => 'Super Admin']);
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
     $this->get(route('dashboard'))->assertOk();
 
     User::findOrFail(30)->delete();
@@ -423,40 +423,40 @@ it('creates a person once when two first sign-ins collide', function () {
     User::creating(function () use (&$collided) {
         if (! $collided) {
             $collided = true;
-            DB::table('users')->insert(['id' => 30, 'username' => '309011221', 'name' => 'Other request', 'email' => 'other@example.com', 'password' => 'x', 'created_at' => now(), 'updated_at' => now()]);
+            DB::table('users')->insert(['id' => 30, 'username' => '900000030', 'name' => 'Other request', 'email' => 'other@example.com', 'password' => 'x', 'created_at' => now(), 'updated_at' => now()]);
         }
     });
     fakeCodex();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
-    expect(User::withTrashed()->where('username', '309011221')->count())->toBe(1)->and(User::findOrFail(30)->name)->toBe('Test Person');
+    expect(User::withTrashed()->where('username', '900000030')->count())->toBe(1)->and(User::findOrFail(30)->name)->toBe('Test Person');
 });
 
 it('refuses with a clear message a person whose records cannot follow them to a new Codex id', function () {
-    $old = User::factory()->create(['id' => 99, 'username' => '309011221']);
+    $old = User::factory()->create(['id' => 99, 'username' => '900000030']);
     $loan = LoanApplication::create([
         'application_code' => LoanApplication::nextCode(), 'application_date' => now(), 'status' => LoanStatus::Draft,
         'nik' => '3201000000000001', 'full_name' => 'Siti', 'created_by' => $old->id,
     ]);
     fakeCodex();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])
         ->assertSessionHasErrors(['username' => 'Data Anda di Codex tidak cocok dengan data di SIPEBRI. Hubungi Super Admin.']);
 
     $this->assertGuest();
     expect(User::find(99))->not->toBeNull()->and(User::find(30))->toBeNull()->and($loan->fresh()->created_by)->toBe(99)
         ->and(AuditLog::query()->where('event', 'auth.login_failed')->first()->decoded('context')['reason'])->toBe('user id conflict')
-        ->and(RateLimiter::attempts(Str::transliterate('309011221|127.0.0.1')))->toBe(0);
+        ->and(RateLimiter::attempts(Str::transliterate('900000030|127.0.0.1')))->toBe(0);
 });
 
 it('gives a placeholder email to a person whose Codex email another person already holds', function () {
     User::factory()->create(['id' => 7, 'email' => 'person@example.com']);
     fakeCodex();
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
-    expect(User::findOrFail(30)->email)->toBe('309011221@codex.invalid')->and(User::findOrFail(7)->email)->toBe('person@example.com');
+    expect(User::findOrFail(30)->email)->toBe('900000030@codex.invalid')->and(User::findOrFail(7)->email)->toBe('person@example.com');
 });
 
 it('validates the form before calling Codex', function () {
@@ -469,7 +469,7 @@ it('validates the form before calling Codex', function () {
 it('makes a person with an unknown role a Guest', function () {
     fakeCodex(['role' => 'Some Unknown Role']);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
     $user = User::findOrFail(30);
     expect($user->hasRole('Guest'))->toBeTrue()->and($user->roles)->toHaveCount(1);
@@ -478,7 +478,7 @@ it('makes a person with an unknown role a Guest', function () {
 it('gives Super Admin to a person whose Codex role is Super Admin', function () {
     fakeCodex(['role' => 'Super Admin']);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
     $user = User::findOrFail(30);
     expect($user->hasRole('Super Admin'))->toBeTrue()->and($user->roles)->toHaveCount(1)->and($user->can('surveys.manage'))->toBeTrue();
@@ -487,20 +487,20 @@ it('gives Super Admin to a person whose Codex role is Super Admin', function () 
 it('keeps the Codex id when the person is created, including the soft delete state', function () {
     fakeCodex(['id' => 4711, 'is_active' => false]);
 
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertSessionHasErrors('username');
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x'])->assertSessionHasErrors('username');
 
     $stored = User::withTrashed()->findOrFail(4711);
-    expect($stored->username)->toBe('309011221')->and($stored->trashed())->toBeTrue();
+    expect($stored->username)->toBe('900000030')->and($stored->trashed())->toBeTrue();
 });
 
 it('translates a known email into the Codex username', function () {
-    User::factory()->create(['id' => 30, 'username' => '309011221', 'email' => 'person@example.com']);
+    User::factory()->create(['id' => 30, 'username' => '900000030', 'email' => 'person@example.com']);
     fakeCodex();
 
     $this->post(route('login.store'), ['username' => 'Person@Example.com', 'password' => 'x'])->assertRedirect(route('dashboard'));
 
-    Http::assertSent(fn ($request) => $request['username'] === '309011221');
-    expect(User::where('username', '309011221')->count())->toBe(1);
+    Http::assertSent(fn ($request) => $request['username'] === '900000030');
+    expect(User::where('username', '900000030')->count())->toBe(1);
 });
 
 it('locks out after repeated wrong attempts', function () {

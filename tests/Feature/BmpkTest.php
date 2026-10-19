@@ -55,12 +55,13 @@ it('lets only Super Admin change the BMPK, and records the change', function () 
 
     $admin = superAdmin();
     $this->actingAs($admin)->get(route('bmpk.show'))->assertInertia(fn (Assert $page) => $page->component('references/bmpk')->where('amount', 2_000_000_000));
-    $this->put(route('bmpk.update'), ['amount' => 0])->assertSessionHasErrors('amount');
-    $this->put(route('bmpk.update'), ['amount' => 2_500_000_000])->assertSessionHasNoErrors();
+    $this->put(route('bmpk.update'), ['amount' => 0, 'reason' => 'Aturan baru'])->assertSessionHasErrors('amount');
+    $this->put(route('bmpk.update'), ['amount' => 2_500_000_000, 'reason' => 'Penyesuaian modal inti'])->assertSessionHasNoErrors();
 
     $row = AuditLog::query()->where('event', 'settings.updated')->firstOrFail();
     expect(LendingLimit::bmpk())->toBe(2_500_000_000)
         ->and($row->user_id)->toBe($admin->id)
         ->and($row->decoded('old_values'))->toBe(['value' => '2000000000'])
-        ->and($row->decoded('new_values'))->toBe(['value' => '2500000000']);
+        ->and($row->decoded('new_values'))->toBe(['value' => '2500000000'])
+        ->and($row->decoded('context'))->toMatchArray(['reason' => 'Penyesuaian modal inti']);
 });

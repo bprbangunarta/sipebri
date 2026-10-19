@@ -90,18 +90,18 @@ it('takes the NIK from Codex when it sends one, and keeps a typed NIK when it se
     config(['services.codex.endpoint' => 'https://codex.test', 'services.codex.token' => 'test-token']);
 
     fakeCodex(['nik' => '3201000000000033', 'role' => 'Kepala Bagian Analis']);
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
     $user = User::findOrFail(30);
     expect($user->nik)->toBe('3201000000000033')->and($user->nik_source)->toBe('codex')->and(CommitteeMembers::findByNik('3201000000000033')?->id)->toBe(30);
 
     $this->post(route('logout'));
     fakeCodex(['role' => 'Kepala Bagian Analis']); // Codex sends no NIK this time
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
     expect(User::findOrFail(30)->nik)->toBe('3201000000000033');
 
     $this->post(route('logout'));
     fakeCodex(['nik' => 'not-a-number', 'role' => 'Kepala Bagian Analis']);
-    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+    $this->post(route('login.store'), ['username' => '900000030', 'password' => 'x']);
     expect(User::findOrFail(30)->nik)->toBe('3201000000000033');
 });
 

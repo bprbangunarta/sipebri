@@ -11,7 +11,7 @@ it('seeds the starter people with their roles and offices, and can run again', f
 
     $person = User::withTrashed()->findOrFail(30);
     expect(User::withTrashed()->count())->toBe(28)
-        ->and($person->username)->toBe('309011221')
+        ->and($person->username)->toBe('900000030')
         ->and($person->office->alias)->toBe('PMK')
         ->and($person->hasRole('Kepala Bagian Teknologi Informasi'))->toBeTrue()
         ->and(User::withTrashed()->findOrFail(500)->trashed())->toBeTrue()

@@ -6,6 +6,7 @@ import { Combobox } from '@/components/ui/combobox';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Badge, PageHeader } from '@/components/ui/misc';
+import { nextSort } from '@/components/ui/sort-head';
 import type { PageMeta } from '@/components/ui/pagination';
 import { useListQuery } from '@/hooks/use-list-query';
 import { formatDate } from '@/lib/format';
@@ -24,6 +25,8 @@ type Filters = {
     search: string;
     role: string | null;
     status: 'active' | 'inactive' | null;
+    sort: string;
+    direction: 'asc' | 'desc';
     per_page: number;
 };
 
@@ -42,42 +45,49 @@ const columns: Column<UserRow>[] = [
     {
         key: 'name',
         header: 'Nama',
+        sort: 'name',
         className: 'font-medium',
         cell: (u) => u.name,
     },
     {
         key: 'username',
         header: 'Username',
+        sort: 'username',
         cell: (u) => u.username ?? '–',
     },
     {
         key: 'email',
         header: 'Email',
+        sort: 'email',
         cell: (u) => u.email,
     },
     {
         key: 'role',
         header: 'Peran',
+        sort: 'role',
         cell: (u) => u.role ?? <span className="text-muted">Tanpa peran</span>,
     },
     {
         key: 'office',
         header: 'Kantor',
+        sort: 'office',
         cell: (u) => u.office ?? '–',
     },
     {
         key: 'status',
         header: 'Status',
+        sort: 'status',
         cell: (u) => <Badge tone={u.active ? 'success' : 'neutral'}>{u.active ? 'Aktif' : 'Nonaktif'}</Badge>,
     },
     {
         key: 'created',
         header: 'Dibuat',
+        sort: 'created',
         cell: (u) => formatDate(u.created_at),
     },
 ];
 
-const DEFAULTS = { per_page: 10 };
+const DEFAULTS = { sort: 'name', direction: 'asc', per_page: 25 };
 
 export default function UsersIndex({ users, filters, roles }: Props) {
     const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
@@ -128,6 +138,7 @@ export default function UsersIndex({ users, filters, roles }: Props) {
                     </FilterBar>
                 }
                 columns={columns}
+                sort={{ sort: filters.sort, direction: filters.direction, onSort: (column) => visit(nextSort(filters, column)) }}
                 empty={{
                     icon: <UserX />,
                     title: hasFilters ? 'Tidak ada pengguna yang cocok dengan filter' : 'Belum ada pengguna',

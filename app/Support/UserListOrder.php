@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Spatie\Permission\Models\Role;
 
 /**
- * The sort keys of the committee member list and how each one orders the rows. A key that is not here is not an order.
+ * How each sort key of a list of people orders the rows (Data Pengguna and the committee members). A key that is not here is not an order;
+ * each screen keeps its own whitelist of the keys it offers.
  */
-class CommitteeMemberOrder
+class UserListOrder
 {
-    public const KEYS = ['name', 'username', 'role', 'office', 'nik'];
+    public const USER_KEYS = ['name', 'username', 'email', 'role', 'office', 'status', 'created'];
+
+    public const MEMBER_KEYS = ['name', 'username', 'role', 'office', 'nik'];
 
     /**
      * @param  Builder<User>  $query
@@ -30,7 +33,10 @@ class CommitteeMemberOrder
             'office' => Office::query()->select('alias')->whereColumn('offices.id', 'users.office_id'),
             // Typed or from Codex, and those without a number first when ascending.
             'nik' => 'nik_source',
-            default => $key === 'username' ? 'username' : 'name',
+            'status' => 'users.deleted_at',
+            'created' => 'users.created_at',
+            'username', 'email' => $key,
+            default => 'name',
         };
 
         return $query->orderBy($order, $direction);
