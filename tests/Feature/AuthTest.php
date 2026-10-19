@@ -129,6 +129,20 @@ it('restores a soft-deleted person when Codex says active again, and soft-delete
     expect(User::withTrashed()->findOrFail(30)->trashed())->toBeTrue();
 });
 
+it('leaves the stored person untouched when mirroring fails halfway', function () {
+    User::factory()->create(['id' => 30, 'username' => '309011221', 'name' => 'Old Name'])->delete();
+    User::restored(fn () => throw new RuntimeException('restore failed'));
+    fakeCodex();
+
+    $this->withoutExceptionHandling();
+    expect(fn () => $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']))->toThrow(RuntimeException::class);
+
+    $user = User::withTrashed()->findOrFail(30);
+    expect($user->name)->toBe('Old Name')->and($user->trashed())->toBeTrue()->and($user->office_id)->toBeNull()
+        ->and(Office::count())->toBe(0);
+    $this->assertGuest();
+});
+
 it('refuses wrong credentials without creating anybody', function () {
     Http::fake(['codex.test/*' => Http::response(['success' => false, 'message' => 'Wrong'], 401)]);
 
@@ -144,6 +158,27 @@ it('shows a clear message when Codex is unreachable', function () {
     $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
         ->assertSessionHasErrors(['username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
     $this->assertGuest();
+});
+
+it('treats an answer without a usable id or username as the service being down, storing nobody', function (array $user) {
+    Http::fake(['codex.test/*' => Http::response(['success' => true, 'data' => ['user' => $user]])]);
+
+    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])
+        ->assertSessionHasErrors(['username' => 'Layanan masuk tidak dapat dihubungi saat ini. Coba lagi sebentar lagi.']);
+    $this->assertGuest();
+    expect(User::withTrashed()->count())->toBe(0);
+})->with([
+    'no id' => [['username' => '309011221', 'is_active' => true]],
+    'zero id' => [['id' => 0, 'username' => '309011221', 'is_active' => true]],
+    'no username' => [['id' => 30, 'is_active' => true]],
+    'empty username' => [['id' => 30, 'username' => ' ', 'is_active' => true]],
+]);
+
+it('refuses an overlong password before calling Codex', function () {
+    Http::fake();
+
+    $this->post(route('login.store'), ['username' => '309011221', 'password' => str_repeat('x', 256)])->assertSessionHasErrors('password');
+    Http::assertNothingSent();
 });
 
 it('validates the form before calling Codex', function () {

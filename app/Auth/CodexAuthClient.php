@@ -3,6 +3,7 @@
 namespace App\Auth;
 
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
@@ -19,33 +20,21 @@ class CodexAuthClient
      */
     public function authenticate(string $username, string $password): ?array
     {
-        try {
-            $response = Http::withToken((string) config('services.codex.token'))
-                ->acceptJson()
-                ->asJson()
-                ->timeout((int) config('services.codex.timeout'))
-                ->withOptions(['verify' => filter_var(config('services.codex.verify'), FILTER_VALIDATE_BOOL)])
-                ->post(rtrim((string) config('services.codex.endpoint'), '/').'/api/web-auth', [
-                    'username' => $username,
-                    'password' => $password,
-                ]);
-        } catch (ConnectionException $exception) {
-            throw new CodexUnavailable('Codex could not be reached.', previous: $exception);
-        } catch (Throwable $exception) {
-            throw new CodexUnavailable('Codex request failed.', previous: $exception);
-        }
-
-        if ($response->serverError()) {
-            throw new CodexUnavailable("Codex answered {$response->status()}.");
-        }
-
+        $response = $this->post('/api/web-auth', ['username' => $username, 'password' => $password]);
         $data = $response->json();
 
         if (! $response->successful() || ($data['success'] ?? false) !== true || ! is_array($data['data']['user'] ?? null)) {
             return null;
         }
 
-        return ['user' => $data['data']['user'], 'office' => $data['data']['office'] ?? null];
+        $user = $data['data']['user'];
+
+        // The local user is keyed by the Codex id and username; an answer without them cannot be mirrored safely.
+        if (! is_int($user['id'] ?? null) || $user['id'] < 1 || ! is_string($user['username'] ?? null) || trim($user['username']) === '') {
+            throw new CodexUnavailable('Codex accepted the credentials but sent no usable user id or username.');
+        }
+
+        return ['user' => $user, 'office' => is_array($data['data']['office'] ?? null) ? $data['data']['office'] : null];
     }
 
     /**
@@ -58,26 +47,12 @@ class CodexAuthClient
      */
     public function changePassword(string $username, string $current, string $password, string $confirmation): array
     {
-        try {
-            $response = Http::withToken((string) config('services.codex.token'))
-                ->acceptJson()
-                ->asJson()
-                ->timeout((int) config('services.codex.timeout'))
-                ->withOptions(['verify' => filter_var(config('services.codex.verify'), FILTER_VALIDATE_BOOL)])
-                ->post(rtrim((string) config('services.codex.endpoint'), '/').'/api/web-auth/password', [
-                    'username' => $username,
-                    'current_password' => $current,
-                    'password' => $password,
-                    'confirmed_password' => $confirmation,
-                ]);
-        } catch (Throwable $exception) {
-            throw new CodexUnavailable('Codex could not be reached.', previous: $exception);
-        }
-
-        if ($response->serverError()) {
-            throw new CodexUnavailable("Codex answered {$response->status()}.");
-        }
-
+        $response = $this->post('/api/web-auth/password', [
+            'username' => $username,
+            'current_password' => $current,
+            'password' => $password,
+            'confirmed_password' => $confirmation,
+        ]);
         $data = $response->json() ?? [];
         $errors = [];
 
@@ -90,5 +65,36 @@ class CodexAuthClient
             'message' => (string) ($data['message'] ?? ''),
             'errors' => $errors,
         ];
+    }
+
+    /**
+     * One call to Codex. Not retried: both calls carry a password and change state on the other side (attempt counters,
+     * the password itself).
+     *
+     * @param  array<string, string>  $payload
+     *
+     * @throws CodexUnavailable when the API cannot be reached or answers with a server error
+     */
+    private function post(string $path, array $payload): Response
+    {
+        try {
+            $response = Http::withToken((string) config('services.codex.token'))
+                ->acceptJson()
+                ->asJson()
+                ->connectTimeout((float) config('services.codex.connect_timeout'))
+                ->timeout((float) config('services.codex.timeout'))
+                ->withOptions(['verify' => filter_var(config('services.codex.verify'), FILTER_VALIDATE_BOOL)])
+                ->post(rtrim((string) config('services.codex.endpoint'), '/').$path, $payload);
+        } catch (ConnectionException $exception) {
+            throw new CodexUnavailable('Codex could not be reached.', previous: $exception);
+        } catch (Throwable $exception) {
+            throw new CodexUnavailable('Codex request failed.', previous: $exception);
+        }
+
+        if ($response->serverError()) {
+            throw new CodexUnavailable("Codex answered {$response->status()}.");
+        }
+
+        return $response;
     }
 }

@@ -26,7 +26,8 @@ class CodexUserSync
      */
     public function sync(array $user, ?array $office): User
     {
-        return Audit::withContext(['source' => 'codex'], 'Codex sync', fn (): User => $this->mirror($user, $office));
+        // One unit: a failure halfway must not leave the person half-updated (restored without their role, ...).
+        return Audit::withContext(['source' => 'codex'], 'Codex sync', fn (): User => DB::transaction(fn (): User => $this->mirror($user, $office)));
     }
 
     /**

@@ -70,17 +70,29 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Audit akses baca halaman daftar** belum dicatat (volume besar); tambahkan ringkas bila auditor meminta.
 - Retensi/arsip audit log (OJK, bertahun-tahun) belum diatur; jangan hapus baris.
 - Role lama `HR Admin`/`Viewer` masih ada di database dev (tanpa izin).
+- **Login pertama orang baru yang terkirim dua kali bersamaan** bisa berakhir galat pada salah satunya (id Codex bentrok); diterima
+  sementara karena jarang dan masuk ulang berhasil. Konfirmasi pemilik.
 
 ## Langkah berikutnya
 
 Dipilih user; agent tidak memulai fitur baru tanpa diminta.
 
-1. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): belum dilakukan karena login lewat Codex butuh kredensial pemilik; layar tamu, halaman error, serta daftar Analisa dan Persetujuan (sesi lokal pada salinan SQLite) sudah.
-2. Realisasi/pencairan + posting core banking (menunggu rancangan).
-3. Pesan validasi kustom dan atribut (`->attributes()`) yang masih Inggris di controller: rapikan, pakai laravel-lang sebisanya.
-4. Ekspor/impor Excel (ada di SIPEBRI lama) belum dibawa.
-5. Saran layanan email OTP (keputusan user): layanan transaksional atau relay resmi, SPF/DKIM/DMARC untuk `bprbangunarta.co.id`, antrean +
+1. **Audit silang dokumen ↔ kode per unit** (user, 2026-10-19), satu unit per sesi mengikuti `AGENTS.md` bagian 1 dan 3 (urutan membaca,
+   standar produksi 9 pertanyaan, langkah 4a); dokumen basi diperbaiki di tempat, perubahan perilaku lewat brief. Unit yang selesai dihapus
+   dari daftar. Platform: (2) MFA + profil, (3) peran dan izin, (4) Data Pengguna (temuan awal:
+   `UserSeeder` memuat nama dan email pribadi yang tampak asli, padahal seeder hanya boleh berisi data karangan), (5) navigasi dan `/`,
+   (6) audit log (temuan awal: `audit:prune` terjadwal bulanan, padahal "Pertanyaan terbuka" menyebut retensi belum diatur), (7) notifikasi,
+   (8) halaman error + status jaringan. Referensi: (9) data referensi generik, (10) parameter produk, (11) BMPK, (12) komite: jalur, jenjang,
+   aturan khusus, (13) anggota komite, NIK, konflik, pengecualian. Alur: (14) dashboard, (15) nasabah Codex, (16) pengajuan, (17) agunan,
+   (18) penjadwalan + batal, (19) survei + foto, (20) lokasi + alamat perkiraan, (21) lembar analisa + rumus, (22) persetujuan komite + RC,
+   (23) koreksi setelah persetujuan. Kerangka: (24) UI bersama + `/ui-guideline`, (25) gerbang dan kerangka agent (temuan awal: `.ai/rules/general.md` masih
+   berjudul "UI nanti Indonesia" dan melarang menerjemahkan, padahal seluruh UI sudah Indonesia).
+2. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): belum dilakukan karena login lewat Codex butuh kredensial pemilik; layar tamu, halaman error, serta daftar Analisa dan Persetujuan (sesi lokal pada salinan SQLite) sudah.
+3. Realisasi/pencairan + posting core banking (menunggu rancangan).
+4. Pesan validasi kustom dan atribut (`->attributes()`) yang masih Inggris di controller: rapikan, pakai laravel-lang sebisanya.
+5. Ekspor/impor Excel (ada di SIPEBRI lama) belum dibawa.
+6. Saran layanan email OTP (keputusan user): layanan transaksional atau relay resmi, SPF/DKIM/DMARC untuk `bprbangunarta.co.id`, antrean +
    mailer cadangan bila volume tumbuh, ganti password SMTP yang pernah terlihat di komentar `.env`.
-6. Pengujian yang butuh perangkat/layanan nyata: GPS lewat HTTPS di iOS Safari dan Chrome Android; unggah foto ke S3 pada kondisi buruk;
+7. Pengujian yang butuh perangkat/layanan nyata: GPS lewat HTTPS di iOS Safari dan Chrome Android; unggah foto ke S3 pada kondisi buruk;
    alur MFA penuh dengan authenticator sungguhan; Nominatim produksi (batas pemakaian); cron `schedule:run` di server; `audit:verify` pada jutaan
    baris; deploy dari awal (`migrate`, `db:seed --force`, `locations:geocode`, `ATTACHMENTS_DISK=s3`); kewenangan komite dengan nominal sungguhan.
