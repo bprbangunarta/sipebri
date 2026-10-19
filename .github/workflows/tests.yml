@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - v3.0.0-alpha
   pull_request:
 
 permissions:
@@ -13,11 +14,21 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    env:
+      # Tests use in-memory SQLite (phpunit.xml); the migration in `composer setup` uses the same, so no database service is needed.
+      DB_CONNECTION: sqlite
+      DB_DATABASE: ':memory:'
+      # Vitest runs Vite in server mode, and the Laravel plugin refuses that under CI (the CI variable): without this `npm run check` fails
+      # here while it passes locally. Production assets are still built by `composer setup`.
+      LARAVEL_BYPASS_ENV_CHECK: 1
+
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          # Full history: the weakened-check and Brief-line checkers read the pushed commits, not only the last one.
+          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
@@ -34,5 +45,9 @@ jobs:
       - name: Setup Application
         run: composer setup
 
+      # The only gate is scripts/verify.sh (`composer ci:check` only calls it): adding a check there adds it here and to the push hook.
+      # The commit range checked is the one pushed, or the one in the pull request.
       - name: Run CI Checks
         run: composer ci:check
+        env:
+          VERIFY_RANGE: ${{ github.event_name == 'pull_request' && format('{0}..{1}', github.event.pull_request.base.sha, github.event.pull_request.head.sha) || format('{0}..{1}', github.event.before, github.sha) }}

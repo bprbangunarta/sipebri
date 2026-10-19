@@ -56,7 +56,7 @@ class Committee
             'path' => [
                 'id' => $path->id,
                 'title' => $path->title(),
-                'product_label' => $path->product ? "{$path->product->alias} — {$path->product->name}" : 'Semua produk',
+                'product_label' => $path->product ? "{$path->product->alias} · {$path->product->name}" : 'Semua produk',
                 'condition_label' => $path->condition ?: 'Normal',
                 'mechanism' => $path->mechanism,
                 'mechanism_label' => CommitteePath::MECHANISMS[$path->mechanism] ?? $path->mechanism,

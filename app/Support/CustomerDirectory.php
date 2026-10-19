@@ -6,7 +6,7 @@ use App\Services\CodexClient;
 use RuntimeException;
 
 /**
- * Bridge to the customer master. The app never stores applicant identity — only the national ID
+ * Bridge to the customer master. The app never stores applicant identity, only the national ID
  * (NIK), name and CIF number. Always the Codex API; when it is not configured the lookup fails visibly instead of guessing.
  */
 class CustomerDirectory

@@ -74,7 +74,7 @@ class CommitteeMembers
     public static function options(): array
     {
         $options = self::query()->with('roles:id,name')->orderBy('name')->get()
-            ->map(fn (User $u): array => ['value' => $u->id, 'label' => $u->name.' — '.$u->getRoleNames()->first()]);
+            ->map(fn (User $u): array => ['value' => $u->id, 'label' => $u->name.' · '.$u->getRoleNames()->first()]);
 
         return array_values($options->all());
     }

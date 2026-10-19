@@ -35,7 +35,7 @@ class LocationTargets
                 'key' => 'collateral:'.$c->id,
                 'type' => 'collateral',
                 'collateral_id' => $c->id,
-                'label' => trim(($c->cbs_id ?? "#{$c->id}").' — '.$c->owner_name),
+                'label' => trim(($c->cbs_id ?? "#{$c->id}").' · '.$c->owner_name),
                 'detail' => collect([
                     $c->document_number ? 'Dok '.$c->document_number : null,
                     $types[$c->collateral_type_code] ?? $c->collateral_type_code,

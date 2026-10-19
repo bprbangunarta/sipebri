@@ -50,7 +50,7 @@ class CommitteeController extends Controller
         return Inertia::render('committees/special-rules', [
             'paths' => CommitteePath::with('product')->withCount('tiers')->where('is_default', false)->orderBy('product_id')->orderBy('condition')->get()
                 ->map(fn (CommitteePath $p): array => $this->pathRow($p)),
-            'productOptions' => Product::orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} — {$p->name}"]),
+            'productOptions' => Product::orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} · {$p->name}"]),
             'pathOptions' => CommitteePath::with('product')->has('tiers')->where('is_default', false)->get()->map(fn (CommitteePath $p): array => ['value' => $p->id, 'label' => $p->title()]),
             'defaultLevels' => ($default = CommitteeLevels::defaultPath()) ? ['id' => $default->id, 'followers' => CommitteeLevels::followers()] : null,
             'mechanisms' => collect(CommitteePath::MECHANISMS)->map(fn (string $label, string $value): array => ['value' => $value, 'label' => $label])->values(),
@@ -90,7 +90,7 @@ class CommitteeController extends Controller
     private function authorityProps(): array
     {
         return [
-            'productOptions' => Product::orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} — {$p->name}"]),
+            'productOptions' => Product::orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} · {$p->name}"]),
             // Valid conditions per product: the product's own plus cross-product ones (e.g. RELOAN).
             'conditionMap' => CommitteePath::where('is_active', true)->get()
                 ->groupBy(fn (CommitteePath $p) => $p->product_id ?? 'global')
@@ -265,7 +265,7 @@ class CommitteeController extends Controller
         return [
             'id' => $path->id,
             'product_id' => $path->product_id,
-            'product_label' => $path->product ? "{$path->product->alias} — {$path->product->name}" : 'Semua produk',
+            'product_label' => $path->product ? "{$path->product->alias} · {$path->product->name}" : 'Semua produk',
             'condition' => $path->condition,
             'condition_label' => $path->condition ?: 'Normal',
             'mechanism' => $path->mechanism,
