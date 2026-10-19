@@ -15,6 +15,9 @@ import type { PageMeta } from '@/components/ui/pagination';
 import { Tip } from '@/components/ui/tooltip';
 import { useListQuery } from '@/hooks/use-list-query';
 import { MASKS } from '@/lib/mask';
+import { AuthorityCheckButton } from '@/pages/committees/authority-check';
+import type { AuthorityOptions } from '@/pages/committees/authority-check';
+import { nextSort } from '@/components/ui/sort-head';
 
 type Member = {
     id: number;
@@ -25,19 +28,21 @@ type Member = {
     nik: string | null;
     nik_source: 'codex' | 'manual' | null;
 };
-type Filters = { search: string; role: string | null; per_page: number };
+type Filters = { search: string; role: string | null; sort: string; direction: 'asc' | 'desc'; per_page: number };
 type Props = {
     members: { data: Member[] } & PageMeta;
     filters: Filters;
     roles: string[];
     withoutNik: number;
+    authority: AuthorityOptions;
 };
 
-const DEFAULTS = { per_page: 25 };
+const DEFAULTS = { sort: 'name', direction: 'asc', per_page: 25 };
 
-export default function CommitteeMembers({ members, filters, roles, withoutNik }: Props) {
+export default function CommitteeMembers({ members, filters, roles, withoutNik, authority }: Props) {
     const [editing, setEditing] = useState<Member | null>(null);
     const [removing, setRemoving] = useState<Member | null>(null);
+    const [busy, setBusy] = useState(false);
     const form = useForm({ nik: '' });
     const { visit, search, onSearch, clear, loading, error } = useListQuery<Filters>({
         url: '/committees/members',
@@ -51,22 +56,25 @@ export default function CommitteeMembers({ members, filters, roles, withoutNik }
         {
             key: 'name',
             header: 'Anggota',
+            sort: 'name',
             className: 'font-medium',
             cell: (m) => m.name,
         },
-        { key: 'username', header: 'Username', cell: (m) => m.username ?? '–' },
-        { key: 'role', header: 'Peran di komite', cell: (m) => m.role ?? '–' },
+        { key: 'username', header: 'Username', sort: 'username', cell: (m) => m.username ?? '–' },
+        { key: 'role', header: 'Peran di komite', sort: 'role', cell: (m) => m.role ?? '–' },
         {
             key: 'office',
             header: 'Kantor',
+            sort: 'office',
             cell: (m) => m.office ?? '–',
         },
         {
             key: 'nik',
             header: 'NIK (KTP)',
+            sort: 'nik',
             cell: (m) =>
                 m.nik ? (
-                    <span className="flex flex-wrap items-center gap-1.5">
+                    <span className="flex items-center gap-1.5">
                         <span className="font-mono text-xs">{m.nik}</span>
                         <Badge>{m.nik_source === 'codex' ? 'Codex' : 'Diketik'}</Badge>
                     </span>
@@ -115,6 +123,7 @@ export default function CommitteeMembers({ members, filters, roles, withoutNik }
             <PageHeader
                 title="Data Komite"
                 description="Orang yang perannya memutus di jenjang komite. NIK membuat sistem mengenali mereka saat mengajukan kredit."
+                actions={<AuthorityCheckButton options={authority} />}
             />
             <CommitteeTabs current="members" />
 
@@ -149,6 +158,7 @@ export default function CommitteeMembers({ members, filters, roles, withoutNik }
                     </FilterBar>
                 }
                 columns={columns}
+                sort={{ sort: filters.sort, direction: filters.direction, onSort: (column) => visit(nextSort(filters, column)) }}
                 empty={{
                     icon: <UserRound />,
                     title: hasFilters ? 'Tidak ada anggota yang cocok dengan filter' : 'Belum ada anggota komite',
@@ -209,7 +219,8 @@ export default function CommitteeMembers({ members, filters, roles, withoutNik }
 
             <ConfirmDialog
                 open={removing !== null}
-                onOpenChange={(open) => !open && setRemoving(null)}
+                onOpenChange={(open) => !open && !busy && setRemoving(null)}
+                loading={busy}
                 title="Hapus NIK?"
                 description={
                     <>
@@ -218,12 +229,14 @@ export default function CommitteeMembers({ members, filters, roles, withoutNik }
                 }
                 confirmLabel="Hapus"
                 onConfirm={() => {
-                    const member = removing;
-                    setRemoving(null);
-
-                    if (member) {
-                        router.delete(`/committees/members/${member.id}`, {
+                    if (removing) {
+                        router.delete(`/committees/members/${removing.id}`, {
                             preserveScroll: true,
+                            onStart: () => setBusy(true),
+                            onFinish: () => {
+                                setBusy(false);
+                                setRemoving(null);
+                            },
                         });
                     }
                 }}

@@ -18,6 +18,8 @@ use Illuminate\Database\Seeder;
  */
 class CommitteeSeeder extends Seeder
 {
+    private const DEFAULT_NOTE = 'Jenjang wewenang yang dipakai bersama oleh semua jalur yang mengikuti bawaan.';
+
     private const PLAFON_PRODUCTS = ['KRU', 'KRM', 'PRK', 'KTO', 'KPS', 'KIH', 'KPJ', 'KRS', 'KPN', 'KIU', 'KTA', 'KPMI', 'KPP', 'KRISPI'];
 
     private const HIERARCHY_PRODUCTS = ['KUP', 'KKO'];
@@ -36,27 +38,30 @@ class CommitteeSeeder extends Seeder
         $this->defaultLevels();
 
         foreach (self::PLAFON_PRODUCTS as $alias) {
-            $this->path($alias, null, 'plafon', 'Authority by amount (general path).');
+            $this->path($alias, null, 'plafon', 'Wewenang menurut plafon (jalur umum).');
         }
 
-        $this->path('KBT', 'PERPADIAN', 'plafon', 'Actual crop-farming loans.');
+        $this->path('KBT', 'PERPADIAN', 'plafon', 'Kredit musiman untuk usaha tani (perpadian).');
 
         foreach (self::HIERARCHY_PRODUCTS as $alias) {
-            $this->path($alias, null, 'hierarki', 'Loans for employees.');
+            $this->path($alias, null, 'hierarki', 'Kredit untuk pegawai.');
         }
 
-        $this->path('KBT', 'PERLELEAN', 'hierarki', 'Customers in partnership with a company.');
-        $this->path(null, 'RELOAN', 'hierarki', 'Applies to every product and overrides the amount-limit path.');
+        $this->path('KBT', 'PERLELEAN', 'hierarki', 'Nasabah yang bermitra dengan perusahaan.');
+        $this->path(null, 'RELOAN', 'hierarki', 'Berlaku untuk semua produk dan menggantikan jalur menurut plafon.');
     }
 
     /** The default authority levels, created once; later edits by an admin are never overwritten. */
     private function defaultLevels(): void
     {
-        if (CommitteeLevels::defaultPath() !== null) {
+        if (($existing = CommitteeLevels::defaultPath()) !== null) {
+            // Its note is not editable on screen (only its levels are), so it follows the seeder.
+            $existing->update(['note' => self::DEFAULT_NOTE]);
+
             return;
         }
 
-        $path = CommitteePath::create(['product_id' => null, 'condition' => '(DEFAULT)', 'mechanism' => 'plafon', 'is_active' => false, 'is_default' => true, 'note' => 'Authority levels shared by every path that follows the defaults.']);
+        $path = CommitteePath::create(['product_id' => null, 'condition' => '(DEFAULT)', 'mechanism' => 'plafon', 'is_active' => false, 'is_default' => true, 'note' => self::DEFAULT_NOTE]);
 
         foreach (self::PLAFON_TIERS as $i => [$label, $role, $min, $max, $escalate, $approve, $cancel, $reject, $individual]) {
             $path->tiers()->create(['sort' => $i + 1, 'label' => $label, 'role' => $role, 'is_individual' => $individual, 'min_amount' => $min, 'max_amount' => $max, 'can_escalate' => $escalate, 'can_approve' => $approve, 'can_cancel' => $cancel, 'can_reject' => $reject]);

@@ -1,5 +1,5 @@
 import { Head, router, useForm } from '@inertiajs/react';
-import { Gavel, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Gavel, MoreHorizontal, Pencil, Plus, SlidersHorizontal, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { CommitteeTabs } from '@/components/committee-tabs';
 import { Button } from '@/components/ui/button';
@@ -8,11 +8,14 @@ import { Checkbox, Switch } from '@/components/ui/choice';
 import { ConfirmDialog, DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { DropdownContent, DropdownItem, DropdownMenu, DropdownSeparator, DropdownTrigger } from '@/components/ui/dropdown';
 import { Field } from '@/components/ui/field';
+import { FilterBar } from '@/components/ui/filter-bar';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Badge, PageHeader } from '@/components/ui/misc';
 import { Tip } from '@/components/ui/tooltip';
+import { AuthorityCheckButton } from '@/pages/committees/authority-check';
+import type { AuthorityOptions } from '@/pages/committees/authority-check';
 
 type Option = { value: number | string; label: string };
 export type PathRow = {
@@ -38,10 +41,11 @@ type Props = {
     pathOptions: Option[];
     mechanisms: Option[];
     defaultLevels: { id: number; followers: number } | null;
+    authority: AuthorityOptions;
     canManage: boolean;
 };
 
-export default function CommitteeSpecialRules({ paths, productOptions, pathOptions, mechanisms, defaultLevels, canManage }: Props) {
+export default function CommitteeSpecialRules({ paths, productOptions, pathOptions, mechanisms, defaultLevels, authority, canManage }: Props) {
     const [editing, setEditing] = useState<PathRow | 'new' | null>(null);
     const [toDelete, setToDelete] = useState<PathRow | null>(null);
     const [showAll, setShowAll] = useState(false);
@@ -161,6 +165,9 @@ export default function CommitteeSpecialRules({ paths, productOptions, pathOptio
                             </DropdownTrigger>
                         </Tip>
                         <DropdownContent>
+                            <DropdownItem icon={<SlidersHorizontal />} onSelect={() => router.visit(`/committees/${p.id}`)}>
+                                Atur jenjang
+                            </DropdownItem>
                             <DropdownItem icon={<Pencil />} onSelect={() => openForm(p)}>
                                 Ubah
                             </DropdownItem>
@@ -181,27 +188,32 @@ export default function CommitteeSpecialRules({ paths, productOptions, pathOptio
                 title="Data Komite"
                 description="Jalur yang tidak sekadar mengikuti jenjang bawaan"
                 actions={
-                    canManage && (
-                        <Button onClick={() => openForm('new')}>
-                            <Plus /> Tambah jalur
-                        </Button>
-                    )
+                    <>
+                        <AuthorityCheckButton options={authority} />
+                        {canManage && (
+                            <Button onClick={() => openForm('new')}>
+                                <Plus /> Tambah jalur
+                            </Button>
+                        )}
+                    </>
                 }
             />
             <CommitteeTabs current="paths" />
 
-            <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
-                <span className="min-w-0">
-                    {showAll
-                        ? `Semua ${paths.length} jalur.`
-                        : `${paths.length - rows.length} jalur mengikuti jenjang bawaan dan disembunyikan; ${rows.length} jalur di bawah memakai hierarki atau jenjang sendiri.`}
-                </span>
-                <Switch label="Tampilkan semua jalur" checked={showAll} onCheckedChange={setShowAll} />
-            </div>
-
             <DataTable
                 rows={rows}
                 rowKey={(p) => p.id}
+                toolbar={
+                    <FilterBar
+                        search={
+                            <span className="min-w-0 text-sm text-muted">
+                                {showAll ? `Semua ${paths.length} jalur.` : `${paths.length - rows.length} jalur yang mengikuti jenjang bawaan disembunyikan.`}
+                            </span>
+                        }
+                    >
+                        <Switch label="Tampilkan semua jalur" checked={showAll} onCheckedChange={setShowAll} />
+                    </FilterBar>
+                }
                 columns={columns}
                 onRowClick={(p) => router.visit(`/committees/${p.id}`)}
                 empty={{

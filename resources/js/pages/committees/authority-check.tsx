@@ -1,4 +1,4 @@
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Scale } from 'lucide-react';
 import { useHttp } from '@inertiajs/react';
 import { useState } from 'react';
 import { authority } from '@/actions/App/Http/Controllers/CommitteeController';
@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Combobox } from '@/components/ui/combobox';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
-import { DialogBody, Modal } from '@/components/ui/dialog';
+import { DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { CurrencyInput } from '@/components/ui/currency-input';
 import { Alert, Badge } from '@/components/ui/misc';
@@ -66,7 +66,36 @@ const chainColumns: Column<ChainRow>[] = [
     },
 ];
 
-export function AuthorityCheck({
+type Option = { value: number | string; label: string };
+
+/** What the dialog offers to choose from; every tab of Data Komite passes the same. */
+export type AuthorityOptions = {
+    productOptions: Option[];
+    conditionMap: Record<string, string[]>;
+    committeeMembers: Option[];
+};
+
+/** The button of the page header together with its dialog, so every tab of Data Komite carries the check the same way. */
+export function AuthorityCheckButton({ options }: { options: AuthorityOptions }) {
+    const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <Button variant="outline" onClick={() => setOpen(true)}>
+                <Scale /> Cek wewenang
+            </Button>
+            <AuthorityCheck
+                open={open}
+                onOpenChange={setOpen}
+                productOptions={options.productOptions}
+                conditionMap={options.conditionMap}
+                memberOptions={options.committeeMembers}
+            />
+        </>
+    );
+}
+
+function AuthorityCheck({
     open,
     onOpenChange,
     productOptions,
@@ -75,9 +104,9 @@ export function AuthorityCheck({
 }: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    productOptions: { value: number | string; label: string }[];
+    productOptions: Option[];
     conditionMap: Record<string, string[]>;
-    memberOptions: { value: number | string; label: string }[];
+    memberOptions: Option[];
 }) {
     const http = useHttp<{ product_id: string; condition: string; amount: number | null; applicant_id: string }, Result>({
         product_id: '',
@@ -113,109 +142,123 @@ export function AuthorityCheck({
             title="Cek wewenang"
             description="Cari tahu siapa yang memutus. Tidak ada yang disimpan."
         >
-            <DialogBody className="flex flex-col gap-3">
-                <div className="grid gap-3 sm:grid-cols-3">
-                    <Field label="Produk">
-                        <Combobox
-                            clearable
-                            placeholder="Semua produk"
-                            options={productOptions}
-                            value={product}
-                            onChange={(v) => {
-                                http.setData({ ...http.data, product_id: v ?? '', condition: '' });
-                                setResult(null);
-                            }}
-                        />
-                    </Field>
-                    <Field label="Kondisi">
-                        <Combobox
-                            searchable={false}
-                            placeholder="Normal"
-                            options={options}
-                            value={condition}
-                            onChange={(v) => {
-                                http.setData('condition', v ?? '');
-                                setResult(null);
-                            }}
-                        />
-                    </Field>
-                    <Field label="Plafon">
-                        <CurrencyInput
-                            value={amount}
-                            onValueChange={(v) => {
-                                http.setData('amount', v);
-                                setResult(null);
-                            }}
-                        />
-                    </Field>
-                </div>
-                <Field
-                    label="Pemohon adalah anggota komite"
-                    hint="Mensimulasikan anggota yang mengajukan kredit: ia tidak boleh memutus berkasnya sendiri, jadi persetujuan melewatinya."
-                >
-                    <Combobox
-                        clearable
-                        placeholder="Tidak"
-                        options={memberOptions}
-                        value={applicant}
-                        onChange={(v) => {
-                            http.setData('applicant_id', v ?? '');
-                            setResult(null);
-                        }}
-                    />
-                </Field>
-                <div>
-                    <Button loading={http.processing} disabled={!validAmount} onClick={run}>
-                        Cek
-                    </Button>
-                </div>
-                {error && <Alert tone="danger">{error}</Alert>}
+            <form
+                noValidate
+                onSubmit={(e) => {
+                    e.preventDefault();
 
-                {result && !result.found && <Alert tone="neutral">{result.message}</Alert>}
-                {result?.found && result.path && (
-                    <div className="flex flex-col gap-2">
-                        <p className="text-sm">
-                            <strong>{result.path.title}</strong> · {result.path.mechanism_label}
-                            {result.path.matched_globally && <span className="text-muted"> (jalur lintas produk)</span>}
-                        </p>
-                        <div className="rounded-md border border-line">
-                            <DataTable
-                                bare
-                                dense
-                                rows={result.chain}
-                                rowKey={(row) => row.id}
-                                columns={chainColumns}
-                                empty={{
-                                    icon: <AlertTriangle />,
-                                    title: 'Tidak ada jenjang',
+                    if (validAmount) {
+                        run();
+                    }
+                }}
+            >
+                <DialogBody className="flex flex-col gap-3">
+                    <div className="grid gap-3 sm:grid-cols-3">
+                        <Field label="Produk">
+                            <Combobox
+                                clearable
+                                placeholder="Semua produk"
+                                options={productOptions}
+                                value={product}
+                                onChange={(v) => {
+                                    http.setData({ ...http.data, product_id: v ?? '', condition: '' });
+                                    setResult(null);
                                 }}
                             />
-                        </div>
-                        {result.applicant && (
-                            <Alert tone="warning">
-                                Pemohon:{' '}
-                                <strong>
-                                    {result.applicant.name}
-                                    {result.applicant.role ? ` (${result.applicant.role})` : ''}
-                                </strong>
-                                {result.chain.some((r) => r.status === 'skipped')
-                                    ? '. Jenjang bertanda dilewati tidak ikut memutus.'
-                                    : '. Jenjangnya tetap: pemegang peran lain yang bertindak.'}
-                            </Alert>
-                        )}
-                        {result.exception && (
-                            <Alert tone="danger" icon={<AlertTriangle />}>
-                                <strong>Pengecualian.</strong> {result.exception}
-                            </Alert>
-                        )}
-                        {result.warnings.map((w) => (
-                            <Alert key={w} tone="warning" icon={<AlertTriangle />}>
-                                {w}
-                            </Alert>
-                        ))}
+                        </Field>
+                        <Field label="Kondisi">
+                            <Combobox
+                                searchable={false}
+                                placeholder="Normal"
+                                options={options}
+                                value={condition}
+                                onChange={(v) => {
+                                    http.setData('condition', v ?? '');
+                                    setResult(null);
+                                }}
+                            />
+                        </Field>
+                        <Field label="Plafon">
+                            <CurrencyInput
+                                value={amount}
+                                onValueChange={(v) => {
+                                    http.setData('amount', v);
+                                    setResult(null);
+                                }}
+                            />
+                        </Field>
                     </div>
-                )}
-            </DialogBody>
+                    <Field
+                        label="Pemohon adalah anggota komite"
+                        hint="Mensimulasikan anggota yang mengajukan kredit: ia tidak boleh memutus berkasnya sendiri, jadi persetujuan melewatinya."
+                    >
+                        <Combobox
+                            clearable
+                            placeholder="Tidak"
+                            options={memberOptions}
+                            value={applicant}
+                            onChange={(v) => {
+                                http.setData('applicant_id', v ?? '');
+                                setResult(null);
+                            }}
+                        />
+                    </Field>
+                    {error && <Alert tone="danger">{error}</Alert>}
+
+                    {result && !result.found && <Alert tone="neutral">{result.message}</Alert>}
+                    {result?.found && result.path && (
+                        <div className="flex flex-col gap-2">
+                            <p className="text-sm">
+                                <strong>{result.path.title}</strong> · {result.path.mechanism_label}
+                                {result.path.matched_globally && <span className="text-muted"> (jalur lintas produk)</span>}
+                            </p>
+                            <div className="rounded-md border border-line">
+                                <DataTable
+                                    bare
+                                    dense
+                                    rows={result.chain}
+                                    rowKey={(row) => row.id}
+                                    columns={chainColumns}
+                                    empty={{
+                                        icon: <AlertTriangle />,
+                                        title: 'Tidak ada jenjang',
+                                    }}
+                                />
+                            </div>
+                            {result.applicant && (
+                                <Alert tone="warning">
+                                    Pemohon:{' '}
+                                    <strong>
+                                        {result.applicant.name}
+                                        {result.applicant.role ? ` (${result.applicant.role})` : ''}
+                                    </strong>
+                                    {result.chain.some((r) => r.status === 'skipped')
+                                        ? '. Jenjang bertanda dilewati tidak ikut memutus.'
+                                        : '. Jenjangnya tetap: pemegang peran lain yang bertindak.'}
+                                </Alert>
+                            )}
+                            {result.exception && (
+                                <Alert tone="danger" icon={<AlertTriangle />}>
+                                    <strong>Pengecualian.</strong> {result.exception}
+                                </Alert>
+                            )}
+                            {result.warnings.map((w) => (
+                                <Alert key={w} tone="warning" icon={<AlertTriangle />}>
+                                    {w}
+                                </Alert>
+                            ))}
+                        </div>
+                    )}
+                </DialogBody>
+                <DialogFooter>
+                    <Button variant="outline" onClick={() => onOpenChange(false)}>
+                        Batal
+                    </Button>
+                    <Button type="submit" loading={http.processing} disabled={!validAmount}>
+                        Cek
+                    </Button>
+                </DialogFooter>
+            </form>
         </Modal>
     );
 }

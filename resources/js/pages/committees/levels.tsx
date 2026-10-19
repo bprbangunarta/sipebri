@@ -1,15 +1,13 @@
 import { Head, router } from '@inertiajs/react';
-import { Scale, SlidersHorizontal } from 'lucide-react';
-import { useState } from 'react';
+import { SlidersHorizontal } from 'lucide-react';
 import { CommitteeTabs } from '@/components/committee-tabs';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import type { Column } from '@/components/ui/data-table';
 import { Badge, Card, CardBody, CardHeader, PageHeader } from '@/components/ui/misc';
 import { rupiah } from '@/lib/format';
-import { AuthorityCheck } from '@/pages/committees/authority-check';
-
-type Option = { value: number | string; label: string };
+import { AuthorityCheckButton } from '@/pages/committees/authority-check';
+import type { AuthorityOptions } from '@/pages/committees/authority-check';
 
 type Level = {
     id: number;
@@ -30,9 +28,7 @@ type Props = {
     levels: Level[];
     followers: number;
     special: number;
-    productOptions: Option[];
-    conditionMap: Record<string, string[]>;
-    committeeMembers: Option[];
+    authority: AuthorityOptions;
     canManage: boolean;
 };
 
@@ -43,9 +39,7 @@ const DECISIONS = [
     ['can_reject', 'Tolak'],
 ] as const;
 
-export default function CommitteeLevels({ defaultId, levels, followers, special, productOptions, conditionMap, committeeMembers, canManage }: Props) {
-    const [checking, setChecking] = useState(false);
-
+export default function CommitteeLevels({ defaultId, levels, followers, special, authority, canManage }: Props) {
     const columns: Column<Level>[] = [
         {
             key: 'order',
@@ -77,7 +71,7 @@ export default function CommitteeLevels({ defaultId, levels, followers, special,
             key: 'decisions',
             header: 'Keputusan',
             cell: (l) => (
-                <span className="flex flex-wrap gap-1">
+                <span className="flex gap-1">
                     {DECISIONS.filter(([k]) => l[k]).map(([k, label]) => (
                         <Badge key={k} tone={k === 'can_approve' ? 'success' : k === 'can_reject' ? 'danger' : k === 'can_escalate' ? 'info' : 'neutral'}>
                             {label}
@@ -103,9 +97,7 @@ export default function CommitteeLevels({ defaultId, levels, followers, special,
                 description="Siapa yang berwenang memutus kredit, menurut plafon"
                 actions={
                     <>
-                        <Button variant="outline" onClick={() => setChecking(true)}>
-                            <Scale /> Cek wewenang
-                        </Button>
+                        <AuthorityCheckButton options={authority} />
                         {canManage && defaultId && (
                             <Button onClick={() => router.visit(`/committees/${defaultId}`)}>
                                 <SlidersHorizontal /> Ubah jenjang
@@ -150,14 +142,6 @@ export default function CommitteeLevels({ defaultId, levels, followers, special,
                     </CardBody>
                 </Card>
             </div>
-
-            <AuthorityCheck
-                open={checking}
-                onOpenChange={setChecking}
-                productOptions={productOptions}
-                conditionMap={conditionMap}
-                memberOptions={committeeMembers}
-            />
         </>
     );
 }

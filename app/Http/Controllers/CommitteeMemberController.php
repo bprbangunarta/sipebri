@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Support\CommitteeAuthorityOptions;
+use App\Support\CommitteeMemberOrder;
 use App\Support\CommitteeMembers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,15 +26,22 @@ class CommitteeMemberController extends Controller
             'search' => ['nullable', 'string', 'max:100'],
             'role' => ['nullable', 'string', 'max:100'],
             'per_page' => ['nullable', 'integer'],
+            'sort' => ['nullable', Rule::in(CommitteeMemberOrder::KEYS)],
+            'direction' => ['nullable', 'in:asc,desc'],
         ]);
+        $sort = $filters['sort'] ?? 'name';
+        $direction = ($filters['direction'] ?? 'asc') === 'desc' ? 'desc' : 'asc';
+        $roles = CommitteeMembers::committeeRoles();
 
         $members = CommitteeMembers::committee()->with(['roles:id,name', 'office:id,alias,name'])
             ->when($filters['search'] ?? null, function ($q, string $term) {
                 $like = '%'.addcslashes($term, '%_\\').'%';
                 $q->where(fn ($w) => $w->where('name', 'like', $like)->orWhere('username', 'like', $like));
             })
-            ->when($filters['role'] ?? null, fn ($q, string $role) => $q->role($role))
-            ->orderBy('name')
+            // A role that no committee level uses holds no member; asking for it is an empty list, not an error.
+            ->when($filters['role'] ?? null, fn ($q, string $role) => in_array($role, $roles, true) ? $q->role($role) : $q->whereRaw('1 = 0'))
+            ->tap(fn ($q) => CommitteeMemberOrder::apply($q, $sort, $direction))
+            ->orderBy('name')->orderBy('id')
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), [10, 25, 50], true) ? (int) $filters['per_page'] : 25)
             ->withQueryString();
 
@@ -40,9 +50,10 @@ class CommitteeMemberController extends Controller
                 'id' => $u->id, 'name' => $u->name, 'username' => $u->username, 'role' => $u->getRoleNames()->first(),
                 'office' => $u->office?->alias, 'nik' => CommitteeMembers::mask($u->nik), 'nik_source' => $u->nik_source,
             ]),
-            'filters' => ['search' => $filters['search'] ?? '', 'role' => $filters['role'] ?? null, 'per_page' => $members->perPage()],
-            'roles' => CommitteeMembers::committeeRoles(),
+            'filters' => ['search' => $filters['search'] ?? '', 'role' => $filters['role'] ?? null, 'sort' => $sort, 'direction' => $direction, 'per_page' => $members->perPage()],
+            'roles' => $roles,
             'withoutNik' => CommitteeMembers::committee()->whereNull('nik_hash')->count(),
+            'authority' => CommitteeAuthorityOptions::props(),
         ]);
     }
 

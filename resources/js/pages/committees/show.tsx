@@ -46,6 +46,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
     const [editing, setEditing] = useState<Tier | 'new' | null>(null);
     const [toDelete, setToDelete] = useState<Tier | null>(null);
     const [following, setFollowing] = useState(false);
+    const [busy, setBusy] = useState(false);
     const byAmount = path.mechanism === 'plafon';
     const locked = path.follows_default;
     const editable = canManage && !locked;
@@ -123,7 +124,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
             key: 'role',
             header: 'Peran pemutus',
             cell: (t) => (
-                <span className="flex flex-wrap items-center gap-1.5">
+                <span className="flex items-center gap-1.5">
                     {t.role}
                     {t.is_individual && <Badge tone="info">Perorangan</Badge>}
                 </span>
@@ -144,7 +145,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
             key: 'decisions',
             header: 'Keputusan',
             cell: (t) => (
-                <span className="flex flex-wrap gap-1">
+                <span className="flex gap-1">
                     {DECISIONS.filter(([key]) => t[key]).map(([key, label]) => (
                         <Badge
                             key={key}
@@ -210,10 +211,13 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
             <Head title={path.title} />
             <PageHeader
                 title={path.title}
-                description={`${path.product_label} · ${path.mechanism_label}${path.note ? ` · ${path.note}` : ''}`}
+                description={
+                    path.is_default
+                        ? 'Dipakai bersama oleh semua jalur yang mengikuti bawaan'
+                        : `${path.product_label} · ${path.mechanism_label}${path.note ? ` · ${path.note}` : ''}`
+                }
                 actions={
                     <>
-                        <Badge tone={path.is_active ? 'success' : 'neutral'}>{path.is_active ? 'Aktif' : 'Nonaktif'}</Badge>
                         <Button variant="outline" onClick={() => router.visit('/committees/special-rules')}>
                             <ArrowLeft /> Kembali
                         </Button>
@@ -328,7 +332,7 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                             Batal
                         </Button>
                         <Button type="submit" loading={form.processing}>
-                            {editing === 'new' ? 'Tambah' : 'Simpan'}
+                            {editing === 'new' ? 'Buat' : 'Simpan'}
                         </Button>
                     </DialogFooter>
                 </form>
@@ -336,17 +340,22 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
 
             <ConfirmDialog
                 open={following}
-                onOpenChange={setFollowing}
+                onOpenChange={(open) => !open && !busy && setFollowing(false)}
                 title="Ikuti jenjang bawaan?"
                 description="Jenjang jalur ini akan diganti dengan salinan jenjang wewenang bawaan."
                 confirmLabel="Ikuti bawaan"
+                loading={busy}
                 onConfirm={() =>
                     router.put(
                         `/committees/${path.id}/follow`,
                         { follow: true },
                         {
                             preserveScroll: true,
-                            onFinish: () => setFollowing(false),
+                            onStart: () => setBusy(true),
+                            onFinish: () => {
+                                setBusy(false);
+                                setFollowing(false);
+                            },
                         },
                     )
                 }
@@ -354,8 +363,9 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
 
             <ConfirmDialog
                 open={toDelete !== null}
-                onOpenChange={(open) => !open && setToDelete(null)}
+                onOpenChange={(open) => !open && !busy && setToDelete(null)}
                 title="Hapus jenjang?"
+                loading={busy}
                 description={
                     <>
                         Jenjang <strong>{toDelete?.role}</strong> akan dihapus dari jalur ini.
@@ -365,7 +375,11 @@ export default function CommitteeShow({ path, roles, canManage }: Props) {
                     if (toDelete) {
                         router.delete(`${base}/${toDelete.id}`, {
                             preserveScroll: true,
-                            onFinish: () => setToDelete(null),
+                            onStart: () => setBusy(true),
+                            onFinish: () => {
+                                setBusy(false);
+                                setToDelete(null);
+                            },
                         });
                     }
                 }}

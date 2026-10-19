@@ -1,18 +1,12 @@
-import { Head, router } from '@inertiajs/react';
-import { Scale, Users } from 'lucide-react';
-import { useState } from 'react';
+import { Head } from '@inertiajs/react';
 import { CommitteeTabs } from '@/components/committee-tabs';
-import { Button } from '@/components/ui/button';
 import { Card, CardBody, CardHeader, PageHeader } from '@/components/ui/misc';
-import { AuthorityCheck } from '@/pages/committees/authority-check';
-
-type Option = { value: number | string; label: string };
+import { AuthorityCheckButton } from '@/pages/committees/authority-check';
+import type { AuthorityOptions } from '@/pages/committees/authority-check';
 
 type Props = {
     members: { total: number; withoutNik: number };
-    productOptions: Option[];
-    conditionMap: Record<string, string[]>;
-    committeeMembers: Option[];
+    authority: AuthorityOptions;
 };
 
 const RULES = [
@@ -24,26 +18,11 @@ const RULES = [
     'Cakupan: pemohon sendiri. Keluarga dekat masih dalam rencana.',
 ];
 
-export default function CommitteeExceptions({ members, productOptions, conditionMap, committeeMembers }: Props) {
-    const [checking, setChecking] = useState(false);
-
+export default function CommitteeExceptions({ members, authority }: Props) {
     return (
         <>
             <Head title="Pengecualian Komite" />
-            <PageHeader
-                title="Data Komite"
-                description="Bila pemohon adalah anggota komite"
-                actions={
-                    <>
-                        <Button variant="outline" onClick={() => router.visit('/committees/members')}>
-                            <Users /> Anggota
-                        </Button>
-                        <Button onClick={() => setChecking(true)}>
-                            <Scale /> Cek wewenang
-                        </Button>
-                    </>
-                }
-            />
+            <PageHeader title="Data Komite" description="Bila pemohon adalah anggota komite" actions={<AuthorityCheckButton options={authority} />} />
             <CommitteeTabs current="exceptions" />
 
             <Card>
@@ -59,14 +38,6 @@ export default function CommitteeExceptions({ members, productOptions, condition
                     </ul>
                 </CardBody>
             </Card>
-
-            <AuthorityCheck
-                open={checking}
-                onOpenChange={setChecking}
-                productOptions={productOptions}
-                conditionMap={conditionMap}
-                memberOptions={committeeMembers}
-            />
         </>
     );
 }

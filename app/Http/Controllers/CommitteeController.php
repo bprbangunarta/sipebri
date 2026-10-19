@@ -9,6 +9,7 @@ use App\Models\CommitteeTier;
 use App\Models\Product;
 use App\Models\User;
 use App\Support\Committee;
+use App\Support\CommitteeAuthorityOptions;
 use App\Support\CommitteeLevels;
 use App\Support\CommitteeMembers;
 use Illuminate\Http\JsonResponse;
@@ -39,7 +40,7 @@ class CommitteeController extends Controller
             ])->values() : [],
             'followers' => CommitteeLevels::followers(),
             'special' => CommitteePath::query()->where('is_default', false)->where(fn ($q) => $q->where('follows_default', false)->orWhere('mechanism', '!=', 'plafon'))->count(),
-            ...$this->authorityProps(),
+            'authority' => CommitteeAuthorityOptions::props(),
             'canManage' => true,
         ]);
     }
@@ -54,6 +55,7 @@ class CommitteeController extends Controller
             'pathOptions' => CommitteePath::with('product')->has('tiers')->where('is_default', false)->get()->map(fn (CommitteePath $p): array => ['value' => $p->id, 'label' => $p->title()]),
             'defaultLevels' => ($default = CommitteeLevels::defaultPath()) ? ['id' => $default->id, 'followers' => CommitteeLevels::followers()] : null,
             'mechanisms' => collect(CommitteePath::MECHANISMS)->map(fn (string $label, string $value): array => ['value' => $value, 'label' => $label])->values(),
+            'authority' => CommitteeAuthorityOptions::props(),
             'canManage' => true,
         ]);
     }
@@ -78,25 +80,8 @@ class CommitteeController extends Controller
     {
         return Inertia::render('committees/exceptions', [
             'members' => ['total' => CommitteeMembers::committee()->count(), 'withoutNik' => CommitteeMembers::committee()->whereNull('nik_hash')->count()],
-            ...$this->authorityProps(),
+            'authority' => CommitteeAuthorityOptions::props(),
         ]);
-    }
-
-    /**
-     * Options for the authority check dialog.
-     *
-     * @return array<string, mixed>
-     */
-    private function authorityProps(): array
-    {
-        return [
-            'productOptions' => Product::orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} · {$p->name}"]),
-            // Valid conditions per product: the product's own plus cross-product ones (e.g. RELOAN).
-            'conditionMap' => CommitteePath::where('is_active', true)->get()
-                ->groupBy(fn (CommitteePath $p) => $p->product_id ?? 'global')
-                ->map(fn ($paths) => $paths->map(fn (CommitteePath $p): string => (string) $p->condition)->unique()->sort()->values()),
-            'committeeMembers' => CommitteeMembers::options(),
-        ];
     }
 
     /** Who decides for a given product, condition and amount. Reads rules only. */
@@ -152,7 +137,7 @@ class CommitteeController extends Controller
 
         $title = $path->title();
 
-        if (($count = $path->loanApplications()->count()) > 0) {
+        if (($count = $path->loanApplications()->withTrashed()->count()) > 0) {
             return back()->with('error', "{$title} dipakai oleh {$count} pengajuan kredit sehingga tidak bisa dihapus. Nonaktifkan saja.");
         }
 
@@ -187,6 +172,11 @@ class CommitteeController extends Controller
     {
         if ($path->follows_default) {
             return $this->followsDefault();
+        }
+
+        // Every path that follows the defaults copies this ladder; with no level left they would have nobody to decide.
+        if ($path->is_default && $path->tiers()->count() <= 1) {
+            return back()->with('error', 'Jenjang wewenang bawaan harus punya sedikitnya satu jenjang.');
         }
 
         $tier->delete();

@@ -9,6 +9,16 @@ use Illuminate\Validation\Rule;
 
 class CommitteePathRequest extends FormRequest
 {
+    /**
+     * The default path is the shared ladder, not a rule of its own: only its levels change, so nothing about the path itself does.
+     */
+    public function authorize(): bool
+    {
+        $path = $this->route('path');
+
+        return ! ($path instanceof CommitteePath && $path->is_default);
+    }
+
     protected function prepareForValidation(): void
     {
         $this->merge([
