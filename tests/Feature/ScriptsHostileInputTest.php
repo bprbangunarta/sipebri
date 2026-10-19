@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Process;
 
 /*
@@ -17,7 +18,9 @@ const CLEAN_NAVIGATION = "<?php\n\nreturn [['label' => 'Pengajuan', 'href' => '/
  */
 function scriptWorkspace(array $files = ['pages/page.tsx' => "export default function Page() {\n    return null;\n}\n"], string $navigation = CLEAN_NAVIGATION): string
 {
-    $dir = sys_get_temp_dir().'/work space é '.bin2hex(random_bytes(3));
+    // Enough random bytes that a leftover from another run can never collide, and every folder is removed after its test.
+    $dir = sys_get_temp_dir().'/work space é '.bin2hex(random_bytes(8));
+    $GLOBALS['scriptWorkspaces'][] = $dir;
     mkdir($dir.'/scripts', 0777, true);
     mkdir($dir.'/resources/js', 0777, true);
     mkdir($dir.'/app/Support', 0777, true);
@@ -149,3 +152,11 @@ it('lets front-end code through that only looks like it breaks a rule', function
 
     expect($result->successful())->toBeTrue($result->errorOutput());
 })->with('allowed front-end code');
+
+afterEach(function () {
+    foreach ($GLOBALS['scriptWorkspaces'] ?? [] as $dir) {
+        File::deleteDirectory($dir);
+    }
+
+    $GLOBALS['scriptWorkspaces'] = [];
+});
