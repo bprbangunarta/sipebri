@@ -73,17 +73,17 @@ return [
         'actions' => [['label' => 'Atur parameter', 'url' => '/references/products/{id}/parameters']],
     ],
     'installments' => [
-        'label' => 'Sistem Angsuran', 'section' => 'Referensi', 'group' => 'Ketentuan kredit', 'model' => Installment::class, 'usage' => ['loanApplications' => 'pengajuan kredit'],
+        'label' => 'Sistem Angsuran', 'section' => 'Referensi', 'group' => 'Ketentuan kredit', 'model' => Installment::class, 'usage' => ['loanApplications' => 'pengajuan kredit', 'defaultForProducts' => 'bawaan produk'],
         'fields' => [
             $code, $label,
             ['name' => 'period_months', 'label' => 'Periode (bulan)', 'type' => 'number', 'required' => true, 'min' => 0, 'max' => 120, 'default' => 1, 'hint' => 'Kelipatan tenor dalam bulan; 0 = tanpa angsuran.'],
         ],
     ],
-    'interest-methods' => ['label' => 'Metode Bunga', 'section' => 'Referensi', 'group' => 'Ketentuan kredit', 'model' => Method::class, 'usage' => ['loanApplications' => 'pengajuan kredit'], 'fields' => [$code, $label]],
+    'interest-methods' => ['label' => 'Metode Bunga', 'section' => 'Referensi', 'group' => 'Ketentuan kredit', 'model' => Method::class, 'usage' => ['loanApplications' => 'pengajuan kredit', 'defaultForProducts' => 'bawaan produk', 'loanApprovals' => 'keputusan komite'], 'fields' => [$code, $label]],
     'collateral-types' => ['label' => 'Jenis Agunan', 'section' => 'Referensi', 'group' => 'Agunan', 'model' => CollateralType::class, 'usage' => ['collaterals' => 'jaminan', 'ownershipStatuses' => 'klasifikasi agunan'], 'fields' => [$code, $label]],
     'collateral-bindings' => ['label' => 'Pengikatan Agunan', 'section' => 'Referensi', 'group' => 'Agunan', 'model' => BindingType::class, 'usage' => ['collaterals' => 'jaminan'], 'fields' => [$code, $label]],
     'collateral-conditions' => ['label' => 'Kondisi Agunan', 'section' => 'Referensi', 'group' => 'Agunan', 'model' => CollateralCondition::class, 'usage' => ['collaterals' => 'jaminan'], 'fields' => [$code, $label]],
-    'collateral-valuations' => ['label' => 'Penilaian Agunan', 'section' => 'Referensi', 'group' => 'Agunan', 'model' => CollateralMethod::class, 'usage' => [], 'fields' => [$code, $label]],
+    'collateral-valuations' => ['label' => 'Penilaian Agunan', 'section' => 'Referensi', 'group' => 'Agunan', 'model' => CollateralMethod::class, 'usage' => ['collaterals' => 'jaminan'], 'fields' => [$code, $label]],
     'collateral-classifications' => [
         'label' => 'Klasifikasi Agunan', 'section' => 'Referensi', 'group' => 'Agunan', 'model' => OwnershipStatus::class, 'usage' => [],
         'fields' => [

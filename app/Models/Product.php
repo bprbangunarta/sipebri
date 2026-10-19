@@ -20,6 +20,12 @@ class Product extends Model
 {
     use Auditable;
 
+    protected static function booted(): void
+    {
+        // The database drops the parameters with their product without telling the audit log; deleting them as a model records what was lost.
+        static::deleting(fn (Product $product) => $product->parameter?->delete());
+    }
+
     protected function casts(): array
     {
         return ['is_active' => 'boolean'];

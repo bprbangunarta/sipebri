@@ -43,13 +43,13 @@ class ReferenceController extends Controller
 
         $perPage = in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 25;
         $items = $sort === ReferenceResource::USAGE_SORT
-            ? $this->byUsage($query, $usage, $first, $direction, $perPage, $request)
+            ? $this->byUsage($definition, $query, $usage, $first, $direction, $perPage, $request)
             : $query->orderBy($sort, $direction)->orderBy($first)->orderBy('id')->paginate($perPage)->withQueryString();
 
         return Inertia::render('references/index', [
             'items' => $items->through(fn ($record): array => [
                 ...$definition->toItem($record),
-                'usage_count' => array_sum(array_map(fn (string $relation): int => (int) $record->getAttribute(Str::snake($relation).'_count'), $usage)),
+                'usage_count' => $this->usageTotal($definition, $record, $usage),
             ]),
             'filters' => ['search' => $filters['search'] ?? '', 'sort' => $sort, 'direction' => $direction, 'per_page' => $items->perPage()],
             'perPageOptions' => self::PER_PAGE_OPTIONS,
@@ -73,6 +73,16 @@ class ReferenceController extends Controller
     }
 
     /**
+     * Everything that holds a row, for the "Dipakai" column: the relation counts loaded with the page plus the holders no relation can count.
+     *
+     * @param  list<string>  $usage
+     */
+    private function usageTotal(ReferenceResource $definition, Model $record, array $usage): int
+    {
+        return array_sum(array_map(fn (string $relation): int => (int) $record->getAttribute(Str::snake($relation).'_count'), $usage)) + array_sum($definition->extraUsage($record));
+    }
+
+    /**
      * The "Dipakai" column adds up several relations, which one SQL ORDER BY cannot do without building SQL text from names;
      * lookup tables that are used by other records stay small, so this one order is done on the rows in memory.
      *
@@ -80,9 +90,9 @@ class ReferenceController extends Controller
      * @param  list<string>  $usage
      * @return LengthAwarePaginator<int, Model>
      */
-    private function byUsage(Builder $query, array $usage, string $first, string $direction, int $perPage, Request $request): LengthAwarePaginator
+    private function byUsage(ReferenceResource $definition, Builder $query, array $usage, string $first, string $direction, int $perPage, Request $request): LengthAwarePaginator
     {
-        $total = fn (Model $record): int => array_sum(array_map(fn (string $relation): int => (int) $record->getAttribute(Str::snake($relation).'_count'), $usage));
+        $total = fn (Model $record): int => $this->usageTotal($definition, $record, $usage);
         $rows = $query->get()->sortBy([
             fn (Model $a, Model $b): int => $direction === 'asc' ? $total($a) <=> $total($b) : $total($b) <=> $total($a),
             fn (Model $a, Model $b): int => $a->getAttribute($first) <=> $b->getAttribute($first),
@@ -168,6 +178,10 @@ class ReferenceController extends Controller
             if ($count > 0) {
                 return back()->with('error', $this->inUse($name, $count, $noun));
             }
+        }
+
+        foreach ($definition->extraUsage($record) as $noun => $count) {
+            return back()->with('error', $this->inUse($name, $count, $noun));
         }
 
         if (($held = $definition->lastHolderOfUsedCode($record)) !== null) {
