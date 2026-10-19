@@ -422,7 +422,7 @@ class LoanApplicationController extends Controller
 
         return [
             'usageTypes' => array_map(fn (string $v): array => ['value' => $v, 'label' => $v], LoanApplication::USAGE_TYPES),
-            'offices' => Office::orderBy('code')->get()->map(fn (Office $o): array => ['value' => $o->id, 'label' => "{$o->alias} : {$o->name}"]),
+            'offices' => Office::orderBy('code')->get()->map(fn (Office $o): array => ['value' => $o->id, 'label' => $o->label()]),
             'products' => Product::where('is_active', true)->orderBy('code')->get()->map(fn (Product $p): array => ['value' => $p->id, 'label' => "{$p->alias} : {$p->name}"]),
             'institutions' => $code(Institution::class),
             'methods' => $code(Method::class),

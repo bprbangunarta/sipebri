@@ -22,6 +22,7 @@ use App\Models\Region;
 |            unique (true, or a sibling column the value is unique within), uppercase, max, min, hint,
 |            default, empty (label for null), options_from
 |            ([model, value, label columns]), rules (extra validation rules).
+|  lock_code – true: the code cannot change once any record uses the row (for rows another system finds by code).
 |  import  – true or ['examples' => [[...cells per field]]] turns on Excel import (the key of a row is its `code`).
 |  actions – extra row actions: label, url (with {id}).
 */
@@ -44,7 +45,13 @@ return [
 
     'offices' => [
         'label' => 'Kantor', 'section' => 'Referensi', 'group' => 'Organisasi', 'model' => Office::class, 'usage' => ['loanApplications' => 'pengajuan kredit', 'users' => 'pengguna'],
-        'fields' => [$code, ['name' => 'alias', 'label' => 'Alias', 'type' => 'text', 'required' => true, 'unique' => true, 'max' => 8, 'uppercase' => true], $label],
+        // Codex matches an office by its code and refreshes name and alias at every sign-in, so the code is locked once someone uses the office.
+        'lock_code' => true,
+        'fields' => [
+            [...$code, 'max' => Office::CODE_MAX],
+            ['name' => 'alias', 'label' => 'Alias', 'type' => 'text', 'required' => true, 'unique' => true, 'max' => Office::ALIAS_MAX, 'uppercase' => true, 'hint' => 'Diperbarui otomatis dari Codex saat pengguna masuk; ubahan di sini bisa tertimpa.'],
+            ['name' => 'name', 'label' => 'Nama', 'type' => 'text', 'required' => true, 'max' => Office::NAME_MAX, 'hint' => 'Diperbarui otomatis dari Codex saat pengguna masuk; ubahan di sini bisa tertimpa.'],
+        ],
     ],
     'resorts' => [
         'label' => 'Resort', 'section' => 'Referensi', 'group' => 'Organisasi', 'model' => Institution::class, 'usage' => ['loanApplications' => 'pengajuan kredit'], 'fields' => [$code, $label],

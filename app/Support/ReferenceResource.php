@@ -2,8 +2,12 @@
 
 namespace App\Support;
 
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 
 /**
@@ -78,6 +82,53 @@ class ReferenceResource
     public function sortKeys(): array
     {
         return [...array_column($this->rawFields(), 'name'), ...($this->usage() === [] ? [] : [self::USAGE_SORT])];
+    }
+
+    /**
+     * The usage relations with rows kept by soft delete included: a deactivated person or a deleted application still holds the foreign key.
+     *
+     * @return array<string, Closure(Builder<Model>|Relation<Model, Model, mixed>): mixed> constraints keyed by relation, for `withCount`
+     */
+    public function usageCounts(): array
+    {
+        $record = new ($this->model());
+        $counts = [];
+
+        foreach (array_keys($this->usage()) as $relation) {
+            $counts[$relation] = $this->heldByForeignKey($record->{$relation}())
+                ? fn ($query) => $query->withTrashed()
+                : fn ($query) => $query;
+        }
+
+        return $counts;
+    }
+
+    /**
+     * How many records, deleted ones included, refer to this one through the relation.
+     */
+    public function usageOf(Model $record, string $relation): int
+    {
+        $link = $record->{$relation}();
+
+        return $this->heldByForeignKey($link) ? $link->withTrashed()->count() : $link->count();
+    }
+
+    /**
+     * A soft-deleted row still holds a foreign key and blocks the delete in the database, so it counts. A relation that
+     * works through a code (no foreign key) counts live rows only: deleted ones keep no guarantee to protect.
+     *
+     * @param  Relation<Model, Model, mixed>  $link
+     */
+    private function heldByForeignKey(Relation $link): bool
+    {
+        return $link instanceof HasOneOrMany
+            && $link->getLocalKeyName() !== 'code'
+            && in_array(SoftDeletes::class, class_uses_recursive($link->getRelated()), true);
+    }
+
+    public function locksCode(): bool
+    {
+        return (bool) ($this->config['lock_code'] ?? false);
     }
 
     public function importable(): bool

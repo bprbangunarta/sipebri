@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Support\ReferenceResource;
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -36,7 +38,7 @@ class ReferenceController extends Controller
         $sort = $filters['sort'] ?? $first;
         $direction = $filters['direction'] ?? 'asc';
 
-        $query = $definition->model()::query()->withCount($usage);
+        $query = $definition->model()::query()->withCount($definition->usageCounts());
         $definition->search($query, $filters['search'] ?? null);
 
         $perPage = in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 25;
@@ -96,7 +98,7 @@ class ReferenceController extends Controller
         $input = $definition->normalize($request->all());
         $data = validator($input, $definition->rules(null, $input))->validate();
 
-        $definition->model()::query()->create($data);
+        $this->saving($definition, fn () => $definition->model()::query()->create($data));
 
         return back()->with('success', "{$definition->label()} berhasil dibuat.");
     }
@@ -108,20 +110,45 @@ class ReferenceController extends Controller
         $input = $definition->normalize($request->all());
         $data = validator($input, $definition->rules($record, $input))->validate();
 
-        // A record other tables refer to by its code cannot get a new code: those references would point nowhere.
-        if (isset($data['code']) && $data['code'] !== $record->getAttribute('code')) {
-            foreach ($definition->usage() as $relation => $noun) {
-                $link = $record->{$relation}();
+        $this->refuseUsedCodeChange($definition, $record, $data);
 
-                if ($link instanceof HasOneOrMany && $link->getLocalKeyName() === 'code' && ($count = $link->count()) > 0) {
-                    throw ValidationException::withMessages(['code' => sprintf('Kode tidak bisa diubah: dipakai oleh %d %s.', $count, $noun)]);
-                }
-            }
-        }
-
-        $record->update($data);
+        $this->saving($definition, fn () => $record->update($data));
 
         return back()->with('success', "{$definition->label()} berhasil diperbarui.");
+    }
+
+    /**
+     * A record that others refer to by its code, or that another system finds by it (`lock_code`), cannot get a new code:
+     * those references would point nowhere.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    private function refuseUsedCodeChange(ReferenceResource $definition, Model $record, array $data): void
+    {
+        if (! isset($data['code']) || $data['code'] === $record->getAttribute('code')) {
+            return;
+        }
+
+        foreach ($definition->usage() as $relation => $noun) {
+            $link = $record->{$relation}();
+            $byCode = $definition->locksCode() || ($link instanceof HasOneOrMany && $link->getLocalKeyName() === 'code');
+
+            if ($byCode && ($count = $definition->usageOf($record, $relation)) > 0) {
+                throw ValidationException::withMessages(['code' => sprintf('Kode tidak bisa diubah: dipakai oleh %d %s.', $count, $noun)]);
+            }
+        }
+    }
+
+    /**
+     * Two people saving the same unique value at the same moment: the loser gets a sentence on the first field, not a server error.
+     */
+    private function saving(ReferenceResource $definition, Closure $write): void
+    {
+        try {
+            $write();
+        } catch (UniqueConstraintViolationException) {
+            throw ValidationException::withMessages([$definition->rawFields()[0]['name'] => 'Data yang sama baru saja disimpan oleh orang lain. Muat ulang halaman lalu coba lagi.']);
+        }
     }
 
     public function destroy(string $resource, int $id): RedirectResponse
@@ -131,7 +158,7 @@ class ReferenceController extends Controller
         $name = $record->name ?? $record->getKey();
 
         foreach ($definition->usage() as $relation => $noun) {
-            $count = $record->{$relation}()->count();
+            $count = $definition->usageOf($record, $relation);
 
             if ($count > 0) {
                 return back()->with('error', $this->inUse($name, $count, $noun));

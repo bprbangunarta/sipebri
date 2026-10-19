@@ -35,7 +35,7 @@ class UserController extends Controller
         return Inertia::render('users/index', [
             'users' => $users->through(fn (User $u): array => [
                 'id' => $u->id, 'name' => $u->name, 'username' => $u->username, 'email' => $u->email,
-                'office' => $u->office ? trim(($u->office->alias ? $u->office->alias.' : ' : '').$u->office->name) : null,
+                'office' => $u->office?->label(),
                 'active' => ! $u->trashed(),
                 'role' => $u->getRoleNames()->first(), 'created_at' => $u->created_at?->toDateString(),
             ]),

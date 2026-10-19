@@ -2,6 +2,7 @@
 
 namespace App\Auth;
 
+use App\Models\Office;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -138,6 +139,10 @@ class CodexAuthClient
             }
         }
 
-        return true;
+        // A value longer than its column would fail halfway through the sign-in on a strict database.
+        return mb_strlen($office['code'] ?? '') <= Office::CODE_MAX
+            && mb_strlen($office['alias'] ?? '') <= Office::ALIAS_MAX
+            && mb_strlen($office['name'] ?? '') <= Office::NAME_MAX
+            && mb_strlen($user['office'] ?? '') <= Office::NAME_MAX;
     }
 }
