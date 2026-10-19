@@ -5,6 +5,7 @@ namespace App\Auth;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 /**
@@ -77,6 +78,10 @@ class CodexAuthClient
      */
     private function post(string $path, array $payload): Response
     {
+        if (app()->isProduction() && ! filter_var(config('services.codex.verify'), FILTER_VALIDATE_BOOL)) {
+            Log::warning('CODEX_VERIFY is off: the connection to Codex is not verified, so the sign-in could be read or altered on the way.');
+        }
+
         try {
             $response = Http::withToken((string) config('services.codex.token'))
                 ->acceptJson()

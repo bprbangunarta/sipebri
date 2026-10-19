@@ -53,6 +53,10 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Dependency karena adopsi (user, 2026-10-19):** ditambah devDependency `@testing-library/{react,user-event,jest-dom}`, `jsdom`, `jscpd`; `recharts` dibuang (grafik lewat `components/ui/chart.tsx`). Risiko diterima: `npm audit` masih melaporkan temuan hanya di alat pengembangan (`--omit=dev` bersih), perbaikannya butuh versi di luar rentang.
 - **Tabel memecah kolom bertumpuk** (satu nilai satu kolom) di semua daftar, termasuk analisa dan persetujuan (2026-10-19). Daftar persetujuan kini diurutkan di server pada semua kolom: usulan plafon/tenor jatuh ke permohonan bila memorandum belum ada, posisi = langkah tertunda, "Giliran" memakai uji yang sama dengan tampilan "Menunggu saya". Kunci dari tabel lain diurutkan lewat subkueri berkunci unik; tanpa migrasi indeks baru karena kolom berkas yang diurutkan sudah berindeks dan indeks pada nilai hasil subkueri tidak dipakai. Audit log hanya urut waktu (tabel besar tanpa indeks lain). Label menu "Data Audit Log" menjadi "Audit Log" (aturan label maksimal dua kata).
 - **Deploy ke VPS sendiri, bukan Laravel Cloud** (sama dengan codex): skill `deploying-to-cloud` tidak dipakai.
+- **Login (audit fitur 1, user, 2026-10-19):** batas gagal 5 per orang+IP dan 60 per IP per menit (longgar karena kantor mungkin berbagi IP);
+  `CODEX_VERIFY=false` di produksi hanya diperingatkan di log; username yang diketik pada percobaan gagal disimpan hanya bila berbentuk
+  username/email (kata sandi pendek tanpa simbol yang diketik di situ tetap tak terbedakan); orang berkas-ada dengan id Codex berubah
+  ditolak dan diselesaikan Super Admin (memindahkan semua rujukan id berisiko bagi rantai audit).
 - **Tidak boleh menambah status berkas baru tanpa dibahas.**
 - **Antrean offline survei tidak dibuat** (user): tanpa sinyal aplikasi pun tidak bisa dibuka; indikator jaringan sudah memberi tahu.
 - **Alamat dari koordinat tidak dibandingkan dengan alamat KTP nasabah:** survei bisa dilakukan di mana saja.
@@ -70,20 +74,15 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Audit akses baca halaman daftar** belum dicatat (volume besar); tambahkan ringkas bila auditor meminta.
 - Retensi/arsip audit log (OJK, bertahun-tahun) belum diatur; jangan hapus baris.
 - Role lama `HR Admin`/`Viewer` masih ada di database dev (tanpa izin).
-- **Keputusan pemilik yang menunggu (audit fitur 1, login):** (a) batas percobaan masuk hanya per orang+IP; satu IP boleh mencoba banyak
-  username tanpa batas (tiap percobaan memanggil Codex dan menulis audit) dan batas per IP bisa mengunci satu kantor yang berbagi IP;
-  (b) `CODEX_VERIFY=false` mematikan verifikasi TLS ke Codex tanpa peringatan di produksi; (c) apakah ada proxy/CDN di depan aplikasi
-  (bila ada, IP di audit dan di batas percobaan adalah IP proxy kecuali proxy dipercaya); (d) username yang diketik pada percobaan gagal
-  masuk audit log apa adanya, jadi kata sandi yang salah diketik di kolom username ikut tersimpan; (e) orang yang berkasnya sudah ada
-  tetapi id Codex-nya berubah ditolak (id tidak bisa dipindah karena berkas menunjuk id lama): pindahkan semua rujukan atau selesaikan
-  lewat Super Admin?
+- **Proxy atau CDN di depan aplikasi belum dikonfirmasi** (audit fitur 1): bila ada, IP di audit dan di batas percobaan masuk adalah IP proxy
+  sampai proxy dipercaya di `bootstrap/app.php`; periksa saat deploy.
 
 ## Langkah berikutnya
 
 Dipilih user; agent tidak memulai fitur baru tanpa diminta.
 
-1. **Audit silang dokumen ↔ kode per unit** (user, 2026-10-19), satu unit per sesi mengikuti `AGENTS.md` bagian 1 dan 3 (urutan membaca,
-   standar produksi 9 pertanyaan, langkah 4a); dokumen basi diperbaiki di tempat, perubahan perilaku lewat brief. Unit yang selesai dihapus
+1. **Audit silang dokumen ↔ kode per unit** (user, 2026-10-19), satu brief "Audit fitur N" per fitur (bentuk: brief 0004 codex, commit 584013f), urutan dari pemilik ("fitur N"), mengikuti
+   `AGENTS.md` bagian 1 dan 3; temuan langsung diperbaiki kecuali yang mengubah kebijakan (dijelaskan ke pemilik dulu). Unit yang selesai dihapus
    dari daftar. Platform: (2) MFA + profil, (3) peran dan izin, (4) Data Pengguna (temuan awal:
    `UserSeeder` memuat nama dan email pribadi yang tampak asli, padahal seeder hanya boleh berisi data karangan), (5) navigasi dan `/`,
    (6) audit log (temuan awal: `audit:prune` terjadwal bulanan, padahal "Pertanyaan terbuka" menyebut retensi belum diatur), (7) notifikasi,

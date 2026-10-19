@@ -43,16 +43,23 @@ class LoginRequest extends FormRequest
     public function authenticate(CodexAuthClient $codex, CodexUserSync $sync): User
     {
         $username = $this->codexUsername();
-        $key = $this->throttleKey($username);
-        $this->ensureIsNotRateLimited($key);
+        $limits = [
+            $this->throttleKey($username) => [(int) config('security.login_attempts'), 'too many attempts'],
+            'login-address|'.$this->ip() => [(int) config('security.login_ip_attempts'), 'too many attempts from this address'],
+        ];
+
+        foreach ($limits as $key => [$max, $reason]) {
+            $this->ensureIsNotRateLimited($key, $max, $reason);
+        }
 
         // Counted before Codex is asked, so requests sent at the same moment cannot all slip under the limit; an outage gives it back.
-        RateLimiter::hit($key);
+        array_map(RateLimiter::hit(...), array_keys($limits));
+        $giveBack = fn () => array_map(RateLimiter::decrement(...), array_keys($limits));
 
         try {
             $result = $codex->authenticate($username, $this->string('password')->toString());
         } catch (CodexUnavailable $exception) {
-            RateLimiter::decrement($key);
+            $giveBack();
             report($exception);
             $this->audit('auth.login_failed', 'sign-in service unavailable');
 
@@ -70,12 +77,16 @@ class LoginRequest extends FormRequest
         try {
             $user = $sync->sync($result['user'], $result['office']);
         } catch (UserIdConflict $exception) {
-            RateLimiter::decrement($key);
+            $giveBack();
             report($exception);
             $this->audit('auth.login_failed', 'user id conflict');
 
             throw ValidationException::withMessages(['username' => 'Data Anda di Codex tidak cocok dengan data di SIPEBRI. Hubungi Super Admin.']);
         }
+
+        // Only failures count: the person's count is cleared, the address's gets this attempt back.
+        RateLimiter::clear($this->throttleKey($username));
+        RateLimiter::decrement('login-address|'.$this->ip());
 
         if ($user->trashed()) {
             $this->audit('auth.login_failed', 'inactive account', $user);
@@ -83,15 +94,27 @@ class LoginRequest extends FormRequest
             throw ValidationException::withMessages(['username' => 'Akun Anda tidak aktif. Hubungi atasan atau bagian SDM.']);
         }
 
-        RateLimiter::clear($key);
-
         return $user;
     }
 
-    /** Failed sign-ins are evidence too; only the typed username is kept, never the password. */
+    /** Failed sign-ins are evidence too; the typed username is kept only when it looks like one, never the password. */
     private function audit(string $event, string $reason, ?User $user = null): void
     {
-        Audit::record($event, 'auth', str_replace('auth.', '', $event), $user, context: ['username' => $this->string('username')->toString(), 'reason' => $reason], outcome: 'failure', label: $user?->auditLabel() ?? $this->string('username')->toString());
+        $typed = $this->loggableUsername();
+
+        Audit::record($event, 'auth', str_replace('auth.', '', $event), $user, context: ['username' => $typed, 'reason' => $reason], outcome: 'failure', label: $user?->auditLabel() ?? $typed);
+    }
+
+    /**
+     * People sometimes type the password in the username field, and the trail must not keep it. A staff number, a username, or
+     * an email is kept as typed; anything else is replaced by a marker. Short plain words still pass, which no rule can tell apart.
+     */
+    private function loggableUsername(): string
+    {
+        $typed = $this->string('username')->toString();
+        $looksLikeUsername = preg_match('/^[A-Za-z0-9._-]{1,30}$/', $typed) === 1 || filter_var($typed, FILTER_VALIDATE_EMAIL) !== false;
+
+        return $looksLikeUsername ? $typed : '[bukan username]';
     }
 
     /**
@@ -113,9 +136,9 @@ class LoginRequest extends FormRequest
     /**
      * @throws ValidationException
      */
-    private function ensureIsNotRateLimited(string $key): void
+    private function ensureIsNotRateLimited(string $key, int $max, string $reason): void
     {
-        if (! RateLimiter::tooManyAttempts($key, 5)) {
+        if (! RateLimiter::tooManyAttempts($key, $max)) {
             return;
         }
 
@@ -124,7 +147,7 @@ class LoginRequest extends FormRequest
 
         // One entry per lockout: the blocked requests that follow are not new evidence and must not grow the trail.
         if (Cache::add('auth.lockout-audited:'.$key, true, $seconds)) {
-            $this->audit('auth.locked_out', 'too many attempts');
+            $this->audit('auth.locked_out', $reason);
         }
 
         throw ValidationException::withMessages([

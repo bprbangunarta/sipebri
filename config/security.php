@@ -28,6 +28,12 @@ return [
     // Minutes the second step of a sign-in may take.
     'challenge_ttl' => 10,
 
+    // Failed sign-ins one person (Codex username and address together) may make per minute before being locked out.
+    'login_attempts' => 5,
+
+    // Failed sign-ins one address may make per minute whoever they try. Generous, because the offices may share one public address.
+    'login_ip_attempts' => 60,
+
     // Number of single-use recovery codes issued when an authenticator app is enabled.
     'recovery_codes' => 8,
 

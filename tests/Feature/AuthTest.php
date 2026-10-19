@@ -6,9 +6,11 @@ use App\Models\LoanApplication;
 use App\Models\Office;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -269,6 +271,67 @@ it('does not count attempts that failed because Codex was down, and a success cl
     fakeCodex();
     $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
 });
+
+it('stops one address that tries many usernames, without counting outages or successful sign-ins', function () {
+    config(['security.login_ip_attempts' => 3]);
+    Http::fake(['codex.test/*' => Http::response(['success' => false], 401)]);
+
+    foreach (['a1', 'b2', 'c3'] as $typed) {
+        $this->post(route('login.store'), ['username' => $typed, 'password' => 'bad'])->assertSessionHasErrors('username');
+    }
+
+    $this->post(route('login.store'), ['username' => 'd4', 'password' => 'bad'])->assertSessionHasErrors('username');
+    Http::assertSentCount(3);
+    expect(AuditLog::query()->where('event', 'auth.locked_out')->get()->map(fn ($row) => $row->decoded('context')['reason'])->all())
+        ->toBe(['too many attempts from this address']);
+
+    RateLimiter::clear(Str::transliterate('login-address|127.0.0.1'));
+    foreach (range(1, 5) as $i) {
+        Http::swap(new Factory);
+        Http::fake(['codex.test/*' => Http::response('down', 500)]);
+        $this->post(route('login.store'), ['username' => "down{$i}", 'password' => 'x']);
+    }
+    foreach (range(1, 5) as $i) {
+        fakeCodex();
+        $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x'])->assertRedirect(route('dashboard'));
+        $this->post(route('logout'));
+    }
+});
+
+it('warns in the log when the connection to Codex is not verified in production, and only then', function (string $environment, bool $verify, bool $warns) {
+    // Outside the testing environment the framework checks the CSRF token again, which this test is not about.
+    $this->withoutMiddleware(PreventRequestForgery::class);
+    app()->detectEnvironment(fn () => $environment);
+    config(['services.codex.verify' => $verify]);
+    Log::spy();
+    fakeCodex();
+
+    $this->post(route('login.store'), ['username' => '309011221', 'password' => 'x']);
+
+    $warns
+        ? Log::shouldHaveReceived('warning')->withArgs(fn (string $message) => str_contains($message, 'CODEX_VERIFY'))->once()
+        : Log::shouldNotHaveReceived('warning');
+})->with([
+    'production without verification' => ['production', false, true],
+    'production with verification' => ['production', true, false],
+    'local without verification' => ['local', false, false],
+]);
+
+it('keeps in the audit trail only what looks like a username or an email, never a password typed in its place', function (string $typed, string $kept) {
+    Http::fake(['codex.test/*' => Http::response(['success' => false], 401)]);
+
+    $this->post(route('login.store'), ['username' => $typed, 'password' => 'bad']);
+
+    $row = AuditLog::query()->where('event', 'auth.login_failed')->firstOrFail();
+    expect($row->decoded('context')['username'])->toBe($kept)->and($row->subject_label)->toBe($kept);
+})->with([
+    'staff number' => ['309011221', '309011221'],
+    'letters username' => ['superadmin', 'superadmin'],
+    'email' => ['person@example.com', 'person@example.com'],
+    'a sentence typed as password' => ['Rahasia saya 2026!', '[bukan username]'],
+    'a password with symbols' => ['P@ss#word$1', '[bukan username]'],
+    'too long' => [str_repeat('a', 40), '[bukan username]'],
+]);
 
 it('shares one limit between a person\'s email and username', function () {
     User::factory()->create(['id' => 30, 'username' => '309011221', 'email' => 'person@example.com']);
