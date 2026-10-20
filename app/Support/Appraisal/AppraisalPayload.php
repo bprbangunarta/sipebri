@@ -94,7 +94,7 @@ final class AppraisalPayload
             }
         }
 
-        return ['id' => $collateral->id, 'label' => $collateral->cbs_id ?? "#{$collateral->id}", 'facts' => $facts];
+        return ['id' => $collateral->id, 'label' => $collateral->cbs_id ?? "Jaminan #{$collateral->id}", 'facts' => $facts];
     }
 
     /**

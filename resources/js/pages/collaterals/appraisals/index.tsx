@@ -60,9 +60,9 @@ export default function CollateralAppraisalsIndex({ collateral, appraisals, purp
 
     return (
         <>
-            <Head title={`Penilaian ${collateral.label}`} />
+            <Head title={`Riwayat penilaian ${collateral.label}`} />
             <PageHeader
-                title={`Penilaian jaminan ${collateral.label}`}
+                title={`Riwayat penilaian ${collateral.label}`}
                 description={`Riwayat penilaian, formulir ${TEMPLATES[template] ?? template}`}
                 actions={
                     <>

@@ -61,6 +61,7 @@ export default function AppraisalShow({
     const [answers, setAnswers] = useState<Answers>(saved);
     const [saving, setSaving] = useState(false);
     const [uploading, setUploading] = useState<string | null>(null);
+    const [showFacts, setShowFacts] = useState(false);
     const [finalizing, setFinalizing] = useState(false);
     const [removing, setRemoving] = useState(false);
     const [busy, setBusy] = useState(false);
@@ -114,9 +115,9 @@ export default function AppraisalShow({
 
     return (
         <>
-            <Head title={`Penilaian #${appraisal.sequence} ${collateral.label}`} />
+            <Head title={`Penilaian ke-${appraisal.sequence} ${collateral.label}`} />
             <PageHeader
-                title={`Penilaian #${appraisal.sequence} · ${collateral.label}`}
+                title={`Penilaian ke-${appraisal.sequence} · ${collateral.label}`}
                 description={`${appraisal.purpose_label}${appraisal.effective_date ? ` · nilai per ${formatDate(appraisal.effective_date)}` : ''}`}
                 badge={<Badge tone={isFinal ? 'success' : 'warning'}>{isFinal ? 'Final' : 'Draf'}</Badge>}
                 actions={
@@ -165,22 +166,33 @@ export default function AppraisalShow({
                     title="Data tetap agunan"
                     description="Dari data jaminan; berlaku untuk semua penilaian."
                     actions={
-                        <Link href={`/collaterals/${collateral.id}/edit`} className="text-xs text-primary hover:underline">
-                            Ubah data jaminan
-                        </Link>
+                        <>
+                            <Button variant="ghost" size="sm" aria-expanded={showFacts} onClick={() => setShowFacts(!showFacts)}>
+                                {showFacts ? 'Sembunyikan' : 'Tampilkan'}
+                            </Button>
+                            <Link href={`/collaterals/${collateral.id}/edit`} className="text-xs text-primary hover:underline">
+                                Ubah data jaminan
+                            </Link>
+                        </>
                     }
                 />
-                <CardBody className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                    {collateral.facts.map((fact) => (
-                        <Stat
-                            key={fact.label}
-                            label={fact.label}
-                            value={
-                                fact.type === 'date' ? formatDate(String(fact.value)) : fact.type === 'integer' ? formatNumber(Number(fact.value)) : fact.value
-                            }
-                        />
-                    ))}
-                </CardBody>
+                {showFacts && (
+                    <CardBody className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                        {collateral.facts.map((fact) => (
+                            <Stat
+                                key={fact.label}
+                                label={fact.label}
+                                value={
+                                    fact.type === 'date'
+                                        ? formatDate(String(fact.value))
+                                        : fact.type === 'integer'
+                                          ? formatNumber(Number(fact.value))
+                                          : fact.value
+                                }
+                            />
+                        ))}
+                    </CardBody>
+                )}
             </Card>
 
             <div className="grid gap-3 lg:grid-cols-[16rem_minmax(0,1fr)]">
