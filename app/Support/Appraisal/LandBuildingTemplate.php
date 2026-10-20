@@ -25,6 +25,16 @@ final class LandBuildingTemplate implements AppraisalTemplate
         return 1;
     }
 
+    public function variant(): ?string
+    {
+        return null;
+    }
+
+    public function missingFacts(): ?string
+    {
+        return null;
+    }
+
     public function hardStops(): array
     {
         return ['legal.original_documents', 'legal.identity', 'legal.no_dispute', 'legal.no_blockade', 'legal.can_be_encumbered', 'legal.access_basis'];

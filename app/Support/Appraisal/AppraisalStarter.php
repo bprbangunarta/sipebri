@@ -32,11 +32,17 @@ final class AppraisalStarter
             }
 
             $template = AppraisalTemplates::for($collateral);
+
+            if (($missing = $template->missingFacts()) !== null) {
+                throw new RuntimeException($missing);
+            }
+
             $appraisal = CollateralAppraisal::create([
                 'collateral_id' => $collateral->id,
                 'sequence' => (int) $collateral->appraisals()->max('sequence') + 1,
                 'template' => $template->key(),
                 'template_version' => $template->version(),
+                'variant' => $template->variant(),
                 'purpose' => $purpose,
                 'credit_ceiling' => 0,
                 'market_value' => 0,

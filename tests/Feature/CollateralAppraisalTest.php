@@ -15,6 +15,7 @@ use App\Support\Appraisal\AppraisalStarter;
 use App\Support\Appraisal\AppraisalTemplates;
 use App\Support\Appraisal\GeneralTemplate;
 use App\Support\Appraisal\LandBuildingTemplate;
+use App\Support\Appraisal\VehicleTemplate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -80,12 +81,14 @@ it('picks the land and building form for the land types and the general form for
     'place of business' => ['08', LandBuildingTemplate::KEY],
     'gold' => ['03', GeneralTemplate::KEY],
     'savings or deposit' => ['02', GeneralTemplate::KEY],
-    'vehicle' => ['10', GeneralTemplate::KEY],
+    'vehicle with a fiduciary binding' => ['10', VehicleTemplate::KEY],
+    'vehicle with a notarial binding' => ['11', VehicleTemplate::KEY],
+    'vehicle with another binding' => ['12', VehicleTemplate::KEY],
     'no collateral' => ['99', GeneralTemplate::KEY],
 ]);
 
 it('keeps every item key of a form unique, every hard stop a yes/no check, and a figure for every computed item', function (string $form) {
-    $template = collect([new LandBuildingTemplate, new GeneralTemplate])->first(fn ($template) => $template->key() === $form);
+    $template = collect([new LandBuildingTemplate, new GeneralTemplate, new VehicleTemplate])->first(fn ($template) => $template->key() === $form);
     $items = collect(AppraisalTemplates::items($template));
     $cells = $template->compute([], new AppraisalContext(0, null))->cells;
 
@@ -93,7 +96,7 @@ it('keeps every item key of a form unique, every hard stop a yes/no check, and a
         ->and($items->whereIn('key', $template->hardStops())->pluck('type')->unique()->all())->toBe(['yesno'])
         ->and($items->whereIn('key', $template->hardStops())->count())->toBe(count($template->hardStops()))
         ->and($items->where('type', 'computed')->pluck('key')->reject(fn (string $key): bool => array_key_exists($key, $cells))->values()->all())->toBe([]);
-})->with([LandBuildingTemplate::KEY, GeneralTemplate::KEY]);
+})->with([LandBuildingTemplate::KEY, GeneralTemplate::KEY, VehicleTemplate::KEY]);
 
 it('starts an appraisal as draft number one with the form and the person who starts it', function () {
     $collateral = landCollateral();
@@ -492,4 +495,148 @@ it('appraises collaterals of other types with the general form', function () {
     finalize($appraisal)->assertSessionHasNoErrors();
 
     expect(fieldsOf($appraisal->fresh(), ['template', 'market_value', 'liquidation_value', 'status']))->toBe(['template' => 'general', 'market_value' => 50_000_000, 'liquidation_value' => 45_000_000, 'status' => 'final']);
+});
+
+/** The reference rows and the form fields a vehicle collateral needs when it is saved through the screen's endpoints. */
+function vehiclePayload(array $overrides = []): array
+{
+    CollateralType::firstOrCreate(['code' => '10'], ['name' => 'VEHICLE']);
+    CollateralCondition::firstOrCreate(['code' => '9'], ['name' => 'OK']);
+    Region::firstOrCreate(['code' => '3201'], ['regency' => 'BOGOR', 'district' => 'X', 'village' => 'Y']);
+
+    return ['collateral_type_code' => '10', 'document_number' => 'BPKB 1', 'description' => 'MOBIL', 'owner_name' => 'SITI', 'owner_address' => 'JL X', 'region_code' => '3201', ...$overrides];
+}
+
+function vehicleCollateral(?string $kind = 'wheel4', array $attributes = []): Collateral
+{
+    return Collateral::create(['collateral_type_code' => '10', 'owner_name' => 'SITI', 'document_number' => 'BPKB 1', 'vehicle_kind' => $kind, 'chassis_number' => 'MHKA1', 'engine_number' => 'ENG1', ...$attributes]);
+}
+
+/** What an appraiser must have filled in for a vehicle appraisal that is accepted. */
+function acceptableVehicleAnswers(array $overrides = []): array
+{
+    return [
+        'h:effective_date' => '2026-10-20', 'h:appraiser_name' => 'Rina', 'h:credit_ceiling' => '100000000', 'reconciliation.selected' => '150000000',
+        'repair.r1.cost' => '5000000', 'repair.h_age.percent' => '20', 'h:decision' => 'accepted',
+        ...array_fill_keys((new VehicleTemplate)->hardStops(), 'yes'),
+        ...$overrides,
+    ];
+}
+
+it('starts a vehicle appraisal with the variant of the collateral, and refuses while the kind of vehicle is not known', function () {
+    $unknown = vehicleCollateral(null);
+
+    $this->post(route('collaterals.appraisals.store', $unknown), ['purpose' => 'new'])->assertSessionHas('error', fn (string $message): bool => str_contains($message, 'jenis kendaraan'));
+    expect($unknown->appraisals()->count())->toBe(0);
+
+    $appraisal = startAppraisal(vehicleCollateral('wheel2', ['chassis_number' => 'MH2', 'engine_number' => 'E2']));
+
+    expect(fieldsOf($appraisal, ['template', 'variant']))->toBe(['template' => 'vehicle', 'variant' => 'wheel2']);
+});
+
+it('keeps the form of an appraisal when the kind of vehicle on the collateral is changed later', function () {
+    $collateral = vehicleCollateral('wheel4');
+    $appraisal = startAppraisal($collateral);
+    $collateral->update(['vehicle_kind' => 'wheel2']);
+
+    $this->get(route('appraisals.show', $appraisal))->assertInertia(fn (Assert $page) => $page
+        ->where('template.sections', fn ($sections) => collect($sections)->pluck('key')->contains('car') && ! collect($sections)->pluck('key')->contains('motorcycle')));
+    $this->put(route('appraisals.sections.update', [$appraisal, 'motorcycle']), ['answers' => [['key' => 'motorcycle.chain', 'value' => 'good']]])->assertNotFound();
+    $this->put(route('appraisals.sections.update', [$appraisal, 'car']), ['answers' => [['key' => 'car.airbag', 'value' => 'good']]])->assertSessionHasNoErrors();
+});
+
+it('counts only the sections that apply to the vehicle in the progress of the appraisal', function () {
+    $appraisal = startAppraisal(vehicleCollateral('wheel2'));
+
+    $this->get(route('appraisals.show', $appraisal))->assertInertia(fn (Assert $page) => $page
+        ->where('progress', fn ($progress) => isset($progress['motorcycle']) && ! isset($progress['car'])));
+});
+
+it('finalises an accepted vehicle appraisal with the figures the form works out', function () {
+    $appraisal = startAppraisal(vehicleCollateral());
+    fillAppraisal($appraisal, acceptableVehicleAnswers());
+
+    finalize($appraisal)->assertSessionHasNoErrors();
+
+    // 150.000.000 - 5.000.000 = 145.000.000; 20% haircut leaves 116.000.000
+    expect(fieldsOf($appraisal->fresh(), ['status', 'market_value', 'liquidation_value', 'haircut_percent']))->toEqual(['status' => 'final', 'market_value' => 145_000_000, 'liquidation_value' => 116_000_000, 'haircut_percent' => 20]);
+});
+
+it('refuses to accept a vehicle while a check that cannot be waived is not answered yes, and names it', function (string $key, string $label) {
+    $appraisal = startAppraisal(vehicleCollateral());
+    fillAppraisal($appraisal, acceptableVehicleAnswers([$key => 'no']));
+
+    finalize($appraisal)->assertSessionHasErrors('finalize');
+
+    expect(session('errors')->first('finalize'))->toContain($label)->and($appraisal->fresh()->status)->toBe('draft');
+})->with([
+    'the original BPKB not seen' => ['legal.original_bpkb', 'BPKB asli telah dilihat'],
+    'the original STNK not seen' => ['legal.original_stnk', 'STNK asli telah dilihat'],
+    'names that do not match' => ['legal.names', 'Nama/identitas konsisten'],
+    'a chassis number that does not match' => ['legal.chassis', 'Nomor rangka sesuai dokumen'],
+    'an engine number that does not match' => ['legal.engine', 'Nomor mesin sesuai dokumen'],
+    'numbers that were altered' => ['legal.not_altered', 'Tidak terdapat bekas perubahan nomor'],
+    'a vehicle under blockade' => ['legal.no_dispute', 'Tidak dalam blokir/sita/sengketa'],
+    'a vehicle that cannot be bound' => ['legal.fiduciary', 'Dapat diikat fidusia'],
+]);
+
+it('records the checks about theft, other pledges, and hidden financing without blocking an acceptance', function () {
+    $appraisal = startAppraisal(vehicleCollateral());
+    fillAppraisal($appraisal, acceptableVehicleAnswers(['legal.not_stolen' => 'no', 'legal.not_pledged' => 'no', 'legal.no_hidden_financing' => 'no']));
+
+    finalize($appraisal)->assertSessionHasNoErrors();
+
+    expect(AppraisalEntry::where('item', 'legal.not_stolen')->value('value'))->toBe('no');
+});
+
+it('shows the fall in value from the previous finalised appraisal in the history', function () {
+    $collateral = vehicleCollateral();
+    $first = startAppraisal($collateral);
+    fillAppraisal($first, acceptableVehicleAnswers());
+    finalize($first);
+    $second = startAppraisal($collateral, ['purpose' => 'review']);
+    fillAppraisal($second, acceptableVehicleAnswers(['reconciliation.selected' => '120000000', 'repair.r1.cost' => '0']));
+    finalize($second);
+    startAppraisal($collateral, ['purpose' => 'top_up']);
+
+    // 145.000.000 -> 120.000.000: a fall of 25.000.000, 17,24%; liquidation 116.000.000 -> 96.000.000
+    $this->get(route('collaterals.appraisals.index', $collateral))->assertInertia(fn (Assert $page) => $page
+        ->where('appraisals.2.market_change', null)->where('appraisals.2.previous_sequence', null)
+        ->where('appraisals.1.market_change', -25_000_000)->where('appraisals.1.market_change_percent', -17.24)->where('appraisals.1.liquidation_change', -20_000_000)->where('appraisals.1.previous_sequence', 1)
+        ->where('appraisals.0.market_change', null));
+});
+
+it('refuses a chassis or engine number that another collateral already carries, whatever its case, and names that collateral', function (string $field, string $value) {
+    $this->post(route('collaterals.store'), vehiclePayload(['cbs_id' => 'AG-9', 'vehicle_kind' => 'wheel4', $field => 'abc123']))->assertSessionHasNoErrors();
+    expect(Collateral::where($field, 'ABC123')->count())->toBe(1);
+
+    $this->post(route('collaterals.store'), vehiclePayload(['cbs_id' => 'AG-10', $field => $value]))->assertSessionHasErrors($field);
+
+    expect(session('errors')->first($field))->toContain('AG-9')->and(Collateral::count())->toBe(1);
+})->with([
+    'chassis in another case' => ['chassis_number', 'Abc123'],
+    'chassis with spaces around it' => ['chassis_number', '  ABC123  '],
+    'engine in another case' => ['engine_number', 'aBc123'],
+]);
+
+it('lets a collateral keep its own chassis number on edit, and a number of a deleted collateral be used again', function () {
+    $payload = vehiclePayload(['condition_code' => '9', 'condition_date' => '2026-01-01', 'insurance_code' => 'T', 'insurance_date' => '2026-01-01', 'chassis_number' => 'keep1']);
+    $collateral = vehicleCollateral('wheel4', ['chassis_number' => 'KEEP1', 'region_code' => '3201']);
+
+    $this->put(route('collaterals.update', $collateral), $payload)->assertSessionHasNoErrors();
+    $collateral->delete();
+    $this->post(route('collaterals.store'), [...$payload, 'cbs_id' => 'AG-NEW'])->assertSessionHasNoErrors();
+
+    expect(Collateral::where('chassis_number', 'KEEP1')->count())->toBe(1);
+});
+
+it('saves the facts of a vehicle in capitals where the registry writes them, and refuses a year that cannot be', function () {
+    $payload = vehiclePayload(['vehicle_kind' => 'wheel2', 'vehicle_brand' => 'Honda', 'plate_number' => 'e 1234 xy', 'bpkb_date' => '2024-03-01', 'engine_capacity' => 150, 'transmission' => 'automatic']);
+
+    $this->post(route('collaterals.store'), [...$payload, 'manufacture_year' => '1800'])->assertSessionHasErrors('manufacture_year');
+    $this->post(route('collaterals.store'), [...$payload, 'vehicle_kind' => 'wheel3'])->assertSessionHasErrors('vehicle_kind');
+    $this->post(route('collaterals.store'), [...$payload, 'manufacture_year' => '2023', 'registration_year' => '2023'])->assertSessionHasNoErrors();
+
+    expect(fieldsOf(Collateral::firstOrFail(), ['vehicle_kind', 'plate_number', 'manufacture_year', 'engine_capacity', 'transmission']))
+        ->toBe(['vehicle_kind' => 'wheel2', 'plate_number' => 'E 1234 XY', 'manufacture_year' => 2023, 'engine_capacity' => 150, 'transmission' => 'automatic']);
 });

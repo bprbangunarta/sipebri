@@ -17,6 +17,12 @@ interface AppraisalTemplate
 
     public function version(): int;
 
+    /** The variant of the form this instance follows (a motorcycle or a car), or null for a form that has none. */
+    public function variant(): ?string;
+
+    /** A sentence about what the collateral still needs before it can be appraised with this form, or null when nothing is missing. */
+    public function missingFacts(): ?string;
+
     /**
      * @return list<array{key: string, label: string, blocks: list<array<string, mixed>>}>
      */

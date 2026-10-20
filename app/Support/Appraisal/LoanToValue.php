@@ -33,6 +33,27 @@ final class LoanToValue
     }
 
     /**
+     * Loan-to-value and the figures the conclusion repeats, for a form whose scenarios are the given ones.
+     *
+     * @param  array<string, string>  $values
+     * @param  array<string, float>  $scenarios
+     * @return array<string, int|float|string|null>
+     */
+    public static function figures(array $values, AppraisalContext $context, int $market, int $liquidation, array $scenarios): array
+    {
+        $cells = self::cells($context->ceiling, $liquidation, $scenarios, Amounts::whole($values['ltv.execution_cost'] ?? null));
+
+        return $cells + [
+            'ltv.ceiling' => $context->ceiling,
+            'ltv.liquidation' => $liquidation,
+            'conclusion.market_value' => $market,
+            'conclusion.liquidation_value' => $liquidation,
+            'conclusion.ltv' => $cells['ltv.ltv'],
+            'conclusion.coverage' => $cells['ltv.coverage'],
+        ];
+    }
+
+    /**
      * @return array<string, int|float|string|null>
      */
     private static function scenario(string $row, int $ceiling, int $value, bool $known): array

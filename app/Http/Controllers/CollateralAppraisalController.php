@@ -30,7 +30,7 @@ class CollateralAppraisalController extends Controller
 
         return Inertia::render('collaterals/appraisals/index', [
             'collateral' => AppraisalPayload::collateral($collateral),
-            'appraisals' => $appraisals->map(fn (CollateralAppraisal $appraisal): array => AppraisalPayload::summary($appraisal))->values(),
+            'appraisals' => AppraisalPayload::history($appraisals),
             'purposes' => CollateralAppraisal::PURPOSES,
             'loans' => $collateral->loanApplications()->orderByDesc('loan_applications.id')->get(['loan_applications.id', 'application_code', 'full_name', 'requested_amount'])
                 ->map(fn (LoanApplication $loan): array => ['value' => (string) $loan->id, 'label' => "{$loan->application_code} : {$loan->full_name}"])->values(),

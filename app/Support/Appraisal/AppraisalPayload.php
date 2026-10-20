@@ -20,6 +20,11 @@ final class AppraisalPayload
         ['right_kind', 'Jenis hak', 'right'], ['right_holder_name', 'Pemegang hak', 'text'], ['right_issued_at', 'Tanggal terbit', 'date'], ['right_expires_at', 'Tanggal berakhir hak', 'date'],
         ['survey_document', 'Surat ukur/gambar situasi', 'text'], ['survey_document_date', 'Tanggal surat ukur', 'date'], ['certificate_land_area', 'Luas menurut sertipikat (m²)', 'integer'],
         ['land_office', 'Kantor pertanahan', 'text'], ['parcel_number', 'NIB', 'text'], ['acquisition_origin', 'Asal perolehan', 'text'], ['tax_object_number', 'NOP PBB', 'text'],
+        ['vehicle_kind', 'Jenis kendaraan', 'kind'], ['vehicle_brand', 'Merek', 'text'], ['vehicle_type', 'Tipe/varian', 'text'], ['vehicle_model', 'Jenis/model', 'text'],
+        ['manufacture_year', 'Tahun pembuatan', 'plain'], ['registration_year', 'Tahun registrasi', 'plain'], ['vehicle_color', 'Warna', 'text'], ['plate_number', 'Nomor polisi', 'text'],
+        ['chassis_number', 'Nomor rangka', 'text'], ['engine_number', 'Nomor mesin', 'text'], ['engine_capacity', 'Isi silinder (cc)', 'integer'], ['fuel', 'Bahan bakar', 'text'],
+        ['transmission', 'Transmisi', 'transmission'], ['drive', 'Penggerak', 'text'], ['unit_number', 'Nomor unit/armada', 'text'], ['bpkb_number', 'Nomor BPKB', 'text'],
+        ['bpkb_date', 'Tanggal BPKB', 'date'], ['bpkb_name', 'Nama pada BPKB', 'text'], ['bpkb_address', 'Alamat pada BPKB', 'text'], ['stnk_number', 'Nomor STNK', 'text'], ['stnk_name', 'Nama pada STNK', 'text'],
         ['building_permit_number', 'Nomor PBG/IMB', 'text'], ['building_permit_date', 'Tanggal PBG/IMB', 'date'], ['operating_certificate_number', 'Nomor SLF', 'text'],
         ['operating_certificate_date', 'Tanggal SLF', 'date'], ['permitted_building_area', 'Luas bangunan menurut izin (m²)', 'integer'], ['permitted_use', 'Peruntukan dalam izin', 'text'],
     ];
@@ -48,6 +53,33 @@ final class AppraisalPayload
             'maxPhotos' => (int) config('credit.max_appraisal_photos'),
             'canEdit' => $canManage && ! $appraisal->isFinal(),
         ];
+    }
+
+    /**
+     * The history of a collateral, newest first, each line with the change in value from the previous finalised appraisal (what falls
+     * from year to year is read here).
+     *
+     * @param  iterable<CollateralAppraisal>  $appraisals  newest first
+     * @return list<array<string, mixed>>
+     */
+    public static function history(iterable $appraisals): array
+    {
+        $all = [...$appraisals];
+        $lines = [];
+
+        foreach ($all as $index => $appraisal) {
+            $previous = collect(array_slice($all, $index + 1))->first(fn (CollateralAppraisal $other): bool => $other->isFinal() && $other->market_value > 0);
+            $change = $previous === null || $appraisal->market_value <= 0 ? null : $appraisal->market_value - $previous->market_value;
+
+            $lines[] = self::summary($appraisal) + [
+                'previous_sequence' => $previous?->sequence,
+                'market_change' => $change,
+                'market_change_percent' => $change === null ? null : Amounts::ratio(abs($change), $previous->market_value) * ($change < 0 ? -1 : 1),
+                'liquidation_change' => $previous === null || $appraisal->liquidation_value <= 0 || $previous->liquidation_value <= 0 ? null : $appraisal->liquidation_value - $previous->liquidation_value,
+            ];
+        }
+
+        return $lines;
     }
 
     /**
@@ -86,8 +118,10 @@ final class AppraisalPayload
             $value = $collateral->getAttribute($column);
 
             if ($value !== null && $value !== '') {
-                $facts[] = ['label' => $label, 'type' => $type === 'right' ? 'text' : $type, 'value' => match (true) {
+                $facts[] = ['label' => $label, 'type' => in_array($type, ['right', 'kind', 'transmission', 'plain'], true) ? 'text' : $type, 'value' => match (true) {
                     $type === 'right' => Collateral::RIGHT_KINDS[$value] ?? $value,
+                    $type === 'kind' => Collateral::VEHICLE_KINDS[$value] ?? $value,
+                    $type === 'transmission' => Collateral::TRANSMISSIONS[$value] ?? $value,
                     $type === 'date' => $value->toDateString(),
                     default => $value,
                 }];

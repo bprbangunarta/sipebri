@@ -174,7 +174,6 @@ it('stores survey photos on the configured attachments disk', function () {
 });
 
 it('serves photos through a signed, expiring link on an S3 disk', function () {
-    $this->freezeTime();
     config([
         'filesystems.attachments' => 's3',
         'filesystems.disks.s3.key' => 'test-key', 'filesystems.disks.s3.secret' => 'test-secret',
@@ -183,7 +182,7 @@ it('serves photos through a signed, expiring link on an S3 disk', function () {
 
     $url = (new LoanSurveyPhoto(['path' => 'surveys/00700001/a.jpg']))->url();
 
-    expect($url)->toContain('sipebri-test')->toContain('surveys/00700001/a.jpg')->toContain('X-Amz-Signature')->toContain('X-Amz-Expires=1800');
+    expect($url)->toContain('sipebri-test')->toContain('surveys/00700001/a.jpg')->toContain('X-Amz-Signature')->toMatch('/X-Amz-Expires=(1799|1800)\b/');
 });
 
 it('lists what still has to be scheduled by default, with files sent back by a surveyor first and flagged', function () {

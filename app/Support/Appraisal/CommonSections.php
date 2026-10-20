@@ -10,14 +10,14 @@ use App\Models\CollateralAppraisal;
 final class CommonSections
 {
     /**
-     * @param  array<string, string>  $inspections
+     * @param  array<string, string>|null  $inspections  the kinds of inspection of the form, or null when the form has none
      * @return list<array<string, mixed>>
      */
-    public static function identity(array $inspections): array
+    public static function identity(?array $inspections): array
     {
         return [
             Fields::choice('h:purpose', 'Tujuan penilaian', CollateralAppraisal::PURPOSES),
-            Fields::choice('h:inspection', 'Jenis inspeksi', $inspections),
+            ...($inspections === null ? [] : [Fields::choice('h:inspection', 'Jenis inspeksi', $inspections)]),
             Fields::item('h:debtor_name', 'Nama debitur', 'text'),
             Fields::item('h:debtor_cif', 'CIF', 'text'),
             Fields::item('h:product_label', 'Produk', 'text'),

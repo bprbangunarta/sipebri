@@ -14,7 +14,11 @@ final class AppraisalFigures
         $appraisal->load('entries', 'collateral');
         $computation = $template->compute(AppraisalValues::of($appraisal), AppraisalValues::context($appraisal));
 
-        $appraisal->update(['market_value' => $computation->marketValue, 'liquidation_value' => $computation->liquidationValue]);
+        $appraisal->update([
+            'market_value' => $computation->marketValue,
+            'liquidation_value' => $computation->liquidationValue,
+            ...($computation->haircut === null ? [] : ['haircut_percent' => $computation->haircut]),
+        ]);
 
         return $computation;
     }

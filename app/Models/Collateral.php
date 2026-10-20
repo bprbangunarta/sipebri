@@ -67,6 +67,27 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $operating_certificate_date
  * @property int|null $permitted_building_area
  * @property string|null $permitted_use
+ * @property string|null $vehicle_kind
+ * @property string|null $vehicle_brand
+ * @property string|null $vehicle_type
+ * @property string|null $vehicle_model
+ * @property int|null $manufacture_year
+ * @property int|null $registration_year
+ * @property string|null $vehicle_color
+ * @property string|null $plate_number
+ * @property string|null $chassis_number
+ * @property string|null $engine_number
+ * @property int|null $engine_capacity
+ * @property string|null $fuel
+ * @property string|null $transmission
+ * @property string|null $drive
+ * @property string|null $unit_number
+ * @property string|null $bpkb_number
+ * @property Carbon|null $bpkb_date
+ * @property string|null $bpkb_name
+ * @property string|null $bpkb_address
+ * @property string|null $stnk_number
+ * @property string|null $stnk_name
  */
 #[Fillable([
     'cbs_id', 'credit_account', 'collateral_type_code', 'binding_type_code', 'document_number', 'description', 'owner_name',
@@ -77,6 +98,7 @@ use Illuminate\Support\Carbon;
     'province', 'postal_code', 'route_hint', 'right_kind', 'right_holder_name', 'right_issued_at', 'right_expires_at', 'survey_document',
     'survey_document_date', 'certificate_land_area', 'land_office', 'parcel_number', 'acquisition_origin', 'tax_object_number',
     'building_permit_number', 'building_permit_date', 'operating_certificate_number', 'operating_certificate_date', 'permitted_building_area', 'permitted_use',
+    'vehicle_kind', 'vehicle_brand', 'vehicle_type', 'vehicle_model', 'manufacture_year', 'registration_year', 'vehicle_color', 'plate_number', 'chassis_number', 'engine_number', 'engine_capacity', 'fuel', 'transmission', 'drive', 'unit_number', 'bpkb_number', 'bpkb_date', 'bpkb_name', 'bpkb_address', 'stnk_number', 'stnk_name',
 ])]
 class Collateral extends Model
 {
@@ -93,6 +115,17 @@ class Collateral extends Model
         'building_permit_number', 'building_permit_date', 'operating_certificate_number', 'operating_certificate_date', 'permitted_building_area', 'permitted_use',
     ];
 
+    /** Facts of a motorcycle or a car that every appraisal reads; they do not go to core banking. */
+    public const VEHICLE_FACTS = [
+        'vehicle_kind', 'vehicle_brand', 'vehicle_type', 'vehicle_model', 'manufacture_year', 'registration_year', 'vehicle_color', 'plate_number',
+        'chassis_number', 'engine_number', 'engine_capacity', 'fuel', 'transmission', 'drive', 'unit_number', 'bpkb_number', 'bpkb_date', 'bpkb_name',
+        'bpkb_address', 'stnk_number', 'stnk_name',
+    ];
+
+    public const VEHICLE_KINDS = ['wheel2' => 'Roda 2', 'wheel4' => 'Roda 4'];
+
+    public const TRANSMISSIONS = ['manual' => 'Manual', 'automatic' => 'Otomatis'];
+
     public const LAND_DATES = ['right_issued_at', 'right_expires_at', 'survey_document_date', 'building_permit_date', 'operating_certificate_date'];
 
     public const RIGHT_KINDS = ['SHM' => 'SHM', 'SHGB' => 'SHGB', 'SHP' => 'SHP', 'OTHER' => 'Lainnya'];
@@ -108,6 +141,7 @@ class Collateral extends Model
             'latitude' => 'decimal:7', 'longitude' => 'decimal:7', 'located_at' => 'datetime',
             'right_issued_at' => 'date', 'right_expires_at' => 'date', 'survey_document_date' => 'date', 'building_permit_date' => 'date', 'operating_certificate_date' => 'date',
             'certificate_land_area' => 'integer', 'permitted_building_area' => 'integer',
+            'bpkb_date' => 'date', 'manufacture_year' => 'integer', 'registration_year' => 'integer', 'engine_capacity' => 'integer',
         ];
     }
 

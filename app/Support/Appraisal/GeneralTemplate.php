@@ -23,6 +23,16 @@ final class GeneralTemplate implements AppraisalTemplate
         return 1;
     }
 
+    public function variant(): ?string
+    {
+        return null;
+    }
+
+    public function missingFacts(): ?string
+    {
+        return null;
+    }
+
     public function hardStops(): array
     {
         return ['legal.original_documents', 'legal.identity', 'legal.no_dispute', 'legal.no_blockade', 'legal.not_pledged', 'legal.can_be_bound'];
@@ -74,16 +84,7 @@ final class GeneralTemplate implements AppraisalTemplate
     {
         $market = Amounts::whole($values['value.market_value'] ?? null) ?? 0;
         $liquidation = Haircut::liquidation($market, Amounts::decimal($values['h:haircut_percent'] ?? null));
-        $loanToValue = LoanToValue::cells($context->ceiling, $liquidation, self::STRESS, Amounts::whole($values['ltv.execution_cost'] ?? null));
 
-        return new Computation($market, $liquidation, $loanToValue + [
-            'value.liquidation_value' => $liquidation,
-            'ltv.ceiling' => $context->ceiling,
-            'ltv.liquidation' => $liquidation,
-            'conclusion.market_value' => $market,
-            'conclusion.liquidation_value' => $liquidation,
-            'conclusion.ltv' => $loanToValue['ltv.ltv'],
-            'conclusion.coverage' => $loanToValue['ltv.coverage'],
-        ]);
+        return new Computation($market, $liquidation, ['value.liquidation_value' => $liquidation] + LoanToValue::figures($values, $context, $market, $liquidation, self::STRESS));
     }
 }

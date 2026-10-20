@@ -46,6 +46,9 @@ type Props = {
         regions: Option[];
         rightKinds: Option[];
         landTypes: string[];
+        vehicleTypes: string[];
+        vehicleKinds: Option[];
+        transmissions: Option[];
     };
 };
 
@@ -75,7 +78,41 @@ const LAND_NUMBERS = [
     ['permitted_building_area', 'Luas bangunan menurut izin (m²)'],
 ] as const;
 
-type LandField = (typeof LAND_TEXT)[number][0] | (typeof LAND_DATES)[number][0] | (typeof LAND_NUMBERS)[number][0] | 'right_kind' | 'postal_code';
+/** Facts of a motorcycle or a car that every appraisal reads; they do not go to core banking. */
+const VEHICLE_TEXT = [
+    ['vehicle_brand', 'Merek', 60],
+    ['vehicle_type', 'Tipe/varian', 80],
+    ['vehicle_model', 'Jenis/model', 60],
+    ['vehicle_color', 'Warna', 40],
+    ['plate_number', 'Nomor polisi', 20],
+    ['chassis_number', 'Nomor rangka (VIN)', 40],
+    ['engine_number', 'Nomor mesin', 40],
+    ['fuel', 'Bahan bakar', 30],
+    ['drive', 'Penggerak', 30],
+    ['unit_number', 'Nomor unit/armada', 40],
+    ['bpkb_number', 'Nomor BPKB', 40],
+    ['bpkb_name', 'Nama pada BPKB', 100],
+    ['bpkb_address', 'Alamat pada BPKB', 255],
+    ['stnk_number', 'Nomor STNK', 40],
+    ['stnk_name', 'Nama pada STNK', 100],
+] as const;
+const VEHICLE_NUMBERS = [
+    ['manufacture_year', 'Tahun pembuatan', 4],
+    ['registration_year', 'Tahun registrasi', 4],
+    ['engine_capacity', 'Isi silinder (cc)', 5],
+] as const;
+
+type LandField =
+    | (typeof LAND_TEXT)[number][0]
+    | (typeof LAND_DATES)[number][0]
+    | (typeof LAND_NUMBERS)[number][0]
+    | (typeof VEHICLE_TEXT)[number][0]
+    | (typeof VEHICLE_NUMBERS)[number][0]
+    | 'right_kind'
+    | 'postal_code'
+    | 'vehicle_kind'
+    | 'transmission'
+    | 'bpkb_date';
 
 const VALUES = [
     ['guarantee_value', 'Nilai jaminan'],
@@ -121,10 +158,14 @@ export default function CollateralForm({ collateral, options }: Props) {
         insurance_date: collateral?.insurance_date ?? '',
         ppap_code: collateral?.ppap_code ?? '1',
         ...(Object.fromEntries(
-            ['postal_code', 'right_kind', ...[...LAND_TEXT, ...LAND_DATES, ...LAND_NUMBERS].map(([name]) => name)].map((name) => [
-                name,
-                String(collateral?.[name as LandField] ?? ''),
-            ]),
+            [
+                'postal_code',
+                'right_kind',
+                'vehicle_kind',
+                'transmission',
+                'bpkb_date',
+                ...[...LAND_TEXT, ...LAND_DATES, ...LAND_NUMBERS, ...VEHICLE_TEXT, ...VEHICLE_NUMBERS].map(([name]) => name),
+            ].map((name) => [name, String(collateral?.[name as LandField] ?? '')]),
         ) as Record<LandField, string>),
     });
     const { data, setData, errors } = form;
@@ -136,6 +177,7 @@ export default function CollateralForm({ collateral, options }: Props) {
         'aria-invalid': !!errors[name],
     });
     const isLand = options.landTypes.includes(data.collateral_type_code);
+    const isVehicle = options.vehicleTypes.includes(data.collateral_type_code);
     const today = new Date();
 
     const submit = (e: React.FormEvent) => {
@@ -259,6 +301,57 @@ export default function CollateralForm({ collateral, options }: Props) {
                                 />
                             </Field>
                         ))}
+                    </Section>
+                )}
+
+                {isVehicle && (
+                    <Section title="Data kendaraan">
+                        <Field label="Jenis kendaraan" error={errors.vehicle_kind} hint="Menentukan formulir penilaian: roda 2 atau roda 4.">
+                            <Combobox
+                                id="vehicle_kind"
+                                clearable
+                                searchable={false}
+                                options={options.vehicleKinds}
+                                value={data.vehicle_kind || null}
+                                onChange={(v) => setData('vehicle_kind', v ?? '')}
+                            />
+                        </Field>
+                        <Field label="Transmisi" error={errors.transmission}>
+                            <Combobox
+                                id="transmission"
+                                clearable
+                                searchable={false}
+                                options={options.transmissions}
+                                value={data.transmission || null}
+                                onChange={(v) => setData('transmission', v ?? '')}
+                            />
+                        </Field>
+                        {VEHICLE_TEXT.map(([name, label, max]) => (
+                            <Field key={name} label={label} error={errors[name]} className={max > 100 ? 'sm:col-span-2' : undefined}>
+                                <Input {...text(name, name === 'plate_number' || name === 'chassis_number' || name === 'engine_number')} maxLength={max} />
+                            </Field>
+                        ))}
+                        {VEHICLE_NUMBERS.map(([name, label, digits]) => (
+                            <Field key={name} label={label} error={errors[name]}>
+                                <MaskedInput
+                                    id={name}
+                                    mask={'9'.repeat(digits)}
+                                    value={data[name]}
+                                    onValueChange={(v) => setData(name, v)}
+                                    className="text-right tabular-nums"
+                                />
+                            </Field>
+                        ))}
+                        <Field label="Tanggal BPKB" error={errors.bpkb_date}>
+                            <DatePicker
+                                id="bpkb_date"
+                                min={new Date(1950, 0, 1)}
+                                max={today}
+                                value={data.bpkb_date}
+                                onChange={(v) => setData('bpkb_date', v)}
+                                invalid={!!errors.bpkb_date}
+                            />
+                        </Field>
                     </Section>
                 )}
 

@@ -6,6 +6,7 @@ use App\Support\Appraisal\GeneralTemplate;
 use App\Support\Appraisal\Haircut;
 use App\Support\Appraisal\LandBuildingTemplate;
 use App\Support\Appraisal\LoanToValue;
+use App\Support\Appraisal\VehicleTemplate;
 
 /** Answers of a land and building appraisal worked out by hand: see the comments for each figure. */
 function landAnswers(array $overrides = []): array
@@ -138,4 +139,69 @@ it('reads answers as numbers only when they are numbers', function (?string $val
 
 it('keeps a haircut between nothing and everything', function () {
     expect(Haircut::liquidation(1_000, 150.0))->toBe(0)->and(Haircut::liquidation(1_000, -5.0))->toBe(1_000)->and(Haircut::liquidation(1_000, null))->toBe(0);
+});
+
+/** Answers of a vehicle appraisal worked out by hand: see the comments for each figure. */
+function vehicleAnswers(array $overrides = []): array
+{
+    return [
+        'comparables.price.c1' => '150000000', 'comparables.price.c2' => '160000000', 'comparables.price.c3' => '140000000',
+        'adjustments.time.c1' => '-2', 'adjustments.odometer.c1' => '-3', 'adjustments.condition.c2' => '5',
+        'reconciliation.selected' => '150000000', 'repair.r1.cost' => '4000000', 'repair.r2.cost' => '1000000',
+        'repair.h_age.percent' => '10', 'repair.h_odometer.percent' => '5', 'repair.h_technical.percent' => '3', 'repair.h_costs.percent' => '2',
+        'ltv.execution_cost' => '6000000',
+        ...$overrides,
+    ];
+}
+
+it('works out the indicated price of each vehicle comparable and their average', function () {
+    $cells = (new VehicleTemplate)->compute(vehicleAnswers(), new AppraisalContext(100_000_000, null))->cells;
+
+    // c1: 150.000.000 minus 2% and 3% = 142.500.000; c2: 160.000.000 plus 5% = 168.000.000; c3 has no adjustment: 140.000.000; their average 150.166.667
+    expect($cells['adjustments.total.c1'])->toBe(-5.0)->and($cells['adjustments.indicative.c1'])->toBe(142_500_000)
+        ->and($cells['adjustments.total.c2'])->toBe(5.0)->and($cells['adjustments.indicative.c2'])->toBe(168_000_000)
+        ->and($cells['adjustments.total.c3'])->toBeNull()->and($cells['adjustments.indicative.c3'])->toBe(140_000_000)
+        ->and($cells['reconciliation.suggested'])->toBe(150_166_667);
+});
+
+it('takes the repair cost off the selected value and works out the haircut from its factors', function () {
+    $result = (new VehicleTemplate)->compute(vehicleAnswers(), new AppraisalContext(100_000_000, null));
+
+    // 150.000.000 - (4.000.000 + 1.000.000) = 145.000.000; haircut 10 + 5 + 3 + 2 = 20% leaves 116.000.000
+    expect($result->marketValue)->toBe(145_000_000)->and($result->liquidationValue)->toBe(116_000_000)->and($result->haircut)->toBe(20.0)
+        ->and($result->cells['repair.total_cost'])->toBe(5_000_000)->and($result->cells['repair.total_haircut'])->toBe(20.0)
+        ->and($result->cells['reconciliation.market_value'])->toBe(145_000_000)->and($result->cells['conclusion.liquidation_value'])->toBe(116_000_000);
+});
+
+it('works out loan-to-value and the three stress scenarios of the vehicle form', function () {
+    $cells = (new VehicleTemplate)->compute(vehicleAnswers(), new AppraisalContext(100_000_000, null))->cells;
+
+    // liquidation 116.000.000: 100/116 = 86,21%; 116/100 = 116%; 10% off: 104.400.000 (95,79%, meets); 20% off: 92.800.000 (107,76%, does not); 30% off: 81.200.000 (123,15%, does not); minus 6.000.000: 110.000.000 (90,91%)
+    expect($cells['ltv.ltv'])->toBe(86.21)->and($cells['ltv.coverage'])->toBe(116.0)
+        ->and($cells['ltv.s10.value'])->toBe(104_400_000)->and($cells['ltv.s10.ltv'])->toBe(95.79)->and($cells['ltv.s10.status'])->toBe('M')
+        ->and($cells['ltv.s20.value'])->toBe(92_800_000)->and($cells['ltv.s20.ltv'])->toBe(107.76)->and($cells['ltv.s20.status'])->toBe('TM')
+        ->and($cells['ltv.s30.value'])->toBe(81_200_000)->and($cells['ltv.s30.ltv'])->toBe(123.15)->and($cells['ltv.s30.status'])->toBe('TM')
+        ->and($cells['ltv.exec.value'])->toBe(110_000_000)->and($cells['ltv.exec.ltv'])->toBe(90.91)->and($cells['ltv.exec.status'])->toBe('M');
+});
+
+it('never lets the haircut factors pass 100 percent, and has no liquidation value while no factor is filled', function () {
+    $over = (new VehicleTemplate)->compute(vehicleAnswers(['repair.h_age.percent' => '90', 'repair.h_odometer.percent' => '30']), new AppraisalContext(0, null));
+    $none = (new VehicleTemplate)->compute(array_diff_key(vehicleAnswers(), array_flip(['repair.h_age.percent', 'repair.h_odometer.percent', 'repair.h_technical.percent', 'repair.h_costs.percent'])), new AppraisalContext(0, null));
+
+    expect($over->haircut)->toBe(100.0)->and($over->liquidationValue)->toBe(0)
+        ->and($none->haircut)->toBeNull()->and($none->liquidationValue)->toBe(0)->and($none->marketValue)->toBe(145_000_000);
+});
+
+it('never lets the repair cost take the market value below zero', function () {
+    $result = (new VehicleTemplate)->compute(vehicleAnswers(['repair.r3.cost' => '900000000']), new AppraisalContext(0, null));
+
+    expect($result->marketValue)->toBe(0);
+});
+
+it('shows a motorcycle only the motorcycle section and a car only the car section, and both while the kind is not known', function () {
+    $keys = fn (?string $variant): array => array_column((new VehicleTemplate($variant))->sections(), 'key');
+
+    expect(in_array('motorcycle', $keys('wheel2'), true))->toBeTrue()->and(in_array('car', $keys('wheel2'), true))->toBeFalse()
+        ->and(in_array('car', $keys('wheel4'), true))->toBeTrue()->and(in_array('motorcycle', $keys('wheel4'), true))->toBeFalse()
+        ->and(in_array('car', $keys(null), true) && in_array('motorcycle', $keys(null), true))->toBeTrue();
 });

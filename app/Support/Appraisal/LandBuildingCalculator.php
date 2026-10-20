@@ -8,8 +8,6 @@ namespace App\Support\Appraisal;
  */
 final class LandBuildingCalculator
 {
-    private const COMPARABLES = ['c1', 'c2', 'c3'];
-
     private const FACTORS = ['time', 'location', 'shape', 'right', 'zoning', 'building', 'position', 'offer'];
 
     private const BUILDINGS = ['main', 'additional'];
@@ -49,7 +47,7 @@ final class LandBuildingCalculator
         $cells['reconciliation.market_value'] = $market;
         $cells['reconciliation.liquidation_value'] = $liquidation;
 
-        return new Computation($market, $liquidation, $cells + self::summary($values, $context, $market, $liquidation));
+        return new Computation($market, $liquidation, $cells + LoanToValue::figures($values, $context, $market, $liquidation, LandBuildingTemplate::STRESS));
     }
 
     /**
@@ -60,30 +58,11 @@ final class LandBuildingCalculator
      */
     private static function comparables(array $values, array &$cells): void
     {
-        $indicated = [];
-
-        foreach (self::COMPARABLES as $column) {
-            $total = 0.0;
-            $any = false;
-
-            foreach (self::FACTORS as $factor) {
-                $adjustment = Amounts::decimal($values["adjustments.$factor.$column"] ?? null);
-                $any = $any || $adjustment !== null;
-                $total += $adjustment ?? 0.0;
-            }
-
-            $price = Amounts::whole($values["comparables.land_per_m2.$column"] ?? null);
-            $cells["adjustments.total.$column"] = $any ? round($total, 2) : null;
-            $cells["adjustments.indicative.$column"] = $price === null ? null : (int) round($price * (1 + $total / 100));
-
-            if ($price !== null) {
-                $indicated[] = $cells["adjustments.indicative.$column"];
-            }
-        }
+        $indicated = ComparableValues::indicated($values, 'comparables.land_per_m2', self::FACTORS, $cells);
 
         $cells['adjustments.range_min'] = $indicated === [] ? null : min($indicated);
         $cells['adjustments.range_max'] = $indicated === [] ? null : max($indicated);
-        $cells['adjustments.suggested'] = $indicated === [] ? null : (int) round(array_sum($indicated) / count($indicated));
+        $cells['adjustments.suggested'] = ComparableValues::average($indicated);
     }
 
     /**
@@ -128,26 +107,6 @@ final class LandBuildingCalculator
         return [
             array_sum(array_intersect_key($present, array_flip(self::BUILDINGS))),
             array_sum(array_intersect_key($present, array_flip(self::FACILITIES))),
-        ];
-    }
-
-    /**
-     * Loan-to-value, the stress scenarios, and the figures repeated in the conclusion.
-     *
-     * @param  array<string, string>  $values
-     * @return array<string, int|float|string|null>
-     */
-    private static function summary(array $values, AppraisalContext $context, int $market, int $liquidation): array
-    {
-        $loanToValue = LoanToValue::cells($context->ceiling, $liquidation, LandBuildingTemplate::STRESS, Amounts::whole($values['ltv.execution_cost'] ?? null));
-
-        return $loanToValue + [
-            'ltv.ceiling' => $context->ceiling,
-            'ltv.liquidation' => $liquidation,
-            'conclusion.market_value' => $market,
-            'conclusion.liquidation_value' => $liquidation,
-            'conclusion.ltv' => $loanToValue['ltv.ltv'],
-            'conclusion.coverage' => $loanToValue['ltv.coverage'],
         ];
     }
 }

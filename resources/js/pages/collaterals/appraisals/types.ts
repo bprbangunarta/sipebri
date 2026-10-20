@@ -46,6 +46,11 @@ export type Summary = {
     decision_label: string | null;
     finalized_at: string | null;
     template: string;
+    /** The change of the market value from the previous finalised appraisal (null when there is none to compare with). */
+    market_change?: number | null;
+    market_change_percent?: number | null;
+    liquidation_change?: number | null;
+    previous_sequence?: number | null;
 };
 
 export type Fact = { label: string; value: string | number; type: 'text' | 'date' | 'integer' };

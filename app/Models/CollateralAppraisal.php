@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property int $sequence
  * @property string $template
  * @property int $template_version
+ * @property string|null $variant the form variant taken from the collateral when the appraisal started (a motorcycle or a car)
  * @property string $status draft or final
  * @property string $purpose
  * @property string|null $inspection
@@ -48,7 +49,7 @@ use Illuminate\Support\Carbon;
  * @property-read Collateral $collateral
  */
 #[Fillable([
-    'collateral_id', 'sequence', 'template', 'template_version', 'status', 'purpose', 'inspection', 'loan_application_id', 'debtor_name', 'debtor_cif',
+    'collateral_id', 'sequence', 'template', 'template_version', 'variant', 'status', 'purpose', 'inspection', 'loan_application_id', 'debtor_name', 'debtor_cif',
     'product_label', 'credit_ceiling', 'owner_address', 'owner_relation', 'owner_contact', 'appraiser_name', 'reviewer_name', 'effective_date',
     'report_date', 'valid_until', 'haircut_percent', 'market_value', 'liquidation_value', 'forced_sale_value', 'rounded_value',
     'credit_basis_value', 'decision', 'main_conditions', 'reappraisal_frequency', 'finalized_at', 'finalized_by', 'created_by',

@@ -9,7 +9,7 @@ import type { Column } from '@/components/ui/data-table';
 import { DialogBody, DialogFooter, Modal } from '@/components/ui/dialog';
 import { Field } from '@/components/ui/field';
 import { Alert, Badge, Card, CardBody, CardHeader, PageHeader } from '@/components/ui/misc';
-import { formatDate, formatNumber, rupiah } from '@/lib/format';
+import { formatDate, formatNumber, formatPercent, rupiah } from '@/lib/format';
 import { Stat } from '@/pages/credit-analysis/parts';
 import type { CollateralSummary, Summary } from '@/pages/collaterals/appraisals/types';
 
@@ -23,7 +23,7 @@ type Props = {
     canManage: boolean;
 };
 
-const TEMPLATES: Record<string, string> = { land_building: 'Tanah dan bangunan', general: 'Umum' };
+const TEMPLATES: Record<string, string> = { land_building: 'Tanah dan bangunan', vehicle: 'Kendaraan', general: 'Umum' };
 
 export default function CollateralAppraisalsIndex({ collateral, appraisals, purposes, loans, hasDraft, template, canManage }: Props) {
     const [starting, setStarting] = useState(false);
@@ -47,6 +47,21 @@ export default function CollateralAppraisalsIndex({ collateral, appraisals, purp
         { key: 'effective', header: 'Tanggal efektif', cell: (a) => (a.effective_date ? formatDate(a.effective_date) : '–') },
         { key: 'valid', header: 'Berlaku sampai', cell: (a) => (a.valid_until ? formatDate(a.valid_until) : '–') },
         { key: 'market', header: 'Nilai pasar', align: 'right', className: 'tabular-nums', cell: (a) => (a.market_value > 0 ? rupiah(a.market_value) : '–') },
+        {
+            key: 'change',
+            header: 'Perubahan nilai pasar',
+            align: 'right',
+            className: 'tabular-nums',
+            cell: (a) =>
+                a.market_change === null || a.market_change === undefined ? (
+                    '–'
+                ) : (
+                    <span className={a.market_change < 0 ? 'text-danger' : undefined} title={`Dari penilaian ke-${a.previous_sequence}`}>
+                        {a.market_change > 0 ? '+' : ''}
+                        {rupiah(a.market_change)} ({formatPercent(a.market_change_percent ?? 0)})
+                    </span>
+                ),
+        },
         {
             key: 'liquidation',
             header: 'Nilai likuidasi',

@@ -15,21 +15,25 @@ final class AppraisalTemplates
     /**
      * @return list<AppraisalTemplate> every form and version, newest of each last
      */
-    private static function all(): array
+    private static function all(?string $variant): array
     {
-        return [new LandBuildingTemplate, new GeneralTemplate];
+        return [new LandBuildingTemplate, new VehicleTemplate($variant), new GeneralTemplate];
     }
 
     /** The form for a collateral that gets a new appraisal. */
     public static function for(Collateral $collateral): AppraisalTemplate
     {
-        return in_array($collateral->collateral_type_code, LandBuildingTemplate::TYPES, true) ? new LandBuildingTemplate : new GeneralTemplate;
+        return match (true) {
+            in_array($collateral->collateral_type_code, LandBuildingTemplate::TYPES, true) => new LandBuildingTemplate,
+            in_array($collateral->collateral_type_code, VehicleTemplate::TYPES, true) => VehicleTemplate::forCollateral($collateral),
+            default => new GeneralTemplate,
+        };
     }
 
     /** The form an existing appraisal was made with. */
     public static function of(CollateralAppraisal $appraisal): AppraisalTemplate
     {
-        foreach (self::all() as $template) {
+        foreach (self::all($appraisal->variant) as $template) {
             if ($template->key() === $appraisal->template && $template->version() === $appraisal->template_version) {
                 return $template;
             }
