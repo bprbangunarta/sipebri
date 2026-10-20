@@ -198,7 +198,7 @@ export default function AppraisalShow({
             <Card className="grid lg:grid-cols-[16rem_minmax(0,1fr)]">
                 <nav
                     aria-label="Bagian penilaian"
-                    className="flex flex-row gap-1 overflow-x-auto border-b border-line p-2 lg:flex-col lg:border-r lg:border-b-0"
+                    className="flex flex-row gap-1 overflow-x-auto rounded-t-lg border-b border-line bg-canvas/60 p-2 shadow-[inset_0_-8px_8px_-8px_rgb(0_0_0/0.1)] lg:flex-col lg:rounded-t-none lg:rounded-l-lg lg:border-r lg:border-b-0 lg:shadow-[inset_-8px_0_8px_-8px_rgb(0_0_0/0.1)]"
                 >
                     <p className="hidden px-2.5 pt-1 pb-1.5 text-2xs font-semibold tracking-wider text-muted uppercase lg:block">Bagian penilaian</p>
                     {template.sections.map((s) => {
