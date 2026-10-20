@@ -27,4 +27,7 @@ return [
     | Survey (stage 3).
     */
     'max_survey_photos' => 5,
+
+    /** Photos of one item of a collateral appraisal (the form lists ten places for photos). */
+    'max_appraisal_photos' => 5,
 ];

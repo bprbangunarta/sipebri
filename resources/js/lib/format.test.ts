@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatDate, formatDateTime, formatNumber, formatRelative, rupiah } from '@/lib/format';
+import { formatDate, formatDateTime, formatNumber, formatPercent, formatRelative, rupiah } from '@/lib/format';
 
 describe('format', () => {
     it('formats whole rupiah with Indonesian separators', () => {
@@ -145,5 +145,15 @@ describe('format shows the company clock (WIB) on a device in any other zone', (
             expect(formatDate(bad)).toBe('–');
             expect(formatDateTime(bad)).toBe('–');
         }
+    });
+});
+
+describe('formatPercent', () => {
+    it('keeps up to two decimals with a decimal comma, and writes a dash for what is not a number', () => {
+        expect(formatPercent(65.79)).toBe('65,79%');
+        expect(formatPercent(152)).toBe('152%');
+        expect(formatPercent(73.1)).toBe('73,1%');
+        expect(formatPercent(-3.5)).toBe('-3,5%');
+        expect(formatPercent(Number.NaN)).toBe('–');
     });
 });

@@ -6,6 +6,7 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { CurrencyInput } from '@/components/ui/currency-input';
 import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { MaskedInput } from '@/components/ui/masked-input';
 import { Card, CardBody, CardHeader, PageHeader } from '@/components/ui/misc';
 
 type Option = { value: string; label: string };
@@ -33,7 +34,7 @@ type Collateral = {
     insurance_code: string;
     insurance_date: string | null;
     ppap_code: string;
-};
+} & Partial<Record<LandField, string | number | null>>;
 
 type Props = {
     collateral: Collateral | null;
@@ -43,8 +44,38 @@ type Props = {
         conditions: Option[];
         methods: Option[];
         regions: Option[];
+        rightKinds: Option[];
+        landTypes: string[];
     };
 };
+
+/** Facts about the land and its building that every appraisal reads; they do not go to core banking. */
+const LAND_TEXT = [
+    ['province', 'Provinsi', 60],
+    ['route_hint', 'Patokan/rute menuju lokasi', 255],
+    ['right_holder_name', 'Nama pemegang hak', 100],
+    ['survey_document', 'Surat ukur/gambar situasi', 100],
+    ['land_office', 'Kantor pertanahan', 100],
+    ['parcel_number', 'Nomor identifikasi bidang (NIB)', 50],
+    ['acquisition_origin', 'Asal perolehan/akta', 150],
+    ['tax_object_number', 'NOP PBB', 30],
+    ['building_permit_number', 'Nomor PBG/IMB', 60],
+    ['operating_certificate_number', 'Nomor SLF', 60],
+    ['permitted_use', 'Peruntukan dalam izin', 100],
+] as const;
+const LAND_DATES = [
+    ['right_issued_at', 'Tanggal terbit hak', 'past'],
+    ['right_expires_at', 'Tanggal berakhir hak', 'future'],
+    ['survey_document_date', 'Tanggal surat ukur', 'past'],
+    ['building_permit_date', 'Tanggal PBG/IMB', 'past'],
+    ['operating_certificate_date', 'Tanggal SLF', 'past'],
+] as const;
+const LAND_NUMBERS = [
+    ['certificate_land_area', 'Luas menurut sertipikat (m²)'],
+    ['permitted_building_area', 'Luas bangunan menurut izin (m²)'],
+] as const;
+
+type LandField = (typeof LAND_TEXT)[number][0] | (typeof LAND_DATES)[number][0] | (typeof LAND_NUMBERS)[number][0] | 'right_kind' | 'postal_code';
 
 const VALUES = [
     ['guarantee_value', 'Nilai jaminan'],
@@ -89,6 +120,12 @@ export default function CollateralForm({ collateral, options }: Props) {
         insurance_code: collateral?.insurance_code ?? 'T',
         insurance_date: collateral?.insurance_date ?? '',
         ppap_code: collateral?.ppap_code ?? '1',
+        ...(Object.fromEntries(
+            ['postal_code', 'right_kind', ...[...LAND_TEXT, ...LAND_DATES, ...LAND_NUMBERS].map(([name]) => name)].map((name) => [
+                name,
+                String(collateral?.[name as LandField] ?? ''),
+            ]),
+        ) as Record<LandField, string>),
     });
     const { data, setData, errors } = form;
     const text = (name: keyof typeof data, upper = false) => ({
@@ -98,6 +135,7 @@ export default function CollateralForm({ collateral, options }: Props) {
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => setData(name, e.target.value as never),
         'aria-invalid': !!errors[name],
     });
+    const isLand = options.landTypes.includes(data.collateral_type_code);
     const today = new Date();
 
     const submit = (e: React.FormEvent) => {
@@ -113,6 +151,13 @@ export default function CollateralForm({ collateral, options }: Props) {
         <>
             <Head title={isEdit ? 'Ubah jaminan' : 'Tambah jaminan'} />
             <PageHeader
+                actions={
+                    isEdit && (
+                        <Button variant="outline" onClick={() => router.visit(`/collaterals/${collateral.id}/appraisals`)}>
+                            Riwayat penilaian
+                        </Button>
+                    )
+                }
                 title={isEdit ? `Ubah ${collateral.cbs_id ?? `jaminan #${collateral.id}`}` : 'Tambah jaminan'}
                 description={
                     isEdit ? 'Kondisi, asuransi, dan taksasi wajib diisi pada tahap ini. Penilai tercatat atas nama Anda.' : 'Kolom bertanda * wajib diisi'
@@ -170,6 +215,52 @@ export default function CollateralForm({ collateral, options }: Props) {
                         <Input {...text('owner_address', true)} maxLength={255} />
                     </Field>
                 </Section>
+
+                {isLand && (
+                    <Section title="Data tanah dan bangunan">
+                        <Field label="Jenis hak" error={errors.right_kind}>
+                            <Combobox
+                                id="right_kind"
+                                clearable
+                                searchable={false}
+                                options={options.rightKinds}
+                                value={data.right_kind || null}
+                                onChange={(v) => setData('right_kind', v ?? '')}
+                            />
+                        </Field>
+                        <Field label="Kode pos" error={errors.postal_code}>
+                            <MaskedInput id="postal_code" mask="99999" value={data.postal_code} onValueChange={(v) => setData('postal_code', v)} />
+                        </Field>
+                        {LAND_TEXT.map(([name, label, max]) => (
+                            <Field key={name} label={label} error={errors[name]} className={max > 100 ? 'sm:col-span-2' : undefined}>
+                                <Input {...text(name)} maxLength={max} />
+                            </Field>
+                        ))}
+                        {LAND_NUMBERS.map(([name, label]) => (
+                            <Field key={name} label={label} error={errors[name]}>
+                                <MaskedInput
+                                    id={name}
+                                    mask="99999999"
+                                    value={data[name]}
+                                    onValueChange={(v) => setData(name, v)}
+                                    className="text-right tabular-nums"
+                                />
+                            </Field>
+                        ))}
+                        {LAND_DATES.map(([name, label, when]) => (
+                            <Field key={name} label={label} error={errors[name]}>
+                                <DatePicker
+                                    id={name}
+                                    min={new Date(1950, 0, 1)}
+                                    max={when === 'past' ? today : new Date(2100, 11, 31)}
+                                    value={data[name]}
+                                    onChange={(v) => setData(name, v)}
+                                    invalid={!!errors[name]}
+                                />
+                            </Field>
+                        ))}
+                    </Section>
+                )}
 
                 <Section title="Nilai">
                     {VALUES.map(([name, label]) => (

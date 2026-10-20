@@ -1,5 +1,5 @@
 import { Head, router } from '@inertiajs/react';
-import { Landmark, MoreHorizontal, Pencil, Plus, Trash2, X } from 'lucide-react';
+import { ClipboardCheck, Landmark, MoreHorizontal, Pencil, Plus, Trash2, X } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { FilterBar, SearchInput } from '@/components/ui/filter-bar';
@@ -82,27 +82,33 @@ export default function CollateralsIndex({ collaterals, filters, perPageOptions,
             srOnly: true,
             narrow: true,
             align: 'right',
-            cell: (c) =>
-                canManage && (
-                    <DropdownMenu>
-                        <Tip label="Aksi">
-                            <DropdownTrigger asChild>
-                                <Button variant="ghost" size="icon" aria-label={`Aksi untuk ${c.cbs_id ?? c.id}`}>
-                                    <MoreHorizontal />
-                                </Button>
-                            </DropdownTrigger>
-                        </Tip>
-                        <DropdownContent>
-                            <DropdownItem icon={<Pencil />} onSelect={() => router.visit(`/collaterals/${c.id}/edit`)}>
-                                Ubah
-                            </DropdownItem>
-                            <DropdownSeparator />
-                            <DropdownItem danger icon={<Trash2 />} onSelect={() => setToDelete(c)}>
-                                Hapus
-                            </DropdownItem>
-                        </DropdownContent>
-                    </DropdownMenu>
-                ),
+            cell: (c) => (
+                <DropdownMenu>
+                    <Tip label="Aksi">
+                        <DropdownTrigger asChild>
+                            <Button variant="ghost" size="icon" aria-label={`Aksi untuk ${c.cbs_id ?? c.id}`}>
+                                <MoreHorizontal />
+                            </Button>
+                        </DropdownTrigger>
+                    </Tip>
+                    <DropdownContent>
+                        <DropdownItem icon={<ClipboardCheck />} onSelect={() => router.visit(`/collaterals/${c.id}/appraisals`)}>
+                            Penilaian
+                        </DropdownItem>
+                        {canManage && (
+                            <>
+                                <DropdownItem icon={<Pencil />} onSelect={() => router.visit(`/collaterals/${c.id}/edit`)}>
+                                    Ubah
+                                </DropdownItem>
+                                <DropdownSeparator />
+                                <DropdownItem danger icon={<Trash2 />} onSelect={() => setToDelete(c)}>
+                                    Hapus
+                                </DropdownItem>
+                            </>
+                        )}
+                    </DropdownContent>
+                </DropdownMenu>
+            ),
         },
     ];
 

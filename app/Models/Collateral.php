@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -46,6 +47,26 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $located_at
  * @property string|null $located_by
  * @property string|null $location_address approximate address of the position (reverse geocoding), a hint only
+ * @property string|null $province
+ * @property string|null $postal_code
+ * @property string|null $route_hint
+ * @property string|null $right_kind
+ * @property string|null $right_holder_name
+ * @property Carbon|null $right_issued_at
+ * @property Carbon|null $right_expires_at
+ * @property string|null $survey_document
+ * @property Carbon|null $survey_document_date
+ * @property int|null $certificate_land_area
+ * @property string|null $land_office
+ * @property string|null $parcel_number
+ * @property string|null $acquisition_origin
+ * @property string|null $tax_object_number
+ * @property string|null $building_permit_number
+ * @property Carbon|null $building_permit_date
+ * @property string|null $operating_certificate_number
+ * @property Carbon|null $operating_certificate_date
+ * @property int|null $permitted_building_area
+ * @property string|null $permitted_use
  */
 #[Fillable([
     'cbs_id', 'credit_account', 'collateral_type_code', 'binding_type_code', 'document_number', 'description', 'owner_name',
@@ -53,6 +74,9 @@ use Illuminate\Support\Carbon;
     'appraisal_value', 'independent_value', 'appraiser_name', 'appraised_at', 'independent_name', 'independent_at',
     'condition_code', 'condition_date', 'insurance_code', 'insurance_date', 'ppap_code', 'created_by',
     'latitude', 'longitude', 'location_source', 'located_at', 'located_by', 'location_address',
+    'province', 'postal_code', 'route_hint', 'right_kind', 'right_holder_name', 'right_issued_at', 'right_expires_at', 'survey_document',
+    'survey_document_date', 'certificate_land_area', 'land_office', 'parcel_number', 'acquisition_origin', 'tax_object_number',
+    'building_permit_number', 'building_permit_date', 'operating_certificate_number', 'operating_certificate_date', 'permitted_building_area', 'permitted_use',
 ])]
 class Collateral extends Model
 {
@@ -61,6 +85,17 @@ class Collateral extends Model
 
     /** Text typed by users is stored in UPPERCASE, as core banking does. */
     public const UPPERCASE = ['cbs_id', 'document_number', 'description', 'owner_name', 'owner_address', 'appraiser_name', 'independent_name'];
+
+    /** Facts of a piece of land and its building that an appraisal reads; they do not go to core banking. */
+    public const LAND_FACTS = [
+        'province', 'postal_code', 'route_hint', 'right_kind', 'right_holder_name', 'right_issued_at', 'right_expires_at', 'survey_document',
+        'survey_document_date', 'certificate_land_area', 'land_office', 'parcel_number', 'acquisition_origin', 'tax_object_number',
+        'building_permit_number', 'building_permit_date', 'operating_certificate_number', 'operating_certificate_date', 'permitted_building_area', 'permitted_use',
+    ];
+
+    public const LAND_DATES = ['right_issued_at', 'right_expires_at', 'survey_document_date', 'building_permit_date', 'operating_certificate_date'];
+
+    public const RIGHT_KINDS = ['SHM' => 'SHM', 'SHGB' => 'SHGB', 'SHP' => 'SHP', 'OTHER' => 'Lainnya'];
 
     public const VALUES = ['guarantee_value', 'adjustment_value', 'fair_value', 'njop_value', 'appraisal_value', 'independent_value'];
 
@@ -71,6 +106,8 @@ class Collateral extends Model
             'appraisal_value' => 'integer', 'independent_value' => 'integer',
             'appraised_at' => 'date', 'independent_at' => 'date', 'condition_date' => 'date', 'insurance_date' => 'date',
             'latitude' => 'decimal:7', 'longitude' => 'decimal:7', 'located_at' => 'datetime',
+            'right_issued_at' => 'date', 'right_expires_at' => 'date', 'survey_document_date' => 'date', 'building_permit_date' => 'date', 'operating_certificate_date' => 'date',
+            'certificate_land_area' => 'integer', 'permitted_building_area' => 'integer',
         ];
     }
 
@@ -88,6 +125,16 @@ class Collateral extends Model
     public function loanApplications(): BelongsToMany
     {
         return $this->belongsToMany(LoanApplication::class, 'loan_application_collaterals');
+    }
+
+    /**
+     * The appraisals of this collateral, newest first: the history that management reads.
+     *
+     * @return HasMany<CollateralAppraisal, $this>
+     */
+    public function appraisals(): HasMany
+    {
+        return $this->hasMany(CollateralAppraisal::class)->orderByDesc('sequence');
     }
 
     /**

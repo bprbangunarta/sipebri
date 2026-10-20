@@ -13,6 +13,9 @@ use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\BmpkController;
+use App\Http\Controllers\CollateralAppraisalController;
+use App\Http\Controllers\CollateralAppraisalPhotoController;
+use App\Http\Controllers\CollateralAppraisalSectionController;
 use App\Http\Controllers\CollateralController;
 use App\Http\Controllers\CommitteeController;
 use App\Http\Controllers\CommitteeMemberController;
@@ -66,7 +69,17 @@ Route::middleware('auth')->group(function () {
     Route::post('notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
 
     Route::get('collaterals', [CollateralController::class, 'index'])->middleware('permission:collaterals.view')->name('collaterals.index');
+    Route::middleware('permission:collaterals.view')->group(function () {
+        Route::get('collaterals/{collateral}/appraisals', [CollateralAppraisalController::class, 'index'])->name('collaterals.appraisals.index');
+        Route::get('collateral-appraisals/{collateralAppraisal}', [CollateralAppraisalController::class, 'show'])->name('appraisals.show');
+    });
     Route::middleware('permission:collaterals.manage')->group(function () {
+        Route::post('collaterals/{collateral}/appraisals', [CollateralAppraisalController::class, 'store'])->name('collaterals.appraisals.store');
+        Route::delete('collateral-appraisals/{collateralAppraisal}', [CollateralAppraisalController::class, 'destroy'])->name('appraisals.destroy');
+        Route::put('collateral-appraisals/{collateralAppraisal}/sections/{section}', [CollateralAppraisalSectionController::class, 'update'])->name('appraisals.sections.update');
+        Route::post('collateral-appraisals/{collateralAppraisal}/finalize', [CollateralAppraisalSectionController::class, 'finalize'])->name('appraisals.finalize');
+        Route::post('collateral-appraisals/{collateralAppraisal}/photos', [CollateralAppraisalPhotoController::class, 'store'])->name('appraisals.photos.store');
+        Route::delete('collateral-appraisals/{collateralAppraisal}/photos/{photo}', [CollateralAppraisalPhotoController::class, 'destroy'])->name('appraisals.photos.destroy');
         Route::get('collaterals/create', [CollateralController::class, 'create'])->name('collaterals.create');
         Route::post('collaterals', [CollateralController::class, 'store'])->name('collaterals.store');
         Route::get('collaterals/{collateral}/edit', [CollateralController::class, 'edit'])->name('collaterals.edit');

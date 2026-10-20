@@ -126,6 +126,13 @@ export function formatNumber(value: number): string {
     return Number.isFinite(value) ? numberFormat.format(value) : '–';
 }
 
+const percentFormat = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 2 });
+
+/** A percentage with up to two decimals and no more: "65,79%", "152%". */
+export function formatPercent(value: number): string {
+    return Number.isFinite(value) ? `${percentFormat.format(value)}%` : '–';
+}
+
 const rupiahFormat = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
