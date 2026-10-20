@@ -195,8 +195,12 @@ export default function AppraisalShow({
                 )}
             </Card>
 
-            <div className="grid gap-3 lg:grid-cols-[16rem_minmax(0,1fr)]">
-                <nav aria-label="Bagian penilaian" className="flex flex-row gap-1 overflow-x-auto lg:sticky lg:top-3 lg:flex-col lg:self-start">
+            <Card className="grid lg:grid-cols-[16rem_minmax(0,1fr)]">
+                <nav
+                    aria-label="Bagian penilaian"
+                    className="flex flex-row gap-1 overflow-x-auto border-b border-line p-2 lg:flex-col lg:border-r lg:border-b-0"
+                >
+                    <p className="hidden px-2.5 pt-1 pb-1.5 text-2xs font-semibold tracking-wider text-muted uppercase lg:block">Bagian penilaian</p>
                     {template.sections.map((s) => {
                         const [filled, total] = progress[s.key] ?? [0, 0];
                         const unsaved = canEdit && dirty(s);
@@ -226,7 +230,7 @@ export default function AppraisalShow({
                     })}
                 </nav>
 
-                <Card className="min-w-0 self-start">
+                <div className="min-w-0">
                     <CardHeader
                         title={current.label}
                         description={`${progress[current.key]?.[0] ?? 0} dari ${progress[current.key]?.[1] ?? 0} isian terisi`}
@@ -263,8 +267,8 @@ export default function AppraisalShow({
                             </Button>
                         </CardFooter>
                     )}
-                </Card>
-            </div>
+                </div>
+            </Card>
 
             <ConfirmDialog
                 open={finalizing}
