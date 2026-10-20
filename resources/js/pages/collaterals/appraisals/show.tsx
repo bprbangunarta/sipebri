@@ -232,7 +232,9 @@ export default function AppraisalShow({
                         actions={
                             <>
                                 {canEdit && dirty(current) && <Badge tone="warning">Belum disimpan</Badge>}
-                                <Badge tone="neutral">{`${progress[current.key]?.[0] ?? 0}/${progress[current.key]?.[1] ?? 0}`}</Badge>
+                                <Badge tone={(progress[current.key]?.[0] ?? 0) === (progress[current.key]?.[1] ?? 0) ? 'success' : 'info'}>
+                                    {`${progress[current.key]?.[0] ?? 0}/${progress[current.key]?.[1] ?? 0}`}
+                                </Badge>
                             </>
                         }
                     />
