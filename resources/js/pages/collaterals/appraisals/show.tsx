@@ -1,5 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import { ArrowLeft, Check, CircleAlert, Gavel, Trash2 } from 'lucide-react';
+import { ArrowLeft, CircleAlert, Gavel, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { AppraisalBlock } from '@/components/appraisal/appraisal-block';
 import { Button } from '@/components/ui/button';
@@ -202,7 +202,6 @@ export default function AppraisalShow({
                 >
                     <p className="hidden px-2.5 pt-1 pb-1.5 text-2xs font-semibold tracking-wider text-muted uppercase lg:block">Bagian penilaian</p>
                     {template.sections.map((s) => {
-                        const [filled, total] = progress[s.key] ?? [0, 0];
                         const unsaved = canEdit && dirty(s);
 
                         return (
@@ -211,9 +210,9 @@ export default function AppraisalShow({
                                 type="button"
                                 aria-current={s.key === active ? 'true' : undefined}
                                 onClick={() => setActive(s.key)}
-                                className={`flex h-8 shrink-0 cursor-pointer items-center gap-2 rounded-md px-2.5 text-left text-sm font-medium whitespace-nowrap transition-colors ${s.key === active ? 'bg-primary-soft text-primary' : 'text-muted hover:bg-canvas hover:text-ink'}`}
+                                className={`flex min-h-8 shrink-0 cursor-pointer items-center gap-2 rounded-md px-2.5 py-1 text-left text-sm font-medium whitespace-nowrap capitalize transition-colors lg:whitespace-normal ${s.key === active ? 'bg-primary-soft text-primary' : 'text-muted hover:bg-canvas hover:text-ink'}`}
                             >
-                                <span className="flex-1 lg:truncate">{s.label}</span>
+                                <span className="flex-1">{s.label}</span>
                                 <span className="flex w-2 justify-center">
                                     {unsaved && (
                                         <>
@@ -221,9 +220,6 @@ export default function AppraisalShow({
                                             <span className="sr-only">Belum disimpan</span>
                                         </>
                                     )}
-                                </span>
-                                <span className="flex w-9 justify-end text-2xs tabular-nums">
-                                    {total > 0 && filled === total ? <Check className="size-3.5 text-success" aria-label="Lengkap" /> : `${filled}/${total}`}
                                 </span>
                             </button>
                         );
@@ -233,8 +229,12 @@ export default function AppraisalShow({
                 <div className="min-w-0">
                     <CardHeader
                         title={current.label}
-                        description={`${progress[current.key]?.[0] ?? 0} dari ${progress[current.key]?.[1] ?? 0} isian terisi`}
-                        actions={canEdit && dirty(current) ? <Badge tone="warning">Belum disimpan</Badge> : undefined}
+                        actions={
+                            <>
+                                {canEdit && dirty(current) && <Badge tone="warning">Belum disimpan</Badge>}
+                                <Badge tone="neutral">{`${progress[current.key]?.[0] ?? 0}/${progress[current.key]?.[1] ?? 0}`}</Badge>
+                            </>
+                        }
                     />
                     <CardBody className="flex flex-col gap-4">
                         {current.blocks.map((block, index) => (
