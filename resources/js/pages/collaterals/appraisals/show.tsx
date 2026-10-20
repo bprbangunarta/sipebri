@@ -1,6 +1,6 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ArrowLeft, CircleAlert, Gavel, Trash2 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AppraisalBlock } from '@/components/appraisal/appraisal-block';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/dialog';
@@ -70,6 +70,29 @@ export default function AppraisalShow({
 
     const keysOf = (s: Section) => answerKeys(s).filter((key) => !locked.includes(key));
     const dirty = (s: Section) => keysOf(s).some((key) => answers[key]?.value !== saved[key]?.value || answers[key]?.note !== saved[key]?.note);
+
+    const unsaved = canEdit && template.sections.some(dirty);
+
+    // Leaving the page by a link would drop what was typed and not saved.
+    useEffect(() => {
+        if (!unsaved) {
+            return;
+        }
+
+        const stop = router.on('before', (event) => {
+            if (event.detail.visit.method === 'get' && !window.confirm('Ada isian yang belum disimpan. Tinggalkan halaman ini?')) {
+                event.preventDefault();
+            }
+        });
+        const warn = (event: BeforeUnloadEvent) => event.preventDefault();
+
+        window.addEventListener('beforeunload', warn);
+
+        return () => {
+            stop();
+            window.removeEventListener('beforeunload', warn);
+        };
+    }, [unsaved]);
 
     const save = () =>
         router.put(
@@ -260,7 +283,7 @@ export default function AppraisalShow({
                         ))}
                     </CardBody>
                     {canEdit && answerKeys(current).length > 0 && (
-                        <CardFooter>
+                        <CardFooter className="sticky bottom-0 rounded-b-lg bg-surface">
                             <Button type="button" variant="outline" disabled={!dirty(current) || saving} onClick={reset}>
                                 Kembalikan
                             </Button>

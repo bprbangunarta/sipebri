@@ -76,25 +76,27 @@ final class CommonSections
     public static function conclusion(): array
     {
         return [
-            ['layout' => 'fields', 'items' => [
-                Fields::item('conclusion.summary', 'Deskripsi singkat objek', 'textarea'),
-                Fields::item('conclusion.strengths', 'Kekuatan utama', 'textarea'),
-                Fields::item('conclusion.weaknesses', 'Kelemahan/risiko utama', 'textarea'),
-                Fields::item('conclusion.assumptions', 'Asumsi dan kondisi pembatas', 'textarea'),
-                Fields::item('conclusion.legal', 'Kecukupan legalitas', 'textarea'),
-                Fields::item('conclusion.physical', 'Kecukupan fisik/marketability', 'textarea'),
+            ['layout' => 'fields', 'cols' => 4, 'items' => [
                 Fields::item('conclusion.market_value', 'Nilai pasar', 'computed', ['format' => 'money']),
                 Fields::item('conclusion.liquidation_value', 'Nilai likuidasi', 'computed', ['format' => 'money']),
                 Fields::item('conclusion.ltv', 'LTV', 'computed', ['format' => 'percent']),
                 Fields::item('conclusion.coverage', 'Coverage', 'computed', ['format' => 'percent']),
-                Fields::item('conclusion.mitigation', 'Mitigasi/syarat', 'textarea'),
-                Fields::item('h:reappraisal_frequency', 'Frekuensi penilaian ulang', 'text'),
+            ]],
+            ['layout' => 'fields', 'items' => [
+                Fields::item('conclusion.summary', 'Deskripsi singkat objek', 'textarea'),
+                Fields::item('conclusion.strengths', 'Kekuatan utama', 'textarea', ['half' => true]),
+                Fields::item('conclusion.weaknesses', 'Kelemahan/risiko utama', 'textarea', ['half' => true]),
+                Fields::item('conclusion.legal', 'Kecukupan legalitas', 'textarea', ['half' => true]),
+                Fields::item('conclusion.physical', 'Kecukupan fisik/marketability', 'textarea', ['half' => true]),
+                Fields::item('conclusion.assumptions', 'Asumsi dan kondisi pembatas', 'textarea', ['half' => true]),
+                Fields::item('conclusion.mitigation', 'Mitigasi/syarat', 'textarea', ['half' => true]),
             ]],
             ['layout' => 'fields', 'items' => [
                 Fields::choice('h:decision', 'Status agunan', CollateralAppraisal::DECISIONS),
                 Fields::item('h:credit_basis_value', 'Dasar nilai untuk kredit', 'money'),
-                Fields::item('h:main_conditions', 'Syarat utama', 'textarea'),
                 Fields::item('h:valid_until', 'Masa berlaku penilaian sampai tanggal', 'date'),
+                Fields::item('h:reappraisal_frequency', 'Frekuensi penilaian ulang', 'text'),
+                Fields::item('h:main_conditions', 'Syarat utama', 'textarea'),
             ]],
         ];
     }

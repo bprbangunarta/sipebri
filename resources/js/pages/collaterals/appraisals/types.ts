@@ -8,6 +8,8 @@ export type Item = {
     unit?: string;
     hint?: string;
     format?: 'money' | 'percent' | 'text';
+    /** A long text that shares a line with the next one instead of taking the whole width. */
+    half?: boolean;
 };
 
 export type Row = { key: string; label: string; type?: string; computed?: boolean; format?: Item['format']; options?: Choices | null };
@@ -16,6 +18,8 @@ export type Column = { key: string; label: string; type?: string; computed?: boo
 
 export type Block = {
     layout: 'fields' | 'checks' | 'ratings' | 'grid' | 'photos';
+    /** Fields only: how many fields share a line on a wide screen (default 2). */
+    cols?: number;
     items?: Item[];
     rows?: Row[];
     columns?: Column[];

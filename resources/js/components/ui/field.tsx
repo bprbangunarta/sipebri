@@ -2,6 +2,7 @@ import { Info } from 'lucide-react';
 import { Tooltip as T } from 'radix-ui';
 import { cloneElement, isValidElement, useId, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
+import { Textarea } from '@/components/ui/textarea';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 
@@ -69,6 +70,8 @@ export function Field({
               'aria-invalid': children.props['aria-invalid'] ?? (error ? true : undefined),
           })
         : children;
+    // A text area with a limit shows how much of it is used, beside the label.
+    const counted = isValidElement<{ maxLength?: number; value?: unknown }>(children) && children.type === Textarea ? children.props : null;
     const target = isValidElement<{ id?: string }>(children) ? (children.props.id ?? id) : undefined;
 
     return (
@@ -79,6 +82,11 @@ export function Field({
                     {required && <span className="ml-0.5 text-danger">*</span>}
                 </label>
                 {hint && <HintTip label={label} hint={hint} />}
+                {counted && counted.maxLength !== undefined && typeof counted.value === 'string' && (
+                    <span className="ml-auto text-xs text-muted tabular-nums" aria-hidden="true">
+                        {counted.value.length}/{counted.maxLength}
+                    </span>
+                )}
             </div>
             {control}
             {hint && (

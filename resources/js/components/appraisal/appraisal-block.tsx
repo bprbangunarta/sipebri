@@ -1,7 +1,7 @@
 import { AnswerInput, showComputed } from '@/components/appraisal/answer-input';
 import { AppraisalPhotos } from '@/components/appraisal/appraisal-photos';
 import { Field } from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Stat } from '@/pages/credit-analysis/parts';
 import type { Answers, Block, Column, Computed, Item, Photo, Row } from '@/pages/collaterals/appraisals/types';
 
@@ -22,6 +22,9 @@ export type BlockProps = {
     onDeletePhoto: (id: number) => void;
     uploading: string | null;
 };
+
+/** The longest note the server accepts. */
+const NOTE_MAX = 500;
 
 const answerOf = (answers: Answers, key: string) => answers[key] ?? { value: '', note: '' };
 
@@ -52,15 +55,15 @@ export function AppraisalBlock(props: BlockProps) {
     }
 }
 
-function Fields({ items, answers, onAnswer, computed, errors, readOnly, locked }: BlockProps & { items: Item[] }) {
+function Fields({ items, answers, onAnswer, computed, errors, readOnly, locked, block }: BlockProps & { items: Item[] }) {
     return (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className={`grid gap-x-3 gap-y-4 sm:grid-cols-2 ${block.cols === 4 ? 'lg:grid-cols-4' : ''}`}>
             {items.map((item) => {
                 if (item.type === 'computed') {
                     return <Stat key={item.key} label={item.label} value={showComputed(computed[item.key], item.format)} strong />;
                 }
 
-                const wide = item.type === 'textarea';
+                const wide = item.type === 'textarea' && !item.half;
 
                 return (
                     <Field
@@ -83,32 +86,36 @@ function Fields({ items, answers, onAnswer, computed, errors, readOnly, locked }
     );
 }
 
-/** A list of statements each answered on a fixed scale, with a note for the evidence or the mitigation. */
+/** A list of statements each answered on a fixed scale; the note for the evidence or the mitigation has the whole line under its statement. */
 function Checks({ items, answers, onAnswer, errors, readOnly, block }: BlockProps & { items: Item[] }) {
     const note = block.layout === 'ratings' ? 'Mitigasi/syarat' : 'Bukti/keterangan';
 
     return (
         <div className="flex flex-col divide-y divide-line">
             {items.map((item) => (
-                <div key={item.key} className="grid gap-2 py-2 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,16rem)] sm:items-center">
-                    <p className="text-sm">{item.label}</p>
-                    <AnswerInput
-                        item={item}
-                        label={item.label}
-                        value={answerOf(answers, item.key).value}
-                        onChange={(value) => onAnswer(item.key, { value })}
-                        disabled={readOnly}
-                        invalid={Boolean(errors[`values.${item.key}`])}
-                    />
-                    <Input
+                <div key={item.key} className="flex flex-col gap-2 py-3 first:pt-0 last:pb-0">
+                    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
+                        <p className="min-w-0 flex-1 basis-64 text-sm font-medium">{item.label}</p>
+                        <AnswerInput
+                            item={item}
+                            label={item.label}
+                            value={answerOf(answers, item.key).value}
+                            onChange={(value) => onAnswer(item.key, { value })}
+                            disabled={readOnly}
+                            invalid={Boolean(errors[`values.${item.key}`])}
+                        />
+                    </div>
+                    <Textarea
                         aria-label={`${note}: ${item.label}`}
-                        placeholder={note}
-                        maxLength={500}
+                        placeholder={`${note} (isi bila perlu)`}
+                        rows={1}
+                        maxLength={NOTE_MAX}
                         disabled={readOnly}
+                        className="field-sizing-content min-h-8 resize-none"
                         value={answerOf(answers, item.key).note}
                         onChange={(e) => onAnswer(item.key, { note: e.target.value })}
                     />
-                    {errors[`values.${item.key}`] && <p className="text-xs text-danger sm:col-span-3">{errors[`values.${item.key}`]}</p>}
+                    {errors[`values.${item.key}`] && <p className="text-xs text-danger">{errors[`values.${item.key}`]}</p>}
                 </div>
             ))}
         </div>

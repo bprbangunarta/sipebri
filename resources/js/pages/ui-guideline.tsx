@@ -288,7 +288,7 @@ function InputExamples() {
 
             <SubTitle>Teks panjang, centang, sakelar, dan radio</SubTitle>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                <Field label="Catatan" hint="Penghitung muncul bila ada maxLength" className="sm:col-span-2">
+                <Field label="Catatan" hint="Penghitung di baris label bila ada maxLength" className="sm:col-span-2">
                     <Textarea value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} placeholder="Tulis catatan…" />
                 </Field>
                 <div className="flex flex-col gap-3">
