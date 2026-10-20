@@ -62,12 +62,25 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
     );
 }
 
-export function PageHeader({ title, description, badge, actions }: { title: string; description?: string; badge?: ReactNode; actions?: ReactNode }) {
+export function PageHeader({
+    title,
+    description,
+    badge,
+    actions,
+    heading: Heading = 'h1',
+}: {
+    title: string;
+    description?: string;
+    badge?: ReactNode;
+    actions?: ReactNode;
+    /** A page has one `h1`; a header shown as an example inside a page uses `h2`. */
+    heading?: 'h1' | 'h2';
+}) {
     return (
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                    <h1 className="text-base font-semibold">{title}</h1>
+                    <Heading className="text-base font-semibold">{title}</Heading>
                     {/* The status of the page (a `Badge`) sits next to the title: in `actions` it would be stretched to the width of a button. */}
                     {badge}
                 </div>

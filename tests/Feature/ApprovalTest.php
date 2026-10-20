@@ -91,6 +91,16 @@ it('keeps the approvals page away from people without the permission', function 
     $this->actingAs(userWith(['dashboard.view']))->get('/approvals')->assertForbidden();
 });
 
+it('refuses a rate with more decimals than the column keeps instead of rounding it silently', function (string $field) {
+    $people = committeePeople();
+    $loan = analysedFor($people, 8_000_000);
+    submitAnalysis($people['analyst'], $loan);
+
+    $this->actingAs($people['analyst'])->post(route('approvals.decide', $loan), decision('approve', ['amount' => 8_000_000, $field => '10.123']))->assertSessionHasErrors($field);
+
+    expect($loan->fresh()->status)->toBe(LoanStatus::Committee);
+})->with(['interest' => ['interest_rate'], 'provision' => ['provision_rate'], 'admin' => ['admin_rate']]);
+
 it('puts a small file with the analyst, who decides it alone', function () {
     $people = committeePeople();
     $loan = analysedFor($people, 8_000_000);

@@ -1,6 +1,15 @@
 <?php
 
+use App\Enums\LoanStatus;
 use App\Enums\RoleName;
+use App\Models\Collateral;
+use App\Models\CommitteePath;
+use App\Models\Installment;
+use App\Models\LoanApplication;
+use App\Models\Method;
+use App\Models\Office;
+use App\Models\Product;
+use App\Models\ProductParameter;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
@@ -121,4 +130,68 @@ function fakeCustomers(array $customers = ['3201000000000001' => 'Siti Aminah'])
                 : Http::response([], 404);
         },
     ]);
+}
+
+/**
+ * A product with limits, its committee path, an office and a section head.
+ *
+ * @return array<string, mixed>
+ */
+function loanSetup(bool $collateralRequired = false): array
+{
+    test()->seed(RoleSeeder::class);
+
+    $method = Method::create(['code' => '10', 'name' => 'FLAT']);
+    $other = Method::create(['code' => '20', 'name' => 'EFFECTIVE']);
+    $installment = Installment::create(['code' => '3', 'name' => 'MONTHLY', 'period_months' => 1]);
+    $product = Product::create(['code' => '01', 'alias' => 'KRU', 'name' => 'GENERAL', 'is_active' => true]);
+    ProductParameter::create([
+        'product_id' => $product->id, 'min_amount' => 1_000_000, 'max_amount' => 50_000_000, 'min_tenor' => 1, 'max_tenor' => 24,
+        'allowed_method_ids' => [$method->id], 'allowed_installment_ids' => [$installment->id], 'collateral_required' => $collateralRequired,
+    ]);
+
+    return [
+        'product' => $product, 'method' => $method, 'otherMethod' => $other, 'installment' => $installment,
+        'path' => CommitteePath::create(['product_id' => $product->id, 'mechanism' => 'plafon']),
+        'office' => Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']),
+        'supervisor' => User::factory()->create()->assignRole('Kepala Seksi Analis'),
+    ];
+}
+
+/**
+ * @param  array<string, mixed>  $s
+ * @return array<string, mixed>
+ */
+function loanPayload(array $s, array $overrides = []): array
+{
+    return array_merge([
+        'application_date' => now()->toDateString(), 'product_id' => $s['product']->id, 'committee_path_id' => $s['path']->id,
+        'requested_amount' => 10_000_000, 'requested_tenor' => 12, 'method_id' => $s['method']->id, 'installment_id' => $s['installment']->id,
+        'interest_rate' => 13, 'usage_type' => 'WORKING CAPITAL', 'office_id' => $s['office']->id, 'supervisor_id' => $s['supervisor']->id,
+        'marketing' => 'adi',
+    ], $overrides);
+}
+
+function loanOfficer(): User
+{
+    return userWith(['loan-applications.view', 'loan-applications.manage', 'collaterals.view', 'collaterals.manage'], 'AO Test');
+}
+
+/**
+ * A scheduled file with its surveyor and one collateral.
+ *
+ * @return array{0: User, 1: LoanApplication, 2: Collateral}
+ */
+function surveyFile(): array
+{
+    test()->seed(RoleSeeder::class);
+    $analyst = User::factory()->create()->assignRole('Staff Analis & Appraisal');
+    $loan = LoanApplication::create([
+        'application_code' => '00700001', 'application_date' => now(), 'status' => LoanStatus::Scheduling->value, 'nik' => '3201000000000001',
+        'full_name' => 'Siti', 'surveyor_id' => $analyst->id, 'survey_date' => now()->toDateString(), 'created_by' => $analyst->id,
+    ]);
+    $collateral = Collateral::create(['collateral_type_code' => '05', 'owner_name' => 'ONIH', 'document_number' => 'SHM 1']);
+    $loan->collaterals()->attach($collateral->id);
+
+    return [$analyst, $loan, $collateral];
 }

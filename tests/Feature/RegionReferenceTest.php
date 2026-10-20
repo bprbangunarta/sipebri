@@ -7,7 +7,6 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     $this->actingAs(superAdmin());
-    $this->village = Region::create(['code' => '3201', 'regency' => 'Kab. Bogor', 'district' => 'Cibinong', 'village' => 'Pakansari', 'postal_code' => '16915']);
 });
 
 function regionInput(array $overrides = []): array
@@ -16,33 +15,36 @@ function regionInput(array $overrides = []): array
 }
 
 it('refuses to delete the last village of a code that a collateral uses, and allows it while another village keeps the code', function () {
+    $village = Region::create(['code' => '3201', 'regency' => 'Kab. Bogor', 'district' => 'Cibinong', 'village' => 'Pakansari', 'postal_code' => '16915']);
     Collateral::create(['collateral_type_code' => '05', 'region_code' => '3201']);
     $other = Region::create(['code' => '3201', 'regency' => 'Kab. Bogor', 'district' => 'Cibinong', 'village' => 'Harapan Jaya']);
 
     $this->delete(route('references.destroy', ['regions', $other->id]))->assertSessionHas('success');
 
-    $this->delete(route('references.destroy', ['regions', $this->village->id]))->assertSessionHas('error', fn (string $message): bool => str_contains($message, 'Pakansari') && str_contains($message, '1 agunan'));
+    $this->delete(route('references.destroy', ['regions', $village->id]))->assertSessionHas('error', fn (string $message): bool => str_contains($message, 'Pakansari') && str_contains($message, '1 agunan'));
     expect(Region::count())->toBe(1);
 
     Collateral::query()->delete();
-    $this->delete(route('references.destroy', ['regions', $this->village->id]))->assertSessionHas('success');
+    $this->delete(route('references.destroy', ['regions', $village->id]))->assertSessionHas('success');
 });
 
 it('refuses to change the code of the last village that a collateral uses', function () {
+    $village = Region::create(['code' => '3201', 'regency' => 'Kab. Bogor', 'district' => 'Cibinong', 'village' => 'Pakansari', 'postal_code' => '16915']);
     Collateral::create(['collateral_type_code' => '05', 'region_code' => '3201']);
 
-    $this->put(route('references.update', ['regions', $this->village->id]), regionInput(['code' => '3202', 'village' => 'Pakansari']))->assertSessionHasErrors('code');
-    expect($this->village->fresh()->code)->toBe('3201');
+    $this->put(route('references.update', ['regions', $village->id]), regionInput(['code' => '3202', 'village' => 'Pakansari']))->assertSessionHasErrors('code');
+    expect($village->fresh()->code)->toBe('3201');
 
-    $this->put(route('references.update', ['regions', $this->village->id]), regionInput(['village' => 'Pakansari', 'postal_code' => '16999']))->assertSessionHasNoErrors();
-    expect($this->village->fresh()->postal_code)->toBe('16999');
+    $this->put(route('references.update', ['regions', $village->id]), regionInput(['village' => 'Pakansari', 'postal_code' => '16999']))->assertSessionHasNoErrors();
+    expect($village->fresh()->postal_code)->toBe('16999');
 
     Region::create(['code' => '3201', 'regency' => 'Kab. Bogor', 'district' => 'Cibinong', 'village' => 'Harapan Jaya']);
-    $this->put(route('references.update', ['regions', $this->village->id]), regionInput(['code' => '3202', 'village' => 'Pakansari']))->assertSessionHasNoErrors();
-    expect($this->village->fresh()->code)->toBe('3202');
+    $this->put(route('references.update', ['regions', $village->id]), regionInput(['code' => '3202', 'village' => 'Pakansari']))->assertSessionHasNoErrors();
+    expect($village->fresh()->code)->toBe('3202');
 });
 
 it('lists one entry per code in the collateral picker, with every way the regency is written', function () {
+    Region::create(['code' => '3201', 'regency' => 'Kab. Bogor', 'district' => 'Cibinong', 'village' => 'Pakansari', 'postal_code' => '16915']);
     Region::create(['code' => '3408', 'regency' => 'Kab. Sijunjung', 'district' => 'A', 'village' => 'A']);
     Region::create(['code' => '3408', 'regency' => 'kota Sawahlunto', 'district' => 'B', 'village' => 'B']);
     Region::create(['code' => '3408', 'regency' => 'Kab. Sijunjung', 'district' => 'C', 'village' => 'C']);
@@ -53,6 +55,7 @@ it('lists one entry per code in the collateral picker, with every way the regenc
 });
 
 it('answers one validation sentence for hostile values', function (array $overrides, string $field) {
+    Region::create(['code' => '3201', 'regency' => 'Kab. Bogor', 'district' => 'Cibinong', 'village' => 'Pakansari', 'postal_code' => '16915']);
     $this->post(route('references.store', 'regions'), regionInput($overrides))->assertSessionHasErrors($field);
 
     expect(Region::count())->toBe(1);
@@ -82,9 +85,10 @@ it('answers not found for an id that does not exist', function () {
 });
 
 it('keeps every action for Super Admin only', function (string $method, string $uri) {
+    $village = Region::create(['code' => '3201', 'regency' => 'Kab. Bogor', 'district' => 'Cibinong', 'village' => 'Pakansari', 'postal_code' => '16915']);
     $this->actingAs(userWith(['dashboard.view', 'collaterals.view', 'collaterals.manage']));
 
-    $this->{$method}(str_replace('{id}', (string) $this->village->id, $uri), regionInput())->assertForbidden();
+    $this->{$method}(str_replace('{id}', (string) $village->id, $uri), regionInput())->assertForbidden();
 
     expect(Region::count())->toBe(1);
 })->with([['get', '/references/regions'], ['post', '/references/regions'], ['put', '/references/regions/{id}'], ['delete', '/references/regions/{id}']]);

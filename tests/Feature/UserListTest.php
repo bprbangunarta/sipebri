@@ -7,7 +7,6 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     $this->actingAs(superAdmin());
-    $this->office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
 });
 
 function person(string $name, array $attributes = [], string $role = 'Customer Service'): User
@@ -65,9 +64,10 @@ dataset('user sorts', function () {
 });
 
 it('sorts the list by every column in both directions', function (string $key, string $direction) {
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
     $other = Office::create(['code' => '01', 'alias' => 'CGK', 'name' => 'Jalancagak']);
     $rows = [
-        ['Citra', 'alpha', 'zeta@contoh.test', 'Direktur Utama', $this->office, '2026-01-03', false],
+        ['Citra', 'alpha', 'zeta@contoh.test', 'Direktur Utama', $office, '2026-01-03', false],
         ['Adi', 'mike', 'alpha@contoh.test', 'Customer Service', $other, '2026-01-02', true],
         ['Bani', 'zulu', 'mike@contoh.test', 'Staff Legal', null, '2026-01-01', false],
     ];

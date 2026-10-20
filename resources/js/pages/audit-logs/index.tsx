@@ -188,7 +188,7 @@ export default function AuditLogsIndex({ logs, filters, modules, verification }:
             <Head title="Audit Logs" />
             <PageHeader
                 title="Audit Logs"
-                description="Catatan anti-rusak tentang siapa melakukan apa, kapan, dan dari mana"
+                description="Catatan siapa melakukan apa, kapan, dan dari mana; keutuhannya bisa diperiksa"
                 actions={
                     <>
                         <Button variant="outline" onClick={verify} disabled={verifying}>

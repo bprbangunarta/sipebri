@@ -180,16 +180,6 @@ class ReferenceResource
         return (bool) ($this->config['lock_code'] ?? false);
     }
 
-    /**
-     * Holders of this row that no relation can count (ids kept in a JSON column), by noun, only those above zero.
-     *
-     * @return array<string, int>
-     */
-    public function extraUsage(Model $record): array
-    {
-        return $record instanceof CountsExtraUsage ? array_filter($record->extraUsage(), fn (int $count): bool => $count > 0) : [];
-    }
-
     public function importable(): bool
     {
         return ($this->config['import'] ?? false) !== false;

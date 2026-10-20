@@ -11,7 +11,6 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     $this->actingAs(superAdmin());
-    $this->product = Product::create(['code' => 'X1', 'alias' => 'XPR', 'name' => 'Uji', 'is_active' => true]);
 });
 
 function parameterChoices(): array
@@ -30,9 +29,10 @@ function validParameter(array $overrides = []): array
 }
 
 it('refuses a value that does not fit its field, in one sentence, and saves nothing', function (array $input, string $field) {
-    saveParameter($this->product, validParameter($input))->assertSessionHasErrors($field);
+    $product = Product::create(['code' => 'X1', 'alias' => 'XPR', 'name' => 'Uji', 'is_active' => true]);
+    saveParameter($product, validParameter($input))->assertSessionHasErrors($field);
 
-    expect($this->product->fresh()->parameter)->toBeNull();
+    expect($product->fresh()->parameter)->toBeNull();
 })->with([
     'negative minimum amount' => [['min_amount' => -1], 'min_amount'],
     'zero maximum amount (would read as no limit)' => [['max_amount' => 0], 'max_amount'],
@@ -56,21 +56,23 @@ it('refuses a value that does not fit its field, in one sentence, and saves noth
 ]);
 
 it('keeps the decimals a rate has, three at most, as they were typed', function () {
-    saveParameter($this->product, validParameter(['interest_rate' => '12.375', 'provision_rate' => '0', 'admin_rate' => '0.001']))->assertSessionHasNoErrors();
+    $product = Product::create(['code' => 'X1', 'alias' => 'XPR', 'name' => 'Uji', 'is_active' => true]);
+    saveParameter($product, validParameter(['interest_rate' => '12.375', 'provision_rate' => '0', 'admin_rate' => '0.001']))->assertSessionHasNoErrors();
 
-    $p = $this->product->fresh()->parameter;
+    $p = $product->fresh()->parameter;
 
     expect([(float) $p->interest_rate, (float) $p->provision_rate, (float) $p->admin_rate])->toBe([12.375, 0.0, 0.001]);
 });
 
 it('wants a reason for every change, and keeps it with the audit entry that shows the value before and after', function () {
-    saveParameter($this->product, validParameter(), null)->assertSessionHasErrors('reason');
-    saveParameter($this->product, validParameter(), 'ya')->assertSessionHasErrors('reason');
-    expect($this->product->fresh()->parameter)->toBeNull();
+    $product = Product::create(['code' => 'X1', 'alias' => 'XPR', 'name' => 'Uji', 'is_active' => true]);
+    saveParameter($product, validParameter(), null)->assertSessionHasErrors('reason');
+    saveParameter($product, validParameter(), 'ya')->assertSessionHasErrors('reason');
+    expect($product->fresh()->parameter)->toBeNull();
 
-    saveParameter($this->product, validParameter())->assertSessionHasNoErrors();
+    saveParameter($product, validParameter())->assertSessionHasNoErrors();
     AuditLog::query()->getQuery()->delete();
-    saveParameter($this->product, validParameter(['max_amount' => 60_000_000]), 'Plafon naik menurut SK 12/2026')->assertSessionHas('success');
+    saveParameter($product, validParameter(['max_amount' => 60_000_000]), 'Plafon naik menurut SK 12/2026')->assertSessionHas('success');
 
     $row = AuditLog::query()->where('event', 'product_parameters.updated')->firstOrFail();
 
@@ -80,34 +82,37 @@ it('wants a reason for every change, and keeps it with the audit entry that show
 });
 
 it('says nothing changed, and writes nothing, when the same values are saved again', function () {
-    saveParameter($this->product, validParameter())->assertSessionHasNoErrors();
+    $product = Product::create(['code' => 'X1', 'alias' => 'XPR', 'name' => 'Uji', 'is_active' => true]);
+    saveParameter($product, validParameter())->assertSessionHasNoErrors();
     AuditLog::query()->getQuery()->delete();
 
-    saveParameter($this->product, validParameter())->assertSessionHas('success', 'Parameter XPR tidak berubah.');
+    saveParameter($product, validParameter())->assertSessionHas('success', 'Parameter XPR tidak berubah.');
 
     expect(AuditLog::query()->count())->toBe(0);
 });
 
 it('treats a field left out of the request as empty, so a limit can be cleared and nothing is kept by accident', function () {
+    $product = Product::create(['code' => 'X1', 'alias' => 'XPR', 'name' => 'Uji', 'is_active' => true]);
     [$method] = parameterChoices();
-    saveParameter($this->product, validParameter(['decree' => 'SK 1/2026', 'allowed_method_ids' => [$method->id]]))->assertSessionHasNoErrors();
+    saveParameter($product, validParameter(['decree' => 'SK 1/2026', 'allowed_method_ids' => [$method->id]]))->assertSessionHasNoErrors();
 
-    saveParameter($this->product, ['collateral_required' => false])->assertSessionHasNoErrors();
+    saveParameter($product, ['collateral_required' => false])->assertSessionHasNoErrors();
 
-    $p = $this->product->fresh()->parameter;
+    $p = $product->fresh()->parameter;
 
     expect([$p->max_amount, $p->decree, $p->allowed_method_ids, $p->interest_rate])->toBe([null, null, [], null]);
 });
 
 it('keeps product parameters for Super Admin only, and for people who are signed in', function () {
+    $product = Product::create(['code' => 'X1', 'alias' => 'XPR', 'name' => 'Uji', 'is_active' => true]);
     $this->actingAs(userWith(['dashboard.view', 'loan-applications.manage']));
-    $this->get(route('products.parameters', $this->product))->assertForbidden();
-    saveParameter($this->product, validParameter())->assertForbidden();
+    $this->get(route('products.parameters', $product))->assertForbidden();
+    saveParameter($product, validParameter())->assertForbidden();
 
     auth()->logout();
-    saveParameter($this->product, validParameter())->assertRedirect(route('login'));
+    saveParameter($product, validParameter())->assertRedirect(route('login'));
 
-    expect($this->product->fresh()->parameter)->toBeNull();
+    expect($product->fresh()->parameter)->toBeNull();
 });
 
 it('answers not found for a product that does not exist', function () {
@@ -116,10 +121,11 @@ it('answers not found for a product that does not exist', function () {
 });
 
 it('opens the page with the parameter, the methods and the installments', function () {
+    $product = Product::create(['code' => 'X1', 'alias' => 'XPR', 'name' => 'Uji', 'is_active' => true]);
     parameterChoices();
-    saveParameter($this->product, validParameter());
+    saveParameter($product, validParameter());
 
-    $this->get(route('products.parameters', $this->product))->assertInertia(fn (Assert $page) => $page
+    $this->get(route('products.parameters', $product))->assertInertia(fn (Assert $page) => $page
         ->where('parameter.max_amount', 50_000_000)->has('methods', 1)->has('installments', 1));
 });
 

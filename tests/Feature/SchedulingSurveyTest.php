@@ -174,6 +174,7 @@ it('stores survey photos on the configured attachments disk', function () {
 });
 
 it('serves photos through a signed, expiring link on an S3 disk', function () {
+    $this->freezeTime();
     config([
         'filesystems.attachments' => 's3',
         'filesystems.disks.s3.key' => 'test-key', 'filesystems.disks.s3.secret' => 'test-secret',

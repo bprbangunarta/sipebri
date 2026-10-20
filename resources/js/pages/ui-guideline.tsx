@@ -662,6 +662,26 @@ export default function UiGuideline() {
                 </Section>
 
                 <Section
+                    title="Header halaman"
+                    description="Judul, keterangan pendek, status halaman di prop badge (di samping judul, tidak di actions karena akan melebar sebesar tombol), dan tombol aksi yang sama lebar langsung di actions tanpa pembungkus."
+                >
+                    <div className="rounded-lg border border-line bg-surface p-3">
+                        <PageHeader
+                            title="Contoh halaman"
+                            heading="h2"
+                            description="Keterangan satu baris"
+                            badge={<Badge tone="success">Aktif</Badge>}
+                            actions={
+                                <>
+                                    <Button variant="outline">Import</Button>
+                                    <Button>Tambah</Button>
+                                </>
+                            }
+                        />
+                    </div>
+                </Section>
+
+                <Section
                     title="Menu dropdown dan tooltip"
                     description="Dropdown untuk beberapa aksi di satu tempat (menu akun, aksi baris yang banyak): item berikon, pemisah, dan item berbahaya di bawah. Tip memberi nama pada tombol ikon."
                 >

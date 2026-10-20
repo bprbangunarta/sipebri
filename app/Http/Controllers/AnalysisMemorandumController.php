@@ -26,7 +26,7 @@ class AnalysisMemorandumController extends Controller
         $rules = [
             ...array_fill_keys(AnalysisMemorandum::NEEDS, $money),
             ...array_fill_keys(array_map(fn (string $c): string => "{$c}_note", AnalysisMemorandum::NEEDS), ['nullable', 'string', 'max:255']),
-            ...array_fill_keys(AnalysisMemorandum::RATES, ['nullable', 'numeric', 'min:0', 'max:100']),
+            ...array_fill_keys(AnalysisMemorandum::RATES, ['nullable', 'decimal:0,2', 'min:0', 'max:100']),
             'proposed_amount' => $money,
             'term_months' => ['nullable', 'integer', 'min:0', 'max:600'],
             'before_disbursement' => ['nullable', 'string', 'max:255'],

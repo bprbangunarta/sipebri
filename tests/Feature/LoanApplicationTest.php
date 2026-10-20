@@ -1,66 +1,17 @@
 <?php
 
+use App\Audit\AuditLog;
 use App\Enums\LoanStatus;
 use App\Models\AppNotification;
 use App\Models\Collateral;
 use App\Models\CollateralType;
 use App\Models\CommitteePath;
-use App\Models\Installment;
 use App\Models\LoanApplication;
-use App\Models\Method;
-use App\Models\Office;
 use App\Models\Product;
-use App\Models\ProductParameter;
 use App\Models\Region;
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Support\Facades\Http;
 use Inertia\Testing\AssertableInertia as Assert;
-
-/**
- * A product with limits, its committee path, an office and a section head.
- *
- * @return array<string, mixed>
- */
-function loanSetup(bool $collateralRequired = false): array
-{
-    test()->seed(RoleSeeder::class);
-
-    $method = Method::create(['code' => '10', 'name' => 'FLAT']);
-    $other = Method::create(['code' => '20', 'name' => 'EFFECTIVE']);
-    $installment = Installment::create(['code' => '3', 'name' => 'MONTHLY', 'period_months' => 1]);
-    $product = Product::create(['code' => '01', 'alias' => 'KRU', 'name' => 'GENERAL', 'is_active' => true]);
-    ProductParameter::create([
-        'product_id' => $product->id, 'min_amount' => 1_000_000, 'max_amount' => 50_000_000, 'min_tenor' => 1, 'max_tenor' => 24,
-        'allowed_method_ids' => [$method->id], 'allowed_installment_ids' => [$installment->id], 'collateral_required' => $collateralRequired,
-    ]);
-
-    return [
-        'product' => $product, 'method' => $method, 'otherMethod' => $other, 'installment' => $installment,
-        'path' => CommitteePath::create(['product_id' => $product->id, 'mechanism' => 'plafon']),
-        'office' => Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']),
-        'supervisor' => User::factory()->create()->assignRole('Kepala Seksi Analis'),
-    ];
-}
-
-/**
- * @param  array<string, mixed>  $s
- * @return array<string, mixed>
- */
-function loanPayload(array $s, array $overrides = []): array
-{
-    return array_merge([
-        'application_date' => now()->toDateString(), 'product_id' => $s['product']->id, 'committee_path_id' => $s['path']->id,
-        'requested_amount' => 10_000_000, 'requested_tenor' => 12, 'method_id' => $s['method']->id, 'installment_id' => $s['installment']->id,
-        'interest_rate' => 13, 'usage_type' => 'WORKING CAPITAL', 'office_id' => $s['office']->id, 'supervisor_id' => $s['supervisor']->id,
-        'marketing' => 'adi',
-    ], $overrides);
-}
-
-function loanOfficer(): User
-{
-    return userWith(['loan-applications.view', 'loan-applications.manage', 'collaterals.view', 'collaterals.manage'], 'AO Test');
-}
 
 it('reports a missing Codex configuration instead of guessing', function () {
     config(['services.codex.endpoint' => null]);
@@ -125,6 +76,14 @@ it('enforces product limits on the application data', function () {
     expect($loan->fresh()->only(['requested_amount', 'marketing']))->toBe(['requested_amount' => 10_000_000, 'marketing' => 'ADI']);
 });
 
+it('refuses an interest rate with more decimals than the column keeps instead of rounding it silently', function (mixed $rate) {
+    $s = loanSetup();
+    $this->actingAs($officer = loanOfficer());
+    $loan = LoanApplication::create(['application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A', 'created_by' => $officer->id]);
+
+    $this->put(route('loan-applications.update', $loan), loanPayload($s, ['interest_rate' => $rate]))->assertSessionHasErrors('interest_rate');
+})->with(['three decimals' => ['13.456'], 'scientific notation' => ['1e1']]);
+
 it('only lets the creator change a draft', function () {
     $s = loanSetup();
     $owner = loanOfficer();
@@ -178,6 +137,21 @@ it('attaches and detaches collateral and refuses to delete attached collateral',
     $this->delete(route('loan-applications.collaterals.detach', [$loan, $collateral]))->assertSessionHas('success');
     $this->delete(route('collaterals.destroy', $collateral))->assertSessionHas('success');
     expect(Collateral::count())->toBe(0);
+});
+
+it('writes nothing to the audit trail when attaching or detaching a collateral that changes nothing', function () {
+    loanSetup();
+    $this->actingAs($officer = loanOfficer());
+    $loan = LoanApplication::create(['application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A', 'created_by' => $officer->id]);
+    $collateral = Collateral::create(['collateral_type_code' => '05', 'owner_name' => 'X']);
+
+    $this->post(route('loan-applications.collaterals.attach', $loan), ['collateral_id' => $collateral->id]);
+    $this->post(route('loan-applications.collaterals.attach', $loan), ['collateral_id' => $collateral->id])->assertSessionHasNoErrors();
+    $this->delete(route('loan-applications.collaterals.detach', [$loan, $collateral]));
+    $this->delete(route('loan-applications.collaterals.detach', [$loan, $collateral]))->assertSessionHasNoErrors();
+
+    expect(AuditLog::query()->where('event', 'loan_applications.collateral_attached')->count())->toBe(1)
+        ->and(AuditLog::query()->where('event', 'loan_applications.collateral_detached')->count())->toBe(1);
 });
 
 it('refuses to delete master data that loan applications use', function () {

@@ -3,30 +3,14 @@
 use App\Audit\AuditLog;
 use App\Enums\LoanStatus;
 use App\Models\Collateral;
-use App\Models\LoanApplication;
 use App\Models\LoanSchedule;
 use App\Models\LoanSurveyPhoto;
 use App\Models\User;
 use App\Support\Coordinates;
 use App\Support\PhotoExif;
-use Database\Seeders\RoleSeeder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
-
-function surveyFile(): array
-{
-    test()->seed(RoleSeeder::class);
-    $analyst = User::factory()->create()->assignRole('Staff Analis & Appraisal');
-    $loan = LoanApplication::create([
-        'application_code' => '00700001', 'application_date' => now(), 'status' => LoanStatus::Scheduling->value, 'nik' => '3201000000000001',
-        'full_name' => 'Siti', 'surveyor_id' => $analyst->id, 'survey_date' => now()->toDateString(), 'created_by' => $analyst->id,
-    ]);
-    $collateral = Collateral::create(['collateral_type_code' => '05', 'owner_name' => 'ONIH', 'document_number' => 'SHM 1']);
-    $loan->collaterals()->attach($collateral->id);
-
-    return [$analyst, $loan, $collateral];
-}
 
 it('reads coordinates from what people paste', function (string $input, ?array $expected) {
     expect(Coordinates::parse($input))->toBe($expected);

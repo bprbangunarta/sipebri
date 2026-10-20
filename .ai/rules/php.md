@@ -22,6 +22,7 @@ Tambahan proyek di atas standar `.ai/rules/quality.md` (sembilan pertanyaan, mut
 ## Pengecualian dari aturan standar
 
 - **Tidak ada pengecualian untuk `.env.example`.** Berkas itu hanya berisi variabel (variabel opsional ditulis `# NAME=value`); penjelasan tiap variabel ada di `docs/deployment.md`, dan `EnvExampleTest` gagal bila ada baris komentar penjelasan (keputusan pemilik 2026-10-20).
+- **Validasi sebaris boleh** (keputusan pemilik 2026-10-20): `laravel.md` meminta Form Request, tetapi aturan kecil milik satu endpoint boleh memakai `$request->validate()` di controller (begitulah hampir semua controller sekarang); Form Request dipakai bila aturannya besar, dipakai ulang, atau butuh `authorize()` sendiri. Izin tetap diputuskan lebih dulu oleh middleware route.
 - **Tidak ada pengecualian `catch (Throwable)` milik proyek.** Aturan standar (`quality.md`, "Errors and validation") sudah mengizinkan satu bentuk: menguraikan masukan yang bermusuhan di mana satu-satunya jawaban adalah penolakan polos, dengan komentar yang mengatakannya (kini `App\Support\PhotoExif`: metadata foto yang rusak berarti foto tanpa posisi). Penyimpanan alamat perkiraan (`ReverseGeocoder`) menangkap galat tetapi memanggil `report()`, jadi tercatat dan tidak melanggar apa pun.
 
 ## Sembilan pertanyaan: bentuk di SIPEBRI

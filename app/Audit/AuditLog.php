@@ -3,6 +3,8 @@
 namespace App\Audit;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use LogicException;
@@ -50,6 +52,34 @@ class AuditLog extends Model
     {
         static::updating(fn () => throw new LogicException('The audit trail is append-only: entries cannot be changed.'));
         static::deleting(fn () => throw new LogicException('The audit trail is append-only: entries cannot be deleted.'));
+    }
+
+    /**
+     * The entries the audit screen and its export show for these (already validated) filters.
+     *
+     * @param  Builder<AuditLog>  $query
+     * @param  array<string, mixed>  $filters
+     */
+    #[Scope]
+    protected function matching(Builder $query, array $filters): void
+    {
+        $query
+            ->when($filters['search'] ?? null, function (Builder $q, string $term): void {
+                $like = '%'.addcslashes($term, '%_\\').'%';
+                $q->where(fn (Builder $w) => $w->where('user_name', 'like', $like)->orWhere('username', 'like', $like)->orWhere('event', 'like', $like)
+                    ->orWhere('subject_label', 'like', $like)->orWhere('ip_address', 'like', $like)->orWhere('request_id', 'like', $like));
+            })
+            ->when($filters['module'] ?? null, fn (Builder $q, string $module) => $q->where('module', $module))
+            ->when($filters['outcome'] ?? null, fn (Builder $q, string $outcome) => $q->where('outcome', $outcome))
+            ->when($filters['from'] ?? null, fn (Builder $q, string $from) => $q->where('created_at', '>=', $from.' 00:00:00.000000'))
+            ->when($filters['to'] ?? null, fn (Builder $q, string $to) => $q->where('created_at', '<=', $to.' 23:59:59.999999'));
+    }
+
+    /** Whether this person opened the audit screen within the last given minutes. */
+    public static function openedBy(int $userId, int $minutes): bool
+    {
+        return static::query()->where('event', 'audit_logs.viewed')->where('user_id', $userId)
+            ->where('created_at', '>', now()->subMinutes($minutes)->format('Y-m-d H:i:s.u'))->exists();
     }
 
     /**

@@ -9,7 +9,10 @@ namespace App\Support;
 interface CountsExtraUsage
 {
     /**
-     * @return array<string, int> what holds this row, by noun (for example "parameter produk"), only the counts above zero need to be present
+     * Counted for a whole page of rows at once, so the list does not ask the database once per row.
+     *
+     * @param  list<int>  $ids
+     * @return array<int, array<string, int>> by row id, what holds the row by noun (for example "pilihan metode produk")
      */
-    public function extraUsage(): array;
+    public static function extraUsageFor(array $ids): array;
 }

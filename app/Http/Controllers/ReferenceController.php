@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Support\ReferenceResource;
+use App\Support\ReferenceUsage;
 use Closure;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -38,18 +36,20 @@ class ReferenceController extends Controller
         $sort = $filters['sort'] ?? $first;
         $direction = $filters['direction'] ?? 'asc';
 
+        $counts = new ReferenceUsage($definition);
         $query = $definition->model()::query()->withCount($definition->usageCounts());
         $definition->search($query, $filters['search'] ?? null);
 
         $perPage = in_array((int) ($filters['per_page'] ?? 0), self::PER_PAGE_OPTIONS, true) ? (int) $filters['per_page'] : 25;
         $items = $sort === ReferenceResource::USAGE_SORT
-            ? $this->byUsage($definition, $query, $usage, $first, $direction, $perPage, $request)
+            ? $counts->paginateByUsage($query, $direction, $perPage, $request->url(), $request->query())
             : $query->orderBy($sort, $direction)->orderBy($first)->orderBy('id')->paginate($perPage)->withQueryString();
+        $counts->loadExtraUsage($items->items());
 
         return Inertia::render('references/index', [
             'items' => $items->through(fn ($record): array => [
                 ...$definition->toItem($record),
-                'usage_count' => $this->usageTotal($definition, $record, $usage),
+                'usage_count' => $counts->usageTotal($record),
             ]),
             'filters' => ['search' => $filters['search'] ?? '', 'sort' => $sort, 'direction' => $direction, 'per_page' => $items->perPage()],
             'perPageOptions' => self::PER_PAGE_OPTIONS,
@@ -70,37 +70,6 @@ class ReferenceController extends Controller
                 'item_url' => route('references.update', [$resource, '__id__'], false),
             ],
         ]);
-    }
-
-    /**
-     * Everything that holds a row, for the "Dipakai" column: the relation counts loaded with the page plus the holders no relation can count.
-     *
-     * @param  list<string>  $usage
-     */
-    private function usageTotal(ReferenceResource $definition, Model $record, array $usage): int
-    {
-        return array_sum(array_map(fn (string $relation): int => (int) $record->getAttribute(Str::snake($relation).'_count'), $usage)) + array_sum($definition->extraUsage($record));
-    }
-
-    /**
-     * The "Dipakai" column adds up several relations, which one SQL ORDER BY cannot do without building SQL text from names;
-     * lookup tables that are used by other records stay small, so this one order is done on the rows in memory.
-     *
-     * @param  Builder<Model>  $query
-     * @param  list<string>  $usage
-     * @return LengthAwarePaginator<int, Model>
-     */
-    private function byUsage(ReferenceResource $definition, Builder $query, array $usage, string $first, string $direction, int $perPage, Request $request): LengthAwarePaginator
-    {
-        $total = fn (Model $record): int => $this->usageTotal($definition, $record, $usage);
-        $rows = $query->get()->sortBy([
-            fn (Model $a, Model $b): int => $direction === 'asc' ? $total($a) <=> $total($b) : $total($b) <=> $total($a),
-            fn (Model $a, Model $b): int => $a->getAttribute($first) <=> $b->getAttribute($first),
-            fn (Model $a, Model $b): int => $a->getKey() <=> $b->getKey(),
-        ])->values();
-        $page = LengthAwarePaginator::resolveCurrentPage();
-
-        return new LengthAwarePaginator($rows->forPage($page, $perPage)->values(), $rows->count(), $perPage, $page, ['path' => $request->url(), 'query' => $request->query()]);
     }
 
     public function store(Request $request, string $resource): RedirectResponse
@@ -180,7 +149,7 @@ class ReferenceController extends Controller
             }
         }
 
-        foreach ($definition->extraUsage($record) as $noun => $count) {
+        foreach ((new ReferenceUsage($definition))->extraUsage($record) as $noun => $count) {
             return back()->with('error', $this->inUse($name, $count, $noun));
         }
 

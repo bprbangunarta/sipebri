@@ -61,7 +61,7 @@ export const ERROR_PAGES: readonly ErrorPageSpec[] = [
     {
         status: 503,
         title: 'Sedang dalam pemeliharaan',
-        description: 'Sistem sedang diperbarui dan akan segera kembali. Data Anda aman. Coba lagi dalam beberapa menit.',
+        description: 'Sistem sedang diperbarui dan akan segera kembali. Coba lagi dalam beberapa menit.',
         illustration: 'maintenance',
         action: 'retry',
     },

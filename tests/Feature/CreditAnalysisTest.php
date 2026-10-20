@@ -122,6 +122,17 @@ it('records a check of each collateral of the file and refuses one that is not t
     expect($check->brand)->toBe('HONDA')->and($check->appraisal_value)->toBe(7_500_000)->and($check->kind)->toBe('vehicle');
 });
 
+it('refuses numbers with more decimals than their column keeps instead of rounding them silently', function () {
+    ['analyst' => $analyst, 'loan' => $loan] = analysisSetup();
+    $this->actingAs($analyst);
+    $this->post(route('credit-analysis.businesses.store', $loan), ['type' => 'farm', 'name' => 'sawah'])->assertRedirect();
+    $business = AnalysisBusiness::firstOrFail();
+
+    $this->put(route('credit-analysis.memorandum.update', $loan), ['interest_rate' => '1.234'])->assertSessionHasErrors('interest_rate');
+    $this->put(route('credit-analysis.businesses.update', [$loan, $business]), ['harvest_quintals' => '10.123'])->assertSessionHasErrors('harvest_quintals');
+    $this->put(route('credit-analysis.businesses.update', [$loan, $business]), ['items' => [['group' => 'goods', 'name' => 'seed', 'qty' => '1.005']]])->assertSessionHasErrors('items.0.qty');
+});
+
 it('creates, changes and deletes a business, working out its figures', function () {
     ['analyst' => $analyst, 'loan' => $loan] = analysisSetup();
     $this->actingAs($analyst);

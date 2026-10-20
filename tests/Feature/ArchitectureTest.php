@@ -181,3 +181,27 @@ it('names the device position only through the shared geolocation helper, never 
 
     expect($offenders)->toBe([]);
 });
+
+it('keeps a helper that two test files share in tests/Pest.php, so each file passes when run alone', function () {
+    $sources = [];
+
+    foreach (glob(base_path('tests/Feature/*Test.php')) ?: [] as $path) {
+        $sources[$path] = (string) file_get_contents($path);
+    }
+
+    $offenders = [];
+
+    foreach ($sources as $path => $source) {
+        preg_match_all('/^function (\w+)\(/m', $source, $defined);
+
+        foreach ($defined[1] as $name) {
+            foreach ($sources as $other => $otherSource) {
+                if ($other !== $path && preg_match('/(?<![\w>:$])'.$name.'\(/', $otherSource) === 1) {
+                    $offenders[] = basename($other).' calls '.$name.'() defined in '.basename($path);
+                }
+            }
+        }
+    }
+
+    expect($offenders)->toBe([]);
+});

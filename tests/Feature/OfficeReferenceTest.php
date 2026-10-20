@@ -11,7 +11,6 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     $this->actingAs(superAdmin());
-    $this->office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
 });
 
 function loanAt(Office $office): LoanApplication
@@ -23,35 +22,39 @@ function loanAt(Office $office): LoanApplication
 }
 
 it('refuses to delete an office that an active person or application uses, with the count', function () {
-    User::factory()->create(['office_id' => $this->office->id]);
-    loanAt($this->office);
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
+    User::factory()->create(['office_id' => $office->id]);
+    loanAt($office);
 
-    $this->delete(route('references.destroy', ['offices', $this->office->id]))
+    $this->delete(route('references.destroy', ['offices', $office->id]))
         ->assertSessionHas('error', fn (string $message): bool => str_contains($message, '1 pengajuan kredit') || str_contains($message, '1 pengguna'));
 
     expect(Office::count())->toBe(1);
 });
 
 it('refuses to delete an office that only deactivated people or deleted applications still hold', function (string $holder) {
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
     if ($holder === 'user') {
-        User::factory()->create(['office_id' => $this->office->id])->delete();
+        User::factory()->create(['office_id' => $office->id])->delete();
     } else {
-        loanAt($this->office)->delete();
+        loanAt($office)->delete();
     }
 
-    $this->delete(route('references.destroy', ['offices', $this->office->id]))->assertSessionHas('error');
+    $this->delete(route('references.destroy', ['offices', $office->id]))->assertSessionHas('error');
 
     expect(Office::count())->toBe(1);
 })->with(['deactivated user' => 'user', 'deleted application' => 'loan']);
 
 it('shows the same count in the Dipakai column as the delete refusal uses', function () {
-    User::factory()->create(['office_id' => $this->office->id])->delete();
-    loanAt($this->office)->delete();
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
+    User::factory()->create(['office_id' => $office->id])->delete();
+    loanAt($office)->delete();
 
     $this->get(route('references.index', 'offices'))->assertInertia(fn (Assert $page) => $page->where('items.data.0.usage_count', 2));
 });
 
 it('answers one validation sentence, not a server error, for hostile values', function (array $input, string $field) {
+    Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
     $this->post(route('references.store', 'offices'), $input)->assertSessionHasErrors($field);
 
     expect(Office::count())->toBe(1);
@@ -90,6 +93,7 @@ it('answers not found, not a server error, for an id that does not exist or is n
 });
 
 it('turns a code taken at the same moment into a validation sentence and saves nothing', function () {
+    Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
     Office::creating(function (Office $office): void {
         if ($office->code === '11') {
             throw new UniqueConstraintViolationException('sqlite', 'insert into offices', [], new Exception('UNIQUE constraint failed: offices.code'));
@@ -102,9 +106,10 @@ it('turns a code taken at the same moment into a validation sentence and saves n
 });
 
 it('keeps every action for Super Admin only', function (string $method, string $uri) {
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
     $this->actingAs(userWith(['dashboard.view', 'loan-applications.view', 'loan-applications.manage']));
 
-    $this->{$method}(str_replace('{id}', (string) $this->office->id, $uri), ['code' => '11', 'alias' => 'AAA', 'name' => 'X'])->assertForbidden();
+    $this->{$method}(str_replace('{id}', (string) $office->id, $uri), ['code' => '11', 'alias' => 'AAA', 'name' => 'X'])->assertForbidden();
 
     expect(Office::count())->toBe(1);
 })->with([['get', '/references/offices'], ['post', '/references/offices'], ['put', '/references/offices/{id}'], ['delete', '/references/offices/{id}']]);
@@ -126,14 +131,16 @@ it('writes the audit entry of every change with the office as subject', function
 });
 
 it('does not write an audit entry when a save changes nothing', function () {
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
     AuditLog::query()->getQuery()->delete();
 
-    $this->put(route('references.update', ['offices', $this->office->id]), ['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan'])->assertSessionHasNoErrors();
+    $this->put(route('references.update', ['offices', $office->id]), ['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan'])->assertSessionHasNoErrors();
 
     expect(AuditLog::query()->count())->toBe(0);
 });
 
 it('refuses an office from Codex whose code, alias or name does not fit the columns, and keeps the person out', function (array $office) {
+    Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
     Http::swap(new Factory);
     config(['services.codex.endpoint' => 'https://codex.test', 'services.codex.token' => 'test-token']);
     Http::fake(['codex.test/*' => Http::response(['success' => true, 'data' => [
@@ -152,9 +159,10 @@ it('refuses an office from Codex whose code, alias or name does not fit the colu
 ]);
 
 it('shows an office without alias with its name, not with an empty label', function () {
-    $this->office->update(['alias' => null]);
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
+    $office->update(['alias' => null]);
 
-    $loan = loanAt($this->office);
+    $loan = loanAt($office);
 
     $this->get(route('loan-applications.show', $loan))
         ->assertInertia(fn (Assert $page) => $page->where('references.offices.0.label', 'Pamanukan'));
@@ -169,31 +177,34 @@ it('keeps the limits of the form and of what Codex may send in step', function (
 });
 
 it('keeps the code of an office that people or applications use, and lets an unused one change', function (string $holder) {
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
     if ($holder === 'user') {
-        User::factory()->create(['office_id' => $this->office->id]);
+        User::factory()->create(['office_id' => $office->id]);
     } elseif ($holder === 'deactivated user') {
-        User::factory()->create(['office_id' => $this->office->id])->delete();
+        User::factory()->create(['office_id' => $office->id])->delete();
     } else {
-        loanAt($this->office);
+        loanAt($office);
     }
 
-    $this->put(route('references.update', ['offices', $this->office->id]), ['code' => '99', 'alias' => 'PMK', 'name' => 'Pamanukan'])->assertSessionHasErrors('code');
-    expect($this->office->fresh()->code)->toBe('00');
+    $this->put(route('references.update', ['offices', $office->id]), ['code' => '99', 'alias' => 'PMK', 'name' => 'Pamanukan'])->assertSessionHasErrors('code');
+    expect($office->fresh()->code)->toBe('00');
 
-    $this->put(route('references.update', ['offices', $this->office->id]), ['code' => '00', 'alias' => 'PMK', 'name' => 'Renamed'])->assertSessionHasNoErrors();
-    expect($this->office->fresh()->name)->toBe('Renamed');
+    $this->put(route('references.update', ['offices', $office->id]), ['code' => '00', 'alias' => 'PMK', 'name' => 'Renamed'])->assertSessionHasNoErrors();
+    expect($office->fresh()->name)->toBe('Renamed');
 })->with(['active user' => 'user', 'deactivated user' => 'deactivated user', 'application' => 'loan']);
 
 it('changes the code of an office nobody uses', function () {
-    $this->put(route('references.update', ['offices', $this->office->id]), ['code' => '99', 'alias' => 'PMK', 'name' => 'Pamanukan'])->assertSessionHasNoErrors();
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
+    $this->put(route('references.update', ['offices', $office->id]), ['code' => '99', 'alias' => 'PMK', 'name' => 'Pamanukan'])->assertSessionHasNoErrors();
 
-    expect($this->office->fresh()->code)->toBe('99');
+    expect($office->fresh()->code)->toBe('99');
 });
 
 it('keeps the name as written and tells on the form that Codex refreshes name and alias', function () {
-    $this->put(route('references.update', ['offices', $this->office->id]), ['code' => '00', 'alias' => 'pmk', 'name' => 'Pamanukan Baru'])->assertSessionHasNoErrors();
+    $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
+    $this->put(route('references.update', ['offices', $office->id]), ['code' => '00', 'alias' => 'pmk', 'name' => 'Pamanukan Baru'])->assertSessionHasNoErrors();
 
-    expect(Office::query()->find($this->office->id, ['alias', 'name'])->toArray())->toBe(['alias' => 'PMK', 'name' => 'Pamanukan Baru']);
+    expect(Office::query()->find($office->id, ['alias', 'name'])->toArray())->toBe(['alias' => 'PMK', 'name' => 'Pamanukan Baru']);
 
     $this->get(route('references.index', 'offices'))->assertInertia(fn (Assert $page) => $page
         ->where('resource.fields.1.hint', fn (string $hint): bool => str_contains($hint, 'Codex'))

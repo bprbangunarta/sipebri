@@ -13,13 +13,19 @@ use Illuminate\Support\Arr;
 
 beforeEach(function () {
     $this->actingAs(superAdmin());
-    $this->product = Product::create(['code' => 'P1', 'alias' => 'KRU', 'name' => 'KRU', 'is_active' => true]);
-    $this->seed([RoleSeeder::class, CommitteeSeeder::class]);
-    $this->default = CommitteeLevels::defaultPath();
-    $this->own = CommitteePath::create(['product_id' => $this->product->id, 'condition' => 'EXTRA', 'mechanism' => 'plafon', 'is_active' => true, 'follows_default' => false]);
-    $this->own->tiers()->create(['sort' => 1, 'label' => 'A', 'role' => 'Direktur Utama', 'min_amount' => 0, 'max_amount' => null, 'can_approve' => true]);
-    $this->tier = $this->own->tiers()->first();
 });
+
+/** A product, the default levels, and a path of its own with one level. */
+function committeeFixture(): array
+{
+    $product = Product::create(['code' => 'P1', 'alias' => 'KRU', 'name' => 'KRU', 'is_active' => true]);
+    test()->seed([RoleSeeder::class, CommitteeSeeder::class]);
+    $default = CommitteeLevels::defaultPath();
+    $own = CommitteePath::create(['product_id' => $product->id, 'condition' => 'EXTRA', 'mechanism' => 'plafon', 'is_active' => true, 'follows_default' => false]);
+    $own->tiers()->create(['sort' => 1, 'label' => 'A', 'role' => 'Direktur Utama', 'min_amount' => 0, 'max_amount' => null, 'can_approve' => true]);
+
+    return ['product' => $product, 'default' => $default, 'own' => $own, 'tier' => $own->tiers()->first()];
+}
 
 function tierInput(array $overrides = []): array
 {
@@ -27,11 +33,12 @@ function tierInput(array $overrides = []): array
 }
 
 it('keeps the default path as it is: only its levels change, not its identity or whether it exists', function (array $change) {
-    $before = Arr::only($this->default->getAttributes(), ['product_id', 'condition', 'mechanism', 'is_active']);
+    ['default' => $default] = committeeFixture();
+    $before = Arr::only($default->getAttributes(), ['product_id', 'condition', 'mechanism', 'is_active']);
 
-    $this->put(route('committees.update', $this->default), [...$before, ...$change])->assertForbidden();
+    $this->put(route('committees.update', $default), [...$before, ...$change])->assertForbidden();
 
-    expect(Arr::only($this->default->fresh()->getAttributes(), ['product_id', 'condition', 'mechanism', 'is_active']))->toBe($before);
+    expect(Arr::only($default->fresh()->getAttributes(), ['product_id', 'condition', 'mechanism', 'is_active']))->toBe($before);
 })->with([
     'other mechanism' => [['mechanism' => 'hierarki']],
     'a product' => [['product_id' => 1]],
@@ -40,42 +47,46 @@ it('keeps the default path as it is: only its levels change, not its identity or
 ]);
 
 it('refuses to delete the last level of the default path, which every follower copies', function () {
-    foreach ($this->default->tiers()->orderByDesc('sort')->get()->slice(1) as $tier) {
-        $this->delete(route('committees.tiers.destroy', [$this->default, $tier]))->assertSessionHas('success');
+    ['default' => $default] = committeeFixture();
+    foreach ($default->tiers()->orderByDesc('sort')->get()->slice(1) as $tier) {
+        $this->delete(route('committees.tiers.destroy', [$default, $tier]))->assertSessionHas('success');
     }
 
-    $last = $this->default->tiers()->firstOrFail();
+    $last = $default->tiers()->firstOrFail();
     $followers = CommitteePath::query()->where('follows_default', true)->first();
 
-    $this->delete(route('committees.tiers.destroy', [$this->default, $last]))->assertSessionHas('error');
+    $this->delete(route('committees.tiers.destroy', [$default, $last]))->assertSessionHas('error');
 
-    expect($this->default->tiers()->count())->toBe(1)->and($followers->fresh()->tiers()->count())->toBe(1);
+    expect($default->tiers()->count())->toBe(1)->and($followers->fresh()->tiers()->count())->toBe(1);
 });
 
 it('refuses to delete a path that a deleted application still holds, in one sentence', function () {
+    ['own' => $own] = committeeFixture();
     LoanApplication::create([
         'application_code' => '00700001', 'application_date' => now(), 'status' => 'draft', 'nik' => '1', 'full_name' => 'A',
-        'created_by' => auth()->id(), 'committee_path_id' => $this->own->id,
+        'created_by' => auth()->id(), 'committee_path_id' => $own->id,
     ])->delete();
 
-    $this->delete(route('committees.destroy', $this->own))->assertSessionHas('error');
+    $this->delete(route('committees.destroy', $own))->assertSessionHas('error');
 
-    expect(CommitteePath::find($this->own->id))->not->toBeNull();
+    expect(CommitteePath::find($own->id))->not->toBeNull();
 });
 
 it('answers not found for a level that belongs to another path', function (string $method, string $uri) {
-    $other = CommitteePath::create(['product_id' => $this->product->id, 'condition' => 'OTHER', 'mechanism' => 'plafon', 'is_active' => true, 'follows_default' => false]);
+    ['product' => $product, 'own' => $own] = committeeFixture();
+    $other = CommitteePath::create(['product_id' => $product->id, 'condition' => 'OTHER', 'mechanism' => 'plafon', 'is_active' => true, 'follows_default' => false]);
     $stranger = $other->tiers()->create(['sort' => 1, 'label' => 'X', 'role' => 'Direktur Bisnis', 'min_amount' => 0, 'can_approve' => true]);
 
-    $this->{$method}(str_replace(['{path}', '{tier}'], [$this->own->id, $stranger->id], $uri), tierInput())->assertNotFound();
+    $this->{$method}(str_replace(['{path}', '{tier}'], [$own->id, $stranger->id], $uri), tierInput())->assertNotFound();
 
     expect($stranger->fresh()->label)->toBe('X')->and($other->tiers()->count())->toBe(1);
 })->with([['put', '/committees/{path}/tiers/{tier}'], ['delete', '/committees/{path}/tiers/{tier}'], ['put', '/committees/{path}/tiers/{tier}/move/up']]);
 
 it('answers one validation sentence for a bad level and saves nothing', function (array $overrides, string $field) {
-    $this->post(route('committees.tiers.store', $this->own), tierInput($overrides))->assertSessionHasErrors($field);
+    ['own' => $own] = committeeFixture();
+    $this->post(route('committees.tiers.store', $own), tierInput($overrides))->assertSessionHasErrors($field);
 
-    expect($this->own->tiers()->count())->toBe(1);
+    expect($own->tiers()->count())->toBe(1);
 })->with([
     'no role' => [['role' => ''], 'role'],
     'unknown role' => [['role' => 'Tidak Ada'], 'role'],
@@ -89,9 +100,10 @@ it('answers one validation sentence for a bad level and saves nothing', function
 ]);
 
 it('answers one validation sentence for a bad path and saves nothing', function (array $overrides, string $field) {
+    ['product' => $product] = committeeFixture();
     $count = CommitteePath::count();
 
-    $this->post(route('committees.store'), array_merge(['product_id' => $this->product->id, 'condition' => 'NEW', 'mechanism' => 'plafon', 'is_active' => true], $overrides))->assertSessionHasErrors($field);
+    $this->post(route('committees.store'), array_merge(['product_id' => $product->id, 'condition' => 'NEW', 'mechanism' => 'plafon', 'is_active' => true], $overrides))->assertSessionHasErrors($field);
 
     expect(CommitteePath::count())->toBe($count);
 })->with([
@@ -119,9 +131,10 @@ it('answers a hostile authority question with a validation error, never a server
 ]);
 
 it('keeps every page and action of Data Komite for Super Admin only', function (string $method, string $uri) {
+    ['own' => $own, 'tier' => $tier] = committeeFixture();
     $this->actingAs(userWith(['dashboard.view', 'loan-applications.view', 'approvals.view']));
 
-    $this->{$method}(str_replace(['{path}', '{tier}', '{user}'], [$this->own->id, $this->tier->id, auth()->id()], $uri))->assertForbidden();
+    $this->{$method}(str_replace(['{path}', '{tier}', '{user}'], [$own->id, $tier->id, auth()->id()], $uri))->assertForbidden();
 })->with([
     ['get', '/committees'], ['get', '/committees/levels'], ['get', '/committees/special-rules'], ['get', '/committees/members'], ['get', '/committees/exceptions'],
     ['get', '/committees/authority?amount=1'], ['get', '/committees/{path}'], ['post', '/committees'], ['put', '/committees/{path}'], ['delete', '/committees/{path}'],
@@ -130,11 +143,12 @@ it('keeps every page and action of Data Komite for Super Admin only', function (
 ]);
 
 it('writes an audit entry for every change to paths and levels', function () {
+    ['product' => $product] = committeeFixture();
     AuditLog::query()->getQuery()->delete();
 
-    $this->post(route('committees.store'), ['product_id' => $this->product->id, 'condition' => 'NEW', 'mechanism' => 'plafon', 'is_active' => true]);
+    $this->post(route('committees.store'), ['product_id' => $product->id, 'condition' => 'NEW', 'mechanism' => 'plafon', 'is_active' => true]);
     $path = CommitteePath::query()->where('condition', 'NEW')->firstOrFail();
-    $this->put(route('committees.update', $path), ['product_id' => $this->product->id, 'condition' => 'NEW', 'mechanism' => 'plafon', 'is_active' => false]);
+    $this->put(route('committees.update', $path), ['product_id' => $product->id, 'condition' => 'NEW', 'mechanism' => 'plafon', 'is_active' => false]);
     $this->post(route('committees.tiers.store', $path), tierInput());
     $tier = $path->tiers()->firstOrFail();
     $this->put(route('committees.tiers.update', [$path, $tier]), tierInput(['label' => 'Baru']));
@@ -147,6 +161,7 @@ it('writes an audit entry for every change to paths and levels', function () {
 });
 
 it('never puts a national ID in the audit log when a member NIK is saved or removed', function () {
+    committeeFixture();
     $member = User::factory()->create()->assignRole('Direktur Bisnis');
 
     $this->put(route('committees.members.update', $member), ['nik' => '3201010101010001'])->assertSessionHasNoErrors();
@@ -165,6 +180,7 @@ dataset('member sorts', function () {
 });
 
 it('sorts the members by every column in both directions', function (string $key, string $direction) {
+    committeeFixture();
     $office = Office::create(['code' => '00', 'alias' => 'PMK', 'name' => 'Pamanukan']);
     $rows = [['Bani', 'zeta', 'Direktur Utama', null], ['Citra', 'alpha', 'Direktur Bisnis', 'codex'], ['Adi', 'mike', 'Kepala Bagian Analis', 'manual']];
 
@@ -195,13 +211,14 @@ it('hands every tab of Data Komite the options of the authority check, and every
 })->with([['committees.levels', 'levels'], ['committees.special-rules', 'special-rules'], ['committees.members', 'members'], ['committees.exceptions', 'exceptions']]);
 
 it('keeps the notes of the seeded paths in Indonesian, also when a database still holds the old English ones', function () {
-    $this->default->update(['note' => 'Authority levels shared by every path that follows the defaults.']);
+    ['default' => $default] = committeeFixture();
+    $default->update(['note' => 'Authority levels shared by every path that follows the defaults.']);
     CommitteePath::query()->where('is_default', false)->update(['note' => 'Loans for employees.']);
 
     $this->seed(CommitteeSeeder::class);
 
     $notes = CommitteePath::query()->whereNotNull('note')->where('condition', '!=', 'EXTRA')->pluck('note')->unique()->all();
 
-    expect($this->default->fresh()->note)->toBe('Jenjang wewenang yang dipakai bersama oleh semua jalur yang mengikuti bawaan.')
+    expect($default->fresh()->note)->toBe('Jenjang wewenang yang dipakai bersama oleh semua jalur yang mengikuti bawaan.')
         ->and(collect($notes)->filter(fn (string $note): bool => preg_match('/\b(Authority|Actual|Loans|Customers|Applies)\b/', $note) === 1)->all())->toBe([]);
 });

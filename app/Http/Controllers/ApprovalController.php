@@ -186,7 +186,7 @@ class ApprovalController extends Controller
         abort_if($step === null, 422, 'Jalur komite berkas ini belum punya pemutus.');
         abort_unless(ApprovalFlow::mayDecide($user, $step, $loanApplication), 403, 'Anda bukan pemutus pada jenjang ini.');
 
-        $percent = ['required', 'numeric', 'min:0', 'max:100'];
+        $percent = ['required', 'decimal:0,2', 'min:0', 'max:100'];
         $data = $request->validate([
             'decision' => ['required', Rule::in(ApprovalFlow::allowed($step, (int) $request->input('amount')))],
             'method_id' => ['required', 'integer', 'exists:methods,id'],

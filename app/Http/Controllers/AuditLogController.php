@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Audit\Audit;
 use App\Audit\AuditLog;
 use App\Audit\AuditVerifier;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -25,7 +24,7 @@ class AuditLogController extends Controller
     {
         $filters = $this->filters($request);
         $this->recordView($request, $filters);
-        $logs = $this->query($filters)->orderByDesc('id')
+        $logs = AuditLog::query()->matching($filters)->orderByDesc('id')
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), [10, 25, 50], true) ? (int) $filters['per_page'] : 25)
             ->withQueryString();
 
@@ -72,10 +71,7 @@ class AuditLogController extends Controller
      */
     private function recordView(Request $request, array $filters): void
     {
-        $recent = AuditLog::query()->where('event', 'audit_logs.viewed')->where('user_id', $request->user()->id)
-            ->where('created_at', '>', now()->subMinutes(self::VIEW_QUIET_MINUTES)->format('Y-m-d H:i:s.u'))->exists();
-
-        if (! $recent) {
+        if (! AuditLog::openedBy((int) $request->user()?->id, self::VIEW_QUIET_MINUTES)) {
             Audit::record('audit_logs.viewed', 'audit_logs', 'viewed', context: ['filters' => array_filter($filters)], label: 'Audit log');
         }
     }
@@ -89,7 +85,7 @@ class AuditLogController extends Controller
             $out = fopen('php://output', 'w') ?: throw new RuntimeException('Cannot open the output stream.');
             fputcsv($out, ['id', 'time', 'user', 'username', 'event', 'module', 'action', 'outcome', 'subject_type', 'subject_id', 'subject', 'old_values', 'new_values', 'context', 'ip', 'method', 'url', 'request_id', 'hash']);
 
-            $this->query($filters)->orderBy('id')->chunkById(500, function ($chunk) use ($out): void {
+            AuditLog::query()->matching($filters)->orderBy('id')->chunkById(500, function ($chunk) use ($out): void {
                 foreach ($chunk as $log) {
                     fputcsv($out, array_map($this->csvCell(...), [
                         $log->id, $log->created_at->format('Y-m-d H:i:s.u'), $log->user_name, $log->username, $log->event, $log->module, $log->action, $log->outcome,
@@ -124,24 +120,6 @@ class AuditLogController extends Controller
             'to' => ['nullable', 'date_format:Y-m-d'],
             'per_page' => ['nullable', 'integer'],
         ]);
-    }
-
-    /**
-     * @param  array<string, mixed>  $filters
-     * @return Builder<AuditLog>
-     */
-    private function query(array $filters): Builder
-    {
-        return AuditLog::query()
-            ->when($filters['search'] ?? null, function (Builder $q, string $term): void {
-                $like = '%'.addcslashes($term, '%_\\').'%';
-                $q->where(fn (Builder $w) => $w->where('user_name', 'like', $like)->orWhere('username', 'like', $like)->orWhere('event', 'like', $like)
-                    ->orWhere('subject_label', 'like', $like)->orWhere('ip_address', 'like', $like)->orWhere('request_id', 'like', $like));
-            })
-            ->when($filters['module'] ?? null, fn (Builder $q, string $module) => $q->where('module', $module))
-            ->when($filters['outcome'] ?? null, fn (Builder $q, string $outcome) => $q->where('outcome', $outcome))
-            ->when($filters['from'] ?? null, fn (Builder $q, string $from) => $q->where('created_at', '>=', $from.' 00:00:00.000000'))
-            ->when($filters['to'] ?? null, fn (Builder $q, string $to) => $q->where('created_at', '<=', $to.' 23:59:59.999999'));
     }
 
     /** Spreadsheet formula characters at the start of a cell are neutralised so an exported value cannot run as a formula. */

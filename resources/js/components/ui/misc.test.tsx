@@ -34,10 +34,17 @@ describe('PageHeader', () => {
     });
 
     it('shows the title and the description', () => {
-        render(<PageHeader title="Audit Logs" description="Catatan anti-rusak" />);
+        render(<PageHeader title="Audit Logs" description="Catatan perubahan data" />);
 
         expect(screen.getByRole('heading', { level: 1, name: 'Audit Logs' })).toBeInTheDocument();
-        expect(screen.getByText('Catatan anti-rusak')).toBeInTheDocument();
+        expect(screen.getByText('Catatan perubahan data')).toBeInTheDocument();
+    });
+
+    it('is an h2 when it is shown as an example inside a page that already has its h1', () => {
+        render(<PageHeader title="Contoh" heading="h2" />);
+
+        expect(screen.getByRole('heading', { level: 2, name: 'Contoh' })).toBeInTheDocument();
+        expect(screen.queryByRole('heading', { level: 1 })).not.toBeInTheDocument();
     });
 });
 

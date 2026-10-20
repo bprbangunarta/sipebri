@@ -145,7 +145,7 @@ class AnalysisBusinessController extends Controller
             'items' => ['sometimes', 'array', 'max:100'],
             'items.*.group' => ['required', Rule::in($groups)],
             'items.*.name' => ['required', 'string', 'max:150'],
-            'items.*.qty' => ['nullable', 'numeric', 'min:0', 'max:99999999'],
+            'items.*.qty' => ['nullable', 'decimal:0,2', 'min:0', 'max:99999999'],
             'items.*.price' => ['nullable', 'integer', 'min:0', 'max:999999999999'],
             'items.*.sell_price' => ['nullable', 'integer', 'min:0', 'max:999999999999'],
         ];
@@ -159,7 +159,7 @@ class AnalysisBusinessController extends Controller
                 'economy_sector' => ['sometimes', 'nullable', Rule::in(AnalysisBusiness::SECTORS)],
                 'plant_type' => ['sometimes', 'nullable', Rule::in(AnalysisBusiness::PLANTS)],
                 'area_own' => $money, 'area_rent' => $money, 'area_pawn' => $money,
-                'harvest_quintals' => ['sometimes', 'nullable', 'numeric', 'min:0', 'max:99999999'],
+                'harvest_quintals' => ['sometimes', 'nullable', 'decimal:0,2', 'min:0', 'max:99999999'],
                 'price_per_quintal' => $money, 'addition_result' => $money, 'other_bank_loan' => $money, 'principal_installment' => $money,
                 ...array_fill_keys(AnalysisBusiness::FARM_COSTS, $money),
             ],

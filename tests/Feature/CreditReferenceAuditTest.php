@@ -176,3 +176,35 @@ it('records the loss of the parameters of a product that is deleted with it', fu
 
     expect($deleted)->not->toBeNull()->and($deleted->old_values)->toContain('50000000');
 });
+
+it('counts what holds a method or installment in the same number of queries however many rows the page has', function (string $slug, Closure $make) {
+    $queriesFor = function (int $rows) use ($slug, $make): int {
+        foreach (range(1, $rows) as $i) {
+            $make($i);
+        }
+
+        $this->get(route('references.index', $slug))->assertOk();
+        DB::flushQueryLog();
+        DB::enableQueryLog();
+        $this->get(route('references.index', ['resource' => $slug, 'per_page' => 50]))->assertOk();
+        $count = count(DB::getQueryLog());
+        DB::disableQueryLog();
+
+        return $count;
+    };
+
+    $few = $queriesFor(2);
+    $many = $queriesFor(10);
+
+    expect($many)->toBe($few);
+})->with([
+    'methods' => ['interest-methods', fn (int $i) => Method::create(['code' => 'M'.$i.microtime(true), 'name' => 'FLAT '.$i.microtime(true)])],
+    'installments' => ['installments', fn (int $i) => Installment::create(['code' => 'I'.$i.microtime(true), 'name' => 'MONTHLY '.$i.microtime(true), 'period_months' => $i])],
+]);
+
+it('shows the usage count of a method held only by a product choice list', function () {
+    $method = Method::create(['code' => 'M1', 'name' => 'FLAT']);
+    ProductParameter::create(['product_id' => Product::create(['code' => 'P1', 'alias' => 'PA', 'name' => 'P', 'is_active' => true])->id, 'allowed_method_ids' => [$method->id]]);
+
+    $this->get(route('references.index', 'interest-methods'))->assertInertia(fn ($page) => $page->where('items.data.0.usage_count', 1));
+});

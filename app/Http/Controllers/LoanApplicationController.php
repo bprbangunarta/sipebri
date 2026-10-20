@@ -185,7 +185,7 @@ class LoanApplicationController extends Controller
             'application_date' => ['required', 'date'],
             'product_id' => ['required', 'integer', Rule::exists('products', 'id')->where('is_active', true)],
             'committee_path_id' => ['required', 'integer', Rule::exists('committee_paths', 'id')->where('is_active', true)],
-            'interest_rate' => ['required', 'numeric', 'min:0', 'max:100'],
+            'interest_rate' => ['required', 'decimal:0,2', 'min:0', 'max:100'],
             'usage_type' => ['required', Rule::in(LoanApplication::USAGE_TYPES)],
             'office_id' => ['required', 'integer', 'exists:offices,id'],
             'supervisor_id' => ['required', 'integer', function (string $attribute, mixed $value, \Closure $fail) use ($conflictId): void {
@@ -230,8 +230,11 @@ class LoanApplicationController extends Controller
         $this->authorize('modify', $loanApplication);
         $data = $request->validate(['collateral_id' => ['required', 'integer', 'exists:collaterals,id']], [], ['collateral_id' => 'jaminan']);
 
-        $loanApplication->collaterals()->syncWithoutDetaching([$data['collateral_id']]);
-        Audit::record('loan_applications.collateral_attached', 'loan_applications', 'collateral_attached', $loanApplication, new: ['collateral_id' => (int) $data['collateral_id']]);
+        $changes = $loanApplication->collaterals()->syncWithoutDetaching([$data['collateral_id']]);
+
+        if ($changes['attached'] !== []) {
+            Audit::record('loan_applications.collateral_attached', 'loan_applications', 'collateral_attached', $loanApplication, new: ['collateral_id' => (int) $data['collateral_id']]);
+        }
 
         return back()->with('success', 'Jaminan berhasil dilekatkan.');
     }
@@ -265,8 +268,10 @@ class LoanApplicationController extends Controller
     public function detachCollateral(LoanApplication $loanApplication, Collateral $collateral): RedirectResponse
     {
         $this->authorize('modify', $loanApplication);
-        $loanApplication->collaterals()->detach($collateral->id);
-        Audit::record('loan_applications.collateral_detached', 'loan_applications', 'collateral_detached', $loanApplication, ['collateral_id' => $collateral->id]);
+
+        if ($loanApplication->collaterals()->detach($collateral->id) > 0) {
+            Audit::record('loan_applications.collateral_detached', 'loan_applications', 'collateral_detached', $loanApplication, ['collateral_id' => $collateral->id]);
+        }
 
         return back()->with('success', 'Jaminan berhasil dilepas.');
     }

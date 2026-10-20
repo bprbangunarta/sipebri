@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Audit\Auditable;
+use App\Support\ChoiceUsage;
 use App\Support\CountsExtraUsage;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
@@ -35,8 +36,8 @@ class Installment extends Model implements CountsExtraUsage
         return $this->hasMany(ProductParameter::class, 'default_installment_id');
     }
 
-    public function extraUsage(): array
+    public static function extraUsageFor(array $ids): array
     {
-        return ['pilihan angsuran produk' => ProductParameter::query()->whereJsonContains('allowed_installment_ids', $this->id)->count()];
+        return array_map(fn (int $count): array => ['pilihan angsuran produk' => $count], ChoiceUsage::count('allowed_installment_ids', $ids));
     }
 }

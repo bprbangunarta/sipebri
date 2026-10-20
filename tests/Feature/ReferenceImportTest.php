@@ -31,6 +31,35 @@ function workbook(array $rows, string $name = 'resorts.xlsx'): UploadedFile
     return new UploadedFile($path, $name, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', null, true);
 }
 
+/**
+ * An upload that is a zip archive holding exactly these parts.
+ *
+ * @param  array<string, string>  $parts
+ */
+function zipUpload(array $parts): UploadedFile
+{
+    $path = tempnam(sys_get_temp_dir(), 'xlsx');
+    $zip = new ZipArchive;
+    $zip->open($path, ZipArchive::OVERWRITE);
+
+    foreach ($parts as $name => $content) {
+        $zip->addFromString($name, $content);
+    }
+
+    $zip->close();
+
+    return new UploadedFile($path, 'resorts.xlsx', null, null, true);
+}
+
+function truncatedWorkbook(): UploadedFile
+{
+    $bytes = (string) file_get_contents(workbook([['Kode', 'Nama'], ['R1', 'One']])->getPathname());
+    $path = tempnam(sys_get_temp_dir(), 'xlsx');
+    file_put_contents($path, substr($bytes, 0, intdiv(strlen($bytes), 2)));
+
+    return new UploadedFile($path, 'resorts.xlsx', null, null, true);
+}
+
 function importResorts(UploadedFile $file)
 {
     return test()->post(route('references.import', 'resorts'), ['file' => $file]);
@@ -134,6 +163,9 @@ it('refuses a file that is not a workbook of the template', function (UploadedFi
 
     expect(Institution::count())->toBe(0);
 })->with([
+    'truncated workbook' => fn () => truncatedWorkbook(),
+    'zip without a workbook' => fn () => zipUpload(['notes.txt' => 'x']),
+    'workbook parts that are not xml' => fn () => zipUpload(['[Content_Types].xml' => '<<<', 'xl/workbook.xml' => '<<<', 'xl/worksheets/sheet1.xml' => '<<<']),
     'text renamed to xlsx' => fn () => UploadedFile::fake()->createWithContent('resorts.xlsx', 'Kode;Nama'),
     'wrong extension' => fn () => workbook([['Kode', 'Nama'], ['R1', 'A']], 'resorts.csv'),
     'no rows' => fn () => workbook([]),
