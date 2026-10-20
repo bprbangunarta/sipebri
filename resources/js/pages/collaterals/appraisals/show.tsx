@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AppraisalBlock } from '@/components/appraisal/appraisal-block';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/dialog';
+import { PanelMenu } from '@/components/ui/panel-menu';
 import { Alert, Badge, Card, CardBody, CardFooter, CardHeader, PageHeader } from '@/components/ui/misc';
 import { formatDate, formatDateTime, formatNumber } from '@/lib/format';
 import { Stat } from '@/pages/credit-analysis/parts';
@@ -219,35 +220,12 @@ export default function AppraisalShow({
             </Card>
 
             <Card className="grid lg:grid-cols-[16rem_minmax(0,1fr)]">
-                <nav
-                    aria-label="Bagian penilaian"
-                    className="flex flex-row gap-1 overflow-x-auto border-b border-line p-2 lg:flex-col lg:gap-0 lg:divide-y lg:divide-line lg:border-r lg:border-b-0"
-                >
-                    <p className="hidden px-2.5 pt-1 pb-1.5 text-2xs font-semibold tracking-wider text-muted uppercase lg:block">Bagian penilaian</p>
-                    {template.sections.map((s) => {
-                        const unsaved = canEdit && dirty(s);
-
-                        return (
-                            <button
-                                key={s.key}
-                                type="button"
-                                aria-current={s.key === active ? 'true' : undefined}
-                                onClick={() => setActive(s.key)}
-                                className={`flex min-h-8 shrink-0 cursor-pointer items-center gap-2 rounded-md px-2.5 py-1.5 text-left text-sm font-medium whitespace-nowrap capitalize transition-colors lg:whitespace-normal ${s.key === active ? 'bg-primary-soft text-primary' : 'text-muted hover:bg-canvas hover:text-ink'}`}
-                            >
-                                <span className="flex-1">{s.label}</span>
-                                <span className="flex w-2 justify-center">
-                                    {unsaved && (
-                                        <>
-                                            <span className="size-1.5 rounded-full bg-warning" aria-hidden="true" />
-                                            <span className="sr-only">Belum disimpan</span>
-                                        </>
-                                    )}
-                                </span>
-                            </button>
-                        );
-                    })}
-                </nav>
+                <PanelMenu
+                    label="Bagian penilaian"
+                    items={template.sections.map((s) => ({ key: s.key, label: s.label, unsaved: canEdit && dirty(s) }))}
+                    active={active}
+                    onSelect={setActive}
+                />
 
                 <div className="min-w-0">
                     <CardHeader

@@ -23,6 +23,7 @@ import { Input, InputGroup } from '@/components/ui/input';
 import { MaskedInput } from '@/components/ui/masked-input';
 import { Alert, Badge, Card, CardBody, CardFooter, CardHeader, EmptyState, ErrorState, PageHeader, Skeleton } from '@/components/ui/misc';
 import type { BadgeTone } from '@/components/ui/misc';
+import { PanelMenu } from '@/components/ui/panel-menu';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -325,6 +326,7 @@ function InputExamples() {
 /** A living reference of every shared component and token. Compare any new screen against it. */
 export default function UiGuideline() {
     const [modal, setModal] = useState(false);
+    const [panelPart, setPanelPart] = useState('a');
     const [confirm, setConfirm] = useState(false);
     const [search, setSearch] = useState('');
     const [status, setStatus] = useState<string | null>(null);
@@ -679,6 +681,30 @@ export default function UiGuideline() {
                             }
                         />
                     </div>
+                </Section>
+
+                <Section
+                    title="Menu bagian dalam halaman"
+                    description="Halaman yang punya banyak bagian (mis. penilaian agunan A sampai R) memakai PanelMenu di dalam satu kartu: judul kecil, daftar bagian dengan garis tipis pemisah, dan garis di sisi isi. Label kapital tiap kata dan membungkus, titik kuning menandai bagian yang belum disimpan. Di ponsel menjadi baris yang menggulir ke samping."
+                >
+                    <Card className="grid lg:grid-cols-[16rem_minmax(0,1fr)]">
+                        <PanelMenu
+                            label="Bagian contoh"
+                            active={panelPart}
+                            onSelect={setPanelPart}
+                            items={[
+                                { key: 'a', label: 'A. identitas penilaian' },
+                                { key: 'b', label: 'B. objek dan lokasi', unsaved: true },
+                                { key: 'c', label: 'C. dokumen hak atas tanah' },
+                            ]}
+                        />
+                        <div className="min-w-0">
+                            <CardHeader title={`Bagian ${panelPart.toUpperCase()}`} actions={<Badge tone="info">3/5</Badge>} />
+                            <CardBody>
+                                <p className="text-sm text-muted">Isi bagian yang dipilih tampil di sini.</p>
+                            </CardBody>
+                        </div>
+                    </Card>
                 </Section>
 
                 <Section
