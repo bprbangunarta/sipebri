@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class AuditPrune extends Command
 {
-    protected $signature = 'audit:prune {--dry-run : Only report what would be removed}';
+    protected $signature = 'audit:prune {--dry-run : Only report what would be removed} {--force : Delete without asking (for a run without a terminal)}';
 
-    protected $description = 'Remove audit entries older than the retention period, keeping the hash chain verifiable';
+    protected $description = 'By hand only: remove audit entries older than the retention period, keeping the hash chain verifiable';
 
     public function handle(): int
     {
@@ -39,6 +39,13 @@ class AuditPrune extends Command
             $this->info("Would remove {$count} entries up to #{$last->id} (older than {$years} years).");
 
             return self::SUCCESS;
+        }
+
+        // Irreversible, and never done by the system on its own: whoever runs it confirms it, or says --force.
+        if (! $this->option('force') && ! $this->confirm("Delete {$count} audit entries older than {$years} years (up to #{$last->id})? This cannot be undone.", false)) {
+            $this->warn('Nothing deleted.');
+
+            return self::FAILURE;
         }
 
         DB::transaction(function () use ($last, $count, $cutoff): void {

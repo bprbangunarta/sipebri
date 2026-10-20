@@ -7,6 +7,7 @@ use App\Models\Collateral;
 use App\Models\Product;
 use App\Models\User;
 use Database\Seeders\RoleSeeder;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Facades\DB;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -176,7 +177,7 @@ it('prunes entries past the retention period and keeps the rest verifiable', fun
     $this->artisan('audit:prune', ['--dry-run' => true])->assertSuccessful();
     expect(AuditLog::query()->count())->toBe(3);
 
-    $this->artisan('audit:prune')->assertSuccessful();
+    $this->artisan('audit:prune', ['--force' => true])->assertSuccessful();
 
     expect(AuditLog::query()->orderBy('id')->pluck('event')->all())->toBe(['new.one', 'audit_logs.pruned'])
         ->and(DB::table('audit_anchors')->value('pruned_count'))->toBe(2)
@@ -189,7 +190,7 @@ it('still detects tampering after a prune, and a removed anchor', function () {
     $this->travelBack();
     Audit::record('new.one', 'new', 'one');
     Audit::record('new.two', 'new', 'two');
-    $this->artisan('audit:prune')->assertSuccessful();
+    $this->artisan('audit:prune', ['--force' => true])->assertSuccessful();
 
     DB::table('audit_anchors')->delete();
     expect(app(AuditVerifier::class)->verify()['ok'])->toBeFalse();
@@ -197,7 +198,7 @@ it('still detects tampering after a prune, and a removed anchor', function () {
 
 it('does not prune when nothing is old enough', function () {
     Audit::record('new.one', 'new', 'one');
-    $this->artisan('audit:prune')->assertSuccessful();
+    $this->artisan('audit:prune', ['--force' => true])->assertSuccessful();
 
     expect(AuditLog::query()->count())->toBe(1)->and(DB::table('audit_anchors')->count())->toBe(0);
 });
@@ -209,4 +210,36 @@ it('records views of sensitive file details', function () {
     $this->actingAs($admin)->get(route('collaterals.edit', $collateral))->assertOk();
 
     expect(AuditLog::query()->where('event', 'collaterals.viewed')->where('subject_id', $collateral->id)->where('user_id', $admin->id)->exists())->toBeTrue();
+});
+
+it('verifies the chain every day and never prunes by itself', function () {
+    $commands = collect(app(Schedule::class)->events())->map(fn ($event): string => (string) $event->command)->all();
+
+    expect(collect($commands)->contains(fn (string $command): bool => str_contains($command, 'audit:verify')))->toBeTrue()
+        ->and(collect($commands)->contains(fn (string $command): bool => str_contains($command, 'audit:prune')))->toBeFalse();
+});
+
+it('asks before it deletes, and deletes nothing when the answer is no', function () {
+    $this->travelTo(now()->subYears(6));
+    Audit::record('old.one', 'old', 'one');
+    $this->travelBack();
+    Audit::record('new.one', 'new', 'one');
+
+    $this->artisan('audit:prune')->expectsConfirmation('Delete 1 audit entries older than 5 years (up to #1)? This cannot be undone.', 'no')->assertFailed();
+    expect(AuditLog::query()->count())->toBe(2);
+
+    $this->artisan('audit:prune')->expectsConfirmation('Delete 1 audit entries older than 5 years (up to #1)? This cannot be undone.', 'yes')->assertSuccessful();
+    expect(AuditLog::query()->orderBy('id')->pluck('event')->all())->toBe(['new.one', 'audit_logs.pruned']);
+});
+
+it('reports a chain that was cut without an anchor, which is why retention is done with audit:prune and not with SQL', function () {
+    $this->travelTo(now()->subYears(6));
+    Audit::record('old.one', 'old', 'one');
+    $this->travelBack();
+    Audit::record('new.one', 'new', 'one');
+    Audit::record('new.two', 'new', 'two');
+
+    DB::table('audit_logs')->where('event', 'old.one')->delete();
+
+    expect(app(AuditVerifier::class)->verify()['ok'])->toBeFalse();
 });

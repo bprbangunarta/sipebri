@@ -39,7 +39,7 @@ return [
 
     /*
     | Audit trail retention in years, counted from the moment an entry was written (credit files are kept
-    | 5 years). `php artisan audit:prune` removes only older entries and leaves an anchor so the hash chain
+    | 5 years). `php artisan audit:prune`, run by hand only (nothing schedules it), removes only older entries and leaves an anchor so the hash chain
     | of what remains still verifies. Nothing is removed unless that command runs.
     */
     'audit_retention_years' => (int) env('AUDIT_RETENTION_YEARS', 5),

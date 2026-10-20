@@ -2,7 +2,7 @@
 
 Untuk pemilik atau operator yang memasang SIPEBRI di VPS (bukan Laravel Cloud) dan perlu tahu apa yang diisi di `.env`, perintah apa yang dijalankan saat pasang dan saat memperbarui, dan apa yang harus berjalan terus (penjadwal). Dokumen ini menggantikan komentar penjelasan yang dulu ada di `.env.example`; berkas itu kini hanya berisi variabel.
 
-**Belum teruji di server sungguhan** (dicatat di `memory/PRD.md`): pasang dari nol, penjadwal (`schedule:run`), `audit:verify` dan `audit:prune` pada data besar, dan foto ke S3 pada kondisi buruk. Yang tertulis di bawah adalah apa yang dilakukan kode, bukan hasil uji produksi.
+**Belum teruji di server sungguhan** (dicatat di `memory/PRD.md`): pasang dari nol, penjadwal (`schedule:run`), `audit:verify` pada data besar, dan foto ke S3 pada kondisi buruk. Yang tertulis di bawah adalah apa yang dilakukan kode, bukan hasil uji produksi.
 
 ## Kebutuhan
 
@@ -42,7 +42,7 @@ Penjadwal Laravel harus dipanggil tiap menit oleh cron server:
 * * * * * cd /path/ke/sipebri && php artisan schedule:run >> /dev/null 2>&1
 ```
 
-Ia menjalankan `audit:verify` tiap hari pukul 02:00 (memeriksa rantai hash audit log) dan `audit:prune` tiap tanggal 1 pukul 03:00 (lihat `AUDIT_RETENTION_YEARS` di bawah). Tanpa cron keduanya tidak jalan. Tidak ada pekerja antrean yang wajib: kode OTP email dikirim sinkron saat orang menunggu.
+Ia menjalankan `audit:verify` tiap hari pukul 02:00 (memeriksa rantai hash audit log). Tanpa cron ia tidak jalan. Sistem **tidak pernah menghapus audit sendiri**: retensi dijalankan pemilik dengan tangan (lihat "Retensi audit log" di bawah). Tidak ada pekerja antrean yang wajib: kode OTP email dikirim sinkron saat orang menunggu.
 
 ## Isi `.env`
 
@@ -64,7 +64,7 @@ Ia menjalankan `audit:verify` tiap hari pukul 02:00 (memeriksa rantai hash audit
 | `REVERSE_GEOCODING`                                                                                                                                           | menampilkan alamat perkiraan di bawah posisi tersimpan lewat Nominatim OpenStreetMap; **posisi dikirim ke layanan itu** | `false` bila koordinat tidak boleh keluar, atau isi `GEOCODER_ENDPOINT` dengan Nominatim sendiri                       |
 | `GEOCODER_ENDPOINT`, `GEOCODER_USER_AGENT`, `GEOCODER_TIMEOUT`                                                                                                | alamat layanan, identitas pemanggil (wajib untuk Nominatim publik), dan batas detik (3)                                 | isi `GEOCODER_USER_AGENT` dengan kontak yang bisa dihubungi                                                            |
 | `MFA_ENABLED`                                                                                                                                                 | verifikasi dua langkah (aplikasi authenticator atau email), dipilih tiap pengguna; `false` mematikan seluruh fitur      | `true`                                                                                                                 |
-| `AUDIT_RETENTION_YEARS`                                                                                                                                       | tahun minimal entri audit log disimpan sebelum `audit:prune` boleh menghapusnya (5)                                     | **perlu keputusan pemilik** (lihat di bawah)                                                                           |
+| `AUDIT_RETENTION_YEARS`                                                                                                                                       | tahun yang disimpan perintah manual `audit:prune` (5); tidak ada yang berjalan otomatis                                 | bawaan 5 sesuai kebijakan pemilik                                                                                      |
 | `APP_MAINTENANCE_DRIVER`, `APP_MAINTENANCE_STORE`                                                                                                             | tempat status pemeliharaan; `file` cukup untuk satu server, `database` bila lebih dari satu                             | `file` untuk satu server                                                                                               |
 | `CACHE_STORE`, `QUEUE_CONNECTION`, `BROADCAST_CONNECTION`, `FILESYSTEM_DISK`, `LOG_*`, `BCRYPT_ROUNDS`, `REDIS_*`, `MEMCACHED_HOST`, `PHP_CLI_SERVER_WORKERS` | bawaan kerangka Laravel; SIPEBRI memakai `database` untuk cache, sesi, dan antrean                                      | tinggalkan bawaan kecuali ada alasan                                                                                   |
 
@@ -76,6 +76,6 @@ Yang perlu dicadangkan: database MySQL (termasuk `audit_logs`, yang tidak boleh 
 
 ## Belum diputuskan
 
-- **Retensi audit log.** Aturan proyek menyatakan baris audit tidak pernah dihapus, tetapi `audit:prune` terjadwal bulanan dan `AUDIT_RETENTION_YEARS` ada; sebelum pasang produksi putuskan apakah `audit:prune` dimatikan atau tahun retensinya ditetapkan sesuai ketentuan OJK (dicatat di `memory/PRD.md`).
+- **Retensi audit log (diputuskan pemilik 2026-10-20).** Kebijakan retensi 5 tahun diatur di luar sistem dan dijalankan pemilik sendiri, tidak otomatis. Cara yang dipakai: `php artisan audit:prune --dry-run` untuk melihat, lalu `php artisan audit:prune` (meminta konfirmasi; `--force` bila tanpa terminal). Perintah itu menghapus yang lebih tua dari `AUDIT_RETENTION_YEARS` dan menulis jangkar supaya `audit:verify` tetap hijau. Menghapus baris lewat SQL tanpa jangkar membuat verifikasi harian melaporkan rantai putus.
 - **Proxy tepercaya.** Di balik proxy atau penyeimbang beban, alamat IP yang dicatat dan yang membatasi percobaan masuk adalah IP proxy sampai proxy yang dipercaya dikonfigurasi.
 - **Cadangan, pemantauan, dan rotasi kunci** belum dirancang.

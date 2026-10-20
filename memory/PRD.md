@@ -115,7 +115,7 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Konflik kepentingan keluarga dekat** anggota komite belum ditangani (butuh data hubungan keluarga atau penandaan manual wajib).
 - **BMPK penuh** (berdasarkan modal, paparan per peminjam/kelompok) belum dimodelkan; sekarang satu angka.
 - **Audit akses baca halaman daftar** belum dicatat (volume besar); tambahkan ringkas bila auditor meminta.
-- **Retensi audit log:** kodenya sudah ada (`AUDIT_RETENTION_YEARS`, bawaan 5; `audit:prune` terjadwal tanggal 1 pukul 03:00; `audit:verify` harian pukul 02:00), tetapi aturan proyek menyatakan baris audit tidak boleh dihapus; keputusan kebijakan retensi (OJK) belum ada dan belum diuji di server. Sampai putus, jangan menyalakan penjadwal produksi tanpa memutuskan nasib `audit:prune`.
+- **Retensi audit log (diputuskan user 2026-10-20):** kebijakan retensi 5 tahun diatur di luar sistem dan dijalankan user sendiri, tidak otomatis. Sistem tidak pernah menghapus audit sendiri: `audit:prune` tidak terjadwal, hanya jalan bila dijalankan dengan tangan (meminta konfirmasi, `--force` tanpa terminal) dan menulis jangkar supaya `audit:verify` harian (02:00) tetap hijau; hapus lewat SQL tanpa jangkar membuat verifikasi melaporkan rantai putus.
 - Role lama `HR Admin`/`Viewer` masih ada di database dev (tanpa izin).
 
 ## Langkah berikutnya
@@ -128,8 +128,7 @@ Dipilih user; agent tidak memulai fitur baru tanpa diminta.
    Fitur baru langsung dibuat mengikuti aturan kerja sekarang, jadi tidak perlu audit susulan. Urutan lama dari pemilik, bila audit berdiri sendiri dilanjutkan: 8 halaman error + status jaringan, 6 audit log, 7 notifikasi,
    2 MFA + profil, 3 peran dan izin, 4 Data Pengguna, 5 navigasi (pesan 403 berbahasa Inggris dari paket izin sudah dibuang di `bootstrap/app.php`, uji ulang bersama halaman error),
    9 data referensi, 10 parameter produk, 11 BMPK, 12 komite, 13 anggota komite; alur kredit (14 sampai 23) dibahas nanti.
-   Temuan awal untuk fitur yang belum diaudit: (6) `audit:prune` terjadwal bulanan
-   padahal retensi belum diatur.
+   Temuan awal untuk fitur yang belum diaudit:
 2. **Periksa layar internal di peramban** setelah adopsi UI 2026-10-19 (1280 px dan 375 px, keadaan memuat/kosong/galat): `/ui-guideline`, layar tamu, halaman error, serta daftar Analisa dan Persetujuan sudah; layar fitur lain diperiksa bersama audit fiturnya.
 3. Realisasi/pencairan + posting core banking (menunggu rancangan).
    **Brief terpisah yang menunggu:** PHPStan level 8 (47 titik akses ke nilai yang bisa null di tujuh controller dan command); daftar umpan balik untuk devcore dari audit 25
