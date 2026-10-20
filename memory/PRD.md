@@ -105,6 +105,7 @@ Identitas pengguna dan nasabah datang dari Codex.
 - **Antrean offline survei tidak dibuat** (user): tanpa sinyal aplikasi pun tidak bisa dibuka; indikator jaringan sudah memberi tahu.
 - **Alamat dari koordinat tidak dibandingkan dengan alamat KTP nasabah:** survei bisa dilakukan di mana saja.
 - **HRIS dibatalkan dan dibersihkan** (user, 2026-10-01): jangan dilanjutkan tanpa diminta.
+- **Toolchain JS (2026-10-21):** `vite-plus` naik ke 1.3.0 (audit npm melaporkan tinypool/oxfmt kritis pada 0.3.0); paket `vite` kini alias `npm:@voidzero-dev/vite-plus-core@1.3.0` dengan `overrides: { vite: "$vite" }`, seperti yang diminta `vp`. `package-lock.json` diformat 4 spasi, `package.json` 2 spasi.
 - **`RoleSeeder` tidak menimpa izin role yang sudah diatur manual** (disengaja); izin wajib lewat `REQUIRED`.
 
 ## Pertanyaan terbuka
