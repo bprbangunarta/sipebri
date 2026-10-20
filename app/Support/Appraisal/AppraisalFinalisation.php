@@ -2,6 +2,7 @@
 
 namespace App\Support\Appraisal;
 
+use App\Audit\Audit;
 use App\Models\CollateralAppraisal;
 
 /**
@@ -10,6 +11,28 @@ use App\Models\CollateralAppraisal;
  */
 final class AppraisalFinalisation
 {
+    /**
+     * Finalises the appraisal when nothing stands in the way.
+     *
+     * @return list<string> the reasons it could not be finalised (empty when it was)
+     */
+    public static function finalize(CollateralAppraisal $appraisal, AppraisalTemplate $template, string $by): array
+    {
+        AppraisalFigures::refresh($appraisal, $template);
+        $blockers = self::blockers($appraisal, $template);
+
+        if ($blockers !== []) {
+            return $blockers;
+        }
+
+        $appraisal->update(['status' => CollateralAppraisal::FINAL, 'finalized_at' => now(), 'finalized_by' => $by]);
+        Audit::record('collateral_appraisals.finalized', 'collateral_appraisals', 'finalized', $appraisal, context: [
+            'decision' => $appraisal->decision, 'market_value' => $appraisal->market_value, 'liquidation_value' => $appraisal->liquidation_value,
+        ]);
+
+        return [];
+    }
+
     /**
      * @return list<string> the reasons it cannot be finalised yet, in words for the appraiser
      */

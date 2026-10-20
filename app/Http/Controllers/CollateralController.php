@@ -152,7 +152,7 @@ class CollateralController extends Controller
 
         return $request->validate([
             'cbs_id' => ['nullable', 'string', 'max:50', Rule::unique('collaterals', 'cbs_id')->ignore($current)],
-            'credit_account' => ['nullable', 'string', 'max:30', Rule::unique('collaterals', 'credit_account')->ignore($current)],
+            'credit_account' => ['nullable', 'string', 'max:30'],
             'collateral_type_code' => ['required', 'string', 'exists:collateral_types,code'],
             'binding_type_code' => ['nullable', 'string', 'exists:binding_types,code'],
             'document_number' => ['required', 'string', 'max:100'],

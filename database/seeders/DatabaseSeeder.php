@@ -15,6 +15,6 @@ class DatabaseSeeder extends Seeder
 
     private function seed(): void
     {
-        $this->call([PermissionSeeder::class, RoleSeeder::class, CreditReferenceSeeder::class, CommitteeSeeder::class, UserSeeder::class]);
+        $this->call([PermissionSeeder::class, RoleSeeder::class, CreditReferenceSeeder::class, CommitteeSeeder::class, UserSeeder::class, CollateralExampleSeeder::class]);
     }
 }

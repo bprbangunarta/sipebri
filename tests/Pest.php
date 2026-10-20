@@ -13,6 +13,7 @@ use App\Models\ProductParameter;
 use App\Models\User;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Facades\Http;
@@ -194,4 +195,10 @@ function surveyFile(): array
     $loan->collaterals()->attach($collateral->id);
 
     return [$analyst, $loan, $collateral];
+}
+
+/** The named attributes of a model, in the order asked. */
+function fieldsOf(Model $model, array $keys): array
+{
+    return collect($keys)->mapWithKeys(fn (string $key): array => [$key => $model->getAttribute($key)])->all();
 }

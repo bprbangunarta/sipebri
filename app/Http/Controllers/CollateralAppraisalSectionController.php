@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Audit\Audit;
 use App\Models\CollateralAppraisal;
-use App\Support\Appraisal\AppraisalFigures;
 use App\Support\Appraisal\AppraisalFinalisation;
 use App\Support\Appraisal\AppraisalGuard;
 use App\Support\Appraisal\AppraisalRules;
@@ -52,18 +50,11 @@ class CollateralAppraisalSectionController extends Controller
             return $refused;
         }
 
-        $template = AppraisalTemplates::of($collateralAppraisal);
-        AppraisalFigures::refresh($collateralAppraisal, $template);
-        $blockers = AppraisalFinalisation::blockers($collateralAppraisal, $template);
+        $blockers = AppraisalFinalisation::finalize($collateralAppraisal, AppraisalTemplates::of($collateralAppraisal), $request->user()->name);
 
         if ($blockers !== []) {
             throw ValidationException::withMessages(['finalize' => implode(' ', $blockers)]);
         }
-
-        $collateralAppraisal->update(['status' => CollateralAppraisal::FINAL, 'finalized_at' => now(), 'finalized_by' => $request->user()->name]);
-        Audit::record('collateral_appraisals.finalized', 'collateral_appraisals', 'finalized', $collateralAppraisal, context: [
-            'decision' => $collateralAppraisal->decision, 'market_value' => $collateralAppraisal->market_value, 'liquidation_value' => $collateralAppraisal->liquidation_value,
-        ]);
 
         return back()->with('success', 'Penilaian difinalkan.');
     }

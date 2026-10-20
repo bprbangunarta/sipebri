@@ -16,7 +16,6 @@ use App\Support\Appraisal\AppraisalTemplates;
 use App\Support\Appraisal\GeneralTemplate;
 use App\Support\Appraisal\LandBuildingTemplate;
 use App\Support\Appraisal\VehicleTemplate;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -24,12 +23,6 @@ use Inertia\Testing\AssertableInertia as Assert;
 beforeEach(function () {
     $this->actingAs(superAdmin());
 });
-
-/** The named attributes of a model, in the order asked. */
-function fieldsOf(Model $model, array $keys): array
-{
-    return collect($keys)->mapWithKeys(fn (string $key): array => [$key => $model->getAttribute($key)])->all();
-}
 
 function landCollateral(string $type = '05', array $attributes = []): Collateral
 {
