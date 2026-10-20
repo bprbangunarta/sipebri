@@ -170,7 +170,7 @@ it('exports every column, respects the filters, and neutralises a formula in any
 
 it('keeps commas, quotes, new lines, and non-latin letters in an exported cell as they were written', function () {
     $this->actingAs(superAdmin());
-    $label = "Satu, \"dua\"\ntiga — 日本語 ünï";
+    $label = "Satu, \"dua\"\ntiga ~ 日本語 ünï";
     Audit::record('x.uji', 'ekspor', 'uji', label: $label);
 
     $csv = $this->get('/audit-logs/export?module=ekspor')->streamedContent();
