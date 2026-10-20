@@ -21,14 +21,14 @@ antislop active: during (session override). Design Read: this is an internal adm
 
 Each line is "met" or "not met" with evidence in the report.
 
-- [ ] A table lists, for each of the briefs 0004 to 0014, the files it changed (from git) and the rule files and skills that match those paths.
-- [ ] For every rule line of every matched file, the table says PASS, FAIL, or N/A with a file and line or a command output as evidence; nothing is ticked from memory.
-- [ ] Same-pattern searches are run over the whole code base (not only the files each brief touched) for the defect classes found: N+1 and queries in controllers, English-only messages, unvalidated decimals, writes that log even when nothing changed, soft-deleted holders, tests that depend on helpers of another test file, relations without a stated delete rule.
+- [x] A table lists, for each of the briefs 0004 to 0014, the files it changed (from git) and the rule files and skills that match those paths.
+- [x] For every rule line of every matched file, the table says PASS, FAIL, or N/A with a file and line or a command output as evidence; nothing is ticked from memory.
+- [x] Same-pattern searches are run over the whole code base (not only the files each brief touched) for the defect classes found: N+1 and queries in controllers, English-only messages, unvalidated decimals, writes that log even when nothing changed, soft-deleted holders, tests that depend on helpers of another test file, relations without a stated delete rule.
 - [x] Every FAIL that is a plain violation is fixed, each with a test that fails before and passes after, or an exemption with a written reason where the rule allows one.
 - [x] Every FAIL that changes policy (for example whether role, permission, and committee-level changes must carry a reason, `.ai/rules/php.md` item 8) is explained to the owner and decided by the owner before any change.
 - [x] Documents and code that this check contradicts are fixed in both directions (the dangling and stale lines of `memory/PRD.md` and `CLAUDE.md` found while reading).
-- [ ] The screen checks that earlier briefs claimed are redone for real on the screens those briefs changed, at 1280 x 800, 768 and 375 (`resize_window`, then reset to `desktop`), with `scrollWidth` equal to the screen width, one `h1`, no control without a name, and the console clear. Screens that cannot be checked in this session are listed as not checked, not as passed.
-- [ ] The report follows `AGENTS.md`: `Brief: 0015-... (approved <date>)`, a `Docs <-> code:` line, the nine production questions answered, the person who meets the change named, antislop Delivery Gate as PASS/FAIL lines with evidence, what changed, what was verified, what was skipped, next steps.
+- [x] The screen checks that earlier briefs claimed are redone for real on the screens those briefs changed, at 1280 x 800, 768 and 375 (`resize_window`, then reset to `desktop`), with `scrollWidth` equal to the screen width, one `h1`, no control without a name, and the console clear. Screens that cannot be checked in this session are listed as not checked, not as passed.
+- [x] The report follows `AGENTS.md`: `Brief: 0015-... (approved <date>)`, a `Docs <-> code:` line, the nine production questions answered, the person who meets the change named, antislop Delivery Gate as PASS/FAIL lines with evidence, what changed, what was verified, what was skipped, next steps.
 
 ## Out of scope
 
@@ -67,7 +67,7 @@ Screen (N/A without a screen)
 
 - [x] States (loading, empty, error), words, and confirmation of irreversible actions follow the UI rules (`.ai/rules/ui.md`, and the project's `.ai/rules/js.md`: shared components, one value per column, server-side sort keys, inputs that enforce the server rule) N/A: no state or dialog was changed; only the guideline example, the h2 option and two sentences of text.
 - [x] Checked in a browser at 1280 px and at 375 px, with the console clear
-- [ ] The antislop Delivery Gate is answered as PASS/FAIL lines with evidence in the report
+- [x] The antislop Delivery Gate is answered as PASS/FAIL lines with evidence in the report
 
 Tests and documents
 
@@ -78,5 +78,5 @@ Tests and documents
 Gates and close
 
 - [x] `scripts/verify.sh` is green and the build runs
-- [ ] Every acceptance criterion above is verified with evidence in the report
-- [ ] The owner is told what changed, what was not done, and why; this brief is deleted in the closing commit
+- [x] Every acceptance criterion above is verified with evidence in the report
+- [x] The owner is told what changed, what was not done, and why; this brief is deleted in the closing commit
