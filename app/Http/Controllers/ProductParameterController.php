@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Audit\Audit;
 use App\Http\Requests\ProductParameterRequest;
 use App\Models\Installment;
 use App\Models\Method;
 use App\Models\Product;
+use App\Models\ProductParameter;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -33,7 +35,17 @@ class ProductParameterController extends Controller
 
     public function update(ProductParameterRequest $request, Product $product): RedirectResponse
     {
-        $product->parameter()->updateOrCreate([], $request->validated());
+        $reason = trim($request->validated('reason'));
+        $values = $request->safe()->except('reason');
+        $parameter = $product->parameter ?? new ProductParameter(['product_id' => $product->id]);
+        $parameter->fill($values);
+
+        if ($parameter->exists && ! $parameter->isDirty()) {
+            return back()->with('success', "Parameter {$product->alias} tidak berubah.");
+        }
+
+        // These are board-decree figures: the entry that records the change carries the reason next to the values before and after.
+        Audit::withContext(['reason' => $reason], (string) $request->user()->name, fn () => $parameter->save());
 
         return back()->with('success', "Parameter {$product->alias} berhasil disimpan.");
     }

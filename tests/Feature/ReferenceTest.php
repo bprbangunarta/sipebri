@@ -101,7 +101,7 @@ it('saves product parameters and validates their consistency', function () {
 
     $this->put(route('products.parameters.update', $product), [
         'min_amount' => 1000000, 'max_amount' => 5000000, 'min_tenor' => 1, 'max_tenor' => 12, 'interest_rate' => 12.5,
-        'allowed_method_ids' => [$allowed->id], 'default_method_id' => $allowed->id, 'collateral_required' => true,
+        'allowed_method_ids' => [$allowed->id], 'default_method_id' => $allowed->id, 'collateral_required' => true, 'reason' => 'Parameter awal sesuai SK',
     ])->assertSessionHasNoErrors();
 
     expect($product->parameter->fresh()->only(['max_amount', 'collateral_required']))->toBe(['max_amount' => 5000000, 'collateral_required' => true]);

@@ -83,6 +83,7 @@ export default function ProductParameters({ product, parameter, methods, install
         collateral_required: parameter?.collateral_required ?? false,
         decree: parameter?.decree ?? '',
         note: parameter?.note ?? '',
+        reason: '',
     });
     const { data, setData, errors } = form;
     const rate = (name: 'interest_rate' | 'provision_rate' | 'admin_rate' | 'rc_threshold') => (
@@ -119,7 +120,9 @@ export default function ProductParameters({ product, parameter, methods, install
                         {canManage && (
                             <Button
                                 loading={form.processing}
-                                onClick={() => form.put(`/references/products/${product.id}/parameters`, { preserveScroll: true })}
+                                onClick={() =>
+                                    form.put(`/references/products/${product.id}/parameters`, { preserveScroll: true, onSuccess: () => setData('reason', '') })
+                                }
                             >
                                 <Save /> Simpan parameter
                             </Button>
@@ -133,7 +136,7 @@ export default function ProductParameters({ product, parameter, methods, install
                     <Field label="Plafon minimum" error={errors.min_amount}>
                         {amount('min_amount')}
                     </Field>
-                    <Field label="Plafon maksimum" error={errors.max_amount}>
+                    <Field label="Plafon maksimum" error={errors.max_amount} hint="Kosongkan bila tidak dibatasi. Nol bukan batas.">
                         {amount('max_amount')}
                     </Field>
                     <Field label="Tenor minimum (bulan)" error={errors.min_tenor}>
@@ -154,7 +157,7 @@ export default function ProductParameters({ product, parameter, methods, install
                     <Field label="Biaya administrasi (%)" error={errors.admin_rate}>
                         {rate('admin_rate')}
                     </Field>
-                    <Field label="RC maksimum (%)" error={errors.rc_threshold} hint="Batas kemampuan bayar (repayment capacity).">
+                    <Field label="RC maksimum (%)" error={errors.rc_threshold} hint="Batas kemampuan bayar (repayment capacity), antara 1 dan 100.">
                         {rate('rc_threshold')}
                     </Field>
                 </Section>
@@ -198,6 +201,23 @@ export default function ProductParameters({ product, parameter, methods, install
                     <Field label="Catatan" error={errors.note} className="sm:col-span-2">
                         <Input id="note" disabled={!canManage} value={data.note} maxLength={255} onChange={(e) => setData('note', e.target.value)} />
                     </Field>
+                    {canManage && (
+                        <Field
+                            label="Alasan perubahan"
+                            required
+                            error={errors.reason}
+                            className="sm:col-span-2 lg:col-span-4"
+                            hint="Wajib setiap parameter diubah. Tersimpan di audit log bersama nilai sebelum dan sesudahnya."
+                        >
+                            <Input
+                                id="reason"
+                                maxLength={255}
+                                value={data.reason}
+                                onChange={(e) => setData('reason', e.target.value)}
+                                aria-invalid={Boolean(errors.reason)}
+                            />
+                        </Field>
+                    )}
                     <Checkbox
                         className="h-8 items-center self-end"
                         label="Agunan wajib"
