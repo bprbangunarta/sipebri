@@ -57,12 +57,12 @@ it('gives each sample collateral the payload that core banking would be sent', f
         ->and($car['penaksir']['taksasi'])->toBe(['penaksir' => 'PAJAR', 'tanggal' => '2026-10-07']);
 });
 
-it('fills four appraisals through every section, finalised with the figures the system works out', function (string $cbsId, string $template, int $market, int $liquidation, string $haircut, string $decision) {
+it('fills four appraisals through every section, left as drafts with the figures the system works out', function (string $cbsId, string $template, int $market, int $liquidation, string $haircut, string $decision) {
     seedExamples();
     $appraisal = appraisalOf($cbsId);
 
     expect(fieldsOf($appraisal, ['template', 'status', 'market_value', 'liquidation_value', 'decision', 'appraiser_name', 'finalized_by']))
-        ->toBe(['template' => $template, 'status' => 'final', 'market_value' => $market, 'liquidation_value' => $liquidation, 'decision' => $decision, 'appraiser_name' => 'PENILAI CONTOH', 'finalized_by' => 'PENILAI CONTOH'])
+        ->toBe(['template' => $template, 'status' => 'draft', 'market_value' => $market, 'liquidation_value' => $liquidation, 'decision' => $decision, 'appraiser_name' => 'PENILAI CONTOH', 'finalized_by' => null])
         ->and((float) $appraisal->haircut_percent)->toBe((float) $haircut);
 })->with([
     'land with customary papers (refused)' => ['01.3.002194', 'land_building', 447_600_000, 335_700_000, '25', 'rejected'],

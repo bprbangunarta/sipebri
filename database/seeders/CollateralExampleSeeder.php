@@ -18,8 +18,8 @@ use RuntimeException;
 
 /**
  * Sample collaterals shaped like the screens of the dummy core banking (two kinds of land and building, a car, a motorcycle, and two
- * supporting documents), and four appraisals filled in through every section of their form, to try the screens with and to show how a
- * form is filled. Every appraisal says it is a sample. Idempotent, and never runs in production: a collateral that exists is left as it
+ * supporting documents), and four appraisals filled in through every section of their form and left as drafts (so they can still be edited), to try the
+ * screens with and to show how a form is filled. Every appraisal says it is a sample. Idempotent, and never runs in production: a collateral that exists is left as it
  * is, and one that already has an appraisal gets no more.
  */
 class CollateralExampleSeeder extends Seeder
@@ -86,7 +86,7 @@ class CollateralExampleSeeder extends Seeder
     }
 
     /**
-     * Fills the appraisal section by section through the same classes the screens use, and finalises it.
+     * Fills the appraisal section by section through the same classes the screens use, and checks that it could be finalised; it stays a draft.
      *
      * @param  array<string, string|array{0: string, 1: string}>  $answers
      */
@@ -100,10 +100,10 @@ class CollateralExampleSeeder extends Seeder
             AppraisalSaver::save($appraisal, $template, $section, $sectionAnswers);
         }
 
-        $blockers = AppraisalFinalisation::finalize($appraisal, $template, 'PENILAI CONTOH');
+        $blockers = AppraisalFinalisation::blockers($appraisal->refresh(), $template);
 
         if ($blockers !== []) {
-            throw new RuntimeException("The sample appraisal of {$collateral->cbs_id} cannot be finalised: ".implode(' ', $blockers));
+            throw new RuntimeException("The sample appraisal of {$collateral->cbs_id} could not be finalised: ".implode(' ', $blockers));
         }
     }
 
