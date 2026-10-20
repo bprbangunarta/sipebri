@@ -4,9 +4,9 @@ import { useMemo, useState } from 'react';
 import { AppraisalBlock } from '@/components/appraisal/appraisal-block';
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/dialog';
-import { Alert, Badge, Card, CardBody, CardHeader, PageHeader } from '@/components/ui/misc';
+import { Alert, Badge, Card, CardBody, CardFooter, CardHeader, PageHeader } from '@/components/ui/misc';
 import { formatDate, formatDateTime, formatNumber } from '@/lib/format';
-import { SaveBar, Stat } from '@/pages/credit-analysis/parts';
+import { Stat } from '@/pages/credit-analysis/parts';
 import type { Answers, CollateralSummary, Computed, Photo, Section, Summary } from '@/pages/collaterals/appraisals/types';
 
 type Props = {
@@ -199,6 +199,7 @@ export default function AppraisalShow({
                 <nav aria-label="Bagian penilaian" className="flex flex-row gap-1 overflow-x-auto lg:sticky lg:top-3 lg:flex-col lg:self-start">
                     {template.sections.map((s) => {
                         const [filled, total] = progress[s.key] ?? [0, 0];
+                        const unsaved = canEdit && dirty(s);
 
                         return (
                             <button
@@ -208,49 +209,61 @@ export default function AppraisalShow({
                                 onClick={() => setActive(s.key)}
                                 className={`flex h-8 shrink-0 cursor-pointer items-center gap-2 rounded-md px-2.5 text-left text-sm font-medium whitespace-nowrap transition-colors ${s.key === active ? 'bg-primary-soft text-primary' : 'text-muted hover:bg-canvas hover:text-ink'}`}
                             >
-                                <span className="flex-1">{s.label}</span>
-                                {canEdit && dirty(s) && <span className="text-2xs text-warning-ink">belum disimpan</span>}
-                                {total > 0 && filled === total ? (
-                                    <Check className="size-3.5 text-success" aria-label="Lengkap" />
-                                ) : (
-                                    <span className="text-2xs tabular-nums">
-                                        {filled}/{total}
-                                    </span>
-                                )}
+                                <span className="flex-1 lg:truncate">{s.label}</span>
+                                <span className="flex w-2 justify-center">
+                                    {unsaved && (
+                                        <>
+                                            <span className="size-1.5 rounded-full bg-warning" aria-hidden="true" />
+                                            <span className="sr-only">Belum disimpan</span>
+                                        </>
+                                    )}
+                                </span>
+                                <span className="flex w-9 justify-end text-2xs tabular-nums">
+                                    {total > 0 && filled === total ? <Check className="size-3.5 text-success" aria-label="Lengkap" /> : `${filled}/${total}`}
+                                </span>
                             </button>
                         );
                     })}
                 </nav>
 
-                <div className="min-w-0">
-                    <h2 className="mb-2 text-base font-semibold">{current.label}</h2>
-                    <div className="flex flex-col gap-3">
+                <Card className="min-w-0 self-start">
+                    <CardHeader
+                        title={current.label}
+                        description={`${progress[current.key]?.[0] ?? 0} dari ${progress[current.key]?.[1] ?? 0} isian terisi`}
+                        actions={canEdit && dirty(current) ? <Badge tone="warning">Belum disimpan</Badge> : undefined}
+                    />
+                    <CardBody className="flex flex-col gap-4">
                         {current.blocks.map((block, index) => (
-                            <Card key={`${current.key}-${index}`}>
-                                <CardBody>
-                                    <AppraisalBlock
-                                        section={current.key}
-                                        block={block}
-                                        answers={answers}
-                                        onAnswer={(key, patch) => setAnswers((all) => ({ ...all, [key]: { ...all[key], ...patch } }))}
-                                        computed={computed}
-                                        errors={errors}
-                                        readOnly={!canEdit}
-                                        locked={locked}
-                                        photos={photos}
-                                        maxPhotos={maxPhotos}
-                                        onUpload={upload}
-                                        onDeletePhoto={(id) => router.delete(`${base}/photos/${id}`, { preserveScroll: true })}
-                                        uploading={uploading}
-                                    />
-                                </CardBody>
-                            </Card>
+                            <div key={`${current.key}-${index}`} className={index > 0 ? 'border-t border-line pt-4' : undefined}>
+                                <AppraisalBlock
+                                    section={current.key}
+                                    block={block}
+                                    answers={answers}
+                                    onAnswer={(key, patch) => setAnswers((all) => ({ ...all, [key]: { ...all[key], ...patch } }))}
+                                    computed={computed}
+                                    errors={errors}
+                                    readOnly={!canEdit}
+                                    locked={locked}
+                                    photos={photos}
+                                    maxPhotos={maxPhotos}
+                                    onUpload={upload}
+                                    onDeletePhoto={(id) => router.delete(`${base}/photos/${id}`, { preserveScroll: true })}
+                                    uploading={uploading}
+                                />
+                            </div>
                         ))}
-                        {canEdit && answerKeys(current).length > 0 && (
-                            <SaveBar processing={saving} dirty={dirty(current)} onSave={save} onReset={reset} note={null} />
-                        )}
-                    </div>
-                </div>
+                    </CardBody>
+                    {canEdit && answerKeys(current).length > 0 && (
+                        <CardFooter>
+                            <Button type="button" variant="outline" disabled={!dirty(current) || saving} onClick={reset}>
+                                Kembalikan
+                            </Button>
+                            <Button type="button" loading={saving} disabled={!dirty(current)} onClick={save}>
+                                Simpan semua
+                            </Button>
+                        </CardFooter>
+                    )}
+                </Card>
             </div>
 
             <ConfirmDialog
