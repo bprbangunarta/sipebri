@@ -11,15 +11,15 @@ The owner and the analysts can open collaterals shaped like the real ones in the
 
 Each line can be answered "met" or "not met" with evidence (a test, a command, a screen checked in a browser).
 
-- [ ] **A seeder for non-production.** `CollateralExampleSeeder` is called by `DatabaseSeeder` only outside production (like `UserSeeder`), is idempotent (running it again adds nothing and changes nothing an owner edited), writes nothing to the audit trail (like every seeder), and uses the real domain classes (`AppraisalStarter`, `AppraisalSaver`, the finalisation) so every figure in a sample is the one the system works out.
-- [ ] **Six collaterals in the shape of the six legacy screens** (the screenshots the owner gave): a land and building with a certificate and mortgage right (type 05, binding 01) whose description says customary papers; a land and building with a certificate and no binding yet (type 06, binding 06) held by two owners; a car (type 10, binding 03); a motorcycle (type 10, binding 03); two supporting documents (type 14, binding 99) with no value. They keep the types, bindings, location code, the amounts (mortgage value, market value, tax value, internal appraisal), the conditions, the insurance, and the method of the screens.
-- [ ] **The data of the screens is used as it is.** The owner confirmed that the screenshots come from the dummy core banking, so the names, addresses, document numbers, accounts, and collateral ids are kept as the screens show them (a value the screen cuts off, like the end of a plate number, is completed with an invented one and said so). The facts of a vehicle that the screens do not state (brand, year) are read from the chassis number and said so in the report.
-- [ ] **One credit account holds several collaterals.** The screens show one account with two and with three collaterals, but `collaterals.credit_account` is unique, so the second one cannot be saved. The unique index becomes a plain index by a new migration, the unique rule of the form is removed, and a test proves that two collaterals can carry the same account while `cbs_id` stays unique.
-- [ ] **Four finalised appraisals filled through every section of their form**, each with a written assessment in the conclusion, the figures worked out, and the photo places left empty (no invented photos): land with a mortgage right (an assessment that finds the customary-papers description against a certificate-with-mortgage type and ends in "Tidak dapat diterima" through the hard stop), land without a binding (accepted with conditions: bind it, consent of both owners), the car (accepted with conditions), the motorcycle (accepted). 
-- [ ] **Marked as samples.** Every appraisal of a sample says in its summary that it is a sample filled in to show how the form is used and not an appraisal of a real object; the appraiser is "PENILAI CONTOH".
-- [ ] **The two supporting documents (type 14) get no appraisal.** The general form cannot accept a collateral whose market value is zero, and such a document (an employee decree, a social-security card) has none; the finding is reported to the owner as a decision to take (whether such collaterals are appraised at all, or accepted without a value), not worked around in the seeder.
-- [ ] **Tests.** A test seeds twice and proves: the six collaterals exist once; the four appraisals are final with known market values, liquidation values, and decisions; no collateral of type 14 has an appraisal; `DatabaseSeeder` does not call the sample seeder in production; and every answer of a sample passes the rules of its item (the same rules a request goes through).
-- [ ] **Docs.** `CLAUDE.md` (how to run the seeders), and `memory/PRD.md` (the finding about zero-value collaterals as an open question) are brought in line.
+- [x] **A seeder for non-production.** `CollateralExampleSeeder` is called by `DatabaseSeeder` only outside production (like `UserSeeder`), is idempotent (running it again adds nothing and changes nothing an owner edited), writes nothing to the audit trail (like every seeder), and uses the real domain classes (`AppraisalStarter`, `AppraisalSaver`, the finalisation) so every figure in a sample is the one the system works out.
+- [x] **Six collaterals in the shape of the six legacy screens** (the screenshots the owner gave): a land and building with a certificate and mortgage right (type 05, binding 01) whose description says customary papers; a land and building with a certificate and no binding yet (type 06, binding 06) held by two owners; a car (type 10, binding 03); a motorcycle (type 10, binding 03); two supporting documents (type 14, binding 99) with no value. They keep the types, bindings, location code, the amounts (mortgage value, market value, tax value, internal appraisal), the conditions, the insurance, and the method of the screens.
+- [x] **The data of the screens is used as it is.** The owner confirmed that the screenshots come from the dummy core banking, so the names, addresses, document numbers, accounts, and collateral ids are kept as the screens show them (a value the screen cuts off, like the end of a plate number, is completed with an invented one and said so). The facts of a vehicle that the screens do not state (brand, year) are read from the chassis number and said so in the report.
+- [x] **One credit account holds several collaterals.** The screens show one account with two and with three collaterals, but `collaterals.credit_account` is unique, so the second one cannot be saved. The unique index becomes a plain index by a new migration, the unique rule of the form is removed, and a test proves that two collaterals can carry the same account while `cbs_id` stays unique.
+- [x] **Four finalised appraisals filled through every section of their form**, each with a written assessment in the conclusion, the figures worked out, and the photo places left empty (no invented photos): land with a mortgage right (an assessment that finds the customary-papers description against a certificate-with-mortgage type and ends in "Tidak dapat diterima" through the hard stop), land without a binding (accepted with conditions: bind it, consent of both owners), the car (accepted with conditions), the motorcycle (accepted). 
+- [x] **Marked as samples.** Every appraisal of a sample says in its summary that it is a sample filled in to show how the form is used and not an appraisal of a real object; the appraiser is "PENILAI CONTOH".
+- [x] **The two supporting documents (type 14) get no appraisal.** The general form cannot accept a collateral whose market value is zero, and such a document (an employee decree, a social-security card) has none; the finding is reported to the owner as a decision to take (whether such collaterals are appraised at all, or accepted without a value), not worked around in the seeder.
+- [x] **Tests.** A test seeds twice and proves: the six collaterals exist once; the four appraisals are final with known market values, liquidation values, and decisions; no collateral of type 14 has an appraisal; `DatabaseSeeder` does not call the sample seeder in production; and every answer of a sample passes the rules of its item (the same rules a request goes through).
+- [x] **Docs.** `CLAUDE.md` (how to run the seeders), and `memory/PRD.md` (the finding about zero-value collaterals as an open question) are brought in line.
 
 ## Out of scope
 
@@ -42,37 +42,37 @@ Every line is ticked `[x]`; a line that does not apply is ticked and ends with `
 
 Reading and scope
 
-- [ ] The PRD and the rule files matched to the paths touched are read (`AGENTS.md` section 1, `.ai/rules/index.md`)
-- [ ] The skills of section 5 that apply are named and used
-- [ ] The person who meets this change and the moment they are most likely to be confused are named, and handled: the owner and the analysts who open the sample appraisals to learn how a form is filled, and who must never mistake a sample for a real appraisal (principle at the top of `AGENTS.md`)
-- [ ] Out of scope is respected; findings outside the task are reported, not fixed on the side
+- [x] The PRD and the rule files matched to the paths touched are read (`AGENTS.md` section 1, `.ai/rules/index.md`)
+- [x] The skills of section 5 that apply are named and used
+- [x] The person who meets this change and the moment they are most likely to be confused are named, and handled: the owner and the analysts who open the sample appraisals to learn how a form is filled, and who must never mistake a sample for a real appraisal (principle at the top of `AGENTS.md`)
+- [x] Out of scope is respected; findings outside the task are reported, not fixed on the side
 
 Design
 
-- [ ] The impact of a changed function, interface, field, or contract is searched (callers, screens, documents, tests) before the change
-- [ ] Who may do this is decided before the input is validated, and every input limit is explicit (`.ai/rules/quality.md`, questions 1 and 2)
-- [ ] Every outcome has one defined response, and a failure leaves nothing half done (`.ai/rules/quality.md`, questions 3 to 5)
-- [ ] Concurrency, repetition, and cost are handled (`.ai/rules/quality.md`, questions 4 and 6)
-- [ ] The code is readable, upgradeable, extensible, and scalable as `.ai/rules/quality.md`, "Design quality", asks: small units, one place to add a case, nothing kept in a process, nothing a person would not have written
-- [ ] Nothing leaks, and what must be on record is on record (`.ai/rules/quality.md`, questions 7 and 8)
-- [ ] Project rule: the change is on the audit record, a new model uses `Auditable`, and a new relation has a foreign key with a deliberate delete rule (`.ai/rules/audit-log.md`, `.ai/rules/general.md`, "Integritas relasi")
-- [ ] Project rule: a schema change is a new migration, never an edited one, and the database is not reset (`.ai/rules/database.md`)
-- [ ] Project rule: code, comments, tests, and URLs are English; screen text is Indonesian (`.ai/rules/general.md`)
+- [x] The impact of a changed function, interface, field, or contract is searched (callers, screens, documents, tests) before the change
+- [x] Who may do this is decided before the input is validated, and every input limit is explicit (`.ai/rules/quality.md`, questions 1 and 2)
+- [x] Every outcome has one defined response, and a failure leaves nothing half done (`.ai/rules/quality.md`, questions 3 to 5)
+- [x] Concurrency, repetition, and cost are handled (`.ai/rules/quality.md`, questions 4 and 6)
+- [x] The code is readable, upgradeable, extensible, and scalable as `.ai/rules/quality.md`, "Design quality", asks: small units, one place to add a case, nothing kept in a process, nothing a person would not have written
+- [x] Nothing leaks, and what must be on record is on record (`.ai/rules/quality.md`, questions 7 and 8)
+- [x] Project rule: the change is on the audit record, a new model uses `Auditable`, and a new relation has a foreign key with a deliberate delete rule (`.ai/rules/audit-log.md`, `.ai/rules/general.md`, "Integritas relasi")
+- [x] Project rule: a schema change is a new migration, never an edited one, and the database is not reset (`.ai/rules/database.md`)
+- [x] Project rule: code, comments, tests, and URLs are English; screen text is Indonesian (`.ai/rules/general.md`)
 
 Screen (N/A without a screen)
 
-- [ ] States (loading, empty, error), words, and confirmation of irreversible actions follow the UI rules (`.ai/rules/ui.md`, and the project's `.ai/rules/js.md`: shared components, one value per column, server-side sort keys, inputs that enforce the server rule)
-- [ ] Checked in a browser at 1280 px and at 375 px, with the console clear
-- [ ] The antislop Delivery Gate is answered as PASS/FAIL lines with evidence in the report
+- [x] States (loading, empty, error), words, and confirmation of irreversible actions follow the UI rules (`.ai/rules/ui.md`, and the project's `.ai/rules/js.md`: shared components, one value per column, server-side sort keys, inputs that enforce the server rule)
+- [x] Checked in a browser at 1280 px and at 375 px, with the console clear
+- [x] The antislop Delivery Gate is answered as PASS/FAIL lines with evidence in the report
 
 Tests and documents
 
-- [ ] Each risk and each refusal has a test (`.ai/rules/quality.md`, question 9; `.ai/rules/testing.md`), and the cross-check tests are green
-- [ ] Documents and code are compared in both directions, stale text is fixed, and `memory/PRD.md` is updated (a decision that outlives this change is one line there)
-- [ ] The notes an agent keeps for itself (its own memory, if it has one) are updated with what this change decided or taught, without waiting to be asked
+- [x] Each risk and each refusal has a test (`.ai/rules/quality.md`, question 9; `.ai/rules/testing.md`), and the cross-check tests are green
+- [x] Documents and code are compared in both directions, stale text is fixed, and `memory/PRD.md` is updated (a decision that outlives this change is one line there)
+- [x] The notes an agent keeps for itself (its own memory, if it has one) are updated with what this change decided or taught, without waiting to be asked
 
 Gates and close
 
-- [ ] `scripts/verify.sh` is green and the build runs
-- [ ] Every acceptance criterion above is verified with evidence in the report
-- [ ] The owner is told what changed, what was not done, and why; this brief is deleted in the closing commit
+- [x] `scripts/verify.sh` is green and the build runs
+- [x] Every acceptance criterion above is verified with evidence in the report
+- [x] The owner is told what changed, what was not done, and why; this brief is deleted in the closing commit
