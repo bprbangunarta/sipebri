@@ -228,7 +228,7 @@ export default function AppraisalShow({
 
                 <div className="min-w-0">
                     <CardHeader
-                        title={current.label}
+                        title={current.label.replace(/(^|[\s(/])(\p{L})/gu, (_, before: string, letter: string) => before + letter.toUpperCase())}
                         actions={
                             <>
                                 {canEdit && dirty(current) && <Badge tone="warning">Belum disimpan</Badge>}
