@@ -50,6 +50,7 @@ export function Field({
     hint,
     className,
     labelClassName,
+    counter,
     children,
 }: {
     label: string;
@@ -59,6 +60,8 @@ export function Field({
     className?: string;
     /** Classes for the label text only (the wrapper's classes would reach the control too), e.g. `capitalize`. */
     labelClassName?: string;
+    /** The characters used and allowed, for a long text whose `Textarea` is wrapped in a component of its own (a direct `Textarea` is read as is). */
+    counter?: { used: number; max: number };
     children: ReactNode;
 }) {
     const id = useId();
@@ -74,7 +77,9 @@ export function Field({
           })
         : children;
     // A text area with a limit shows how much of it is used, beside the label.
-    const counted = isValidElement<{ maxLength?: number; value?: unknown }>(children) && children.type === Textarea ? children.props : null;
+    const direct = isValidElement<{ maxLength?: number; value?: unknown }>(children) && children.type === Textarea ? children.props : null;
+    const counted =
+        counter ?? (direct && direct.maxLength !== undefined && typeof direct.value === 'string' ? { used: direct.value.length, max: direct.maxLength } : null);
     const target = isValidElement<{ id?: string }>(children) ? (children.props.id ?? id) : undefined;
 
     return (
@@ -85,9 +90,9 @@ export function Field({
                     {required && <span className="ml-0.5 text-danger">*</span>}
                 </label>
                 {hint && <HintTip label={label} hint={hint} />}
-                {counted && counted.maxLength !== undefined && typeof counted.value === 'string' && (
+                {counted && (
                     <span className="ml-auto text-xs text-muted tabular-nums" aria-hidden="true">
-                        {counted.value.length}/{counted.maxLength}
+                        {counted.used}/{counted.max}
                     </span>
                 )}
             </div>

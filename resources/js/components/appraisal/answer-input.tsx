@@ -9,6 +9,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { formatPercent, rupiah } from '@/lib/format';
 import type { Choices, Item } from '@/pages/collaterals/appraisals/types';
 
+/** The longest long text the server accepts. */
+export const TEXTAREA_MAX = 2000;
+
 const DECIMAL = /^[0-9.]$/;
 const SIGNED_DECIMAL = /^[0-9.-]$/;
 const EARLIEST = new Date(1950, 0, 1);
@@ -61,7 +64,7 @@ export function AnswerInput({ item, value, onChange, disabled, label, id, compac
 
     switch (item.type) {
         case 'textarea':
-            return <Textarea {...common} maxLength={2000} value={value} onChange={(e) => onChange(e.target.value)} />;
+            return <Textarea {...common} maxLength={TEXTAREA_MAX} value={value} onChange={(e) => onChange(e.target.value)} />;
         case 'integer':
             return <MaskedInput {...common} mask="99999999" value={value} onValueChange={onChange} className="text-right tabular-nums" />;
         case 'money':

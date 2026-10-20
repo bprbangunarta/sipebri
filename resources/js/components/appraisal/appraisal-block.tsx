@@ -1,4 +1,4 @@
-import { AnswerInput, showComputed } from '@/components/appraisal/answer-input';
+import { AnswerInput, TEXTAREA_MAX, showComputed } from '@/components/appraisal/answer-input';
 import { AppraisalPhotos } from '@/components/appraisal/appraisal-photos';
 import { Field } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
@@ -71,6 +71,7 @@ function Fields({ items, answers, onAnswer, computed, errors, readOnly, locked, 
                         label={item.unit ? `${item.label} (${item.unit})` : item.label}
                         hint={item.hint}
                         labelClassName="capitalize"
+                        counter={item.type === 'textarea' ? { used: answerOf(answers, item.key).value.length, max: TEXTAREA_MAX } : undefined}
                         error={errors[`values.${item.key}`]}
                         className={wide ? 'sm:col-span-2' : undefined}
                     >

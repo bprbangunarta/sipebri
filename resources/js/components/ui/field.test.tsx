@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
+import { Textarea } from '@/components/ui/textarea';
 import { Field } from '@/components/ui/field';
 import { Input, InputGroup } from '@/components/ui/input';
 
@@ -120,5 +121,23 @@ describe('Field with an InputGroup', () => {
         expect(input).toHaveAttribute('aria-invalid', 'true');
         expect(input).toHaveAccessibleDescription('Wajib diisi.');
         expect(screen.getByRole('button', { name: 'Buat' })).toBeInTheDocument();
+    });
+
+    it('shows the character counter beside the label, for a text area it holds directly and for one that a component wraps', () => {
+        const Wrapped = (props: { id?: string }) => <textarea id={props.id} defaultValue="abc" />;
+
+        render(
+            <>
+                <Field label="Langsung">
+                    <Textarea value="abcd" maxLength={10} onChange={() => undefined} />
+                </Field>
+                <Field label="Terbungkus" counter={{ used: 3, max: 2000 }}>
+                    <Wrapped />
+                </Field>
+            </>,
+        );
+
+        expect(screen.getByText('4/10')).toBeInTheDocument();
+        expect(screen.getByText('3/2000')).toBeInTheDocument();
     });
 });
