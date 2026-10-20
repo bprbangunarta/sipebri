@@ -19,9 +19,12 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class AuditLogController extends Controller
 {
+    private const VIEW_QUIET_MINUTES = 10;
+
     public function index(Request $request): Response
     {
         $filters = $this->filters($request);
+        $this->recordView($request, $filters);
         $logs = $this->query($filters)->orderByDesc('id')
             ->paginate(in_array((int) ($filters['per_page'] ?? 0), [10, 25, 50], true) ? (int) $filters['per_page'] : 25)
             ->withQueryString();
@@ -60,6 +63,21 @@ class AuditLogController extends Controller
             'modules' => AuditLog::query()->distinct()->orderBy('module')->pluck('module'),
             'verification' => $request->session()->get('audit_verification'),
         ]);
+    }
+
+    /**
+     * Opening the trail is itself recorded, once in ten minutes for the same person, so paging and filtering do not fill the log.
+     *
+     * @param  array<string, mixed>  $filters
+     */
+    private function recordView(Request $request, array $filters): void
+    {
+        $recent = AuditLog::query()->where('event', 'audit_logs.viewed')->where('user_id', $request->user()->id)
+            ->where('created_at', '>', now()->subMinutes(self::VIEW_QUIET_MINUTES)->format('Y-m-d H:i:s.u'))->exists();
+
+        if (! $recent) {
+            Audit::record('audit_logs.viewed', 'audit_logs', 'viewed', context: ['filters' => array_filter($filters)], label: 'Audit log');
+        }
     }
 
     public function export(Request $request): StreamedResponse

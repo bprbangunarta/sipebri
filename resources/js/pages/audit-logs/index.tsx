@@ -73,6 +73,13 @@ const TONES: Record<LogRow['outcome'], BadgeTone> = {
 const DEFAULTS = { per_page: 25 };
 const MIN_DATE = new Date(2020, 0, 1);
 
+/** A day written as "2026-03-10" as the calendar day it names on the device (not a moment). */
+const dayOf = (value: string) => {
+    const [year, month, day] = value.split('-').map(Number);
+
+    return new Date(year, month - 1, day);
+};
+
 const show = (value: unknown): string => (value === null || value === undefined ? '–' : typeof value === 'string' ? value : JSON.stringify(value));
 
 const changedFields = (log: LogRow): string[] => Array.from(new Set([...Object.keys(log.old ?? {}), ...Object.keys(log.new ?? {})]));
@@ -213,10 +220,21 @@ export default function AuditLogsIndex({ logs, filters, modules, verification }:
                         search={<SearchInput value={search} onChange={onSearch} placeholder="Cari pengguna, kejadian, data, IP…" label="Cari audit log" />}
                     >
                         <div className="w-full sm:w-36">
-                            <DatePicker value={filters.from ?? ''} min={MIN_DATE} placeholder="Dari" onChange={(v) => visit({ from: iso(v) })} />
+                            <DatePicker
+                                value={filters.from ?? ''}
+                                min={MIN_DATE}
+                                max={filters.to ? dayOf(filters.to) : undefined}
+                                placeholder="Dari"
+                                onChange={(v) => visit({ from: iso(v) })}
+                            />
                         </div>
                         <div className="w-full sm:w-36">
-                            <DatePicker value={filters.to ?? ''} min={MIN_DATE} placeholder="Sampai" onChange={(v) => visit({ to: iso(v) })} />
+                            <DatePicker
+                                value={filters.to ?? ''}
+                                min={filters.from ? dayOf(filters.from) : MIN_DATE}
+                                placeholder="Sampai"
+                                onChange={(v) => visit({ to: iso(v) })}
+                            />
                         </div>
                         <Combobox
                             className="w-full sm:w-40"

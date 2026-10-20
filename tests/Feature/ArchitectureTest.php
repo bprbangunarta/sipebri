@@ -78,6 +78,7 @@ it('records writes that bypass model events', function () {
     $bypass = '/->(syncWithoutDetaching|attach|detach|sync|toggle|updateExistingPivot)\(|DB::(table\([^)]*\)->(insert|insertOrIgnore|update|delete|upsert|truncate|increment|decrement)|insert|update|delete|statement|unprepared)\(|->(where|whereIn|whereKey|whereNull|whereNotNull)\([^;{}]*\)->(update|delete|forceDelete|increment|decrement)\(|::query\(\)->[^;{}]*->(update|delete)\(|->(upsert|insertOrIgnore|truncate)\(|Quietly\(|Storage::[^;]*(delete|deleteDirectory)\(|->delete\([\'"][^)]/';
     $exempt = [
         'app/Http/Controllers/NotificationController.php' => 'read markers of the signed-in person, not business data',
+        'app/Audit/AuditVerifier.php' => 'the bookmark of the audit trail itself (the last entry found intact); the caller records the result of the verification',
     ];
     $offenders = [];
     $needless = [];

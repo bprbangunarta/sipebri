@@ -18,6 +18,10 @@ class AuditVerifier
         $previous = null;
         $checked = 0;
         $first = true;
+        $lastId = null;
+        // The last entry that an earlier verification found intact: it must still be there, unchanged.
+        $head = DB::table('audit_verified_heads')->orderByDesc('id')->first();
+        $headSeen = false;
 
         foreach (DB::table('audit_logs')->orderBy('id')->cursor() as $row) {
             $columns = (array) $row;
@@ -36,8 +40,26 @@ class AuditVerifier
                 return $this->broken($checked, (int) $columns['id'], 'Isi entri ini diubah setelah ditulis.');
             }
 
+            if ($head !== null && (int) $columns['id'] === (int) $head->entry_id) {
+                $headSeen = true;
+
+                if ($columns['hash'] !== $head->hash) {
+                    return $this->broken($checked, (int) $columns['id'], 'Entri ini sudah pernah diperiksa dan sekarang isinya lain.');
+                }
+            }
+
             $previous = (string) $columns['hash'];
+            $lastId = (int) $columns['id'];
             $checked++;
+        }
+
+        // Entries removed at the end leave a chain that is still linked, so the only proof is the entry that was checked last time.
+        if ($head !== null && ! $headSeen && (int) DB::table('audit_anchors')->max('pruned_through_id') < (int) $head->entry_id) {
+            return $this->broken($checked, (int) $head->entry_id, "Entri terbaru yang sudah pernah diperiksa (#{$head->entry_id}) tidak ada lagi: entri terbaru dihapus.");
+        }
+
+        if ($lastId !== null && ($head === null || (int) $head->entry_id !== $lastId)) {
+            DB::table('audit_verified_heads')->insert(['entry_id' => $lastId, 'hash' => $previous]);
         }
 
         return ['ok' => true, 'checked' => $checked, 'broken_at' => null, 'reason' => null];
