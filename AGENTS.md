@@ -32,6 +32,7 @@ Steps 3 to 5 end in the brief: the rule files and skills you read are named ther
 | What exists now, what was decided, what is open, what is next? | `memory/PRD.md` |
 | How does the gate work, and how do I change its settings? | `devcore.conf` and `scripts/verify.steps` |
 | Which part of the code does what, and how do I run the app? | `CLAUDE.md` (table "Arsitektur singkat") |
+| What do the ten management forms (`docs/Form … BPR Bangunarta.docx`) say, and how are the two appraisal forms built? | `docs/management-forms.md` (read it instead of the .docx files) |
 
 Each fact lives in exactly one document; link instead of copying. Do not create other tracking or memory files (`notes.md`, `state.md`, `backlog.md`, ...); the only temporary exception is a brief in `docs/briefs/`, deleted when its work is finished. Ideas and follow-ups go to "Open questions" or "Next steps" in `memory/PRD.md`, or to the issue tracker.
 
