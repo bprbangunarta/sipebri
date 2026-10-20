@@ -65,6 +65,8 @@ dc_msg() {
         id:verify_nosteps) printf 'VERIFY: scripts/verify.steps tidak ada atau kosong, jadi gerbang tidak memeriksa apa pun. Tambahkan satu baris "label|perintah" per pemeriksaan.' ;;
         en:verify_failed) printf 'VERIFY: the step "%s" failed, so nothing is pushed.' "$@" ;;
         id:verify_failed) printf 'VERIFY: langkah "%s" gagal, jadi tidak ada yang di-push.' "$@" ;;
+        en:verify_reused) printf 'Steps skipped: the gate was green on exactly this content %s minutes ago. The commit checks above ran as always.' "$@" ;;
+        id:verify_reused) printf 'Langkah dilewati: gerbang sudah hijau pada isi yang persis sama %s menit lalu. Pemeriksaan commit di atas tetap berjalan.' "$@" ;;
         en:verify_green) printf 'All checks are green.' ;;
         id:verify_green) printf 'Semua pemeriksaan hijau.' ;;
 

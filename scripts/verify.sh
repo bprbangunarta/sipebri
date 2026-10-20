@@ -72,28 +72,80 @@ done
 
 steps_file="scripts/verify.steps"
 
-if [ ! -f "$steps_file" ] || ! grep -qvE '^[[:space:]]*(#|$)' "$steps_file"; then
-    dc_msg verify_nosteps >&2
-    echo >&2
-    exit 1
-fi
+# A green run leaves a stamp inside .git: the tree it checked and the time. The pre-push hook (and only it, through VERIFY_REUSE_SHAS)
+# skips the steps when every commit being sent has exactly that tree and the stamp is young enough; anything else, a manual run and CI
+# included, runs every step.
+stamp_file="$(git rev-parse --git-dir)/devcore-verified"
+stamp_hours="${VERIFY_STAMP_HOURS:-24}"
+case "$stamp_hours" in '' | *[!0-9]*) stamp_hours=24 ;; esac
 
-while IFS= read -r line; do
-    case "$line" in
-        '' | '#'*) continue ;;
-    esac
+# stamp_covers: the stamp names the tree of every commit being sent, and is not older than the allowed hours.
+stamp_covers() {
+    [ -n "${VERIFY_REUSE_SHAS:-}" ] && [ -f "$stamp_file" ] || return 1
+    stamped_tree="$(sed -n 's/^tree=//p' "$stamp_file")"
+    stamped_at="$(sed -n 's/^time=//p' "$stamp_file")"
+    case "$stamped_at" in '' | *[!0-9]*) return 1 ;; esac
+    [ -n "$stamped_tree" ] || return 1
+    age=$(($(date +%s) - stamped_at))
+    [ "$age" -ge 0 ] && [ "$age" -le $((stamp_hours * 3600)) ] || return 1
 
-    label="${line%%|*}"
-    command="${line#*|}"
+    for sha in $VERIFY_REUSE_SHAS; do
+        [ "$(git rev-parse --verify --quiet "${sha}^{tree}")" = "$stamped_tree" ] || return 1
+    done
+}
 
-    echo "→ $label"
+# clean_tree: prints the tree of HEAD when what was checked is exactly the committed content: no tracked file differs from HEAD and no
+# untracked file that is not ignored is code (an untracked note or .DS_Store changes nothing the gate checks).
+clean_tree() {
+    git rev-parse --verify --quiet HEAD >/dev/null || return 1
+    git diff --quiet HEAD -- || return 1
+    if git ls-files --others --exclude-standard | grep -Eq "${CODE_PATHS:-^$}"; then return 1; fi
+    git rev-parse 'HEAD^{tree}'
+}
 
-    if ! sh -c "$command"; then
-        dc_msg verify_failed "$label" >&2
+# run_steps: every step of verify.steps, then the stamp when the content checked is exactly the committed one.
+run_steps() {
+    # Every run that gets this far starts without a stamp: a failing or interrupted run leaves none.
+    rm -f "$stamp_file"
+    tree_before="$(clean_tree || true)"
+
+    if [ ! -f "$steps_file" ] || ! grep -qvE '^[[:space:]]*(#|$)' "$steps_file"; then
+        dc_msg verify_nosteps >&2
         echo >&2
         exit 1
     fi
-done < "$steps_file"
 
-dc_msg verify_green
-echo
+    while IFS= read -r line; do
+        case "$line" in
+            '' | '#'*) continue ;;
+        esac
+
+        label="${line%%|*}"
+        command="${line#*|}"
+
+        echo "→ $label"
+
+        if ! sh -c "$command"; then
+            dc_msg verify_failed "$label" >&2
+            echo >&2
+            exit 1
+        fi
+    done < "$steps_file"
+
+    tree_after="$(clean_tree || true)"
+    if [ -n "$tree_before" ] && [ "$tree_before" = "$tree_after" ]; then
+        printf 'tree=%s\ntime=%s\n' "$tree_after" "$(date +%s)" > "$stamp_file"
+    fi
+
+    dc_msg verify_green
+    echo
+}
+
+if stamp_covers; then
+    minutes=$((($(date +%s) - $(sed -n 's/^time=//p' "$stamp_file")) / 60))
+    printf '→ '
+    dc_msg verify_reused "$minutes"
+    echo
+else
+    run_steps
+fi

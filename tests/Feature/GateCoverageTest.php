@@ -394,3 +394,10 @@ it('sets the branch that CI compares a new branch with to a branch that exists',
 
     expect(in_array($main, $known, true) || in_array("origin/{$main}", $known, true))->toBeTrue("MAIN_BRANCH={$main} is not a branch of this repository.");
 });
+
+it('lets only the pre-push hook reuse a green run, for whole hours, and never CI or a manual run', function () {
+    expect(gateConf('VERIFY_STAMP_HOURS'))->toMatch('/^[1-9][0-9]*$/')
+        ->and(gateRead('.githooks/pre-push'))->toContain('VERIFY_REUSE_SHAS=')
+        ->and(gateRead('.github/workflows/ci.yml'))->not->toContain('VERIFY_REUSE_SHAS')
+        ->and(gateRead('scripts/verify.sh'))->toContain('VERIFY_REUSE_SHAS')->and(gateRead('composer.json'))->not->toContain('VERIFY_REUSE_SHAS');
+});

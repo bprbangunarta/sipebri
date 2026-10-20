@@ -5,6 +5,7 @@
 root="$(git rev-parse --show-toplevel)"
 zero=0000000000000000000000000000000000000000
 ranges=''
+shas=''
 
 while read -r local_ref local_sha remote_ref remote_sha; do
     # Deleting a branch on the remote carries no commits.
@@ -18,9 +19,12 @@ while read -r local_ref local_sha remote_ref remote_sha; do
 
     ranges="${ranges}${spec}
 "
+    shas="${shas}${local_sha}
+"
 done
 
 # Nothing is being sent (only branches being deleted): no commits to check.
 [ -n "$ranges" ] || exit 0
 
-VERIFY_RANGE="$ranges" exec "$root/scripts/verify.sh"
+# The commits being sent let verify.sh trust a green run of exactly this content instead of repeating it (see VERIFY_STAMP_HOURS).
+VERIFY_RANGE="$ranges" VERIFY_REUSE_SHAS="$shas" exec "$root/scripts/verify.sh"
