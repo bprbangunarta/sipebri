@@ -49,6 +49,7 @@ export function Field({
     required,
     hint,
     className,
+    labelClassName,
     children,
 }: {
     label: string;
@@ -56,6 +57,8 @@ export function Field({
     required?: boolean;
     hint?: string;
     className?: string;
+    /** Classes for the label text only (the wrapper's classes would reach the control too), e.g. `capitalize`. */
+    labelClassName?: string;
     children: ReactNode;
 }) {
     const id = useId();
@@ -77,7 +80,7 @@ export function Field({
     return (
         <div className={cn('flex min-w-0 flex-col gap-1', className)}>
             <div className="flex items-center gap-1">
-                <label htmlFor={target} className="text-xs font-medium text-ink">
+                <label htmlFor={target} className={cn('text-xs font-medium text-ink', labelClassName)}>
                     {label}
                     {required && <span className="ml-0.5 text-danger">*</span>}
                 </label>

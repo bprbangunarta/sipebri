@@ -70,6 +70,7 @@ function Fields({ items, answers, onAnswer, computed, errors, readOnly, locked, 
                         key={item.key}
                         label={item.unit ? `${item.label} (${item.unit})` : item.label}
                         hint={item.hint}
+                        labelClassName="capitalize"
                         error={errors[`values.${item.key}`]}
                         className={wide ? 'sm:col-span-2' : undefined}
                     >
